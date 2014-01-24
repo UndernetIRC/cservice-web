@@ -1,6 +1,7 @@
 <?
 /* $Id: toast_this.php,v 1.14 2005/03/07 14:10:51 nighty Exp $ */
 
+	define(TOASTER_FROM_MAIL,"toaster@undernet_tmp.org");
 	$debug_me = 0; // set to 1 to enable debug messages (no actions).
 	$use_redir = 0; // Use a HTTP/302 redirection (0: use a JavaScript redirection : fixes some issues with HTTP timeouts on 'no data')
 	ignore_user_abort(true);
