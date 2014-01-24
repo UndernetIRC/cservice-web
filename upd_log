@@ -1,0 +1,117 @@
+? docs/gnuworld/.cvsignore
+? docs/gnuworld/__sOApp_
+? docs/gnuworld/n1cks3rv_
+? docs/gnuworld/viewlogs_archive.php
+? docs/gnuworld/images/xs4all_40mm.gif
+? docs/gnuworld/themes/data/easter
+? docs/gnuworld/themes/data/halloween
+? docs/gnuworld/themes/data/undernet
+? docs/gnuworld/themes/data/xmas
+? php_includes/.cvsignore
+cvs update: Updating .
+cvs update: Updating docs
+cvs update: Updating docs/gnuworld
+U docs/gnuworld/cfp.php
+RCS file: /cvsroot/gnuworld/website/docs/gnuworld/channels.php,v
+retrieving revision 1.17
+retrieving revision 1.18
+Merging differences between 1.17 and 1.18 into channels.php
+M docs/gnuworld/channels.php
+M docs/gnuworld/confirm.php
+U docs/gnuworld/dfp.php
+P docs/gnuworld/forgotten_pass.php
+P docs/gnuworld/get_newpass.php
+M docs/gnuworld/highload.php
+M docs/gnuworld/left.php
+M docs/gnuworld/login.php
+M docs/gnuworld/logout.php
+RCS file: /cvsroot/gnuworld/website/docs/gnuworld/newuser.php,v
+retrieving revision 1.27
+retrieving revision 1.28
+Merging differences between 1.27 and 1.28 into newuser.php
+rcsmerge: warning: conflicts during merge
+cvs update: conflicts found in docs/gnuworld/newuser.php
+C docs/gnuworld/newuser.php
+M docs/gnuworld/save_user.php
+M docs/gnuworld/sponsor_redirection.php
+RCS file: /cvsroot/gnuworld/website/docs/gnuworld/users.php,v
+retrieving revision 1.50
+retrieving revision 1.51
+Merging differences between 1.50 and 1.51 into users.php
+rcsmerge: warning: conflicts during merge
+cvs update: conflicts found in docs/gnuworld/users.php
+C docs/gnuworld/users.php
+P docs/gnuworld/viewlogs.php
+cvs update: Updating docs/gnuworld/SOAP
+U docs/gnuworld/SOAP/index.php
+U docs/gnuworld/SOAP/testClient.php
+cvs update: Updating docs/gnuworld/acl
+RCS file: /cvsroot/gnuworld/website/docs/gnuworld/acl/index.php,v
+retrieving revision 1.17
+retrieving revision 1.18
+Merging differences between 1.17 and 1.18 into index.php
+M docs/gnuworld/acl/index.php
+cvs update: Updating docs/gnuworld/admin
+M docs/gnuworld/admin/check_reviews.php
+M docs/gnuworld/admin/idledchannels.php
+M docs/gnuworld/admin/index.php
+M docs/gnuworld/admin/sponsor_clicks.php
+RCS file: /cvsroot/gnuworld/website/docs/gnuworld/admin/susp_users.php,v
+retrieving revision 1.11
+retrieving revision 1.12
+Merging differences between 1.11 and 1.12 into susp_users.php
+M docs/gnuworld/admin/susp_users.php
+M docs/gnuworld/admin/view_admins.php
+M docs/gnuworld/admin/view_judgereg.php
+RCS file: /cvsroot/gnuworld/website/docs/gnuworld/admin/view_suspends.php,v
+retrieving revision 1.4
+retrieving revision 1.5
+Merging differences between 1.4 and 1.5 into view_suspends.php
+M docs/gnuworld/admin/view_suspends.php
+P docs/gnuworld/admin/weirdos.php
+cvs update: Updating docs/gnuworld/complaints
+cvs update: Updating docs/gnuworld/domainlock
+M docs/gnuworld/domainlock/add_entry.php
+M docs/gnuworld/domainlock/remove.php
+cvs update: Updating docs/gnuworld/forms
+P docs/gnuworld/forms/pwreset.php
+cvs update: Updating docs/gnuworld/help_mgr
+cvs update: Updating docs/gnuworld/images
+cvs update: Updating docs/gnuworld/noreg
+M docs/gnuworld/noreg/add_entry.php
+M docs/gnuworld/noreg/add_entry_f.php
+M docs/gnuworld/noreg/add_entry_l.php
+M docs/gnuworld/noreg/add_entry_va.php
+M docs/gnuworld/noreg/remove.php
+M docs/gnuworld/noreg/remove_f.php
+M docs/gnuworld/noreg/remove_l.php
+M docs/gnuworld/noreg/remove_va.php
+cvs update: Updating docs/gnuworld/notes
+cvs update: Updating docs/gnuworld/regproc
+cvs update: Updating docs/gnuworld/themes
+cvs update: Updating docs/gnuworld/themes/data
+cvs update: Updating docs/gnuworld/themes/data/default
+cvs update: Updating docs/gnuworld/userbrowser
+M docs/gnuworld/userbrowser/list.php
+M docs/gnuworld/userbrowser/toast_this.php
+cvs update: Updating docs/gnuworld/webaxs
+cvs update: Updating docs/gnuworld/xat
+cvs update: Updating docs/gnuworld/xat/mailchg
+cvs update: Updating docs/gnuworld/xat/mgrchg
+P docs/gnuworld/xat/mgrchg/mgr_change.php
+cvs update: Updating fonts
+cvs update: Updating php_includes
+M php_includes/blackhole.inc
+RCS file: /cvsroot/gnuworld/website/php_includes/cmaster.inc,v
+retrieving revision 1.173
+retrieving revision 1.174
+Merging differences between 1.173 and 1.174 into cmaster.inc
+M php_includes/cmaster.inc
+RCS file: /cvsroot/gnuworld/website/php_includes/config.inc,v
+retrieving revision 1.25
+retrieving revision 1.27
+Merging differences between 1.25 and 1.27 into config.inc
+rcsmerge: warning: conflicts during merge
+cvs update: conflicts found in php_includes/config.inc
+C php_includes/config.inc
+cvs update: Updating php_includes/SOAP
