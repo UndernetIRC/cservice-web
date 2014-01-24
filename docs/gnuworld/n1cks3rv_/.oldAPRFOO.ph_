@@ -1,0 +1,42 @@
+<?
+	require("../../../php_includes/cmaster.inc");
+	std_connect();
+	$cTheme = get_theme_info();
+	std_theme_styles(1);
+	std_theme_body("../");
+
+?>
+<h1>AprilFool'd People</h1>
+<hr>
+<a href="#butt">Go to bottom of page !</a><br><br>
+<?
+	$r = pg_safe_exec("SELECT nickserv.nickname,nickserv.ts,users.user_name FROM nickserv,users WHERE nickserv.id>8 AND users.id=nickserv.user_id ORDER BY nickserv.ts DESC");
+
+	$fph = "n/a";
+
+	$rspeed = pg_safe_exec("SELECT nickserv.ts FROM nickserv,users WHERE nickserv.id>8 AND users.id=nickserv.user_id ORDER BY nickserv.ts LIMIT 1");
+	$rospeed = pg_fetch_object($rspeed);
+	$duration = (int)(time() - $rospeed->ts);
+	$nbf = (int)pg_numrows($r);
+	$fph = (int)($nbf / ($duration / 3600));
+	$fpm = (int)($nbf / ($duration / 60));
+	$fps = (int)($nbf / ($duration));
+
+	echo "TOTAL Fo0Lz : <b>" . pg_numrows($r) . "</b><br>";
+	echo "Fo0L speed : <b>" . $fph . "</b> fOoLz per hour.<br><br>\n";
+
+
+	while ($o = pg_fetch_object($r)) {
+		$USER_TZ = "Pacific/Auckland";
+		if (!ereg("Apr 01",cs_time($o->ts))) {
+			$USER_TZ = "Pacific/Honolulu";
+		}
+		echo "<li> <b>" . $o->nickname . "</b> (" . $o->user_name . "), was fool'd on <b>" . cs_time($o->ts) . " ";
+		if ($USER_TZ == "Pacific/Auckland") { echo "NZST"; } else { echo "PST"; }
+		echo "</b><br>\n";
+
+	}
+?>
+<br>
+<a name="butt">&nbsp;</a><br>
+</body></html>

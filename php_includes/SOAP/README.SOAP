@@ -1,0 +1,36 @@
+--
+-- $Id: README.SOAP,v 1.1 2003/01/05 07:58:01 nighty Exp $
+--
+
+-- Here are a few instructions on what is SOAP, and how to eventually update it to the latest version if needed.
+
+SOAP is a protocol of communication.
+Here in this directory you have 'NuSOAP' which is a GPL SOAP PHP client/server library/class.
+
+We, coder-com, do NOT provide end-user support for the 'NuSOAP' module, if you need any
+information on this product, please visit http://www.sf.net/projects/nusoap/
+
+If you need to upgrade all the PHP files in this directory to the latest version, here is how you'll do :
+(this assumes you start as the user holding the 'website/' directory in his HOME, formerly 'gnuworld')
+
+	1. go to your home directory :
+			cd ~
+
+	2. create a directory where you will maintain latest NuSOAP release, and go into it :
+			mkdir NuSOAP
+			cd NuSOAP/
+
+	3. get the CVS version of NuSOAP (you need a CVS client installed on your system) :
+			cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/nusoap login
+	(just press ENTER as your password)
+			cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/nusoap co lib
+
+	4. copy the newly downloaded CVS version to the mod.cservice's website :
+			cp lib/*.php ../website/php_includes/SOAP/
+
+	5. Done! it's updated :)
+
+
+
+Enjoy!
+
