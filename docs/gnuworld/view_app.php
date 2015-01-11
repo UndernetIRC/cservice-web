@@ -591,7 +591,7 @@
 				if ($admin>=$min_lvl || $nrw_lvl>0) {
 					echo "<tr><td valign=center align=right><font color=#" . $cTheme->main_warnmsg . "><b>*</b></font>&nbsp;<u>Objection type :</u>&nbsp;</td><td valign=center><select name=admin_only><option selected value=\"N\">User objection</option><option value=\"Y\">Admin comment</option></select></td></tr>\n";
 				}
-				echo "<tr><td valign=top align=right><u>Your comment :</u>&nbsp;</td><td valign=center><font size=+1><textarea name=comment cols=30 rows=7>$comment</textarea></font></td></tr>\n";
+				echo "<tr><td valign=top align=right><u>Your comment :</u>&nbsp;</td><td valign=center><font size=+1><textarea name=comment cols=50 rows=7>$comment</textarea></font></td></tr>\n";
 				echo "<tr><td align=center colspan=2>";
 				if ($admin==0 || $nrw_lvl<1) {
 					echo "<input type=hidden name=admin_only value=\"N\">\n";
@@ -624,7 +624,7 @@
 		}
 		echo "<tr><td valign=center align=right><u>Your username :</u>&nbsp;</td><td valign=center><font size=+1><b>$user_name</b><input type=hidden name=user_name value=\"$user_name\"></font></td></tr>\n";
 		echo "<tr><td valign=center align=right><font color=#" . $cTheme->main_warnmsg . "><b>*</b></font>&nbsp;<u>Objection type :</u>&nbsp;</td><td valign=center><select name=admin_only><option value=\"Y\">Admin comment</option></select></td></tr>\n";
-		echo "<tr><td valign=top align=right><u>Your comment :</u>&nbsp;</td><td valign=center><font size=+1><textarea name=comment cols=30 rows=7>$comment</textarea></font></td></tr>\n";
+		echo "<tr><td valign=top align=right><u>Your comment :</u>&nbsp;</td><td valign=center><font size=+1><textarea name=comment cols=50 rows=7>$comment</textarea></font></td></tr>\n";
 		echo "<tr><td align=center colspan=2>";
 		echo "<input type=hidden name=channel_id value=$channel_id><input type=submit value=\" SUBMIT THIS ADMIN COMMENT \"><br><br>&nbsp;</td></tr>\n";
 	}

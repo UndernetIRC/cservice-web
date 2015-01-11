@@ -21,7 +21,7 @@ function checkint ($x)
 {
 return (is_numeric($x)? intval($x)==$x : false);
 }
-$debug=off;
+$debug=on;
 $root_dir="../";
 // set to on the filters to be enabled by default
 $nopurge = off;			// channel flag nopurge

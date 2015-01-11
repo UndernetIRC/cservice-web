@@ -31,34 +31,78 @@ $usr = pg_fetch_object($usrq);
 
 $err = "";
 if (check_secure_form("addrestrict" . $_POST["user_id"])) {
-	$a_mask = "";
-	$a_r1 = 0;
-	$a_r2 = 0;
-	switch ($_POST["rtype"]) {
-		case 1:
-			if (long2ip(ip2long($_POST["t1ip"]))!=$_POST["t1ip"]) { $err .= "<li> Invalid IP (" . $_POST["t1ip"] . ")\n"; }
-			$a_mask = "";
-			$a_r1 = ip2long($_POST["t1ip"]);
-			$a_r2 = 0;
-			break;
-		case 2:
-			if (long2ip(ip2long($_POST["t2ip1"]))!=$_POST["t2ip1"]) { $err .= "<li> Invalid IP (from) (" . $_POST["t2ip1"] . ")\n"; }
-			if (long2ip(ip2long($_POST["t2ip2"]))!=$_POST["t2ip2"]) { $err .= "<li> Invalid IP (to) (" . $_POST["t2ip2"] . ")\n"; }
-			if (long2ip(ip2long($_POST["t2ip1"]))==$_POST["t2ip1"] && long2ip(ip2long($_POST["t2ip2"]))==$_POST["t2ip2"]) {
-				if (ip2long($_POST["t2ip2"])<=ip2long($_POST["t2ip1"])) { $err .= "<li> Invalid RANGE (from >= to)\n"; }
-
-			}
-			$a_mask = "";
-			$a_r1 = ip2long($_POST["t2ip1"]);
-			$a_r2 = ip2long($_POST["t2ip2"]);
-			break;
-		case 3:
-			if (!preg_match('/^.*\..*$/',$_POST["t3mask"]) || !preg_match('/^[a-zA-Z0-9\.\*\?_-]+$/', $_POST["t3mask"])) { $err .= "<li> Invalid MASK (" . $_POST["t3mask"] . ")\n"; }
-			$a_mask = $_POST["t3mask"];
-			$a_r1 = 0;
-			$a_r2 = 0;
-			break;
+	$new_ip=$_POST["t1ip"];
+        str_replace(':', ':', $new_ip, $count6);
+        str_replace('.', '.', $new_ip, $count4);
+        $ip_parts=explode("/", $new_ip);
+        
+        if ($count6>0)
+        {
+         $isValid = filter_var($ip_parts[0], FILTER_VALIDATE_IP,FILTER_FLAG_IPV6);   
+         $go_ahead=false;
+         if ($isValid)
+         {
+             if (count($ip_parts)===2)
+             {
+                    if (!is_int($ip_parts[1]))
+                            if (($ip_parts[1]>0) && ($ip_parts[1]<129))
+                            {
+                                 $go_ahead=true;
+                            }
+                            
+             }
+             else
+             {
+                 if (count($ip_parts)===1)
+                             $go_ahead=true;
+             }
+      
 	}
+        }
+        if ($count4>0)
+        {
+         $isValid = filter_var($ip_parts[0], FILTER_VALIDATE_IP,FILTER_FLAG_IPV4);   
+         $go_ahead=false;
+         if ($isValid)
+         {
+             if (count($ip_parts)===2)
+             {
+                    if (!is_int($ip_parts[1]))
+                            if (($ip_parts[1]>0) && ($ip_parts[1]<33))
+                            {
+                                 $go_ahead=true;
+                            }
+                            
+             }
+             else
+             {
+                 if (count($ip_parts)===1)
+                             $go_ahead=true;
+             }
+      
+	}
+        }
+  if ($go_ahead)
+  {
+      if ($_POST['totp_only'] == '1')
+          $ntype=2;
+      else
+          $ntype=1;
+      if ($_POST['ipr_exp']>0)
+      $nexp=time()+$_POST['ipr_exp'];
+      else
+         $nexp=0;  
+  $q = "INSERT INTO ip_restrict (user_id, value, last_updated, last_used, expiry, description, added, added_by, type) VALUES (";
+  $q .= (int)$_GET["user_id"] . ", ";
+  $q .= "'" . $new_ip . "', ";
+  $q .= time() . ", '0', '". $nexp."', '".$_POST['descr']."', ".time().", " . (int)$user_id . ", '".$ntype."') ";    
+ //die($q);
+  pg_safe_exec($q);
+header("Location: ip_restrict.php?user_id=" . (int)$_GET["user_id"]);
+die;
+  }
+  else
+      $err="Invalid IP format!";
 	if ($err != "") {
 		std_theme_styles(1);
 		std_theme_body();
@@ -70,18 +114,6 @@ if (check_secure_form("addrestrict" . $_POST["user_id"])) {
 		echo "<br><a href=\"javascript:history.go(-1);\"><b>&lt;&lt;&nbsp;Go Back</b></a>\n";
 		echo "</body>\n";
 		echo "</html>\n\n";
-		die;
-	} else {
-		$q = "";
-		$q .= "INSERT INTO ip_restrict (user_id, allowmask, allowrange1, allowrange2, added, added_by, type) VALUES (";
-		$q .= (int)$_GET["user_id"] . ", ";
-		$q .= "'" . $a_mask . "', ";
-		$q .= $a_r1 . ", ";
-		$q .= $a_r2 . ", ";
-		$q .= time() . ", " . (int)$user_id . ", 1)";
-		//die($q);
-		pg_safe_exec($q);
-		header("Location: ip_restrict.php?user_id=" . (int)$_GET["user_id"]);
 		die;
 	}
 }
@@ -102,37 +134,38 @@ if ($ipq) {
 	echo "<a href=\"users.php?id=" . (int)$usr->id . "\"><b>Back to user details</b></a><br><br>\n";
 
 	echo "<b>Add an IP restriction :</b> (<u>note:</u> clearing the below list means <b>NO</b> restriction)<br>\n";
-	echo "<table width=600 border=0 cellspacing=2 cellpadding=3>";
+	echo "<table width=900 border=0 cellspacing=2 cellpadding=3>";
 	echo "<tr bgcolor=#4c4c4c>";
-	echo "<td align=center><font color=#ffffff><label for=rtype1><b>Single IP</b></label><br><input id=rtype1 type=radio name=rtype value=1></font></td>";
-	echo "<td align=center><font color=#ffffff><label for=rtype2><b>IP range</b></label><br><input id=rtype2 type=radio name=rtype value=2></font></td>";
-	echo "<td align=center><font color=#ffffff><label for=rtype3><b>Host or IP mask</b></label><br><input id=rtype3 type=radio name=rtype value=3></font></td>";
+	echo "<td align=center colspan=\"5\"   ><font color=#ffffff><label for=rtype1><b>IP( with or w/o CIDR. Do not use wildcards!)</b></label></font></td>";
 	echo "</tr>";
 
 	echo "<tr bgcolor=#eeeeee>";
 	echo "<td valign=top>";
 	echo "<b>IP</b><br>";
-	echo "<input type=text name=t1ip size=20 maxlength=15>";
+	echo "<input type=text name=t1ip size=34 maxlength=40>";
 	echo "</td>\n";
-	echo "<td valign=top>";
-	echo "<b>from IP</b><br>";
-	echo "<input type=text name=t2ip1 size=20 maxlength=15>";
-	echo "<br><br>";
-	echo "<b>to IP</b><br>";
-	echo "<input type=text name=t2ip2 size=20 maxlength=15>";
-	echo "</td>\n";
-	echo "<td valign=top>";
-	echo "<b>Mask</b><br>";
-	echo "<input type=text name=t3mask size=35 maxlength=255>";
-	echo "<br>";
-	echo "<i>";
-	echo "wildcards <b>*</b> and <b>?</b> are allowed.";
-	echo "</i>";
-	echo "</td>\n";
+        echo "<td><b>Expires in: </b><br>";
+        echo "<select name=\"ipr_exp\" id=\"ipr_exp\">";
+        
+        for ($i=0;$i<count($ipr_expiry)-1; $i++)
+        echo '<option value="'.$ipr_expiry[$i].'">'. secs_to_h($ipr_expiry[$i]).'</option>
+            ';
+        echo '<option value="0">Never</option>';
+        echo '</select>';
+        echo "</td>\n";
+         echo "<td ><b>Description: <br></b>";
+        echo '<input type="text" name="descr" size="35"/> <br>';
+        echo "</td>\n";
+        echo "<td > <b>TOTP only?</b> <br>";
+        echo '<input type="checkbox" name="totp_only" value="1">';
+        echo "</td>\n";
 	echo "</tr>";
-
+        
 	echo "<tr><td colspan=3 align=right><input type=submit value=\"Add\"></td></tr>\n";
 	echo "</table>\n";
+        
+        
+
 
 	echo "<br><br>";
 	if ($user_id == $usr->id && ($admin>0 || has_acl($user_id)) && is_ip_restrict()) { // safety valve warning
@@ -140,30 +173,48 @@ if ($ipq) {
 		echo "WARNING</b> : The current IP restrictions will NOT allow you to login.<br>Your current IP is : " . cl_ip() . "</font><br><br>";
 	}
 
-	echo "<table border=1 cellspacing=0 cellpadding=3>\n";
+	echo "<table border=1 cellspacing=0 cellpadding=3 >\n";
 	$amask=0;
+        echo "<tr><td><b>IP</b></td><td><b>Added by</b></td><td><b>Expires on</b></td><td><b>Description</b></td>
+                    <td><b>TOTP only?</b></td><td><b>Action</b></td></tr>";
 	while ($ip = pg_fetch_object($ipq)) {
 		$amask++;
-		echo "<tr>";
-		if ($ip->allowrange2 != 0) { // IP range
-			echo "<td>Range</td>";
-			echo "<td><b>";
-			echo long2ip($ip->allowrange1) . "</b>-<b>" . long2ip($ip->allowrange2);
-		} elseif ($ip->allowrange1 != 0) { // single IP
-			echo "<td>IP</td>";
-			echo "<td><b>";
-			echo long2ip($ip->allowrange1);
-		} elseif ($ip->allowmask != "") { // IP / Host mask
-			echo "<td>Mask</td>";
-			echo "<td><b>";
-			echo $ip->allowmask;
-		}
+		
+                        echo "<tr>";
+			echo "<td valign=\"top\"><b>";
+                        if ($ip->type==0)
+                            echo "<font color=#" . $cTheme->main_no . "><b>";
+                        else 
+                           echo "<font color=#" . $cTheme->main_yes . "><b>"; 
+                        echo $ip->value."</b></font></td>\n";
+		
 		echo "</b></td>\n";
 		$ruu = pg_safe_exec("SELECT user_name FROM users WHERE id='" . $ip->added_by . "'");
 		$ouu = pg_fetch_object($ruu);
-		echo "<td><b>added_by</b>: " . $ouu->user_name . "<br>\n";
+		echo "<td valign=\"top\"> " . $ouu->user_name . "<br>\n";
 		echo "<b>on</b>: " . cs_time($ip->added) . "</td>\n";
-		echo "<td><input type=button value=\"Delete\" onClick=\"del_id( " . (int)$ip->id . ")\"></td>\n";
+                echo "<td valign=\"top\">";
+                if ($ip->expiry != 0)
+                {
+                    if (time()<$ip->expiry)
+                        echo "" . cs_time($ip->expiry) . "</td>\n";
+                    else
+                        echo "-- expired --</td>\n";
+                }
+                else {
+                echo "-- never --</td>\n";    
+                }
+		echo "<td width=\"200px\" valign=\"top\">";
+                if ($ip->description == '')
+                    echo "N/A</td>\n";
+		echo "" . $ip->description . "</td>\n";
+                echo "<td valign=\"top\">";
+                if ($ip->type == 2)
+		echo "<font color=#" . $cTheme->main_yes . "><b>YES</b></font></td>\n";
+                else
+                echo "<font color=#" . $cTheme->main_no . "><b>NO</b></font></td>\n";    
+                echo "<td valign=\"top\"><a href=\"#\" onclick=\"window.open('edit_ipr.php?ipr_id=".(int)$ip->id . "&user_id=".(int)$_GET["user_id"]."', 'THEME','width=900,height=220')\");\"><input type=button value=\"Edit\"/></a> ";
+		echo "<input type=button value=\"Delete\" onClick=\"del_id( " . (int)$ip->id . ")\"></td>\n";
 		echo "</tr>\n";
 	}
 	if ($amask==0) {
@@ -180,6 +231,7 @@ if ($ipq) {
 ?>
 <script language="JavaScript">
 <!--
+/* pre inet type
 function checkf(f) {
 	var all_ok = true;
 	var one_chk = false;
@@ -202,6 +254,7 @@ function checkf(f) {
 	}
 	return all_ok;
 }
+*/
 function del_id( id ) {
 	if (confirm('Are you sure you want to delete this IP restriction ?')) {
 		document.forms[1].delid.value = parseInt(id);

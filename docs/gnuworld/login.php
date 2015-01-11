@@ -10,6 +10,24 @@ header("Pragma: no-cache");
 unset($failed); unset($is_admin); unset($user_id);
 $failed = 0; $is_admin = 0; $user_id = 0;
 // For efficiency, don't load the db unless we have to.
+if (RBL_CHECKS==1)
+{
+$msg=ip_check_rbl(cl_ip());
+if ($msg !='clean')
+	{
+	echo "<html><head><title>SECURITY WARNING</title>";
+	std_theme_styles();
+	echo "</head>\n";
+	std_theme_body();
+	echo "<center>\n";
+	echo "<h2>";
+	echo "Sorry, you're not allowed to login from this IP address. ".$msg;
+	echo "</h2>";
+	echo "</center>\n";
+	echo "</body></html>\n\n";
+	die;
+	}
+}
 if ($username != "" && $password != "") {
 	if (!ip_check($username,0)) {
 		echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";

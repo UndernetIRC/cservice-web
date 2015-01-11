@@ -23,6 +23,7 @@ class Google2FA {
 		"6" => 30,	"7" => 31
 	);
 
+        
 	/**
 	 * Generates a 16 digit secret key in base32 format
 	 * @return string
