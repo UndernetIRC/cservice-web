@@ -34,13 +34,13 @@ $dares = pg_safe_exec("SELECT * FROM users WHERE id='" . $user_id . "'");
 $dauser = pg_fetch_object($dares,0);
 
 header("Pragma: no-cache\n\n");
-$error[0] = "You already have TOTP enabled. You can not reactivate it again. Consult #usernames for more help.";
+$error[0] = "You already have two-step verification enabled. You can not reactivate it again. Consult #usernames for more help.";
 $user_name=$authtok[0];
 	if (!ip_check_totp($user_name,0)) {
 		echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
 		std_theme_styles(1); std_theme_body();
         	echo "<h1>Error<br>\n";
-        	echo "Too many failed TOTP attempts. Restart TOTP activation proccess in 24 hours.</h1><br>\n";
+        	echo "Too many failed two-step verification attempts. Restart two-step verificationn proccess in 24 hours.</h1><br>\n";
 		echo "</body>\n";
 		echo "</html>\n\n";
 		die;
@@ -49,7 +49,7 @@ if (has_totp($user_id))
 	{
 	echo "<html>\n";
 	echo "<head>\n";
-	echo "<title>CService activate TOTP</title>\n";
+	echo "<title>CService activate two-step verification</title>\n";
 	std_theme_styles();
 	echo "</head>\n";
 	std_theme_body();
@@ -74,7 +74,7 @@ if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
 	$query = "UPDATE users SET totp_key='".$cookieval."' WHERE id=" . ($user_id+0);
 	pg_safe_exec($query);
 	$mailm = "";
-	$mailm .= "\nHello,\n\nThis is the confirmation of your TOTP activation.\n";
+	$mailm .= "\nHello,\n\nThis is a confirmation that you have chosen to enable two-step verification,\nto complete the activation follow the instructions below.\n";
 	$confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) ."/confirm.php?ID=$cookieval";
 	$mailm .= "Make sure you're logged in to CService webpage, then click the link ".$confirm_url." and follow the instructions to proceede.\n\n";
 	$mailm .= "\n\nThe " . NETWORK_NAME . " Channel Service.\n\n";
@@ -83,32 +83,32 @@ if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
 		echo '<pre>'.$mailm.'</pre>';
 							echo "<html>\n";
 							echo "<head>\n";
-							echo "<title>CService activate TOTP</title>\n";
+							echo "<title>CService enable two-step verification</title>\n";
 							std_theme_styles();
 							echo "</head>\n";
 							std_theme_body();
 
 							echo "<font size=+1>";
-							echo "Your activation email was sent. Please check your inbox and follow the instructions.<br>\n";
+							echo "Your activation email was sent. Please check your inbox for further instructions.<br>\n";
 							echo "</font>";
 							echo "</body></html>\n\n";
 							die;
 }
 echo "<html>\n";
 echo "<head>\n";
-echo "<title>CService activate TOTP</title>\n";
+echo "<title>CService enable two-step verification</title>\n";
 std_theme_styles();
 echo "</head>\n";
 std_theme_body();
 
-echo "<h2>TOTP activation :</h2>\n";
+echo "<h2>Enable two-step verification :</h2>\n";
 echo "<form name=act_totp method=post action=activate.php>\n";
 echo "<input type=hidden name=SECURE_ID value=\"" . $SECURE_ID . "\">\n";
 echo "<input type=hidden name=crc value=\"" . md5( $SECURE_ID . CRC_SALT_0011 ) . "\">\n";
 echo "<input type=hidden name=mode value=write>\n";
-echo "Are you sure you want to enable TOTP? This is not reversible by you, you'll need to ask a CService Admin to disable it!<br>\n";
+echo "Are you sure you want to enable two-step verification? This is not reversible by you, you'll need to ask a CService Admin to disable it!<br>\n";
 if (($dauser->totp_key !='') && (strlen($dauser->totp_key) < 33))
-echo '<input type="checkbox" value="1" name="new_key" id="new_key" checked="checked"/> Generate a new TOTP key. (If you want to use the old stored key, uncheck this box.)<br><br>';
+echo '<input type="checkbox" value="1" name="new_key" id="new_key" checked="checked"/> Generate a new two-step verification key. (If you want to use the old stored key, uncheck this box.)<br><br>';
 echo "<input type=submit name=yes value=\"YES\">  ";
 echo "<input type=submit name=no value=\"NO\" onclick=\"window.location=\'users.php\'\"><br>\n";
 echo "</font></pre>\n";

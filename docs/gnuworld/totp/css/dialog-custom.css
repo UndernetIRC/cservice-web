@@ -2,6 +2,10 @@
     font-family: Arial;
     font-size: 0.8em;
 }
-#twostepdialog {
+#twostepdialog, #qr-show-elem, #key-div {
     display: none;
 }
+
+form.totp p { position: relative; }
+form.totp p br { display: none; }
+label { position: absolute; top: 3px; left: 4px; cursor: text }

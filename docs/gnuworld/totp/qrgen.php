@@ -1,5 +1,6 @@
 <?php
 require_once  "qrgen/phpqrcode/qrlib.php";
+session_start();
 
 function base32encode($input) {
         $alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
@@ -31,11 +32,9 @@ function base32encode($input) {
 
     return $output;
   } //base32encode
-$t_name=filter_var(trim($_GET['name']), FILTER_SANITIZE_STRING);
-$t_key=filter_var(trim($_GET['code']), FILTER_SANITIZE_STRING);
-if(($t_name!='') && ($t_key != '')) {
-        //QRcode::png("otpauth://totp/" . $_GET['name'] . "?secret=" .  base32encode($_GET['code']) . "&digits=6");
-        QRcode::png("otpauth://totp/" .$t_name. "?secret=" .  $t_key . "&digits=6");
+
+if(isset($_SESSION['oath_uri'])) {
+    QRcode::png($_SESSION['oath_uri'], false, QR_ECLEVEL_L, 4);
 } else { 
 ?>
 <html>
