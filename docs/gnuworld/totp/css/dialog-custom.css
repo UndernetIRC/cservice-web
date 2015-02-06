@@ -1,0 +1,7 @@
+.twostep .ui-widget-content {
+    font-family: Arial;
+    font-size: 0.8em;
+}
+#twostepdialog {
+    display: none;
+}

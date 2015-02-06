@@ -1,13 +1,10 @@
-<?
+<?php
 $min_lvl = 800;
 $edit_lvl = 600;
 $maxuserlisted = 500;
 require("../../php_includes/cmaster.inc");
 std_init();
 $cTheme = get_theme_info();
-?>
-<!-- $Id: users.php,v 1.54 2006/01/13 02:32:02 nighty Exp $ //-->
-<?
 $theuser = trim($theuser);
 
 $nrw_lvl = 0;
@@ -202,8 +199,22 @@ if ($admin == 0 && $edit && $id != $user_id && !acl(XAT_CAN_EDIT)) {
     die;
 }
 
-
-std_theme_styles(1);
+echo "<html><head><title>CService</title>\n";
+std_theme_styles();
+?>
+<link rel="stylesheet" type="text/css" href="./totp/css/smoothness/jquery-ui-1.8.20.custom.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="./totp/css/dialog-custom.css" media="screen" />
+<script type="text/javascript" src="./totp/js/jquery-1.7.2.min.js"~></script>
+<script type="text/javascript" src="./totp/js/jquery-ui-1.8.20.custom.min.js"></script>
+<script>
+  function showTwoStepDialog() {
+    $( "#twostepdialog" ).dialog({
+      dialogClass: 'twostep'
+    });
+  }
+</script>
+</head>
+<?php
 std_theme_body();
 
 if ($admin > 0 || $id == $user_id || acl(XAT_CAN_EDIT)) {
@@ -336,12 +347,12 @@ if (!$edit) {
                         $authtok = explode(":", $auth);
                         $authcsc = $authtok[3];
                         $sec_id = md5($user_id . CRC_SALT_0019 . $authcsc);
-                        echo '<tr><td><b>TOTP:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font>. Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about TOTP <a href="totp/" target="new">here</a> )</td></tr>';
+                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font>. Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
                     } else {
 
                         echo '<tr><td><b>TOTP:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font>';
                         if ((TOTP_ALLOW_SELF_OFF == 1) && ($admin == 0) && (!isoper($user->user_id))) {
-                            echo "<font size=-1><a href=\"#\" onclick=\"window.open('disable_totp.php', 'WARNING','width=500,height=120')\");\"> Open Popup</a> to verify your identity and disable TOTP.</font></td></tr>";
+                            echo "<font size=-1><a href=\"#\" onclick=\"window.open('disable_totp.php', 'WARNING','width=500,height=120')\");\"> Open Popup</a> to verify your identity and disable two-step verification.</font></td></tr>";
                         } else
                             echo '</td></tr>';
                     }
@@ -349,10 +360,14 @@ if (!$edit) {
             }
             else {
                 if (SHOW_TOTP_PUBLIC || acl(XTOTP_DISABLE_OTHERS) || ($admin > 0))
-                    if (!has_totp($id))
-                        echo '<tr><td><b>TOTP:</b></td><td> <font color=#' . $cTheme->main_no . '><b> Disabled</b></font></td></tr>';
-                    else
-                        echo '<tr><td><b>TOTP:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font></td></tr>';
+                  if (has_totp($id)) {
+                    $theme = $cTheme->main_yes;
+                    $status = 'Enabled';
+                  } else {
+                    $theme = $cTheme->main_no;
+                    $status = 'Disabled';
+                  }
+                printf("<tr><td><b>Two-step verification:</b></td><td><font color=\"#%s\"><b>%s</b></font></td></tr>", $theme, $status);
             }
         }
     }
@@ -513,7 +528,7 @@ if (!$edit) {
     // edit TOTP 
     if (TOTP_ON) {
         if (($admin >= TOTP_RESET_LVL) || ((acl(XIPR_VIEW_OWN)) && (!$isAdmin)) || ((acl(XTOTP_DISABLE_OTHERS) && (!$isAdmin)))) {
-            echo "<tr><td> <b>TOTP</b>:</td><td> ";
+            echo "<tr><td> <b>Two-step verification</b>:</td><td> ";
 
             if (has_totp($user->id))
                 echo "<select id=\"totp\" name =\"totp\"> <option selected value=\"on\"> Enabled </option><option value=\"off\"> Disabled </option></select></td></tr>";
@@ -521,10 +536,7 @@ if (!$edit) {
                 echo " Disabled </td></tr>";
         }
         else {
-            if (has_totp($user->id))
-                echo '<tr><td> <b>TOTP</b>: </td><td> Enabled </td></tr>';
-            else
-                echo '<tr><td> <b>TOTP</b>: </td><td> Disabled </td></tr>';
+          printf("<tr><td> <b>Two-step verification</b>: </td><td> %s </td></tr>", has_totp($user->id) ? 'Enabled' : 'Disabled');
         }
     }
     if (ENABLE_NOTES && ((NOTES_ADMIN_ONLY && $admin > 0) || (NOTES_ADMIN_ONLY == 0))) {
@@ -1214,5 +1226,9 @@ if ($admin > 0 || acl(XLOGGING_VIEW)) {
     }
 }
 ?>
+  <div id="twostepdialog" title="Two-step verification">
+    <p>Two-step verification adds an extra security layer to your account. Whenever you sign in to the cservice website
+ you'll need to enter both your password and also a security code generated by your phone app or equivalent.</p>
+  </div>
 </body>
 </html>
