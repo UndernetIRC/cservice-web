@@ -204,6 +204,7 @@ std_theme_styles();
 ?>
 <link rel="stylesheet" type="text/css" href="./totp/css/smoothness/jquery-ui-1.8.20.custom.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="./totp/css/dialog-custom.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="./css/flash.css" media="screen" />
 <script type="text/javascript" src="./totp/js/jquery-1.7.2.min.js"~></script>
 <script type="text/javascript" src="./totp/js/jquery-ui-1.8.20.custom.min.js"></script>
 <script>
@@ -212,10 +213,23 @@ std_theme_styles();
       dialogClass: 'twostep'
     });
   }
+  setTimeout(function() {
+      $('.flash.info').fadeOut('slow');
+  }, 15000);
 </script>
 </head>
 <?php
+if (!session_id()) {
+    session_start();
+}
+require_once("../../php_includes/FlashMessage.php");
+$flash = new FlashMessage();
+
 std_theme_body();
+
+if ($flash->hasMessage()) {
+    echo $flash->show();
+}
 
 if ($admin > 0 || $id == $user_id || acl(XAT_CAN_EDIT)) {
     $uid_info = "<font size=-1>(" . $id . ")</font>";
@@ -350,7 +364,7 @@ if (!$edit) {
                         echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font>. Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
                     } else {
 
-                        echo '<tr><td><b>TOTP:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font>';
+                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font>';
                         if ((TOTP_ALLOW_SELF_OFF == 1) && ($admin == 0) && (!isoper($user->user_id))) {
                             echo "<font size=-1><a href=\"#\" onclick=\"window.open('disable_totp.php', 'WARNING','width=500,height=120')\");\"> Open Popup</a> to verify your identity and disable two-step verification.</font></td></tr>";
                         } else

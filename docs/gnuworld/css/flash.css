@@ -1,0 +1,6 @@
+.flash { width: 97%; display: block; padding: 10px 0; margin: 10px auto 10px; clear: both; }
+.flash p { margin: 3px 0 3px 10px !important; font-size: 1.1em; line-height: 1.2em; }
+.flash.info { background: #f3f8fc url(../images/information.png) 8px 50% no-repeat; padding: 5px 5px 5px 30px; border: 1px solid #b2d1ff; }
+.flash.info p { color: #456395; }
+.flash.error { background: #fff3f3 url(../images/exclamation.png) 8px 50% no-repeat; border: 1px solid red; padding: 5px 5px 5px 30px; }
+.flash.error p { color: #cc0000; }

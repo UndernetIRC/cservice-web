@@ -1,8 +1,9 @@
 <?php
 error_reporting(E_ALL);
 include("../../../php_includes/cmaster.inc");
+require_once("../../../php_includes/FlashMessage.php");
 
-function html_header() {
+function html_header($show_flash=false) {
     header("Pragma: no-cache\n\n");
     echo "<html>\n<head>\n";
     echo "<title>CService enable two-step verification</title>\n";
@@ -11,13 +12,14 @@ function html_header() {
     <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
     <link rel="stylesheet" type="text/css" href="./css/smoothness/jquery-ui-1.8.20.custom.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="./css/dialog-custom.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../css/flash.css" media="screen" />
     <script type="text/javascript" src="./js/jquery-1.7.2.min.js"~></script>
     <script type="text/javascript" src="./js/jquery-ui-1.8.20.custom.min.js"></script>
     <script type="text/javascript" src="./js/jquery.infieldlabel.min.js"></script>
     <script type="text/javascript" src="./js/custom.js"></script>
     </head>
     <?php
-    std_theme_body();
+    std_theme_body("","document.forms[0].pin.focus();");
 }
 
 std_connect();
@@ -28,8 +30,10 @@ if ($user_id==0 || $auth=="") {
     html_header();
     echo "<h3>You must be logged in to view that page!</h3>";
 } else {
-    session_start();
-
+    if (!session_id()) {
+        session_start();
+    }
+    $flash = new FlashMessage();
     $admin = std_admin();
     if (isset($authtok)) { unset($authtok); }
     if (isset($authcsc)) { unset($authcsc); }
@@ -52,9 +56,8 @@ if ($user_id==0 || $auth=="") {
         $token=filter_var($_POST['pin'], FILTER_SANITIZE_NUMBER_INT);
 
         if (!ip_check_totp($user_name, 0)) {
-            html_header();
-            echo "<h1>Error</h1>\n";
-            echo "<h3>Too many failed TOTP attempts. Restart TOTP activation proccess in 24 hours.</h3>\n";
+            $flash->message("Too many failed two-step verification code attempts. Please try again in 24 hours.", "error");
+            header("Location: ../users.php");
         } elseif ($key != $key_crc) {
             html_header();
             echo "<h1>Error</h1>\n";
@@ -77,10 +80,13 @@ if ($user_id==0 || $auth=="") {
             $fmm="UPDATE webcookies SET totp_cookie='".$temp_totp_hash."' WHERE user_id='" . (int)$user_id . "'";
             pg_exec($fmm);
 
-            header("Location: ../main.php");
+            $flash->message("Two-step verification successfully enabled");
+            header("Location: ../users.php");
         } else {
             ip_check_totp($user_name,1);
-            echo '<h3> WRONG TOKEN!</h3>';
+            html_header();
+            $flash->message("Invalid code, please try again!", "error");
+            echo $flash->show();
             include("_twostep_form.php");
         }
     } else {

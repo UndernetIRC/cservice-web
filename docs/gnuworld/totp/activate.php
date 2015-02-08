@@ -1,3 +1,4 @@
+
 <?
 include("../../../php_includes/cmaster.inc");
 /* $Id: passwd.php,v 1.5 2003/07/19 01:26:20 nighty Exp $ */
@@ -30,35 +31,33 @@ if (!$change_ok) {
 	die("NOT ALLOWED!");
 }
 
+if (!session_id()) {
+    session_start();
+}
+require_once("../../../php_includes/FlashMessage.php");
+$flash = new FlashMessage();
+
 $dares = pg_safe_exec("SELECT * FROM users WHERE id='" . $user_id . "'");
 $dauser = pg_fetch_object($dares,0);
 
-header("Pragma: no-cache\n\n");
 $error[0] = "You already have two-step verification enabled. You can not reactivate it again. Consult #usernames for more help.";
 $user_name=$authtok[0];
-	if (!ip_check_totp($user_name,0)) {
-		echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
-		std_theme_styles(1); std_theme_body();
-        	echo "<h1>Error<br>\n";
-        	echo "Too many failed two-step verification attempts. Restart two-step verificationn proccess in 24 hours.</h1><br>\n";
-		echo "</body>\n";
-		echo "</html>\n\n";
-		die;
-        }
-if (has_totp($user_id))
-	{
-	echo "<html>\n";
-	echo "<head>\n";
-	echo "<title>CService activate two-step verification</title>\n";
-	std_theme_styles();
-	echo "</head>\n";
-	std_theme_body();
 
-	$errors='<h3>'.$error[0].'</h3>';
-	echo $errors;
-	echo "</body></html>\n\n";
+if (!ip_check_totp($user_name,0)) {
+    $flash->message("Too many failed two-step verification code attempts. Please try again in 24 hours.", "error");
+    header("Location: ../users.php");
+    die;
+}
+
+if (has_totp($user_id))
+{
+    $flash->message("You already have two-step verification enabled. You can not enable it again. Consult #usernames for more help.");
+    header("Location: ../users.php");
 	die;
-	}
+}
+
+header("Pragma: no-cache\n\n");
+
 $key=Google2FA::generate_secret_key();
 $cookieval = md5(CRC_SALT_0015 . uniqid("",1) . time() . $key );
 $cookieval.='.'.time();
@@ -74,25 +73,15 @@ if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
 	$query = "UPDATE users SET totp_key='".$cookieval."' WHERE id=" . ($user_id+0);
 	pg_safe_exec($query);
 	$mailm = "";
-	$mailm .= "\nHello,\n\nThis is a confirmation that you have chosen to enable two-step verification,\nto complete the activation follow the instructions below.\n";
-	$confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) ."/confirm.php?ID=$cookieval";
-	$mailm .= "Make sure you're logged in to CService webpage, then click the link ".$confirm_url." and follow the instructions to proceede.\n\n";
+	$mailm .= "\nHello,\n\nThis is a confirmation that you have chosen to enable two-step verification,\nto complete the activation follow the instructions below.\n\n";
+    preg_match('/(.+)\/totp.*/', $REQUEST_URI, $m);
+	$confirm_url = gen_server_url() . preg_replace('/\/totp.*/','', $REQUEST_URI) ."/main.php?entotp=1&ID=$cookieval";
+	$mailm .= "Make sure that you are logged in to the CService webpage, then click on this link ".$confirm_url." and follow the instructions.\n\n";
 	$mailm .= "\n\nThe " . NETWORK_NAME . " Channel Service.\n\n";
-	custom_mail($dauser->email,"CService TOTP activtion",$mailm,"From: " . NETWORK_NAME . " Channel Service <" . FROM_NEWUSER . ">\nReply-to: " . OBJECT_EMAIL . "\nX-Mailer: " . NETWORK_NAME . " Channel Service\n\n");
-	if (TOTP_DEBUG == 1)
-		echo '<pre>'.$mailm.'</pre>';
-							echo "<html>\n";
-							echo "<head>\n";
-							echo "<title>CService enable two-step verification</title>\n";
-							std_theme_styles();
-							echo "</head>\n";
-							std_theme_body();
-
-							echo "<font size=+1>";
-							echo "Your activation email was sent. Please check your inbox for further instructions.<br>\n";
-							echo "</font>";
-							echo "</body></html>\n\n";
-							die;
+	custom_mail($dauser->email,"CService enable two-step verification",$mailm,"From: " . NETWORK_NAME . " Channel Service <" . FROM_NEWUSER . ">\nReply-to: " . OBJECT_EMAIL . "\nX-Mailer: " . NETWORK_NAME . " Channel Service\n\n");
+    $flash->message("An activation email for two-step verification has been sent to you,<br>please check your inbox and follow the instructions.");
+    header("Location: ../users.php");
+    die;
 }
 echo "<html>\n";
 echo "<head>\n";
@@ -106,7 +95,7 @@ echo "<form name=act_totp method=post action=activate.php>\n";
 echo "<input type=hidden name=SECURE_ID value=\"" . $SECURE_ID . "\">\n";
 echo "<input type=hidden name=crc value=\"" . md5( $SECURE_ID . CRC_SALT_0011 ) . "\">\n";
 echo "<input type=hidden name=mode value=write>\n";
-echo "Are you sure you want to enable two-step verification? This is not reversible by you, you'll need to ask a CService Admin to disable it!<br>\n";
+echo "Are you sure you want to enable two-step verification?<br>\n";
 if (($dauser->totp_key !='') && (strlen($dauser->totp_key) < 33))
 echo '<input type="checkbox" value="1" name="new_key" id="new_key" checked="checked"/> Generate a new two-step verification key. (If you want to use the old stored key, uncheck this box.)<br><br>';
 echo "<input type=submit name=yes value=\"YES\">  ";

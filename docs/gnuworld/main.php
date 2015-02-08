@@ -40,6 +40,8 @@ if ($securize_mode) {
 	echo "<FRAME SRC=\"left.php\" NAME=left SCROLLING=AUTO>\n";
 	if ($sba) {
 	        echo "<FRAME SRC=\"right.php?sba=1\" NAME=right SCROLLING=AUTO>\n";
+    } elseif (isset($entotp) && isset($ID)) {
+            echo "<FRAME SRC=\"totp/confirm.php?ID=$ID\" NAME=\"right\" SCROLLING=\"AUTO\"\n";
 	} else {
 	        echo "<FRAME SRC=\"right.php\" NAME=right SCROLLING=AUTO>\n";
 	}
