@@ -90,7 +90,6 @@ if ($user_id==0 || $auth=="") {
             include("_twostep_form.php");
         }
     } else {
-        html_header();
         $tmp_sql = pg_safe_exec("SELECT * FROM old_totp WHERE id='" . $dauser->id . "'");
 
         if (pg_num_rows($tmp_sql) == 1) {
@@ -108,17 +107,23 @@ if ($user_id==0 || $auth=="") {
             $dauser = pg_fetch_object($dares,0);
 
             if ($test_hash != $id_parts[2]) {
-                echo '<h3>Invalid link. Please make sure you copied the link corectly !</h3>';
+                $flash->message("The activation link is invalid. Please make sure that you copied the link correctly!", "error");
             } elseif ((time()-$id_parts[1]) > TOTP_CONFIRM_INT) {
-                echo '<h3>Link expired. Please restart the activation proccess to generate a new link.</h3>';
+                $flash->message("The activation link has expired. Please try and enable two-step verification again.", "error");
             } elseif($user_id != $dauser->id) {
-                echo '<h3>Link is invalid. Does not belong to the logged in username.</h3>';
+                $flash->message("The activation link is invalid.", "error");
             } else {
+                html_header();
                 $query = "UPDATE users SET totp_key='".$totp_key."' WHERE id=" . ($user_id+0);
                 $_SESSION['oath_uri'] = "otpauth://totp/Undernet:{$user_name}?secret={$totp_key}&issuer=Undernet&digits=6";
                 pg_safe_exec($query);
                 echo "<h3>Enable two-step verification</h3>";
                 include("_twostep_form.php");
+            }
+
+            if($flash->hasMessage()) {
+                header("Location: ../users.php");
+                die;
             }
         }
     }
