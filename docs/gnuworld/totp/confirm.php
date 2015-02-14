@@ -46,6 +46,11 @@ if ($user_id==0 || $auth=="") {
     $authcsc = $authtok[3];
     $user_name = $authtok[0];
     $SECURE_ID=md5( $user_id . CRC_SALT_0019 . $authcsc );
+    if ($admin > 0) {
+        $user_redirect_url = "../users.php?id={$user_id}";
+    } else {
+        $user_redirect_url = "../users.php";
+    }
 
     if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
         $expire=time()+get_custom_session($user_id);
@@ -57,7 +62,7 @@ if ($user_id==0 || $auth=="") {
 
         if (!ip_check_totp($user_name, 0)) {
             $flash->message("Too many failed two-step verification code attempts. Please try again in 24 hours.", "error");
-            header("Location: ../users.php");
+            header("Location: {$user_redirect_url}");
         } elseif ($key != $key_crc) {
             html_header();
             echo "<h1>Error</h1>\n";
@@ -81,7 +86,7 @@ if ($user_id==0 || $auth=="") {
             pg_exec($fmm);
 
             $flash->message("Two-step verification successfully enabled");
-            header("Location: ../users.php");
+            header("Location: {$user_redirect_url}");
         } else {
             ip_check_totp($user_name,1);
             html_header();
@@ -122,7 +127,7 @@ if ($user_id==0 || $auth=="") {
             }
 
             if($flash->hasMessage()) {
-                header("Location: ../users.php");
+                header("Location: {$user_redirect_url}");
                 die;
             }
         }

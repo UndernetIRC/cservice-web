@@ -80,7 +80,11 @@ if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
 	$mailm .= "\n\nThe " . NETWORK_NAME . " Channel Service.\n\n";
 	custom_mail($dauser->email,"CService enable two-step verification",$mailm,"From: " . NETWORK_NAME . " Channel Service <" . FROM_NEWUSER . ">\nReply-to: " . OBJECT_EMAIL . "\nX-Mailer: " . NETWORK_NAME . " Channel Service\n\n");
     $flash->message("An activation email for two-step verification has been sent to you,<br>please check your inbox and follow the instructions.");
-    header("Location: ../users.php");
+    if ($admin > 0) {
+        header("Location: ../users.php?id={$user_id}");
+    } else {
+        header("Location: ../users.php");
+    }
     die;
 }
 echo "<html>\n";
