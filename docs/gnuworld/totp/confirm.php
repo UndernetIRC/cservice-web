@@ -46,11 +46,7 @@ if ($user_id==0 || $auth=="") {
     $authcsc = $authtok[3];
     $user_name = $authtok[0];
     $SECURE_ID=md5( $user_id . CRC_SALT_0019 . $authcsc );
-    if ($admin > 0) {
-        $user_redirect_url = "../users.php?id={$user_id}";
-    } else {
-        $user_redirect_url = "../users.php";
-    }
+    $user_redirect_url = "../users.php?id={$user_id}";
 
     if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
         $expire=time()+get_custom_session($user_id);
