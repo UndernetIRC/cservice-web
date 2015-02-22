@@ -205,7 +205,9 @@ std_theme_styles();
 <script>
   function showTwoStepDialog() {
     $( "#twostepdialog" ).dialog({
-      dialogClass: 'twostep'
+       dialogClass: 'twostep',
+       modal: true,
+       position: { my: "center", at: "center", of: $(".tsdialog") }
     });
   }
   setTimeout(function() {
@@ -356,7 +358,7 @@ if (!$edit) {
                         $authtok = explode(":", $auth);
                         $authcsc = $authtok[3];
                         $sec_id = md5($user_id . CRC_SALT_0019 . $authcsc);
-                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font>. Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
+                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font>. Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a class="tsdialog" href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
                     } else {
 
                         echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font>';

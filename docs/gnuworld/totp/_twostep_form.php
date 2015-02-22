@@ -7,7 +7,7 @@ if (isset($_SESSION['oath_uri'])) { ?>
   <input type="hidden" name="key" value="<?= md5( $totp_key . CRC_SALT_0011 ) ?>">
   <input type="hidden" name="mode" value="write">
   <p class="description">
-    An authenticator app lets your generate security codes using your mobile device. We support any of <a href="#">these apps</a>. 
+    An authenticator app lets your generate security codes using your mobile device. We support any of <a href="javascript:void(null);" class="tsdialog" onclick="showTwoStepAppsDialog();">these apps</a>.
   </p>
   <p>To configure your authenticator app:</p>
   <ul>

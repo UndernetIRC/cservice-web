@@ -1,27 +1,8 @@
-.twostep .ui-widget-content {
-    font-family: Arial;
-    font-size: 0.8em;
-}
-#twostepdialog, #qr-show-elem, #key-div {
-    display: none;
-}
-
-#qr-div img {
-    margin-left: 40px;
-}
-
-#key-div {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-#key-div span {
-    font-size: 1.5em;
-    font-weight: 700;
-    margin-left: 40px;
-    background-color: #FFFFFF;
-}
-
+.twostep .ui-widget-content { font-family: Arial; font-size: 0.8em; }
+#twostepdialog, #qr-show-elem, #key-div, #twostep-apps { display: none; }
+#qr-div img { margin-left: 40px; }
+#key-div { margin-top: 20px; margin-bottom: 20px; }
+#key-div span {font-size: 1.5em; font-weight: 700; margin-left: 40px; background-color: #FFFFFF; }
 form.totp p { position: relative; }
 form.totp p br { display: none; }
 label { position: absolute; top: 3px; left: 4px; cursor: text }

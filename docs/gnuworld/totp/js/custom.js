@@ -7,3 +7,11 @@ function toggleQr() {
     $("#qr-show-elem").toggle();
     $("#key-div").toggle();
 };
+function showTwoStepAppsDialog() {
+    $( "#twostep-apps" ).dialog({
+        dialogClass: 'twostep',
+        modal: true,
+        minWidth: 385,
+        position: { my: "center", at: "center", of: $(".tsdialog") }
+    });
+};

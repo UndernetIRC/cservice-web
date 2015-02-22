@@ -129,5 +129,8 @@ if ($user_id==0 || $auth=="") {
         }
     }
 }
-echo "</body></html>\n";
 ?>
+  <div id="twostep-apps" title="Supported authenticator apps">
+    <p>...this is just a place holder [FIXME]</p>
+  </div>
+</body></html>
