@@ -84,11 +84,9 @@ if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_
         die;
     }
 } else {
-
     if ($thehostmask != "" && $mode == 2 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
         $lowhost = strtolower($thehostmask);
         $raw_q = "FROM users,users_lastseen WHERE lower(users_lastseen.last_hostmask) LIKE '" . str_replace("*", "%", $lowhost) . "' AND users_lastseen.user_id=users.id";
-//			echo "$raw_q<br><br>";
         $tcount = pg_safe_exec("SELECT COUNT(*) AS count " . $raw_q . " LIMIT " . ($maxuserlisted + 1));
         $cobj = pg_fetch_object($tcount, 0);
         $rcount = $cobj->count;
@@ -128,58 +126,55 @@ if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_
             echo "</body></html>\n\n";
             die;
         }
-    } else {
-
+    } elseif ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW)) {
         if ($id == "") {
-            if ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW)) {
-                std_theme_styles(1);
-                std_theme_body();
-                ?>
-                <H1>User Lookup</h1>
-                <form name=f1 method=POST>
-                    Username <input type=text name=theuser>&nbsp;(wildcard : *)<br><br>
-                    <input type=submit value="Go baby!">
-                    <input type=hidden name=mode value=1>
-                </form>
-                <br><br>
-                <form name=f2 method=POST>
-                    Last hostmask <input type=text name=thehostmask>&nbsp;(wildcard : *)<br><br>
-                    <input type=submit value="Go baby!">
-                    <input type=hidden name=mode value=2>
-                </form>
-                <?
-                if ($admin > 0) {
-                    /*
-                      $stat=pg_safe_exec("select count(*) from channels where registered_ts>0");
-                      $stat=pg_fetch_object($stat,0);
-                      $channel_count=$stat->count;
-                      echo "Channels: $channel_count";
+            std_theme_styles(1);
+            std_theme_body();
+            ?>
+            <H1>User Lookup</h1>
+                 <form name=f1 method=POST>
+            Username <input type=text name=theuser>&nbsp;(wildcard : *)<br><br>
+            <input type=submit value="Go baby!">
+            <input type=hidden name=mode value=1>
+            </form>
+            <br><br>
+            <form name=f2 method=POST>
+            Last hostmask <input type=text name=thehostmask>&nbsp;(wildcard : *)<br><br>
+            <input type=submit value="Go baby!">
+            <input type=hidden name=mode value=2>
+            </form>
+            <?
+            if ($admin > 0) {
+                /*
+                  $stat=pg_safe_exec("select count(*) from channels where registered_ts>0");
+                  $stat=pg_fetch_object($stat,0);
+                  $channel_count=$stat->count;
+                  echo "Channels: $channel_count";
 
-                      $stat=pg_safe_exec("select count(*) from users");
-                      $stat=pg_fetch_object($stat,0);
-                      $user_count=$stat->count;
-                      echo "<br>Users: $user_count";
-                     */
-                }
-
-                if ($admin > 900) {
-                    echo "<br><br>";
-                    echo "<a href=\"newpass.php\">Change A User's Password</a><br>\n";
-                    echo "(<b>CODER</b> only feature for emergency cases, do NOT use it unless you know what you are doing)<br>\n";
-                }
-
-
-                echo "</body>\n</html>\n\n";
-
-                exit;
-            } else {
-                $id = $user_id;
+                  $stat=pg_safe_exec("select count(*) from users");
+                  $stat=pg_fetch_object($stat,0);
+                  $user_count=$stat->count;
+                  echo "<br>Users: $user_count";
+                */
             }
+
+            if ($admin > 900) {
+                echo "<br><br>";
+                echo "<a href=\"newpass.php\">Change A User's Password</a><br>\n";
+                echo "(<b>CODER</b> only feature for emergency cases, do NOT use it unless you know what you are doing)<br>\n";
+            }
+
+
+            echo "</body>\n</html>\n\n";
+
+            exit;
         } else {
             $id = $id + 0;
         }
-        $user = pg_safe_exec("select * from users where id='" . $id . "'");
+    } else {
+        $id = $user_id;
     }
+    $user = pg_safe_exec("select * from users where id='" . $id . "'");
 }
 if (pg_numrows($user) == 0) {
     std_theme_styles(1);
