@@ -358,12 +358,12 @@ if (!$edit) {
                         $authtok = explode(":", $auth);
                         $authcsc = $authtok[3];
                         $sec_id = md5($user_id . CRC_SALT_0019 . $authcsc);
-                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font>. Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a class="tsdialog" href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
+                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font> - Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a class="tsdialog" href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
                     } else {
 
-                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font>';
+                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font> - ';
                         if ((TOTP_ALLOW_SELF_OFF == 1) && ($admin == 0) && (!isoper($user->user_id))) {
-                            echo "<font size=-1><a href=\"#\" onclick=\"window.open('disable_totp.php', 'WARNING','width=500,height=120')\");\"> Open Popup</a> to verify your identity and disable two-step verification.</font></td></tr>";
+                            echo "Click <a href=\"" . TOTP_PATH . "disable_totp.php\"> here </a> to disable two-step verification.";
                         } else
                             echo '</td></tr>';
                     }
