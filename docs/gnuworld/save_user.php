@@ -332,6 +332,19 @@ if(isset($_POST['totp']))
 		}
 	}
 
+$changed_totp_ipr = 0;
+if (isset($_POST['totp_ipr'])) {
+    if ($_POST['totp_ipr'] == "on" && ($row->flags & TOTP_ADMIN_IPR_FLAG) == 0) {
+        $new_flags = (int)$new_flags | TOTP_ADMIN_IPR_FLAG;
+        $changed_totp_ipr = 1;
+        $fchanged = 1;
+    } else if ($_POST['totp_ipr'] == "off" && ($row->flags & TOTP_ADMIN_IPR_FLAG)) {
+        $new_flags = (int)$new_flags & ~TOTP_ADMIN_IPR_FLAG;
+        $changed_totp_ipr = 1;
+        $fchanged = 1;
+    }
+}
+
 $changed_timout=0;
 //sess_timout
 if ($admin >= 800)
@@ -433,6 +446,7 @@ if( $result ) {
 			if ($chg_formpost>0) { $add_reason .="- Form Post\n"; }
 			if ($admin>=MOD_MAXLOGINS_LEVEL && $maxlogins!=$row->maxlogins) { $add_reason .= "- Maxlogins\n"; }
 			if ($changed_totp == 1) { $add_reason .= "- TOTP disabled\n";}
+            if ($changed_totp_ipr == 1) { $add_reason .= " - Toggled two-step verification IPR check\n"; }
 			if ($changed_timout == 1) { $add_reason .= "- Web session timeout\n";}
 			if ($add_reason!="") { $add_reason = "Fields modified:\n" . $add_reason; } else { $add_reason = "No fields modified"; }
 			$result = log_user($id,3,$add_reason);

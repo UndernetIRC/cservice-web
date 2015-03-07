@@ -353,19 +353,28 @@ if (!$edit) {
     {
         if (TOTP_ON) {
             if ($id == $user_id) {
-                if (TOTP_ON == 1) {
-                    if (!has_totp($id)) {
-                        $authtok = explode(":", $auth);
-                        $authcsc = $authtok[3];
-                        $sec_id = md5($user_id . CRC_SALT_0019 . $authcsc);
-                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font> - Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a class="tsdialog" href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
-                    } else {
+                if (!has_totp($id)) {
+                    $authtok = explode(":", $auth);
+                    $authcsc = $authtok[3];
+                    $sec_id = md5($user_id . CRC_SALT_0019 . $authcsc);
+                    echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font> - Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a class="tsdialog" href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
+                } else {
 
-                        echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font> - ';
-                        if ((TOTP_ALLOW_SELF_OFF == 1) && ($admin == 0) && (!isoper($user->user_id))) {
-                            echo "Click <a href=\"" . TOTP_PATH . "disable_totp.php\"> here </a> to disable two-step verification.";
-                        } else
-                            echo '</td></tr>';
+                    echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font>';
+                    if ((TOTP_ALLOW_SELF_OFF == 1) && ($admin == 0) && (!isoper($user->user_id))) {
+                        echo " - Click <a href=\"" . TOTP_PATH . "disable_totp.php\"> here </a> to disable two-step verification.";
+                    } else {
+                        echo '</td></tr>';
+                    }
+                    if ($admin > 0) {
+                        if ($user->flags & TOTP_ADMIN_IPR_FLAG) {
+                            $theme = $cTheme->main_yes;
+                            $status = 'Enabled';
+                        } else {
+                            $theme = $cTheme->main_no;
+                            $status = 'Disabled';
+                        }
+                        printf('<tr><td><b>Two-step verification IPR check:</b></td><td><font color="#%s"><b>%s</b></font>', $theme, $status);
                     }
                 }
             }
@@ -539,16 +548,38 @@ if (!$edit) {
     // edit TOTP 
     if (TOTP_ON) {
         if (($admin >= TOTP_RESET_LVL) || ((acl(XIPR_VIEW_OWN)) && (!$isAdmin)) || ((acl(XTOTP_DISABLE_OTHERS) && (!$isAdmin)))) {
-            echo "<tr><td> <b>Two-step verification</b>:</td><td> ";
+            echo "<tr><td> <b>Two-step verification:</b></td><td> ";
 
-            if (has_totp($user->id))
+            if (has_totp($user->id)) {
+                $totp_enabled = true;
                 echo "<select id=\"totp\" name =\"totp\"> <option selected value=\"on\"> Enabled </option><option value=\"off\"> Disabled </option></select></td></tr>";
-            else
+            } else {
                 echo " Disabled </td></tr>";
+            }
+
+            if ($totp_enabled) {
+                echo "<tr><td><b>Two-step verification IPR check:</b></td><td>";
+                if ($user->flags & TOTP_ADMIN_IPR_FLAG) {
+                    echo "<select id=\"totp_ipr\" name =\"totp_ipr\"> <option selected value=\"on\"> Enabled </option><option value=\"off\"> Disabled </option></select></td></tr>";
+                } else {
+                    echo "<select id=\"totp_ipr\" name =\"totp_ipr\"> <option selected value=\"on\"> Enabled </option><option value=\"off\" selected> Disabled </option></select></td></tr>";
+                }
+            }
         }
         else {
-          printf("<tr><td> <b>Two-step verification</b>: </td><td> %s </td></tr>", has_totp($user->id) ? 'Enabled' : 'Disabled');
-        }
+            $totp_status = $totp_ipr_status = 'Disabled';
+            if (has_totp($user->id)) {
+                $totp_enabled = true;
+                if ($user->flags & TOTP_ADMIN_IPR_FLAG) {
+                    $totp_ipr_status = 'Enabled';
+                }
+            }
+            printf("<tr><td><b>Two-step verification:</b> </td><td> %s </td></tr>", $totp_status);
+            if ($totp_enabled) {
+                printf("<tr><td><b>Two-step verification IPR check:</b> </td><td> %s </td></tr>", $totp_ipr_status);
+            }
+       }
+
     }
     if (ENABLE_NOTES && ((NOTES_ADMIN_ONLY && $admin > 0) || (NOTES_ADMIN_ONLY == 0))) {
         echo "<tr><td valign=top><b>Accept notes:</b></td>";
