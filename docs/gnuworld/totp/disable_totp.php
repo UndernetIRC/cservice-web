@@ -79,6 +79,7 @@ if(!has_totp($user_id)) {
     } else {
         html_header();
         $flash->message("Invalid code, please try again!", "error");
+        ip_check_totp($user_name, 1);
         echo $flash->show();
         echo "<h3>Disable two-step verification</h3>";
         ts_disable_form();
