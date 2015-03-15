@@ -636,22 +636,24 @@ if (!$edit && ($admin > 0 || has_acl($user_id)) && (
         (acl(XIPR_VIEW_OTHERS) && $isAdminLvl < $admin)
         )) {
     // not in user edit mode .. separate page for modifications ...
-    $rip = @pg_safe_exec("SELECT * FROM ip_restrict WHERE user_id='" . (int) $user->id . "'");
-    if ($rip && ($isAdminLvl > 0 || has_acl($user->id))) { //only if the table is present... and the user has a need for IPR entries
+    if ($admin > 0 || has_acl($user->id)) { //only if the table is present... and the user has a need for IPR entries
         echo("<tr><td colspan=2 bgcolor=#" . $cTheme->table_sepcolor . "><font size=-1 color=#" . $cTheme->table_septextcolor . "><em><b>Access IP restrictions</b> (ACL+)</em></td></tr>");
         echo "<TR><TD colspan=2><font size=-1><b>";
         // function matches_wild($string_to_match,$wildcard_mask)
         echo "This user is restricted to login on the following IP/Host masks :</b><br>\n";
         echo "<form name=dummy><ul>";
-        $amask = 0;
-        while ($ripo = @pg_fetch_object($rip)) {
-            $amask++;
-            echo "<li> ";
-            echo $ripo->value;
-            echo "\n";
-        }
-        if ($amask == 0) {
-            echo "<li> <i>none</i>\n";
+        $rip = @pg_safe_exec("SELECT * FROM ip_restrict WHERE user_id='" . (int) $user->id . "'");
+        if ($rip) {
+            $amask = 0;
+            while ($ripo = @pg_fetch_object($rip)) {
+                $amask++;
+                echo "<li> ";
+                echo $ripo->value;
+                echo "\n";
+            }
+            if ($amask == 0) {
+                echo "<li> <i>none</i>\n";
+            }
         }
         echo "</ul>";
         echo "<br><br>";

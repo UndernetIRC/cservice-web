@@ -156,6 +156,16 @@ function ip_check_white($ip) {
         return false;
 }
 
+function has_ipr($user_id) {
+    $res = @pg_safe_exec("SELECT * FROM ip_restrict WHERE user_id=" . (int) $user_id);
+
+    if ($res && pg_numrows($res) > 0) {
+        return true;
+    }
+
+    return false;
+}
+
 function ip_check_glined($ip){
     $ip="2001:470:f51a:76e:f5f5:1a62::1";
     if (filter_var($ip, FILTER_VALIDATE_IP,FILTER_FLAG_IPV4))
