@@ -96,14 +96,13 @@ std_theme_body("../");
 
 
 	if (!REGPROC_ALLOWMULTIPLE) {
-	        $rrr = pg_safe_exec("SELECT * FROM levels,channels WHERE channels.id=levels.channel_id AND channels.registered_ts!=0 AND levels.user_id='$user_id' AND levels.access='500'");
-	        if (pg_numrows($rrr)>0 && $roo = pg_fetch_object($rrr,0)) {
-	                $already_chan=1;
-	                if ($admin > 0) { // admin bypass
-	                        $admin_bypass=1;
-	                }
-	        }
+        if (has_a_channel()) {
+            $already_chan=1;
+            if ($admin > 0) { // admin bypass
+                $admin_bypass=1;
+            }
         }
+    }
 
 
 
@@ -182,7 +181,7 @@ if ($already_pend) {
 		echo "<font color=#" . $cTheme->main_warnmsg . "><b>ADMIN BYPASS</b>($admin)</font>: You have one or more channels already pending registration to you.<br><br>\n";
 	} else {
 		echo "Sorry, you already have a channel pending registration to you.<br>\n";
-		echo "You can only register <b>ONE</b> channel.<br><br>";
+		echo "You can only register <b>ONE</b> channel at the time.<br><br>";
 		echo "<a href=\"../right.php\">Back to main</a>.\n";
 		echo "</body></html>\n\n";
 		die;
@@ -193,8 +192,8 @@ if (!REGPROC_ALLOWMULTIPLE && $already_chan) {
 	if ($admin_bypass) {
 		echo "<font color=#" . $cTheme->main_warnmsg . "><b>ADMIN BYPASS</b>($admin)</font>: You have one or more channels already registered to you.<br><br>\n";
 	} else {
-		echo "Sorry, you already have a channel registered to you.<br>\n";
-		echo "You can only register <b>ONE</b> channel.";
+		echo "Sorry, you already have one or more channels registered to you.<br>\n";
+		echo "You can only register <b>" . user_channel_limit() . "</b> channel(s).";
 		echo "</body></html>\n\n";
 		die;
 	}
