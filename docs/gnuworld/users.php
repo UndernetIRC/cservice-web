@@ -913,6 +913,20 @@ if (!$edit || $admin < 800) {
             echo "<tr><td><b>User's Max Logins 6</b></td><td>" . $can_set_maxlogins . "</td></tr>\n";
     }
 
+    if (!REGPROC_ALLOWMULTIPLE) {
+        $user_age = time() - $user->signup_ts;
+        asort($allow_multi_chans);
+
+        echo "<tr><td valign=\"top\"><b>Channel manager limit</b></td><td>" . user_channel_limit();
+
+        foreach ($allow_multi_chans as $key => $val) {
+            if ($user_age < $val) {
+                echo "<span style=\"font-style: italic; padding-left: 50px;\">(You need to wait " . seconds2human2($val - $user_age) . " until you can register {$key} channels.)</span>";
+                break;
+            }
+        }
+        echo "</td></tr>";
+    }
 
     if ($canview == 1) {
         echo "<tr bgcolor=#" . $cTheme->table_tr_enlighten3 . "><td valign=top>";
