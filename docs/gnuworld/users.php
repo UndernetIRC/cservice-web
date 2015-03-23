@@ -917,7 +917,7 @@ if (!$edit || $admin < 800) {
         $user_age = time() - $user->signup_ts;
         asort($allow_multi_chans);
 
-        echo "<tr><td valign=\"top\"><b>Channel manager limit</b></td><td>" . user_channel_limit();
+        echo "<tr><td valign=\"top\"><b>Channel manager limit</b></td><td>" . user_channel_limit($user->id);
 
         foreach ($allow_multi_chans as $key => $val) {
             if ($user_age < $val) {
