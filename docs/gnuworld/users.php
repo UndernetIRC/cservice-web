@@ -725,7 +725,7 @@ if ($admin > 0) {
     }
     if ($edit) {
         if ($admin >= MOD_MAXLOGINS_LEVEL) {
-            echo "<tr><td><b>User's Max Logins 1</b></td><td>";
+            echo "<tr><td><b>User's Max Logins</b></td><td>";
             echo "<select name=maxlogins>";
             for ($ml = 1; $ml <= MAX_MAXLOGINS; $ml++) {
                 echo "<option ";
@@ -737,7 +737,7 @@ if ($admin > 0) {
             echo "</select>";
             echo "&nbsp;</td></tr>\n";
         } else {
-            echo "<tr><td><b>User's Max Logins 2</b></td><td>" . ($user->maxlogins + 0) . "&nbsp;</td></tr>\n";
+            echo "<tr><td><b>User's Max Logins</b></td><td>" . ($user->maxlogins + 0) . "&nbsp;</td></tr>\n";
         }
     } else {
 
@@ -748,7 +748,7 @@ if ($admin > 0) {
                 $temp_maxlogins = 2;
                 if ($user_age > $allow_maxlogins[1])
                     $temp_maxlogins = "3";
-                echo "</form><tr><td><b>User's Max Logins 3</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
+                echo "</form><tr><td><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
                 echo "<select name=\"maxlogins\" id=\"maxlogins\">";
                 for ($ml = 1; $ml <= $temp_maxlogins; $ml++) {
                     echo "<option ";
@@ -761,7 +761,7 @@ if ($admin > 0) {
                 echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_maxlogins . "</td></tr>\n";
             }
         } else
-            echo "<tr><td><b>User's Max Logins 4</b></td><td>" . ($user->maxlogins + 0) . "&nbsp;</td></tr>\n";
+            echo "<tr><td><b>User's Max Logins</b></td><td>" . ($user->maxlogins + 0) . "&nbsp;</td></tr>\n";
     }
 
     $ENABLE_COOKIE_TABLE = 1;
@@ -898,7 +898,7 @@ if (!$edit || $admin < 800) {
             $temp_maxlogins = 2;
             if ($user_age > $allow_maxlogins[3])
                 $temp_maxlogins = "3";
-            echo "<tr><td valign=\"top\"><b>User's Max Logins 5</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
+            echo "<tr><td valign=\"top\"><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
             echo "<select name=\"maxlogins\" id=\"maxlogins\">";
             for ($ml = 1; $ml <= $temp_maxlogins; $ml++) {
                 echo "<option ";
@@ -910,14 +910,15 @@ if (!$edit || $admin < 800) {
             echo "</select>";
             echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_maxlogins . "</td></tr>\n";
         } else
-            echo "<tr><td><b>User's Max Logins 6</b></td><td>" . $can_set_maxlogins . "</td></tr>\n";
+            echo "<tr><td><b>User's Max Logins</b></td><td>" . $can_set_maxlogins . "</td></tr>\n";
     }
 
     if (!REGPROC_ALLOWMULTIPLE) {
         $user_age = time() - $user->signup_ts;
-        asort($allow_multi_chans);
 
         echo "<tr><td valign=\"top\"><b>Channel manager limit</b></td><td>" . user_channel_limit($user->id);
+
+        asort($allow_multi_chans);
 
         foreach ($allow_multi_chans as $key => $val) {
             if ($user_age < $val) {
