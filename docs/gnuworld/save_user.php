@@ -323,14 +323,13 @@ if ($admin>=800 && $user_id!=$row->id) {
 
 
 $changed_totp=0;
-if(isset($_POST['totp']))
-	{
-	if ($_POST['totp'] == "off")
-		{
-		disable_totp($id);
+if(isset($_POST['totp'])) {
+	if ($_POST['totp'] == "off" && ($row->flags & TOTP_USR_FLAG)) {
+        $new_flags = (int)$new_flags & ~TOTP_USR_FLAG;
 		$changed_totp=1;
-		}
-	}
+        $fchanged = 1;
+    }
+}
 
 $changed_totp_ipr = 0;
 if (isset($_POST['totp_ipr'])) {
