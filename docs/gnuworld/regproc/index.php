@@ -193,7 +193,7 @@ if (!REGPROC_ALLOWMULTIPLE && $already_chan) {
 		echo "<font color=#" . $cTheme->main_warnmsg . "><b>ADMIN BYPASS</b>($admin)</font>: You have one or more channels already registered to you.<br><br>\n";
 	} else {
 		echo "Sorry, you already have one or more channels registered to you.<br>\n";
-		echo "You can only register <b>" . user_channel_limit() . "</b> channel(s).";
+		echo "You can only register <b>" . user_channel_limit($user_id) . "</b> channel(s).";
 		echo "</body></html>\n\n";
 		die;
 	}
