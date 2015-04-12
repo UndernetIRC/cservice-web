@@ -358,6 +358,16 @@ if (!$edit) {
                     $authcsc = $authtok[3];
                     $sec_id = md5($user_id . CRC_SALT_0019 . $authcsc);
                     echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_no . '><b>Disabled</b></font> - Click <a href ="' . TOTP_PATH . 'activate.php?SECURE_ID=' . $sec_id . '"> here </a> to enable it (read more about two-step verification <a class="tsdialog" href="javascript:void(null);" onclick="showTwoStepDialog();">here</a>).</td></tr>';
+                    if ($admin > 0 || has_ipr($user_id)) {
+                        if ($user->flags & TOTP_ADMIN_IPR_FLAG) {
+                            $theme = $cTheme->main_yes;
+                            $status = 'Enabled';
+                        } else {
+                            $theme = $cTheme->main_no;
+                            $status = 'Disabled';
+                        }
+                        printf('<tr><td><b>Two-step verification IPR check:</b></td><td><font color="#%s"><b>%s</b></font>', $theme, $status);
+                    }
                 } else {
 
                     echo '<tr><td><b>Two-step verification:</b></td><td> <font color=#' . $cTheme->main_yes . '><b>Enabled</b></font>';
@@ -366,7 +376,7 @@ if (!$edit) {
                     } else {
                         echo '</td></tr>';
                     }
-                    if ($admin > 0) {
+                    if ($admin > 0 || has_ipr($user_id)) {
                         if ($user->flags & TOTP_ADMIN_IPR_FLAG) {
                             $theme = $cTheme->main_yes;
                             $status = 'Enabled';
@@ -379,15 +389,25 @@ if (!$edit) {
                 }
             }
             else {
-                if (SHOW_TOTP_PUBLIC || acl(XTOTP_DISABLE_OTHERS) || ($admin > 0))
-                  if (has_totp($id)) {
-                    $theme = $cTheme->main_yes;
-                    $status = 'Enabled';
-                  } else {
-                    $theme = $cTheme->main_no;
-                    $status = 'Disabled';
-                  }
-                printf("<tr><td><b>Two-step verification:</b></td><td><font color=\"#%s\"><b>%s</b></font></td></tr>", $theme, $status);
+                if (SHOW_TOTP_PUBLIC || acl(XTOTP_DISABLE_OTHERS) || ($admin > 0)) {
+                    if (has_totp($id)) {
+                        $theme = $cTheme->main_yes;
+                        $status = 'Enabled';
+                    } else {
+                        $theme = $cTheme->main_no;
+                        $status = 'Disabled';
+                    }
+                    printf("<tr><td><b>Two-step verification:</b></td><td><font color=\"#%s\"><b>%s</b></font></td></tr>", $theme, $status);
+
+                    if ($user->flags & TOTP_ADMIN_IPR_FLAG) {
+                        $theme = $cTheme->main_yes;
+                            $status = 'Enabled';
+                    } else {
+                        $theme = $cTheme->main_no;
+                        $status = 'Disabled';
+                    }
+                    printf('<tr><td><b>Two-step verification IPR check:</b></td><td><font color="#%s"><b>%s</b></font>', $theme, $status);
+                }
             }
         }
     }
@@ -557,14 +577,14 @@ if (!$edit) {
                 echo " Disabled </td></tr>";
             }
 
-            if ($totp_enabled) {
+            //            if ($totp_enabled) {
                 echo "<tr><td><b>Two-step verification IPR check:</b></td><td>";
                 if ($user->flags & TOTP_ADMIN_IPR_FLAG) {
                     echo "<select id=\"totp_ipr\" name =\"totp_ipr\"> <option selected value=\"on\"> Enabled </option><option value=\"off\"> Disabled </option></select></td></tr>";
                 } else {
                     echo "<select id=\"totp_ipr\" name =\"totp_ipr\"> <option selected value=\"on\"> Enabled </option><option value=\"off\" selected> Disabled </option></select></td></tr>";
                 }
-            }
+                //}
         }
         else {
             $totp_status = $totp_ipr_status = 'Disabled';
@@ -575,9 +595,7 @@ if (!$edit) {
                 }
             }
             printf("<tr><td><b>Two-step verification:</b> </td><td> %s </td></tr>", $totp_status);
-            if ($totp_enabled) {
-                printf("<tr><td><b>Two-step verification IPR check:</b> </td><td> %s </td></tr>", $totp_ipr_status);
-            }
+            printf("<tr><td><b>Two-step verification IPR check:</b> </td><td> %s </td></tr>", $totp_ipr_status);
        }
 
     }
@@ -922,7 +940,7 @@ if (!$edit || $admin < 800) {
 
         foreach ($allow_multi_chans as $key => $val) {
             if ($user_age < $val) {
-                echo "<span style=\"font-style: italic; padding-left: 50px;\">(You need to wait " . seconds2human2($val - $user_age) . " until you can register {$key} channels.)</span>";
+                echo "<span style=\"font-style: italic; padding-left: 50px;\">You need to wait " . seconds2human2($val - $user_age) . " until you can register {$key} channel(s).</span>";
                 break;
             }
         }
