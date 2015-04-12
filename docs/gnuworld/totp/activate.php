@@ -63,13 +63,8 @@ $cookieval = md5(CRC_SALT_0015 . uniqid("",1) . time() . $key );
 $cookieval.='.'.time();
 $tmp_cookie=substr(md5(CRC_SALT_0015 . time()), 0, 5);
 $cookieval.='.'.$tmp_cookie;
-//echo $cookieval;
+
 if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
-	$tmp_sql=pg_safe_exec("delete from old_totp WHERE id='" .$dauser->id . "'");
-	if (($_POST['new_key']!="1") && ($dauser->totp_key !='') && (strlen($dauser->totp_key) < 33))
-		{
-			$tmp_sql=pg_safe_exec("insert into old_totp values ('". $dauser->id  ."', '".$dauser->totp_key."')");
-		}
 	$query = "UPDATE users SET totp_key='".$cookieval."' WHERE id=" . ($user_id+0);
 	pg_safe_exec($query);
 	$mailm = "";
@@ -96,14 +91,12 @@ echo "<input type=hidden name=SECURE_ID value=\"" . $SECURE_ID . "\">\n";
 echo "<input type=hidden name=crc value=\"" . md5( $SECURE_ID . CRC_SALT_0011 ) . "\">\n";
 echo "<input type=hidden name=mode value=write>\n";
 echo "Are you sure you want to enable two-step verification?<br>\n";
-if (($dauser->totp_key !='') && (strlen($dauser->totp_key) < 33))
-echo '<input type="checkbox" value="1" name="new_key" id="new_key" checked="checked"/> Generate a new two-step verification key. (If you want to use the old stored key, uncheck this box.)<br><br>';
 echo "<input type=submit name=yes value=\"YES\">  ";
 echo "<input type=submit name=no value=\"NO\" onclick=\"window.location=\'users.php\'\"><br>\n";
 echo "</font></pre>\n";
 
 if (trim($dauser->email)!="") {
-	echo "<br><i><b>note:</b> A confirmation email will be sent (<b>" . $dauser->email . "</b>).</i><br>\n";
+	echo "<br><i><b>note:</b> A confirmation link will be sent to your registered email address.</i><br>\n";
 } else {
 	echo "<br><i><b>note:</b> this will be displayed in next screen as a confirmation, because you don't have an email-in-record.</i><br>\n";
 }

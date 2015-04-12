@@ -17,7 +17,7 @@ if (isset($_SESSION['oath_uri'])) { ?>
         Use your authenticator app to scan the barcode below, or <a href="javascript:void(null);" onclick="toggleQr();">enter your secret key manually</a>.
       </span>
       <span id="qr-show-elem">
-        Enter the secret key below, or <a href="#" onclick="toggleQr();">scan a barcode using your authenticator app</a>.
+        Enter the secret key below, or <a href="#" onclick="toggleQr();">scan a barcode using your authenticator app</a>.<br>Note: For security reasons you should not save this secret key by writing it down.
       </span>
    </li>
  </ul>

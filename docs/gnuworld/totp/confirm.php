@@ -91,14 +91,7 @@ if ($user_id==0 || $auth=="") {
             include("_twostep_form.php");
         }
     } else {
-        $tmp_sql = pg_safe_exec("SELECT * FROM old_totp WHERE id='" . $dauser->id . "'");
-
-        if (pg_num_rows($tmp_sql) == 1) {
-            $old_totp = pg_fetch_object($tmp_sql,0);
-            $totp_key=$old_totp->totp_key;
-        } else {
-            $totp_key=Google2FA::generate_secret_key();
-        }
+        $totp_key=Google2FA::generate_secret_key();
 
         if ($ID!="" && strlen($ID)<=128) {
             $id_parts=explode('.', $ID);
