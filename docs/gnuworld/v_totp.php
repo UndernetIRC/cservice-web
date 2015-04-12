@@ -114,8 +114,9 @@ if (($totp_pin != '') && ($msg !=''))
 	{
 	echo $msg;
 	local_seclog("Failed login (WRONG TOTP for `" . N_get_pure_string($user_name) . "`)");
-	log_webrelay("failed TOTP token.");
-
+    if (std_admin() > 0) {
+        log_webrelay("failed TOTP token.");
+    }
 	}
 ?>
 <form method="post" action="v_totp.php">
