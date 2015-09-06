@@ -132,7 +132,7 @@ if (($totp_pin != '') && ($msg !=''))
 <?php
 echo "<tr><td valign=top bgcolor=#ff9999 colspan=\"2\">";
 	echo "<font style=\"font-size: 13px; color: #000000; font-weight: bold;\">";
-	echo 'If you can not login, consult the online manual at <a href="'.$totp_web_help.'" target="_blank">'.$totp_web_help.'</a> or contact #usernames';
+	echo 'If you have issues logging in, please contact #usernames.';
 	?>
 </table>
 </td>

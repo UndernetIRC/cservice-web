@@ -11,7 +11,7 @@ function showTwoStepAppsDialog() {
     $( "#twostep-apps" ).dialog({
         dialogClass: 'twostep',
         modal: true,
-        minWidth: 385,
+        minWidth: 490,
         position: { my: "center", at: "center", of: $(".tsdialog") }
     });
 };

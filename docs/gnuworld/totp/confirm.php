@@ -124,6 +124,14 @@ if ($user_id==0 || $auth=="") {
 }
 ?>
   <div id="twostep-apps" title="Supported authenticator apps">
-    <p>...this is just a place holder [FIXME]</p>
+    <p>Any app that supports the Time-based One-Time Password (TOTP) should be supported, including the following:</p>
+    <p>
+      <ul>
+        <li><a href="http://support.google.com/accounts/bin/answer.py?hl=en&answer=1066447" target="_blank">Google Authenticator</a> for Android, iPhone and BlackBerry</li>
+        <li><a href="https://guide.duosecurity.com/third-party-accounts" target="_blank">Duo Mobile</a> for Android and iPhone</li>
+        <li><a href="http://www.windowsphone.com/en-us/store/app/authenticator/021dd79f-0598-e011-986b-78e7d1fa76f8" target="_blank">Authenticator</a> for Windows Phone 7</li>
+        <li><a href="https://play.google.com/store/apps/details?id=com.yubico.yubioath&hl=en" target="_blank">Yubico Authenticator</a> for Android (Note: Requires a <a href="https://www.yubico.com/products/yubikey-hardware/yubikey-neo/" target="_blank">YuiKey NEO</a>)</li>
+      </ul>
+    </p>
   </div>
 </body></html>
