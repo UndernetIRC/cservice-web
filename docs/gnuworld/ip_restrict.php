@@ -82,6 +82,9 @@ if (check_secure_form("addrestrict" . $_POST["user_id"])) {
       
 	}
         }
+        if ($_POST['descr'] == '') {
+            $go_ahead=false;
+        }
   if ($go_ahead)
   {
       if ($_POST['totp_only'] == '1')
@@ -102,7 +105,7 @@ header("Location: ip_restrict.php?user_id=" . (int)$_GET["user_id"]);
 die;
   }
   else
-      $err="Invalid IP format!";
+      $err="Invalid IP format or missing description!";
 	if ($err != "") {
 		std_theme_styles(1);
 		std_theme_body();
@@ -118,7 +121,29 @@ die;
 	}
 }
 
-std_theme_styles(1);
+std_theme_styles(0);
+echo "<script type='text/javascript' src='./totp/js/jquery-1.7.2.min.js'></script>\n";
+?>
+<script type="text/javascript">
+$(function(){
+    validate();
+    $('input[type="text"]').keyup(validate);
+});
+
+function validate() {
+    var inputvalue = $('input[type="text"]').filter(function (n) {
+        return this.value.length > 0;
+    })
+
+    if (inputvalue.length == $('input[type="text"]').length) {
+        $("input[type=submit]").prop("disabled", false);
+    } else {
+        $("input[type=submit]").prop("disabled", true);
+    }
+}
+</script>
+<?php
+echo "</head>\n";
 std_theme_body();
 
 echo "<h2>IP Restriction List <font size=+0>(for " . $usr->user_name . ")</font></h2>\n";
@@ -127,7 +152,7 @@ echo "<hr width=100% size=1 noshade>\n";
 $ipq = @pg_safe_exec("SELECT * FROM ip_restrict WHERE user_id=" . (int)$usr->id . "");
 if ($ipq) {
 
-	echo "<form name=addrestrict method=post onsubmit=\"return checkf(this);\">";
+	echo "<form id=\"iprestrict\" name=\"addrestrict\" method=\"post\" onsubmit=\"return checkf(this);\">";
 	make_secure_form("addrestrict" . (int)$usr->id);
 	echo "<input type=hidden name=user_id value=\"" . (int)$usr->id . "\">\n";
 
@@ -142,7 +167,7 @@ if ($ipq) {
 	echo "<tr bgcolor=#eeeeee>";
 	echo "<td valign=top>";
 	echo "<b>IP</b><br>";
-	echo "<input type=text name=t1ip size=34 maxlength=40>";
+	echo "<input id=\"ipaddr\" type=\"text\" name=\"t1ip\" size=\"34\" maxlength=\"40\">";
 	echo "</td>\n";
         echo "<td><b>Expires in: </b><br>";
         echo "<select name=\"ipr_exp\" id=\"ipr_exp\">";
@@ -150,18 +175,18 @@ if ($ipq) {
         for ($i=0;$i<count($ipr_expiry)-1; $i++)
         echo '<option value="'.$ipr_expiry[$i].'">'. secs_to_h($ipr_expiry[$i]).'</option>
             ';
-        echo '<option value="0">Never</option>';
+        echo '<option value="0" selected="selected">Never</option>';
         echo '</select>';
         echo "</td>\n";
          echo "<td ><b>Description: <br></b>";
-        echo '<input type="text" name="descr" size="35"/> <br>';
+        echo '<input id="description" type="text" name="descr" size="35"/> <br>';
         echo "</td>\n";
         echo "<td > <b>TOTP only?</b> <br>";
         echo '<input type="checkbox" name="totp_only" value="1">';
         echo "</td>\n";
 	echo "</tr>";
         
-	echo "<tr><td colspan=3 align=right><input type=submit value=\"Add\"></td></tr>\n";
+	echo "<tr><td colspan=3 align=right><input id=\"ip_add\" type=\"submit\" value=\"Add\"></td></tr>\n";
 	echo "</table>\n";
         
         
