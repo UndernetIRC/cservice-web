@@ -612,8 +612,8 @@ function popUpClosed() {
         if ($M > 0 ) { array_push($res, "$M month(s)"); }
         if ($d > 0 || sizeof($res) > 0) { array_push($res, "$d day(s)"); }
         if ($h > 0 || sizeof($res) > 0) { array_push($res, "$h hour(s)"); }
-        if ($M > 0 || sizeof($res) > 0) { array_push($res, "$m minute(s)"); }
-        if ($M > 0 || sizeof($res) > 0) { array_push($res, "$s second(s)"); }
+        if ($m > 0 || sizeof($res) > 0) { array_push($res, "$m minute(s)"); }
+        if ($s > 0 || sizeof($res) > 0) { array_push($res, "$s second(s)"); }
 
         return implode(", ", $res);
     }
