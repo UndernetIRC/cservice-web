@@ -157,7 +157,6 @@ echo "<b>CHANNEL SERVICE REGISTRATION PROCESS</b> - CONFIRMATION<br><hr noshade 
 /* below is a fully hidden form to avoid retyping all if you do a mistake and must go back to the form */
 echo "<form name=back action=index.php method=post>\n";
 echo "<input type=hidden name=aup value=$aup>\n";
-echo "<input type=hidden name=ii_managername value=\"$managername\">\n";
 echo "<input type=hidden name=ii_channelname value=\"" . urlencode($channel_name) . "\">\n";
 echo "<input type=hidden name=ii_description value=\"" . urlencode($description) . "\">\n";
 $suptest="ok";
@@ -648,9 +647,9 @@ if (!$lastreq) {
 }
 
 if (REQUIRED_SUPPORTERS>0) {
-	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,managername,last_updated,reg_acknowledged,check_start_ts) VALUES ($channel_id,$manager_id,now()::abstime::int4,0,'','','$description','$managername',now()::abstime::int4,'N',0)";
+	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,last_updated,reg_acknowledged,check_start_ts) VALUES ($channel_id,$manager_id,now()::abstime::int4,0,'','','$description',now()::abstime::int4,'N',0)";
 } else {
-	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,managername,last_updated,reg_acknowledged,check_start_ts,status) VALUES ($channel_id,$manager_id,now()::abstime::int4,now()::abstime::int4,'** INSTANT REGISTRATION **','','$description','$managername',now()::abstime::int4,'Y',0,3)";
+	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,last_updated,reg_acknowledged,check_start_ts,status) VALUES ($channel_id,$manager_id,now()::abstime::int4,now()::abstime::int4,'** INSTANT REGISTRATION **','','$description',now()::abstime::int4,'Y',0,3)";
 }
 $lastreq = pg_safe_exec($pending_q);
 

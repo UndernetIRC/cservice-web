@@ -222,11 +222,6 @@ In order to process your channel registration, you need to accept our <a href="a
 </tr>
 
 <tr>
-<td align=right><b>Your real name :&nbsp;&nbsp;</b></td>
-<td><input type=text name=managername size=30 maxlength=80 value="<? echo $ii_managername ?>"></td>
-</tr>
-
-<tr>
 <td align=right><b>The channel you want to register :&nbsp;&nbsp;</b></td>
 <td><input type=text name=channel_name size=30 maxlength=255 value="<? echo $ii_channelname ?>"></td>
 </tr>
@@ -432,7 +427,6 @@ In order to process your channel registration, you need to accept our <a href="a
 function clear_form() {
 	var f = document.forms[0];
 	f.aup.checked=false;
-	f.managername.value='';
 	f.channel_name.value='#';
 	f.description.value='';
 <? if (REQUIRED_SUPPORTERS>0) { ?>
@@ -471,7 +465,6 @@ function check(f) {
 	var state = true;
 	var mf = '';
 	if (!f.aup.checked) { mf = mf + '- You must ACCEPT the AUP.\n'; state = false; }
-	if (f.managername.value=="") { mf = mf + '- Your real name\n'; state = false; }
 	if (f.channel_name.value=="") { mf = mf + '- The channel name\n'; state = false; }
 	if (f.description.value=="") { mf = mf + '- The channel description\n'; state = false; }
 <? if (REQUIRED_SUPPORTERS>0) { ?>
