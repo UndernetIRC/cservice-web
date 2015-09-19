@@ -601,6 +601,23 @@ function popUpClosed() {
         return $res;
     }
 
+    function seconds2human($ss) {
+        $res = array();
+        $s = $ss%60;
+        $m = floor(($ss%3600)/60);
+        $h = floor(($ss%86400)/3600);
+        $d = floor(($ss%2592000)/86400);
+        $M = floor($ss/2592000);
+
+        if ($M > 0 ) { array_push($res, "$M month(s)"); }
+        if ($d > 0 || sizeof($res) > 0) { array_push($res, "$d day(s)"); }
+        if ($h > 0 || sizeof($res) > 0) { array_push($res, "$h hour(s)"); }
+        if ($M > 0 || sizeof($res) > 0) { array_push($res, "$m minute(s)"); }
+        if ($M > 0 || sizeof($res) > 0) { array_push($res, "$s second(s)"); }
+
+        return implode(", ", $res);
+    }
+
     function seconds2human2($time) {
         $names = array("day(s)", "month(s)", "year(s)");
         $values = array(24 * 3600, 30 * 24 * 3600, 365 * 24 * 3600);
@@ -626,9 +643,9 @@ function popUpClosed() {
         $time_since = time() - $creation_date;
         global $allow_maxlogins;
         if ($time_since < $allow_maxlogins[2]) {  // less than a year
-            $msg = "You need to wait " . seconds2human2($allow_maxlogins[2] - $time_since) . " before you can set MAXLOGINS 2.";
+            $msg = "You need to wait " . seconds2human($allow_maxlogins[2] - $time_since) . " before you can set MAXLOGINS 2.";
         } elseif ($time_since < $allow_maxlogins[3]) {
-            $msg = "You need to wait " . seconds2human2($allow_maxlogins[3] - $time_since) . " before you can set MAXLOGINS 3.";
+            $msg = "You need to wait " . seconds2human($allow_maxlogins[3] - $time_since) . " before you can set MAXLOGINS 3.";
         } else
             $msg = '';
 

@@ -928,19 +928,19 @@ if (!$edit || $admin < 800) {
             echo "</select>";
             echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_maxlogins . "</td></tr>\n";
         } else
-            echo "<tr><td><b>User's Max Logins</b></td><td>" . $can_set_maxlogins . "</td></tr>\n";
+            echo "<tr><td><b>User's Max Logins</b></td><td><span style=\"font-style: italic; padding-left: 50px;\">&nbsp;&nbsp;" . $can_set_maxlogins . "</span></td></tr>\n";
     }
 
     if (!REGPROC_ALLOWMULTIPLE) {
         $user_age = time() - $user->signup_ts;
 
-        echo "<tr><td valign=\"top\"><b>Channel manager limit</b></td><td>" . user_channel_limit($user->id);
+        echo "<tr><td valign=\"top\"><b>Channel manager max limit</b></td><td>" . user_channel_limit($user->id);
 
         asort($allow_multi_chans);
 
         foreach ($allow_multi_chans as $key => $val) {
             if ($user_age < $val) {
-                echo "<span style=\"font-style: italic; padding-left: 50px;\">You need to wait " . seconds2human2($val - $user_age) . " until you can register {$key} channel(s).</span>";
+                echo "<span style=\"font-style: italic; padding-left: 50px;\">You need to wait " . seconds2human($val - $user_age) . " before you can register {$key} channel(s).</span>";
                 break;
             }
         }
