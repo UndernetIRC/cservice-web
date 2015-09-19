@@ -45,7 +45,7 @@ a:hover { font-family: arial,helvetica; color: #<?=$cTheme->left_linkover?>; fon
 			echo("<b><A HREF=\"users.php?id=$user_id\" TARGET=\"right\">My Information</a><br><br>\n");
 ?>
 <A HREF="channels.php" TARGET="right">Channel Information</a><br><br>
-<? if (!has_a_noreg() && !has_a_channel()) { ?>
+<? if (!has_a_noreg()) { ?>
 <a href="regproc/index.php" target=right><b>Register A Channel</b></a><br><br>
 <? } ?>
 
