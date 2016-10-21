@@ -598,6 +598,7 @@ if (pg_numrows($res)>0) {
 	pg_safe_exec("DELETE FROM supporters WHERE channel_id='$cc_id'");
 	pg_safe_exec("DELETE FROM levels WHERE channel_id='$cc_id'");
 	pg_safe_exec("DELETE FROM bans WHERE channel_id='$cc_id'");
+	pg_safe_exec("DELETE FROM pending_traffic WHERE channel_id='$cc_id'");
 	log_channel($cc_id,15,"New Incoming Application");
 	$reusechan=1;
 } else {
@@ -685,7 +686,7 @@ pg_safe_exec("COMMIT WORK");
 if (REQUIRED_SUPPORTERS>0) {
 	echo "<h2>";
 	echo "Your application has been recorded.<br>\n";
-	echo "Please allow 10-12 days for processing<br><br>\n";
+	echo "Please allow 5-7 days for processing<br><br>\n";
 	echo "</h2>";
 } else {
 	echo "<h2>";
