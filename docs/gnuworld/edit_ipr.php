@@ -1,7 +1,7 @@
 <?php
 
 /* $Id: ip_restrict.php,v 1.6 2005/11/18 10:08:08 nighty Exp $ */
-$min_lvl = 1800;
+$min_lvl = 800;
 header("Pragma: no-cache");
 require("../../php_includes/cmaster.inc");
 std_init();
@@ -10,9 +10,11 @@ unset($axslock);
 unset($da_u_adm);
 $axslock = 1;
 $da_u_adm = 0;
-if (acl(XIPR_MOD_OWN) && ($ipruser_id == (int) $_GET["user_id"]) && ($ipr_id == (int) $_GET["ipr_id"])) {
+
+if (acl(XIPR_MOD_OWN) && ($user_id == (int) $_GET["user_id"]) && ($ipr_id == (int) $_GET["ipr_id"])) {
     $axslock = 0;
 }
+
 $tmpr = @pg_safe_exec("SELECT access FROM levels WHERE channel_id=1 AND user_id=" . (int) $_GET["user_id"] . "");
 if ($tmpr) {
     if ($tmpo = pg_fetch_object($tmpr)) {
@@ -117,7 +119,7 @@ if (isset($_POST['save'])) {
 $cTheme = get_theme_info();
 std_theme_styles(1);
 std_theme_body();
-$ipq = @pg_safe_exec("SELECT * FROM ip_restrict WHERE id=" . (int) $ipr_id . "");
+$ipq = @pg_safe_exec("SELECT * FROM ip_restrict WHERE id=" . (int) $ipr_id . " AND user_id=" . $_GET["user_id"]);
 if ($ipq) {
     $ip = pg_fetch_object($ipq);
    // print_r($ip);
