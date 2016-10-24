@@ -71,6 +71,7 @@ $sec_id = md5( $user_id . CRC_SALT_0019 . $authcsc );
 <A HREF="login.php" TARGET="right">Log In</A><BR><br>
 <A HREF="newuser.php" TARGET="right">Register!</A><BR><br>
 <A HREF="forgotten_pass.php" target="right">Forgotten password</A><BR><br>
+<a href="whatsnew.html" target="right">What's new</a><br><br>
 <? if (ENABLE_COMPLAINTS_MODULE == 1) { ?>
 <!--<a href="complaints/complaints.php" target="right"><b>Complaints</b></a><br><br>//-->
 <? } ?>
