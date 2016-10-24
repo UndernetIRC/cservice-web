@@ -107,7 +107,7 @@ if ($username != "" && $password != "") {
 		if (($ouu->flags & 128) && $is_admin>0) { $is_alumni = 1; }
 
 		// check IP restrictions . . . (only for * persons or persons with an ACL set, excepted ALUMNIs (as X on IRC))
-		if (($is_alumni==0 && ($is_admin>0 || acl())) || ($is_alumni==0 && has_ipr($user_id))) {
+		if (($is_alumni==0 && ($is_admin>0 || acl())) || has_ipr($user_id)) {
 			if (is_ip_restrict()) {
 				$admin = $is_admin;
 				local_seclog("Failed login (no IPR match)");
