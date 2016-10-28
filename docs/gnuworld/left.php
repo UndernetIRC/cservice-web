@@ -61,6 +61,7 @@ unset($sec_id);
 $sec_id = md5( $user_id . CRC_SALT_0019 . $authcsc );
 ?>
 <a href="passwd.php?SECURE_ID=<?=$sec_id?>" TARGET="right"><b>New Password</b></a><br><br>
+<a href="whatsnew.html" target="right">What's new</a><br><br>
 <A HREF="logout.php" TARGET="body"><b>Log out</b></a><br><br>
 
 <?
