@@ -10,24 +10,14 @@ $cTheme = get_theme_info();
 			std_theme_body();
 /* $Id: right.php,v 1.15 2005/03/07 04:48:03 nighty Exp $ */
 
-function seconds2human($ss) {
-$s = $ss%60;
-$m = floor(($ss%3600)/60);
-$h = floor(($ss%86400)/3600);
-$d = floor(($ss%2592000)/86400);
-$M = floor($ss/2592000);
-
-return "$M months, $d days, $h hours, $m minutes, $s seconds";
-}
-
 function not_valid_va ($user_id) {
 global $allow_maxlogins;
 global $temp_msg;
 $r = pg_safe_exec("SELECT * FROM users WHERE id='".(int)$user_id."'");
-				if ($o = pg_fetch_object($r)) 
+				if ($o = pg_fetch_object($r))
 					{
-					
-					if((!(preg_match( "/^[A-Za-z0-9!\ \/\\.+_-]+$/", $_POST["va"] ))) && ($_POST["step"]=="yes")) { echo "Verification answer contains invalid chars."; 						
+
+					if((!(preg_match( "/^[A-Za-z0-9!\ \/\\.+_-]+$/", $_POST["va"] ))) && ($_POST["step"]=="yes")) { echo "Verification answer contains invalid chars.";
 							ip_check($o->user_name,1);
 							return true;
 							}
@@ -50,8 +40,8 @@ $r = pg_safe_exec("SELECT * FROM users WHERE id='".(int)$user_id."'");
 							$result = Google2FA::verify_key($totp_key, $token=filter_var($_POST["va"], FILTER_SANITIZE_NUMBER_INT));
 							if ($result)
 								$good=true;
-							}	
-							if ($good)		
+							}
+							if ($good)
 							{
 							$user_age=time()-$o->signup_ts;
 							$temp_maxlogins=1;
@@ -72,21 +62,21 @@ $r = pg_safe_exec("SELECT * FROM users WHERE id='".(int)$user_id."'");
 								else
 								{
 								$sql=pg_safe_exec("update users set maxlogins=".$_POST["maxlogins"].", last_updated=now()::abstime::int4, last_updated_by='Web Interface (" . $o->user_name . "(" . $o->id . "))'  where id =".$o->id."");
-								
+
 								echo "You've succesfully set maxlogins to <strong>".$_POST["maxlogins"]."</strong> !<br>";
 								echo '<a href ="users.php?id='.$o->id.'">Click here</a> to go back to your info page.';
 								$fmm="DELETE from ips where ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($o->user_name) . "'";
-								log_user($o->id,15, "Changed from ".$o->maxlogins." to ".$_POST["maxlogins"]."."); 
+								log_user($o->id,15, "Changed from ".$o->maxlogins." to ".$_POST["maxlogins"].".");
 								die;
 								}
 							$fmm="DELETE from ips where ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($o->user_name) . "'";
-					
+
 							pg_exec($fmm);
 							return false;
 							}
 							else
 							{
-							
+
 							echo "Wrong verification answer".$temp_msg."!";
 							ip_check($o->user_name,1);
 							return true;
@@ -99,7 +89,7 @@ $r = pg_safe_exec("SELECT * FROM users WHERE id='".(int)$user_id."'");
 					echo "Invalid username ID.";
 					die;
 					}
-				
+
 }
 
 
@@ -122,7 +112,7 @@ if ($user_id >0)
 		else
 		echo 'Too many failed attempts';
 	}
-	
+
 	}
 	else
 	{
