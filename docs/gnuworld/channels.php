@@ -585,7 +585,7 @@ if (pg_numrows($levels)==0) {
 
 echo("</table>");
 
-$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE expires>now()::abstime::int4 AND channel_id=$channel->id order by set_ts desc");
+$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE (expires=0 OR expires>now()::abstime::int4) AND channel_id=$channel->id order by set_ts desc");
 
 if (pg_numrows($bans)!=0) {
 echo(" <br><br>
@@ -610,7 +610,12 @@ echo(" <br><br>
 	for ($row=0;$row<pg_numrows($bans);$row++) {
 		$ban = pg_fetch_object($bans,$row);
 		echo(" <tr><td>". $ban->banmask . "</td><td>". $ban->set_by ."</td>");
-		echo("     <td>" . cs_time($ban->set_ts) . " [". $ban->set_ts . "]</td><td>". drake_duration($ban->expires-$ban->set_ts) . " [" . (($ban->expires-$ban->set_ts)/3600) . " hour(s)]</td>");
+        echo("<td>" . cs_time($ban->set_ts) . " [". $ban->set_ts . "]</td>");
+        if ($ban->expires == 0) {
+            echo("<td>permanent</td>");
+        } else {
+            echo("<td>". drake_duration($ban->expires-$ban->set_ts) . " [" . (($ban->expires-$ban->set_ts)/3600) . " hour(s)]</td>");
+        }
 		echo("     <td>". $ban->level . "</td><td>". htmlspecialchars($ban->reason) . "</td>");
 //		if ($edit) { echo "<td><input type=checkbox name=".$ban->id."_delete></td>"; }
 		echo("</tr>");
