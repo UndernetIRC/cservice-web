@@ -72,31 +72,24 @@ std_theme_body("../");
 	$rsts = pg_safe_exec("SELECT signup_ts FROM users WHERE id=" . (int)$user_id);
 	$rsto = pg_fetch_object($rsts);
 	if ((int)$rsto->signup_ts>0) {
-		$now = time();
-		$days_elapsed = (int)((int)($now - (int)$rsto->signup_ts)/86400);
-		if ($days_elapsed < MIN_DAYS_BEFORE_REG) {
-               		echo "<html><head><title>REGISTRATION PROCESS</title>";
+        $user_age = time() - $rsto->signup_ts;
+        if ($user_age < $allow_multi_chans[1]) {
+            echo "<html><head><title>REGISTRATION PROCESS</title>";
 			std_theme_styles();
 			echo "</head>\n";
 			std_theme_body("../");
 			echo "<b>CHANNEL SERVICE REGISTRATION PROCESS</b><br><hr noshade size=2><br>\n";
-			echo "<h2>You must wait <b>";
-			echo (int)(MIN_DAYS_BEFORE_REG - $days_elapsed);
-			echo "</b> more day";
-			if ((int)(MIN_DAYS_BEFORE_REG - $days_elapsed)>1) {
-				echo "s";
-			}
-			echo " in order to apply for a new channel.<br></h2>\n";
-			echo "<br>\n";
-			echo "<a href=\"javascript:history.go(-1);\">Go back</a><br>\n";
-			echo "</body></html>\n\n";
-			die;
-		}
+            echo "<h2>You need to wait " . seconds2human($allow_multi_chans[1] - $user_age) . " before you can register a channel.</h2>";
+            echo "<br>\n";
+            echo "<a href=\"javascript:history.go(-1);\">Go back</a><br>\n";
+            echo "</body></html>\n\n";
+            die;
+        }
 	}
 
 
 	if (!REGPROC_ALLOWMULTIPLE) {
-        if (has_a_channel()) {
+        if (has_a_channel($user_id)) {
             $already_chan=1;
             if ($admin > 0) { // admin bypass
                 $admin_bypass=1;
