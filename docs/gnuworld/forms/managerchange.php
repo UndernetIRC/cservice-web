@@ -253,11 +253,10 @@ if (pg_numrows($huhu)>0) {
 
 	if ($mctype==2) { // permanent change only check
 		// disallow new perm manager to be already 500 somewhere
-		$blibli = pg_safe_exec("SELECT * FROM levels,channels,users WHERE levels.user_id='" . $new_manager_id . "' AND levels.channel_id=channels.id AND channels.registered_ts>0 AND levels.user_id=users.id AND levels.access=500");
-		if (pg_numrows($blibli)>0) {
+		if (has_a_channel($new_manager_id)) {
 			echo "<h2>\n";
 
-			echo "The chosen new manager is already 500 on another channel.<br>This user can only apply to 'Temporary' changes.<br><br>\n";
+			echo "The chosen new manager is already 500 on one or more channels.<br>This user can only apply to 'Temporary' changes.<br><br>\n";
 
 			echo "<a href=\"javascript:history.go(-1);\">Go Back</a><br>\n";
 			echo "</h2>\n";

@@ -208,10 +208,9 @@ if ($toc == 0) { // temporary
 		echo "</form>";
 		die;
 	}
-	$test = pg_safe_exec("SELECT * FROM levels,channels WHERE levels.user_id='$pending->new_manager_id' AND levels.access=500 AND levels.channel_id=channels.id AND channels.registered_ts>0");
-	if (pg_numrows($test)>0) { // 499 already owns a channel (already 500, FAILED)
+	if (has_a_channel($pending->new_manager_id)) { // 499 already owns a channel (already 500, FAILED)
 		local_headers();
-		echo "<h3>It seems the 499 now already owns a channel and is 500 on it</h3><br><br>";
+		echo "<h3>It seems the 499 now already owns one or more channels</h3><br><br>";
 		echo "<form>";
 		echo "<input type=button value=\"DENY THIS APPLICATION\" onClick=\"location.href='deny.php?id=$id&autoreason=2';\"><br><br>\n";
 		echo "<input type=button value=\"<< GO BACK\" onClick=\"history.go(-2);\">\n";
