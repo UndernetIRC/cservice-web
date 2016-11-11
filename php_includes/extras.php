@@ -418,13 +418,7 @@ function ip6_check_glined($ip) {
     function show_web_warning() {
         global $admin;
         global $user_id;
-        $pageURL = 'http';
-        $pageURL .= "://";
-        if ($_SERVER["SERVER_PORT"] != "80") {
-            $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . '/live';
-        } else {
-            $pageURL .= $_SERVER["SERVER_NAME"] . '/live';
-        }
+        $pageURL = gen_server_url() . LIVE_LOCATION;
 
         if (WARN_EXPIRE_SESSION) {
             if ($admin > 0) {
