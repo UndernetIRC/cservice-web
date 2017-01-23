@@ -45,7 +45,7 @@ $ENABLE_COOKIE_TABLE=0;
 
 		$contents_ok = str_replace("\\\"","\"",str_replace("\n","\\n",str_replace("\r","",$contents)));
 
-		$query = "UPDATE help SET contents='$contents_ok' WHERE topic='" . strtoupper($cmdname) . "' AND language_id='$lang_id'";
+		$query = "UPDATE help SET contents=E'$contents_ok' WHERE topic='" . strtoupper($cmdname) . "' AND language_id='$lang_id'";
 
 		//echo $query;
 		pg_safe_exec($query);
