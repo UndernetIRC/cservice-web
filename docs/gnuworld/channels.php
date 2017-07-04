@@ -421,13 +421,13 @@ if (($access >= $level_status) || ($admin > 0)) {
 	number($edit && $access>=$level_set_massdeoppro,$channel->mass_deop_pro,"Mass Deop Protection","massdeop");
 	number($edit && $access>=$level_set_floodpro,$channel->flood_pro,"Flood Protection","floodpro");
 	if ($edit && $access>=$level_set_url) {
-		if ($channel->url!="" && !ereg("^http://",$channel->url)) {
+		if ($channel->url!="" && !ereg("^https?://",$channel->url)) {
 			echo "<b>Channel Homepage: </b><input type=text size=50 name=url maxlength=75 value=\"http://" . $channel->url . "\"><br>\n";
 		} else {
 			echo "<b>Channel Homepage: </b><input type=text size=50 name=url maxlength=75 value=\"" . $channel->url . "\"><br>\n";
 		}
 	} else {
-		if ($channel->url!="" && !ereg("^http://",$channel->url)) {
+		if ($channel->url!="" && !ereg("^https?://",$channel->url)) {
 			echo "<b>Channel Homepage: </b><a href=\"http://" . $channel->url . "\" target=\"_blank\">http://" . htmlspecialchars($channel->url) . "</a><br>\n";
 		} else {
 			echo "<b>Channel Homepage: </b><a href=\"" . $channel->url . "\" target=\"_blank\">" . htmlspecialchars($channel->url) . "</a><br>\n";
