@@ -1,2 +1,5 @@
 *~
 *.log
+php_includes/config.inc
+php_includes/cmaster.inc
+php_includes/blackhole.inc

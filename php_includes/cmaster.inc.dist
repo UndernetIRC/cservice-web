@@ -1,0 +1,3259 @@
+<?
+/*
+	NOTE: You shouldn't be editing this file, you should be editing the 'config.inc' file,
+	which contains all data you have to, and can edit for this website module.
+
+	Editing other files may requests skills in PHP and a good understanding of it.
+	You can do it at your own risk.
+*/
+
+// Emulate PHP_VERSION_ID
+if (!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+
+error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
+ini_set('log_errors', '1');
+ini_set('error_log', 'page_errors.log');
+ini_set('display_errors', '0');
+//error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
+$MAX_ALLOWED_USERS = 1000; // after that count, new users are locked and needs a manual unlock (resetting the count).
+
+define(HIJACK_LOGFILE, ""); // optional fullpath to file where to log queries found 'bogus' by pg_safe_exec();
+
+define(MAX_MAXLOGINS,3); // Maximum settable "maxlogins".
+define(MOD_MAXLOGINS_LEVEL,800);
+
+define(CRIT_LOADAVG,6.0); // if loadavg5 goes over this number, the login/newuser/regproc/emailchange/pwreset are locked out.
+define(CRIT_MAX_LOADAVG,15.0); // if loadavg5 goes over this number, everything is stopped to make the load lower.
+
+define(NOPURGE_USER_VIEWLEVEL,750);
+define(NOPURGE_USER_EDITLEVEL,750);
+define(SHOW_IP_LEVEL,800);  // level above which you can see IP numbers for * accounts (userinfo, logs, last_updated, last_hostmask, etc.)
+
+define(MIN_CHAN_TOASTER_QRY,0); // the bigger your database is and the lower you set this number, the more your DB will be hammered,
+         // however, 0 disables the feature.
+
+define(NON_BOGUS,'/^[A-Za-z0-9`\^\|\}\{_-]+$/');
+
+define(XCHGMGR_REVIEW,         1);
+define(XCHGMGR_ADMIN,          2);
+define(XMAILCH_REVIEW,         4);
+define(XMAILCH_ADMIN,          8);
+define(XHELP,                  16);
+define(XHELP_CAN_ADD,          32);
+define(XHELP_CAN_EDIT,         64);
+define(XWEBAXS_2,              128);
+define(XWEBAXS_3,              256);
+define(XWEBCTL,                512);
+define(XWEBACL,                1024);
+define(XWEBUSR_TOASTER,        2048);
+define(XAT_CAN_VIEW,           4096);
+define(XAT_CAN_EDIT,           8192);
+define(XDOMAIN_LOCK,           16384);
+define(XSUSPEND_USR,           32768);
+define(XUNSUSPEND_USR,         65536);
+define(XWEBSESS,               131072);
+define(XCOMPLAINTS_ADM_READ,   262144);
+define(XCOMPLAINTS_ADM_REPLY,  524288);
+define(XLOGGING_VIEW,          1048576);
+define(XIPR_VIEW_OWN,          2097152);
+define(XIPR_VIEW_OTHERS,       4194304);
+define(XIPR_MOD_OWN,           8388608);
+define(XIPR_MOD_OTHERS,        16777216);
+define(XWEBUSR_TOASTER_RDONLY, 33554432);
+define(MIA_VIEW,               67108864);
+define(XTOTP_DISABLE_OTHERS,   134217728);
+
+define(COMPLAINTS_DO_FOLLOWUP, 0); // if this is set to 1, only the admins that have originated a message to a user see the replies and can reply to him again.
+                                  // thus making the admin that opens a ticket dedicated for the given case until the ticket is closed.
+
+define(COOKIE_EXPIRE, 1800); // time after which if you are inactive (dont load any page) on the website, you are logged out.
+
+if (isset($channel_events)) { unset($channel_events); }
+if (isset($user_events)) { unset($user_events); }
+if (isset($IPNOLOG_UIDS)) { unset($IPNOLOG_UIDS); }
+$IPNOLOG_UIDS = Array();
+/*
+The UIDs listed there will NOT HAVE THEIR IP (will be shown as xx.xx.xx.xx) LOGGED INTO userlog or channellog.
+This means it will NOT be recorded, and there will be no way to get it aftewards thru the database.
+This is intented in very special hiding purpose which are more likely not to be used on any network.
+example of use:
+  $IPNOLOG_UIDS[]=123;
+  $IPNOLOG_UIDS[]=456;
+  $IPNOLOG_UIDS[]=789;
+  ...
+*/
+$IPNOLOG_UIDS[]=1; // Admin
+
+/* stuff for GFX code check */
+define(ALLOWED_EXT,".ttf");
+define(DEFAULT_BG_COLOR,"#FFFFFF");
+define(DEFAULT_FG_COLOR,"#CACACA");
+define(DEFAULT_FONT_SIZE,36);
+
+define(GFX_SECURE_MODE,1);
+define(ENABLE_ANGLE_VARIATION,1);
+
+/* GFX_SECURE_MODE == 1 */
+define(DEFAULT_LINES_COLOR,"#CACACA");
+define(DEFAULT_DOTS_COLOR,"#CACACA");
+define(DEFAULT_NUM_LINES,10);
+define(DEFAULT_NUM_DOTS,2000);
+define(ENABLE_H_LINES,1);
+define(ENABLE_V_LINES,1);
+define(ENABLE_DOTS,0);
+
+/* GFX_SECURE_MODE == 2 */
+define(SPECIFIC_FONT2,"b5.ttf");
+define(TILE_UP,"tile_up2.jpg");
+define(TILE_DW,"tile_down.jpg");
+define(RANDOM_UP_DW,1);
+
+
+
+define(MIN_TIMES_VA_MATCH,50); // the minimum number that can be entered to search on similar VA matches, if you put a low number you allow a larger amount
+          // of possible results, it would be very bad on a broad network .. usually 10 or 5 is nice for small networks, but 50 or 70
+        // is more to recommend for broad IRC networks.
+
+$channel_events = array (
+    1 => "Misc",
+    2 => "Join",
+    3 => "Part",
+    4 => "Oper Forced Join",
+    5 => "Oper Forced Part",
+    6 => "Admin Force",
+    7 => "Register",
+    8 => "Purge",
+    9 => "Comment",
+    10 => "Remove All",
+    11 => "Left Idled Chan",
+    12 => "Manager Change",
+    13 => "Admin Reject",
+    14 => "Withdrawn by applicant",
+    15 => "New Application",
+    16 => "Non Support",
+    17 => "Reviewed Application",
+    18 => "Cleared Admin Review",
+    19 => "Channel Suspension",
+    20 => "Channel Unsuspension"
+);
+
+$user_events = array (
+    1 => "Global Suspension",
+    2 => "Global Unsuspension",
+    3 => "Modified by admin",
+    4 => "Misc",
+    5 => "Admin Comment",
+    6 => "Manager Change",
+    7 => "E-Mail Change",
+    8 => "Verif Q/A Reset",
+    9 => "Forgotten Password",
+    10=> "Password Change",
+    11=> "Complaint Post",
+    12=> "Complaint Close",
+    13=> "Activated TOTP",
+    14=> "Disabled TOTP",
+    15=> "Changed maxlogins",
+    16=> "Added IPR",
+    17=> "Removed IPR"
+);
+
+define(MIN_COMPLAINT_REPORT_LEVEL,600);
+define(MAX_COMPLAINT_TYPE,5);
+unset($cpt_name);
+$cpt_name = Array(
+    1=>"My username is suspended",
+    2=>"Members of a registered channel are spamming my channel",
+    3=>"I want to object to a channel application but I want to do so anonymously",
+    4=>"My channel was purged and I want you to reconsider",
+    5=>"My channel was purged and I want to know why",
+    99=>"Other complaint"
+); // maybe ... (yes maybe...) pass this to DB one day
+
+unset($cmp_status);
+$cmp_status = array (
+    0=>"unconfirmed",
+    1=>"incoming",
+    2=>"being processed",
+    3=>"resolved",
+    4=>"abandonned",
+    99=>"deleted"
+);
+
+
+$level_access = 0;
+$level_banlist = 0;
+$level_chaninfo = 0;
+
+//$level_deauth = 0; -- Depreciated
+
+$level_help = 0;
+$level_lbanlist = 0;
+$level_map = 0;
+$level_motd = 0;
+
+$level_status = 1;
+
+$level_voice = 25;
+$level_devoice = 25;
+
+$level_kick = 50;
+$level_topic = 50;
+
+$level_ban = 75;
+$level_unban = 75;
+
+$level_deop = 100;
+$level_op = 100;
+$level_invite = 100;
+$level_suspend = 100;
+$level_unsuspend = 100;
+
+$level_masskick = 200;
+$level_status2 = 200; // users can see the channel mode too
+
+$level_adduser = 400;
+$level_clearmode = 400;
+$level_modinfo = 400;
+$level_remuser = 400;
+
+$level_set_alwaysop = 450;
+$level_set_userflag = 450; // give 'autoop' on adduser
+$level_set_autotopic= 450;
+$level_set_url = 450;
+$level_set_massdeoppro = 450;
+$level_immune_massdeop = 450;
+$level_immune_suspendop = 450; // immune from opping a suspended user
+$level_set_keywords = 450;
+$level_set_desc = 450;
+$level_set_mode = 450;
+
+$level_set_noop = 500;
+$level_set_oponly = 500;
+$level_set_strictop = 500;
+$level_set_lang = 500;
+$level_set_floodpro = 500;
+$level_set_autojoin = 500;
+
+$level_immune_floodpro = 501;
+$level_set_nopurge = 501;
+$level_set_special = 501;
+$level_set_noreg = 501;
+$level_set_neverreg= 501;
+$level_set_suspend = 501;
+$level_set_secret = 501;
+$level_set_tempman = 501;
+$level_set_caution = 501;
+$level_set_vacation = 501;
+
+$level_purge = 750;
+$level_remignore = 750;
+$level_logs = 750; // * level that logs are visible at.
+
+$level_say = 800;
+
+$level_die = 900;
+$level_restart = 900;
+
+$need_rollback=0;
+
+$question_text[1]="What's your mother's maiden name ?";
+$question_text[2]="What's your dog's (or cat's) name ?";
+$question_text[3]="What's your father's birthdate ?";
+//$question_text[4]="What are the four last digits of your social security number ?";
+
+$max_question_id=3;
+
+// deprecated
+$standard_body="<BODY BGCOLOR=#A0A0A0 TEXT=#000000 alink=#004400 link=#004400 vlink=#004400> <FONT FACE=\"Arial,Helvetica,sans-serif\" size=\"-1\">";
+
+if ($cache_page!=1) { $cache_page=0; }
+if (!$cache_page) {
+//  header("Expires: 0");
+//  header("Pragma: no-cache");
+}
+
+$main_rr = ROUNDROBIN;
+$local_mirror = LOCALMIRROR;
+
+if ($HTTP_HOST==$main_rr) {
+    header("Location: http://" . $local_mirror);
+    die;
+}
+
+if (file_exists("/proc/loadavg")) { // on some OS's this file is not present.
+    $loadfp = fopen("/proc/loadavg", "r");
+    if($loadfp) {
+        list($loadavg1, $loadavg5, $loadavg15) = fscanf($loadfp, "%f %f %f");
+        fclose($loadfp);
+    } else {
+        $loadavg1 = 0.0;
+        $loadavg5 = 0.0;
+        $loadavg15 = 0.0;
+    }
+} else { // freeBSD compatibility
+    $loadfp = `/sbin/sysctl vm.loadavg`;
+    $loadfp = str_replace(",","",str_replace("vm.loadavg: { ","",str_replace(" }","",$loadfp)));
+    $tmp = explode(" ",$loadfp);
+    $loadavg1 = $tmp[0]+0;
+    $loadavg5 = $tmp[1]+0;
+    $loadavg15 = $tmp[2]+0;
+}
+
+/* safety valve! */
+if($loadavg1 >= CRIT_MAX_LOADAVG) {
+    header("Location: /live/highload.php");
+    exit;
+}
+
+if (file_exists("/tmp/vacuum.csc")) {
+    echo "<a href=\"./\" target=\"_top\">The DB is currently being maintained - Please try back in a moment.</a>";
+    die;
+}
+
+/* GFX code check functions */
+function ImgNewColor($image_id,$hex_notation) {
+    if (!preg_match("/^#[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]$/",$hex_notation)) { return 0; }
+    $r_col = substr($hex_notation,1,2);$g_col = substr($hex_notation,3,2);$b_col = substr($hex_notation,5,2);
+    $r_dec = hexdec($r_col);$g_dec = hexdec($g_col);$b_dec = hexdec($b_col);
+    return ImageColorAllocate($image_id,$r_dec,$g_dec,$b_dec);
+}
+
+function get_font_face_list() {
+    // returns an array containing all valid FONT FACE (file names)
+    $retVal = Array();
+    if ($handle = opendir(FONT_PATH)) {
+        while (false !== ($file = readdir($handle))) {
+            if ($file != "." && $file != ".." && ereg(ALLOWED_EXT,strtolower($file))) {
+                $retVal[] = $file;
+            }
+        }
+        closedir($handle);
+        sort($retVal);
+        return $retVal;
+    } else {
+        return $retVal;
+    }
+}
+
+function img_label($text_label, $font_name = SPECIFIC_FONT, $font_size = DEFAULT_FONT_SIZE, $fg_color = DEFAULT_FG_COLOR, $bg_color = DEFAULT_BG_COLOR) {
+    global $fontList,$dFID;
+
+    if (substr(FONT_PATH,(strlen(FONT_PATH)-1),1)!="/") { $ff = FONT_PATH . "/"; } else { $ff = FONT_PATH; }
+
+    // this function will only work if nothing was output before its call.
+    // it will completely generate the image text label from scratch to the 'die' clause.
+
+    if ($font_name == "") { $font_name = $fontList[$dFID]; } // if no specified font_name, pick a random one in those TTFs available in FONT_PATH.
+    header("Content-type: image/jpeg");
+
+    // load the bg image
+    $bg_IMG = ImageCreateFromJPEG($ff . "bg_gfx_code.jpg"); // image is in FONT_PATH
+    $bg_W = ImageSX($bg_IMG); $bg_H = ImageSY($bg_IMG);
+
+    // calculate image size for chosen text
+    if (ENABLE_ANGLE_VARIATION) { srand(); $da_angle = rand(-5,5); } else { $da_angle = 0; }
+    list($pos_blx, $pos_bly, $pos_brx, $pos_bry, $pos_trx, $pos_try, $pos_tlx, $pos_tly) = ImageTTFBBox($font_size, $da_angle, $ff . $font_name, $text_label);
+    $text_w = $pos_brx - $pos_blx;
+    $text_h = $pos_bly - $pos_tly;
+
+    // create empty template of final size and define colors
+    $newIm = ImageCreate($text_w+50,$text_h+50);
+    $bgCol = ImgNewColor($newIm,$bg_color); $fgCol = ImgNewColor($newIm,$fg_color);
+    if (ENABLE_H_LINES || ENABLE_V_LINES) { $gridCol = ImgNewColor($newIm,DEFAULT_LINES_COLOR); }
+    if (ENABLE_DOTS) { $dotzCol = ImgNewColor($newIm,DEFAULT_DOTS_COLOR); }
+
+    // copy a resized version of BG image into final picture
+    ImageCopyResampled($newIm,$bg_IMG,0,0,0,0,$text_w+50,$text_h+50,$bg_W,$bg_H);
+
+    // write the text into the picture
+    ImageTTFText($newIm,$font_size,$da_angle,20,$text_h+20,$fgCol,$ff . $font_name,$text_label);
+
+
+    // add some various configurable garbage to make it even harder to do picture recognition
+    if (ENABLE_H_LINES){
+        for ($x=0;$x<DEFAULT_NUM_LINES;$x++) {
+            srand();
+            $r_y = rand(1,(ImageSY($newIm)-1));
+            ImageLine($newIm,0,$r_y,ImageSX($newIm),$r_y,$gridCol);
+        }
+    }
+    if (ENABLE_V_LINES) {
+        for ($x=0;$x<DEFAULT_NUM_LINES;$x++) {
+            srand();
+            $r_x = rand(1,(ImageSX($newIm)-1));
+            ImageLine($newIm,$r_x,0,$r_x,ImageSY($newIm),$gridCol);
+        }
+    }
+    if (ENABLE_DOTS) {
+        for ($x=0;$x<DEFAULT_NUM_DOTS;$x++) {
+            srand();
+            $r_x = rand(1,(ImageSX($newIm)-1));
+            $r_y = rand(1,(ImageSY($newIm)-1));
+            ImageSetPixel($newIm,$r_x,$r_y,$dotzCol);
+        }
+    }
+    // output the picture
+    ImageJPEG($newIm,"",JPEG_OUT_QUALITY); // JPEG Quality
+    die;
+}
+
+function img_label2($text_label, $font_name = SPECIFIC_FONT2, $font_size = DEFAULT_FONT_SIZE, $fg_color = DEFAULT_FG_COLOR, $bg_color = DEFAULT_BG_COLOR) {
+    global $fontList,$dFID;
+
+    if (substr(FONT_PATH,(strlen(FONT_PATH)-1),1)!="/") { $ff = FONT_PATH . "/"; } else { $ff = FONT_PATH; }
+
+    // this function will only work if nothing was output before its call.
+    // it will completely generate the image text label from scratch to the 'die' clause.
+
+    if ($font_name == "") { $font_name = $fontList[$dFID]; } // if no specified font_name, pick a random one in those TTFs available in FONT_PATH.
+    header("Content-type: image/jpeg");
+
+
+    // calculate image size for chosen text
+    if (ENABLE_ANGLE_VARIATION) { srand(); $da_angle = rand(-5,5); } else { $da_angle = 0; }
+    list($pos_blx, $pos_bly, $pos_brx, $pos_bry, $pos_trx, $pos_try, $pos_tlx, $pos_tly) = ImageTTFBBox($font_size, $da_angle, $ff . $font_name, $text_label);
+    $text_w = $pos_brx - $pos_blx;  $text_h = $pos_bly - $pos_tly;
+
+    // load the TILE UP/DOWN images
+    if (RANDOM_UP_DW) {
+        srand();
+        $rnum = rand(5000,10000);
+        if ($rnum>=7500) {
+            $tile_up_IMG = ImageCreateFromJPEG($ff . TILE_UP); // image is in FONT_PATH
+            $tile_down_IMG = ImageCreateFromJPEG($ff . TILE_DW); // image is in FONT_PATH
+        } else {
+            $tile_up_IMG = ImageCreateFromJPEG($ff . TILE_DW); // image is in FONT_PATH
+            $tile_down_IMG = ImageCreateFromJPEG($ff . TILE_UP); // image is in FONT_PATH
+        }
+    } else {
+        $tile_up_IMG = ImageCreateFromJPEG($ff . TILE_UP); // image is in FONT_PATH
+        $tile_down_IMG = ImageCreateFromJPEG($ff . TILE_DW); // image is in FONT_PATH
+    }
+
+    // create empty template of final size and define colors
+    $newIm = ImageCreate($text_w+70,$text_h+70);
+    $bgCol = ImgNewColor($newIm,$bg_color);
+    $fgCol = ImgNewColor($newIm,$fg_color);
+    ImageSetTile($newIm,$tile_up_IMG);
+    ImageFilledRectangle($newIm,0,0,$text_w+70,$text_h+70,IMG_COLOR_TILED);
+
+
+    // create the text image
+    $t_IMG = ImageCreate($text_w+70,$text_h+70);
+    $TbgCol = ImgNewColor($t_IMG,"#ffffff");
+    $TfgCol = ImgNewColor($t_IMG,"#000000");
+    $TTTCol = ImgNewColor($t_IMG,"#ffffff");
+    ImageSetTile($t_IMG,$tile_down_IMG);
+    ImageFilledRectangle($t_IMG,0,0,$text_w+70,$text_h+70,IMG_COLOR_TILED);
+    $transp_t = ImageColorTransparent($t_IMG,$TTTCol);
+
+    // write the text into the picture
+    ImageTTFText($t_IMG,$font_size,$da_angle,35,$text_h+35,-$TTTCol,$ff . $font_name,$text_label);
+
+    // copy transparent text on final picture
+    ImageCopy($newIm,$t_IMG,0,0,0,0,$text_w+70,$text_h+70);
+
+    // output the picture
+    ImageJPEG($newIm,"",JPEG_OUT_QUALITY); // JPEG Quality
+    die;
+}
+
+
+function prepare_dbtext( $text ) {
+    $search = "\\";
+    $replace = "\\\\";
+    return str_replace( $search, $replace, $text );
+}
+
+function prepare_dbtext_db( $text ) {
+    $text = str_replace( "\\", "\\\\", $text );
+    $text = str_replace( "'", "''", $text );
+    return $text;
+}
+
+function check_file($filename) {
+    global $REQUEST_URI;
+    if (file_exists($filename)) {
+        echo "Sorry, this page is currently unavailable due to overloading<br><br>\n";
+        echo "<a href=\"" . LIVE_LOCATION . "/index.php\" target=\"_top\">click here</a>.\n";
+        die;
+        return(1);
+    }
+    return(0);
+}
+
+function flag($edit,$bool,$name,$value,$wanttail) {
+    $end="";
+    if ($wanttail=="Y") $end="<br>\n";  // TODO : Use images for Yes/No options
+    if (!$edit) {
+        if ($bool)
+            echo("$name <img src=\"images/inuse.gif\" ALT=\"Yes\">$end");
+        else
+            if(!$name)  echo("$name $end");
+    } else {
+        echo("<input type=\"checkbox\" name=\"$value\" value=\"on\"");
+        if ($bool) echo(" checked");
+        echo("> $name<br>\n");
+    }
+}
+
+function number($edit,$num,$name,$value) {
+    if ($name)
+        echo ("<b>$name:</b> ");
+    if (!$edit) {
+        if (!$num && $name)
+            echo("Disabled");
+        else
+            echo($num);
+    }
+    else {
+        echo("<input type=\"text\" name=\"$value\" value=\"$num\" size=5>");
+    }
+    echo("<br>");
+};
+
+function text($edit,$text,$name,$value) {
+    echo ("<b>$name:</b> ");
+    if (!$edit) {
+        if ($value != "url") {
+            echo(htmlspecialchars($text));
+        } else {
+            echo "<A HREF=\"" . $text . "\" target=\"new\">" . stripslashes($text) . "</a>\n";
+        }
+    } else {
+        echo("<input type=\"text\" name=\"$value\" value=\"" . str_replace("\"","&quot;",$text) . "\" size=40>");
+    }
+    echo("<br>");
+};
+
+function pw_check($password) { // checks for password complexity. (0=not secure, 1=secure).
+    // main definitions.
+    $total_chars = strlen($password);
+    $total_capsl = 0;
+    $total_minsl = 0;
+    $total_digit = 0;
+    for ($x=0;$x<$total_chars;$x++) {
+        if (preg_match("/[A-Z]/",$password[$x])) { $total_capsl++; }
+        if (preg_match("/[a-z]/",$password[$x])) { $total_minsl++; }
+        if (preg_match("/[0-9]/",$password[$x])) { $total_digit++; }
+    }
+    $total_other = $total_chars-($total_capsl+$total_minsl+$total_digit);
+
+    // allow passphrases
+    if ($total_chars>=20 && preg_match("/ /",$password)) { return(1); }
+
+    // return proper value. (0 = password NOT secure, 1 = password secure).
+    if ($total_chars<PW_MIN_CHARS ||
+        $total_capsl<PW_MIN_CAPSL ||
+        $total_minsl<PW_MIN_MINSL ||
+        $total_digit<PW_MIN_DIGIT ||
+        $total_other<PW_MIN_OTHER) {
+        return(0);
+    }
+    return(1);
+}
+
+function cs_time($ts) {
+    global $USER_TZ;
+    if ($ts == 0) { return "Never"; }
+
+    if ($USER_TZ=="") {
+        $ret=date ("M d Y H:i:s",$ts);
+        $ret .= " CSST";
+    } else {
+        $old_tz = getenv("TZ"); // keep webserver's timezone
+
+        putenv("TZ=$USER_TZ"); // set user's timezone
+        $tz_acronym=""; // unused for now
+        $ret=date ("M d Y H:i:s",$ts);
+        $ret .= " " . $tz_acronym;
+
+        putenv("TZ=$old_tz"); // restore webserver's timezone
+    }
+    return $ret;
+}
+
+function cl_ipdmaskchk($ip) {
+    if (!DISALLOW_RESERVED_BLOCKS) { return 0; }
+    $dmask = Array(
+        0=>'^127\.0\.0\.',
+        1=>'^192\.168\.',
+        2=>'^10\.',
+        3=>'^169\.254\.',
+        4=>'^172\.16\.',
+        5=>'^192\.0\.2\.',
+        6=>'^224\.',
+        7=>'^240\.',
+        8=>'^0\.'
+    );
+    $count = count($dmask);
+    for ($x=0;$x<$count;$x++) {
+        if (ereg($dmask[$x],$ip)) { return 1; }
+    }
+    return 0;
+}
+
+function cl_ipwmaskchk($ip) {
+    if (DISALLOW_RESERVED_BLOCKS) { return 0; }
+    $wmask = Array(
+        0=>'^10\.101\.'
+    );
+    $count = count($wmask);
+    for ($x=0;$x<$count;$x++) {
+        if (ereg($wmask[$x],$ip)) { return 1; }
+    }
+    return 0;
+}
+
+function cl_ip($rettype = 1) {
+    global $dns_cache;
+    // rettype = 1 : returns IP
+    // rettype = 2 : returns hostname
+    $ips = Array();
+    $hst = Array();
+    if (!isset($dns_cache) || !is_array($dns_cache)) { unset($dns_cache); $dns_cache = Array(); }
+    if (!cl_ipdmaskchk($_SERVER["REMOTE_ADDR"]) && !cl_ipwmaskchk($_SERVER['REMOTE_ADDR'])) { // direct connection (IP not in disallow list $dmask or allow list $wmask)
+        $ips[] = $_SERVER["REMOTE_ADDR"];
+        $hst[] = $_SERVER["REMOTE_HOST"];
+    } else if ($_SERVER["HTTP_X_FORWARDED_FOR"]!="") { // from a proxy
+        if (ereg(",",$_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            $ipp = explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]);
+            $ipc = count($ipp);
+            for ($x=0;$x<$ipc;$x++) {
+                $ip = trim($ipp[$x]);
+                if (long2ip(ip2long($ip))==$ip) {
+                    if (!cl_ipdmaskchk($ip)) {
+                        $ips[] = $ip;
+                        if ($dns_cache[$ip]!="") { $hst[] = $dns_cache[$ip]; } else {
+                            $hs = gethostbyaddr($ip);
+                            $hst[] = $hs;
+                            $dns_cache[$ip] = $hs;
+                        }
+                    }
+                }
+            }
+        } else {
+            $ip = trim($_SERVER["HTTP_X_FORWARDED_FOR"]);
+            if (long2ip(ip2long($ip))==$ip) {
+                if (!cl_ipdmaskchk($ip)) {
+                    $ips[] = $ip;
+                    if ($dns_cache[$ip]!="") { $hst[] = $dns_cache[$ip]; } else {
+                        $hs = gethostbyaddr($ip);
+                        $hst[] = $hs;
+                        $dns_cache[$ip] = $hs;
+                    }
+                }
+            }
+        }
+    }
+    // we return only the first element (rare are the cases it contains more than one excluding 127.0.0.*)
+    // if present
+    if ($rettype==1) {
+        if (count($ips)>0) {
+            return $ips[0];
+        } else {
+            return "0.0.0.0";
+        }
+    }
+    if ($rettype==2) {
+        if (count($hst)>0) {
+            if ($hst[0]=="") { return "NO_DNS"; } // bad hack to fix .. see why its not filling $hst[].
+            return $hst[0];
+        } else {
+            return "NO_DNS";
+        }
+    }
+}
+
+function cl_host() {
+    return(cl_ip(2));
+}
+
+function pg_safe_exec($query) {
+    global $REMOTE_USER,$need_rollback,$ipchk_dbuser,$database,$ENABLE_COOKIE_TABLE;
+
+    // parses EVERY SQL query passed to the db.
+    // add any query integrity check here (*).
+    $query = str_replace ("\'", "''", $query);
+    $query = trim($query);
+    $safe_query2 = $query;
+    $safe_query = urldecode($query);
+    $query_ok=1;$warning=0;
+
+    if (!ereg("^insert",strtolower($safe_query)) &&
+        !ereg("^delete",strtolower($safe_query)) &&
+        !ereg("^update",strtolower($safe_query)) &&
+        !ereg("^begin",strtolower($safe_query)) &&
+        !ereg("^rollback",strtolower($safe_query)) &&
+        !ereg("^abort",strtolower($safe_query)) &&
+        !ereg("^end",strtolower($safe_query)) &&
+        !ereg("^commit",strtolower($safe_query)) &&
+        !ereg("^select",strtolower($safe_query))) { $query_ok = 0; }
+    if (ereg(";",$safe_query) && $query_ok) {
+        // check if there's a ";" not between ' (quotes) or " (double-quotes)
+        $long = strlen($safe_query);
+        $quoteopen=0;$dquoteopen=0;
+        for ($x=0;$x<$long;$x++) {
+            if (substr($safe_query,$x,1)=="'" && substr($safe_query,$x-1,1)!="'" && substr($safe_query,$x-1,1)!="\\" && $quoteopen==0 && $dquoteopen==0 ) { $quoteopen=1; } else {
+                if (substr($safe_query,$x,1)=="\"" && substr($safe_query,$x-1,1)!="\\" && $dquoteopen==0 && $quoteopen==0 ) { $dquoteopen=1; } else {
+                    if (substr($safe_query,$x,1)=="'" && substr($safe_query,$x-1,1)!="\\" && substr($safe_query,$x-1,1)!="'" && $quoteopen==1 && $dquoteopen==0 ) { $quoteopen=0; } else {
+                        if (substr($safe_query,$x,1)=="\"" && substr($safe_query,$x-1,1)!="\\" && $dquoteopen==1 && $quoteopen==0 ) { $dquoteopen=0; }
+                    }
+                }
+            }
+
+            if (substr($safe_query,$x,1)==";" && $dquoteopen==0 && $quoteopen==0) {
+                $query_ok = 0;
+            }
+        }
+        $warning = 1;
+    }
+
+    // (*)
+
+    if (!$query_ok) {
+        echo "</td></tr></table>";
+        echo "<h2><font color=#990000>\n";
+            echo "<b>Attempt to hijack the SQL queries<b><br>\n";
+            $R_USER = "unknown";
+            if ($REMOTE_USER!="") { $R_USER = $REMOTE_USER; }
+            echo "from <font color=#ff0000>" . $R_USER . "@" . cl_ip() . "</font> has been logged<br>\n";
+            echo "on " . cs_time(time()) . ".<br><br>\n";
+            echo "</font></h2>\n";
+            echo "Query :<br><br>\n";
+            echo $safe_query2 . "<br><br>\n";
+            if (HIJACK_LOGFILE != "") { // log it into a local file !
+                $ts = time();
+                $log_line = "[" . date("d/m/Y@H:i:s(T)",$ts) . "] " . $ts . " " . cl_ip() . " :" . $safe_query2 . "\n";
+                $ffp = @fopen(HIJACK_LOGFILE,"a+");
+                if ($ffp) { // log it if file can be accessed/written
+                    fwrite($ffp,$log_line);
+                    @fclose($ffp);
+                }
+            }
+            echo "</body></html>\n\n";
+            if ($need_rollback) { pg_exec("ROLLBACK WORK"); }
+            die;
+            return(0);
+    }
+
+    if ($ENABLE_COOKIE_TABLE==1) {
+        $localdb = "";
+        if (LOCALDB_PASS!="") {
+            $localdb = @pg_connect("host=localhost user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
+        } else {
+            $localdb = @pg_connect("host=127.0.0.1 user=" . LOCALDB_USER . " dbname=" . LOCALDB_NAME);
+        }
+        if ($localdb == "") {
+            echo("<head><title>Database unavailable</title></head>");
+            echo("<body><h1>The database is currently unavailable (L)</h1>");
+            echo("Please try again later</body>");
+            exit;
+        } else {
+            $rx = pg_exec($localdb,$safe_query2);
+            if (!$rx) { echo $safe_query2; }
+            return($rx);
+        }
+    } else {
+        return(pg_exec($database,$safe_query2));
+    }
+}
+
+
+function is_pw_secure_logged() {
+    // this function looks in your webcookies entry if you are authenticated ($user_id>0),
+    // it assumes the function is called *AFTER* std_init() or std_security_check().
+    global $user_id,$admin,$ENABLE_COOKIE_TABLE;
+    if ($user_id<=0) { return(0); }
+    $ENABLE_COOKIE_TABLE = 1;
+    $res = pg_safe_exec("SELECT is_admin FROM webcookies WHERE user_id='" . (int)$user_id . "'");
+    $ENABLE_COOKIE_TABLE = 0;
+    if (pg_numrows($res)==0) { return(0); } else {
+        $row = pg_fetch_object($res,0);
+        if ($row->is_admin==-1) { return(0); } else { return(1); }
+    }
+}
+unset($LOCK_USERNAME);
+unset($LOCK_REGPROC);
+unset($LOCK_EMAILCHG);
+unset($LOCK_LOGIN);
+unset($FORCE_GET);
+unset($lock_domain_table);
+$LOCK_USERNAME=1;
+$LOCK_REGPROC=2;
+$LOCK_EMAILCHG=4;
+$LOCK_LOGIN=8;
+$FORCE_GET=0;
+$lock_domain_table="domain";
+
+unset($LAST_ACL_FLAGS);
+unset($LAST_ACL_SECURED);
+unset($LAST_OPERFLAG);
+
+function isoper($userID) {
+    if (isset($LAST_OPERFLAG)) { return $LAST_OPERFLAG; }
+    $LAST_OPERFLAG = 0;
+    $res = pg_safe_exec("SELECT flags FROM users WHERE id=" . (int)$userID);
+    if ($row = pg_fetch_object($res)) { if ($row->flags & 256) { $LAST_OPERFLAG = 1; return 1; } }
+    return 0;
+}
+
+function has_acl($userID) {
+    global $admin,$r_admin;
+    if (ACL_FOR_ANY!=1 && $admin==0) { return 0; }
+    if ($admin==0 && $r_admin>0) { return(0); }
+    $res = pg_safe_exec("SELECT acl_id FROM acl WHERE user_id=" . (int)$userID);
+    if (pg_numrows($res)==0) { return 0; }
+    return 1;
+}
+
+function acl($FLAG_TO_CHECK = -1) {
+    global $user_id,$admin,$r_admin,$ACL_XTRA,$LAST_ACL_FLAGS,$LAST_ACL_SECURED,$FORCE_GET;
+    if (isset($ACL_XTRA)) { unset($ACL_XTRA); }
+    if ($admin>=800) { return(1); }
+    if (ACL_FOR_ANY!=1 && $admin==0) { return(0); }
+    if ($user_id==0) { return(0); }
+    if ($admin==0 && $r_admin>0) { return(0); }
+    if ($LAST_ACL_SECURED!=md5( CRC_SALT_0011 . $user_id . $admin . $LAST_ACL_FLAGS )) {
+        $FORCE_GET = 1;
+    }
+    if ($FORCE_GET == 1) {
+        //echo "acl_db<br>\n";
+        $res = pg_safe_exec("SELECT * FROM acl WHERE user_id='" . (int)$user_id . "'");
+        if (pg_numrows($res)==0) { $LAST_ACL_FLAGS = 0; $LAST_ACL_SECURED = md5( CRC_SALT_0011 . $user_id . $admin . $LAST_ACL_FLAGS ); $FORCE_GET = 0; return(0); }
+        if ($FLAG_TO_CHECK == -1) { return(1); }
+        $row = pg_fetch_object($res,0);
+        $ACL_XTRA = $row->xtra;
+        $LAST_ACL_SECURED = md5( CRC_SALT_0011 . $user_id . $admin . $row->flags );
+        $LAST_ACL_FLAGS = $row->flags;
+        if (((int)$FLAG_TO_CHECK & (int)$row->flags) == (int)$FLAG_TO_CHECK) { $FORCE_GET = 0; return(1); }
+    } else {
+        //echo "acl_cache<br>\n";
+        if ($FLAG_TO_CHECK == -1) { return(1); }
+        $ACL_XTRA="";
+        if (((int)$FLAG_TO_CHECK & (int)$LAST_ACL_FLAGS) == (int)$FLAG_TO_CHECK) { return(1); }
+    }
+    return(0);
+}
+
+function is_xat_person() {
+    global $user_id,$admin;
+    return(acl(XCHGMGR_REVIEW) || acl(XCHGMGR_ADMIN));
+}
+
+function is_xat_admin() {
+    global $user_id,$admin;
+    return(acl(XCHGMGR_ADMIN));
+}
+
+function user_channel_limit($user_id) {
+    global $allow_multi_chans;
+
+    $user = pg_safe_exec("SELECT id, signup_ts FROM users WHERE id={$user_id}");
+    $user = pg_fetch_object($user, 0);
+    $user_age = time() - $user->signup_ts;
+
+    arsort($allow_multi_chans);
+
+    $max_channels = 0;
+    foreach ($allow_multi_chans as $key => $val) {
+        if ($user_age >= $val) {
+            $max_channels = $key;
+            break;
+        }
+    }
+
+    return $max_channels;
+}
+
+function has_a_channel($user_id) {
+    global $admin,$allow_multi_chans;
+
+    if (REGPROC_ALLOWMULTIPLE==1 || $admin > 0) { return false; }
+
+    $rrr = pg_safe_exec("SELECT levels.channel_id FROM channels,levels WHERE levels.user_id='" . (int)$user_id . "' AND levels.access='500' AND levels.channel_id=channels.id AND channels.registered_ts>0 order by levels.last_modif ASC");
+    $reg_channels = pg_num_rows($rrr);
+    $max_channels = user_channel_limit($user_id);
+
+    return $reg_channels >= $max_channels;
+}
+
+function make_secure_form($additional_salt = "", $form_timeout = COOKIE_EXPIRE) {
+    global $user_id,$admin,$HTTP_USER_AGENT;
+    $FTS=time()+get_custom_session($user_id);
+    $user_id2 = $user_id+0; $admin2 = $admin+0;
+    //$FTS = time()+$form_timeout;
+    echo "<input type=hidden name=SECUREFTS value=\"" . $FTS . "\">\n";
+    echo "<input type=hidden name=SECUREFCRC value=\""  . md5( $user_id2 . CRC_SALT_0013 . $additional_salt . $admin2 . $FTS . $HTTP_USER_AGENT ) . "\">\n";
+}
+
+function check_secure_form($additional_salt = "") {
+    global $user_id,$admin,$SECUREFTS,$SECUREFCRC,$HTTP_USER_AGENT;
+    $user_id2 = $user_id+0; $admin2 = $admin+0;
+    $crc_check = md5( $user_id2 . CRC_SALT_0013 . $additional_salt . $admin2 . $SECUREFTS . $HTTP_USER_AGENT );
+    if (($crc_check == $SECUREFCRC) && ($SECUREFTS>time())) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function has_a_noreg() {
+    global $user_id;
+    $res = pg_safe_exec("SELECT user_name,email FROM users WHERE id='" . (int)$user_id . "'");
+    $row = pg_fetch_object($res,0);
+    $user_name = $row->user_name;
+    $email = $row->email;
+    $res = pg_safe_exec("SELECT id FROM noreg WHERE type!=5 AND user_name='" . $user_name . "' OR email='" . $email . "'");
+    return (pg_numrows($res)==1);
+}
+
+function is_locked_username($userName) { // NOREG type = 5 (recall: 1,2,3/STD_NOREG 4/FRAUDUSER 5/NOREG_WILD
+    global $ulockinfo;
+    $res = pg_safe_exec("SELECT * FROM noreg WHERE type=5 AND channel_name='' AND email=''");
+    $isLocked = 0;
+    while ($row = pg_fetch_object($res)) {
+        $search_preg = "/^" . str_replace("?",".",str_replace("*",".*",strtolower($row->user_name))) . "$/";
+        if ( preg_match($search_preg, strtolower($userName)) ) { $ulockinfo = $row; $isLocked = 1; }
+    }
+    return ($isLocked);
+}
+
+function is_email_locked($type,$email) {
+    global $LOCK_USERNAME,$LOCK_REGPROC,$LOCK_EMAILCHG,$LOCK_LOGIN,$lock_domain_table,$LOCK_MATCH;
+    //
+    // types :
+    //   1    : username registration ($LOCK_USERNAME)
+    //   2    : channel registration ($LOCK_REGPROC)
+    //   4    : email change form ($LOCK_EMAILCHG)
+    //   8    : login (bad !) ($LOCK_LOGIN)
+    //
+    $LOCK_MATCH = "";
+
+
+    // check e-mail addy
+    $tmp = explode("@",$email);
+    $lowdomain = strtolower($tmp[1]);
+    $res = pg_safe_exec("SELECT * FROM $lock_domain_table WHERE lower(domain)='" . $lowdomain . "'");
+    if (pg_numrows($res)>0) {
+        $obj = pg_fetch_object($res,0);
+        $flags = $obj->flags;
+        if ($type == -1 || ((int)$flags & (int)$type)) {
+            $LOCK_MATCH = $obj->domain;
+            return(1);
+        }
+    }
+
+    // check user@ prefix
+    $tmp = explode("@",$email);
+    $lowuser = strtolower($tmp[0]) . "@";
+    $res = pg_safe_exec("SELECT * FROM " . $lock_domain_table . " WHERE lower(domain)='" . $lowuser . "'");
+    if (pg_numrows($res)>0) {
+        $obj = pg_fetch_object($res,0);
+        $flags = $obj->flags;
+        if ($type == -1 || ((int)$flags & (int)$type)) {
+            $LOCK_MATCH = $obj->domain;
+            return(1);
+        }
+    }
+
+    // check wildcarded domain names (there shouldnt be too much of them ;P)
+    $tmp = explode("@",$email);
+    $lowdomain = strtolower($tmp[1]);
+    $res = pg_safe_exec("SELECT * FROM " . $lock_domain_table . " WHERE (domain LIKE '%*%' OR domain LIKE '%?%')");
+    if (pg_numrows($res)>0) {
+        for ($x=0;$x<pg_numrows($res);$x++) {
+            $row = pg_fetch_object($res,$x);
+            $dom = $row->domain;
+
+            if (matches_wild($lowdomain,strtolower($dom))) {
+                $flags = $row->flags;
+                if ($type == -1 || ((int)$flags & (int)$type)) {
+                    $LOCK_MATCH = $dom;
+                    return(1);
+                } else {
+                    return(0);
+                }
+            }
+        }
+        return(0);
+    } else {
+        return(0);
+    }
+}
+
+function site_off() {
+    global $LOCKED_SINCE,$LOCKED_BY;
+    $LOCKED_SINCE="";$LOCKED_BY="";
+    $res = pg_safe_exec("SELECT * FROM locks WHERE section='1'");
+    if (pg_numrows($res)==0) { return(0); }
+    $obj = pg_fetch_object($res,0);
+    if ($obj->by>0) {
+        $ras = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$obj->by . "'");
+        $abj = pg_fetch_object($ras,0);
+        $LOCKED_BY = $abj->user_name;
+    } else {
+        $LOCKED_BY = "** SYSTEM **";
+    }
+    $LOCKED_SINCE = cs_time($obj->since);
+    return(1);
+}
+
+function newregs_off() {
+    global $LOCKED_SINCE,$LOCKED_BY;
+    $LOCKED_SINCE="";$LOCKED_BY="";
+    $res = pg_safe_exec("SELECT * FROM locks WHERE section='2'");
+    if (pg_numrows($res)==0) { return(0); }
+    $obj = pg_fetch_object($res,0);
+    if ($obj->by>0) {
+        $ras = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$obj->by . "'");
+        $abj = pg_fetch_object($ras,0);
+        $LOCKED_BY = $abj->user_name;
+    } else {
+        $LOCKED_BY = "** SYSTEM **";
+    }
+    $LOCKED_SINCE = cs_time($obj->since);
+    return(1);
+}
+
+function newusers_off() {
+    global $LOCKED_SINCE,$LOCKED_BY;
+    $LOCKED_SINCE="";$LOCKED_BY="";
+    $res = pg_safe_exec("SELECT * FROM locks WHERE section='3'");
+    if (pg_numrows($res)==0) { return(0); }
+    $obj = pg_fetch_object($res,0);
+    if ($obj->by>0) {
+        $ras = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$obj->by . "'");
+        $abj = pg_fetch_object($ras,0);
+        $LOCKED_BY = $abj->user_name;
+    } else {
+        $LOCKED_BY = "** SYSTEM **";
+    }
+    $LOCKED_SINCE = cs_time($obj->since);
+    return(1);
+}
+
+function complaints_off() {
+    global $LOCKED_SINCE,$LOCKED_BY;
+    $LOCKED_SINCE="";$LOCKED_BY="";
+    $res = pg_safe_exec("SELECT * FROM locks WHERE section='4'");
+    if (pg_numrows($res)==0) { return(0); }
+    $obj = pg_fetch_object($res,0);
+    if ($obj->by>0) {
+        $ras = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$obj->by . "'");
+        $abj = pg_fetch_object($ras,0);
+        $LOCKED_BY = $abj->user_name;
+    } else {
+        $LOCKED_BY = "** SYSTEM **";
+    }
+    $LOCKED_SINCE = cs_time($obj->since);
+    return(1);
+}
+
+function newu_ipcheck($mode) { // return false on locked.
+    global $ENABLE_COOKIE_TABLE;
+    if (cl_ip()=="" || cl_ip=="0.0.0.0") { return 0; }
+    if (NEWUSERS_IPCHECK == 0) { return(1); }
+    $ENABLE_COOKIE_TABLE = 1;
+    $res = pg_safe_exec("SELECT * FROM newu_ipcheck WHERE ip='" . cl_ip() . "'");
+    if (pg_numrows($res)==0) {
+        if ($mode==0) { // check only
+            $ENABLE_COOKIE_TABLE = 0;
+            return(1);
+        } else {
+            pg_safe_exec("INSERT INTO newu_ipcheck VALUES (now()::abstime::int4,'" . cl_ip() . "',(now()::abstime::int4+86400))");
+            $ENABLE_COOKIE_TABLE = 0;
+            return(1);
+        }
+    } else {
+        $row = pg_fetch_object($res,0);
+        if (time()>$row->expiration) {
+            if ($mode==0) { // check only
+                $ENABLE_COOKIE_TABLE=0;
+                return(1);
+            }
+            pg_safe_exec("UPDATE newu_ipcheck SET ts=now()::abstime::int4,expiration=(now()::abstime::int4+86400) WHERE ip='" . cl_ip() . "'");
+            $ENABLE_COOKIE_TABLE = 0;
+            return(1);
+        } else {
+            $ENABLE_COOKIE_TABLE = 0;
+            return(0);
+        }
+
+    }
+    $ENABLE_COOKIE_TABLE = 0;
+    return(1); // accept in case of bogus function termination (this won't happen ;P)
+}
+
+function ip_check($user_name,$mode) {
+    global $unlock_ts,$ipchk_dbuser,$ENABLE_COOKIE_TABLE;
+    if (cl_ip()=="" || ereg("^127.0.0.",cl_ip())) { return 0; }
+
+    if ($mode!=0) { $mode = 1; } else { $mode = 0; }
+
+    if ($user_name == "") { return (1); } // check passed.
+    if (strlen($user_name) > 12) { return(0); } // check failed, bogus username.
+
+    //if (!preg_match("/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/",urldecode(cl_ip()))) { return (0); } // check failed (bogus IP ?!)
+    if (!filter_var(cl_ip(), FILTER_VALIDATE_IP)) { return (0); };  // not a valid IPv4 or v6, or from reserved blocks
+    /* global configuration of IP checking */
+
+    $dbname = LOCALDB_NAME;
+    $dbuser = LOCALDB_USER;
+
+
+    $max_hits = IPCHK_MAXHITS;
+    $next_delay = IPCHK_BANTIME;
+
+    /* -- */
+
+    $debug_proc = 0;
+    $unlock_ts = 0;
+
+    if (LOCALDB_PASS!="") {
+        $cid = @pg_connect("host=localhost user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
+    } else {
+        $cid = @pg_connect("host=localhost user=" . LOCALDB_USER . " dbname=" . LOCALDB_NAME);
+    }
+
+    $ENABLE_COOKIE_TABLE = 1;
+    if ($cid) {
+        pg_safe_exec("DELETE FROM ips WHERE (expiration>0 AND expiration<now()::abstime::int4) OR (set_on>0 AND set_on<(now()::abstime::int4-86400) AND expiration=0)"); // removed expired entries.
+        $res = pg_safe_exec("SELECT * FROM exclusions WHERE excluded='" . cl_ip() . "'");
+        if (pg_numrows($res)==0) { // IP shall be checked.
+            $check = pg_safe_exec("SELECT * FROM ips WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
+            if (pg_numrows($check)==0) { // IP is not existing, add it.
+                if (!$mode) { $ENABLE_COOKIE_TABLE = 0; return (1); } // check passed. (checkonly mode).
+                pg_safe_exec("INSERT INTO ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,now()::abstime::int4)");
+                if ($debug_proc) { echo "ADDED<br>\n"; }
+                $ENABLE_COOKIE_TABLE = 0;
+                return (1); // check passed.
+            } else { // IP exists in db... check some fields to see if its locked or no.
+                for ($x=0;$x<pg_numrows($check);$x++) {
+                    $row = pg_fetch_object($check,$x);
+                    $testA = (strtolower($row->user_name) == strtolower($user_name));
+                    $testB = ($row->hit_counts >= $max_hits);
+                    $testC = ($row->expiration>time());
+                    if ($debug_proc) { echo "Checking ... USER_NAME = " . $row->user_name . " ($testA), HITS = " . $row->hit_counts . " ($testB), EXP = " . $row->expiration . " ($testC).<br>\n"; }
+                    if ($testA && $testB && $testC) {
+                        if ($debug_proc) { echo "LOCKED (until " . date("d/m/Y H:i:s",$row->expiration) . ")<br>\n"; }
+                        $unlock_ts = $row->expiration;
+                        $ENABLE_COOKIE_TABLE = 0;
+                        return(0); // check failed, you are locked.
+                    }
+                }
+                if (!$mode) { $ENABLE_COOKIE_TABLE = 0; return (1); } // check passed. (checkonly mode).
+                // increase hit count for this IP/user_name.
+
+                $blah = pg_safe_exec("SELECT COUNT(*) as count FROM ips WHERE ipnum='" . cl_ip() . "'");
+                $bluh = pg_fetch_object($blah,0);
+                // check if user tried too many different logins from this IP
+                if ($bluh->count>25) { // toast it !
+                    $ENABLE_COOKIE_TABLE = 0;
+                    return(0); // check failed, you are locked.
+                }
+
+                $newcount = $row->hit_counts+1;
+                if ($newcount>=$max_hits) { $newexpire = "" . (time()+$next_delay) . ""; } else { $newexpire = "0"; }
+                pg_safe_exec("UPDATE ips SET expiration='" . (int)$newexpire . "',set_on=now()::abstime::int4,hit_counts='" . (int)$newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
+                if ($debug_proc) { echo "UPDATED (HIT=$newcount,EXP=$newexpire)<br>\n"; }
+                $ENABLE_COOKIE_TABLE = 0;
+                return (1); // check passed.
+            }
+        }
+        if ($debug_proc) { echo "EXCLUDED (" . cl_ip() . ")<br>\n"; }
+        $ENABLE_COOKIE_TABLE = 0;
+        return (1); // check passed.
+    }
+    if ($debug_proc) { echo "NO CONNECTION<br>\n"; }
+    $ENABLE_COOKIE_TABLE = 0;
+    return (1); // check passed.
+}
+
+
+function ip_check_totp($user_name,$mode) {
+    global $unlock_ts,$ipchk_dbuser,$ENABLE_COOKIE_TABLE;
+    if (cl_ip()=="" || ereg("^127.0.0.",cl_ip())) { return 0; }
+
+    if ($mode!=0) { $mode = 1; } else { $mode = 0; }
+
+    if ($user_name == "") { return (1); } // check passed.
+    if (strlen($user_name) > 12) { return(0); } // check failed, bogus username.
+
+    if (!filter_var(cl_ip(), FILTER_VALIDATE_IP)) { return (0); };  // not a valid IPv4 or v6, or from reserved blocks
+
+    /* global configuration of IP checking */
+
+    $dbname = LOCALDB_NAME;
+    $dbuser = LOCALDB_USER;
+
+
+    $max_hits = IPCHK_MAXHITS;
+    $next_delay = IPCHK_BANTIME;
+
+    /* -- */
+
+    $debug_proc = 0;
+    $unlock_ts = 0;
+
+    if (LOCALDB_PASS!="") {
+        $cid = @pg_connect("host=localhost user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
+    } else {
+        $cid = @pg_connect("host=localhost user=" . LOCALDB_USER . " dbname=" . LOCALDB_NAME);
+    }
+
+    $ENABLE_COOKIE_TABLE = 1;
+    if ($cid) {
+        pg_safe_exec("DELETE FROM totp_ips WHERE (expiration>0 AND expiration<now()::abstime::int4) OR (set_on>0 AND set_on<(now()::abstime::int4-86400) AND expiration=0)"); // removed expired entries.
+        $res = pg_safe_exec("SELECT * FROM exclusions WHERE excluded='" . cl_ip() . "'");
+        if (pg_numrows($res)==0) { // IP shall be checked.
+            $check = pg_safe_exec("SELECT * FROM totp_ips WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
+            if (pg_numrows($check)==0) { // IP is not existing, add it.
+                if (!$mode) { $ENABLE_COOKIE_TABLE = 0; return (1); } // check passed. (checkonly mode).
+                pg_safe_exec("INSERT INTO totp_ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,now()::abstime::int4)");
+                if ($debug_proc) { echo "ADDED<br>\n"; }
+                $ENABLE_COOKIE_TABLE = 0;
+                return (1); // check passed.
+            } else { // IP exists in db... check some fields to see if its locked or no.
+                for ($x=0;$x<pg_numrows($check);$x++) {
+                    $row = pg_fetch_object($check,$x);
+                    $testA = (strtolower($row->user_name) == strtolower($user_name));
+                    $testB = ($row->hit_counts >= $max_hits);
+                    $testC = ($row->expiration>time());
+                    if ($debug_proc) { echo "Checking ... USER_NAME = " . $row->user_name . " ($testA), HITS = " . $row->hit_counts . " ($testB), EXP = " . $row->expiration . " ($testC).<br>\n"; }
+                    if ($testA && $testB && $testC) {
+                        if ($debug_proc) { echo "LOCKED (until " . date("d/m/Y H:i:s",$row->expiration) . ")<br>\n"; }
+                        $unlock_ts = $row->expiration;
+                        $ENABLE_COOKIE_TABLE = 0;
+                        return(0); // check failed, you are locked.
+                    }
+                }
+                if (!$mode) { $ENABLE_COOKIE_TABLE = 0; return (1); } // check passed. (checkonly mode).
+                // increase hit count for this IP/user_name.
+
+                $blah = pg_safe_exec("SELECT COUNT(*) as count FROM ips WHERE ipnum='" . cl_ip() . "'");
+                $bluh = pg_fetch_object($blah,0);
+                // check if user tried too many different logins from this IP
+                if ($bluh->count>25) { // toast it !
+                    $ENABLE_COOKIE_TABLE = 0;
+                    return(0); // check failed, you are locked.
+                }
+
+                $newcount = $row->hit_counts+1;
+                if ($newcount>=$max_hits) { $newexpire = "" . (time()+$next_delay) . ""; } else { $newexpire = "0"; }
+                pg_safe_exec("UPDATE totp_ips SET expiration='" . (int)$newexpire . "',set_on=now()::abstime::int4,hit_counts='" . (int)$newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
+                if ($debug_proc) { echo "UPDATED (HIT=$newcount,EXP=$newexpire)<br>\n"; }
+                $ENABLE_COOKIE_TABLE = 0;
+                return (1); // check passed.
+            }
+        }
+        if ($debug_proc) { echo "EXCLUDED (" . cl_ip() . ")<br>\n"; }
+        $ENABLE_COOKIE_TABLE = 0;
+        return (1); // check passed.
+    }
+    if ($debug_proc) { echo "NO CONNECTION<br>\n"; }
+    $ENABLE_COOKIE_TABLE = 0;
+    return (1); // check passed.
+}
+
+
+function is_irc_idled($user_id,$nb_days_max) {
+    $res = pg_safe_exec("SELECT users.id,users_lastseen.last_seen,users_lastseen.last_hostmask FROM users,users_lastseen WHERE users.id=users_lastseen.user_id AND users.id='" . (int)$user_id . "'");
+    if (pg_numrows($res)>0) {
+        $ooo = pg_fetch_object($res,0);
+        $t_now = time();
+        $t_sec_min = 86400 * $nb_days_max;
+        $t_compare = $t_now - $t_sec_min;
+
+        if ($ooo->last_seen < $t_compare)  {
+            return(1);
+        } else {
+            if ($ooo->last_hostmask=="") { // never logged in on IRC is considered as "idled" .. same restrictions.
+                return(1);
+            }
+        }
+
+    } else { // no result in "last_seen" is abnormal, therefore the more restricted.
+        return(1);
+    }
+    return(0);
+}
+
+function get_channel_access($database,$userid,$channelid)
+{
+    $user = pg_safe_exec("SELECT suspend_expires>=now()::abstime::int4 as suspended,access".
+                         " from ".
+                         "  levels".
+                         " where".
+                         "  levels.user_id=" . (int)$userid . " and" .
+                         "  levels.channel_id=" . (int)$channelid .
+                         " order by" .
+                         "  levels.access desc" .
+                         "");
+    if (pg_numrows($user)<1) {
+        return 0;  // They have access 0.
+    }
+    $user = pg_fetch_object($user,0);
+    switch ($user->suspended=="t") {
+    case "t":
+        return $user->access;
+    case "f":
+        return 0;
+    default:
+        return $user->access; // if they've never been suspended.
+    } // of switch
+    return 0;
+} // of get_channel_access
+
+function is_suspended($user_id,$channel_name) {
+    // either or both parameters can be filled to check if user is suspended globally,
+    // or on a specific channel, or if a channel is suspended.
+    $err = 0;
+    $ret = 0;
+
+    if ($user_id>0 && $user_id!="") {
+        $res = pg_safe_exec("SELECT flags FROM users WHERE id='" . (int)$user_id . "'");
+        if (pg_numrows($res)==0) {
+            $err = 1;
+            $ret = -1; // invalid user_id.
+        } else {
+            $row = pg_fetch_object($res,0);
+            $user_flags = $row->flags;
+        }
+    } else {
+        $user_id = 0;
+    }
+
+    if ($channel_name!="") {
+        $channel_name=str_replace("'","''",$channel_name);
+        $res = pg_safe_exec("SELECT flags FROM channels WHERE lower(name)='" . strtolower($channel_name) . "'");
+        if (pg_numrows($res)==0) {
+            $err = 1;
+            $ret = $ret-2; // invalid channel_name.
+        } else {
+            $row = pg_fetch_object($res,0);
+            $channel_flags = $row->flags;
+        }
+    } else {
+        $channel_name = "";
+    }
+
+    if ($user_id>0 && $channel_name!="") {
+        $res = pg_safe_exec("SELECT levels.suspend_expires as suspend FROM channels,levels WHERE levels.suspend_expires>now()::abstime::int4 AND lower(channels.name)='" . strtolower($channel_name) . "' AND levels.channel_id=channels.id AND levels.user_id='" . (int)$user_id . "'");
+        if (pg_numrows($res)==0) {
+            $err = 1;
+            $ret = -4; // user_id has no access on channel_name.
+        } else {
+            $row = pg_fetch_object($res,0);
+            $useronchan_suspend = $row->suspend;
+        }
+    }
+
+    if ($err) {
+        return($ret); // return error code.
+        // -1 = invalid user
+        // -2 = invalid channel
+        // -3 = invalid channel and invalid user
+        // -4 = user has no access on channel
+    }
+
+    //echo "uid:$user_id<br>cname:$channel_name<br>uflags:$user_flags<br>cflags:$channel_flags<br>susp_exp:$useronchan_suspend<br>time:" . time() . "<br><br>\n";;
+
+    if ($user_id>0 && $channel_name!="") {
+        if (($useronchan_suspend>=time()) && ($useronchan_suspend>0)) { return(1); } else { return(0); }
+    }
+    if ($user_id>0) {
+        if ((int)$user_flags & 0x0001) { return(1); } else { return(0); }
+    }
+    if ($channel_name!="") {
+        if ((int)$channel_flags & 0x00000010) { return(1); } else { return(0); }
+    }
+    return(-9); // -9 = abnormal function termination.
+}
+
+function not_in_tab($elt,$tab) {
+    $not_in_tab = 1;
+    for ($x=0;$x<count($tab);$x++) {
+        if ($elt === $tab[$x]) { $not_in_tab = 0; }
+    }
+    return $not_in_tab;
+}
+
+function show_fraud_list($username_or_id_array,$array_type) {
+  // array_type = 1 : IDs
+  // array_type = 2 : USERNAMEs
+  global $st,$sp,$nb,$mode,$or,$onlyfresh,$minchan,$showlasthost,$lookup_apps,$cTheme,$first_elt_ever,$fl,$listtype,$user_id,$admin;
+  if (isset($temp_id)) { unset($temp_id); }
+  if (isset($temp_username)) { unset($temp_username); }
+  if (isset($temp_username_s)) { unset($temp_username_s); }
+  if (isset($temp_email)) { unset($temp_email); }
+  if (isset($temp_email_s)) { unset($temp_email_s); }
+  if (isset($temp_email_user)) { unset($temp_email_user); }
+  if (isset($temp_email_user_s)) { unset($temp_email_user_s); }
+  if (isset($temp_email_addy)) { unset($temp_email_addy); }
+  if (isset($temp_email_addy_s)) { unset($temp_email_addy_s); }
+  if (isset($temp_verifdata)) { unset($temp_verifdata); }
+  if (isset($temp_verifdata_s)) { unset($temp_verifdata_s); }
+  if (isset($temp_signup_ts)) { unset($temp_signup_ts); }
+  if (isset($temp_signup_ip)) { unset($temp_signup_ip); }
+  if (isset($temp_lasthost)) { unset($temp_lasthost); }
+  if (isset($temp_lasthost_s)) { unset($temp_lasthost_s); }
+
+  $countP = count($username_or_id_array);
+  if ($countP==0) { echo "<br><br><b>No usernames found / Nothing to be listed.</b>\n"; echo "</body></html>\n\n"; die; }
+
+  if (!isset($minchan) || ($minchan+0)<MIN_CHAN_TOASTER_QRY) { $minchan = -1; } // no restriction.
+
+  for ($x=0;$x<$countP;$x++) {
+    if ($array_type == 1) {
+      $t_user = pg_safe_exec("SELECT users.id,users.flags,users.user_name,users.email,users.verificationdata,users.signup_ts,users.signup_ip,users_lastseen.last_hostmask FROM users,users_lastseen WHERE users.id='" . ($username_or_id_array[$x]+0) . "' AND users_lastseen.user_id=users.id");
+    }
+    if ($array_type == 2) {
+      $t_user = pg_safe_exec("SELECT users.id,users.flags,users.user_name,users.email,users.verificationdata,users.signup_ts,users.signup_ip,users_lastseen.last_hostmask FROM users,users_lastseen WHERE lower(users.user_name)='" . strtolower($username_or_id_array[$x]) . "' AND users_lastseen.user_id=users.id");
+    }
+    if ($tmp_res = pg_fetch_object($t_user)) {
+      if (not_in_tab($tmp_res->user_name,$temp_username)) {
+        if (($onlyfresh+0)==0 || (($onlyfresh+0)==1 && !((int)$tmp_res->flags & 0x0001))) {
+          $temp_username[]=$tmp_res->user_name;
+          $temp_username_s[]=strtolower($tmp_res->user_name);
+          $temp_id[]=$tmp_res->id;
+          $temp_email[]=$tmp_res->email;
+          $temp_email_s[]=strtolower($tmp_res->email);
+          unset($exp);
+          $exp = explode("@",$tmp_res->email);
+          $temp_email_user[]=$exp[0];
+          $temp_email_user_s[]=strtolower($exp[0]);
+          $temp_email_addy[]=$exp[1];
+          $temp_email_addy_s[]=strtolower($exp[1]);
+          $temp_verifdata[]=$tmp_res->verificationdata;
+          $temp_verifdata_s[]=strtolower($tmp_res->verificationdata);
+          $temp_signup_ts[]=$tmp_res->signup_ts;
+          $temp_signup_ip[]=$tmp_res->signup_ip;
+          $temp_lasthost[]=$tmp_res->last_hostmask;
+          $temp_lasthost_s[]=strtolower($tmp_res->last_hostmask);
+        }
+      }
+    }
+  }
+
+  $count = count($temp_id);
+  if ($count==0) {
+    echo "<br><br><b>No usernames found / Nothing to be listed.</b>\n";
+  } else {
+    switch ($or) {
+      case 1:
+        array_multisort($temp_username_s, SORT_ASC, SORT_STRING,$temp_username,$temp_id,$temp_email,$temp_verifdata,$temp_signup_ts,$temp_signup_ip,$temp_lasthost,$temp_email_user,$temp_email_addy);
+        break;
+      case 2:
+        array_multisort($temp_email_user_s, SORT_ASC, SORT_STRING,$temp_email_user,$temp_email_addy,$temp_id,$temp_username,$temp_verifdata,$temp_signup_ts,$temp_signup_ip,$temp_email,$temp_lasthost);
+        break;
+      case 3:
+        array_multisort($temp_signup_ts, SORT_DESC, SORT_NUMERIC,$temp_id,$temp_username,$temp_email,$temp_verifdata,$temp_signup_ip,$temp_lasthost,$temp_email_user,$temp_email_addy);
+        break;
+      case 4:
+        array_multisort($temp_verifdata_s, SORT_ASC, SORT_STRING,$temp_verifdata,$temp_id,$temp_username,$temp_email,$temp_signup_ts,$temp_signup_ip,$temp_lasthost,$temp_email_user,$temp_email_addy);
+        break;
+      case 5:
+        array_multisort($temp_id, SORT_DESC, SORT_NUMERIC,$temp_username,$temp_email,$temp_verifdata,$temp_signup_ts,$temp_signup_ip,$temp_lasthost,$temp_email_user,$temp_email_addy);
+        break;
+      case 6:
+        array_multisort($temp_signup_ip, SORT_ASC, SORT_STRING,$temp_id,$temp_email,$temp_verifdata,$temp_signup_ts,$temp_username,$temp_lasthost,$temp_email_user,$temp_email_addy);
+        break;
+      case 7:
+        array_multisort($temp_email_addy_s, SORT_ASC, SORT_STRING,$temp_email_addy,$temp_email_user,$temp_id,$temp_username,$temp_verifdata,$temp_signup_ts,$temp_signup_ip,$temp_email,$temp_lasthost);
+        break;
+    }
+    $c_addy = "";
+    if ($count>1) { $c_addy = "s"; }
+
+    echo "<form name=dummy>\n";
+    echo "<br><br>Found <b>$count</b> record$c_addy matching your query : ";
+    echo "<input type=text name=suspcount value=\"---\" size=4 maxlength=4> are already suspended.\n";
+    if ($minchan>=MIN_CHAN_TOASTER_QRY) { echo "<br><i>The above total count may be not accurate due to a post-query filtering</i>\n"; }
+    echo "</form>\n";
+    echo "<br>\n";
+    $ecount = $first_elt_ever;
+    echo "<form name=toasterz action=toast_this.php method=post onsubmit=\"return check(this)\">\n";
+    echo "<blink><b>WARNING</b></blink>: Clicking on column names to modify order clears tag selection.<br>\n";
+    echo "<table border=1 cellspacing=0 cellpadding=2 bgcolor=#" . $cTheme->table_bgcolor . ">\n";
+    echo "<tr bgcolor=#" . $cTheme->table_headcolor . ">\n";
+    $rooturl = "javascript:new_order(";
+    if ($or==5) { echo "<td><b><font color=#" . $cTheme->table_headtextcolor . ">id</font></b></td>"; } else { echo "<td><a href=\"" . $rooturl . "5);\"><font color=#" . $cTheme->table_headtextcolor . ">id</font></a></td>"; }
+    if ($or==1) { echo "<td><b><font color=#" . $cTheme->table_headtextcolor . ">username</font></b></td>"; } else { echo "<td><a href=\"" . $rooturl . "1);\"><font color=#" . $cTheme->table_headtextcolor . ">username</font></a></td>"; }
+    if ($or==2) { echo "<td><b><font color=#" . $cTheme->table_headtextcolor . ">email</font></b>"; } else { echo "<td><a href=\"" . $rooturl . "2);\"><font color=#" . $cTheme->table_headtextcolor . ">email</font></a>"; }
+    if ($or==7) { echo "<td><b><font color=#" . $cTheme->table_headtextcolor . ">(email @addy only)</font></b></td>"; } else { echo "<td><a href=\"" . $rooturl . "7);\"><font color=#" . $cTheme->table_headtextcolor . ">(email @addy only)</font></a></td>"; }
+    if ($or==4) { echo "<td><b><font color=#" . $cTheme->table_headtextcolor . ">verif. answer</font></b></td>"; } else { echo "<td><a href=\"" . $rooturl . "4);\"><font color=#" . $cTheme->table_headtextcolor . ">verif. answer</font></a></td>"; }
+    if ($or==3) { echo "<td><b><font color=#" . $cTheme->table_headtextcolor . ">Signup Time</font></b></td>"; } else { echo "<td><a href=\"" . $rooturl . "3);\"><font color=#" . $cTheme->table_headtextcolor . ">Signup Time</font></a></td>"; }
+    echo "<td><font color=#" . $cTheme->table_headtextcolor . ">lastseen (days)</font></td>";
+    if ($or==6) { echo "<td><b><font color=#" . $cTheme->table_headtextcolor . ">Signup IP</font></b></td>"; } else { echo "<td><a href=\"" . $rooturl . "6);\"><font color=#" . $cTheme->table_headtextcolor . ">Signup IP</font></a></td>"; }
+    echo "<td><font color=#" . $cTheme->table_headtextcolor . "># axs</font></td><td><font color=#" . $cTheme->table_headtextcolor . ">is 500 ?</font></td>";
+    if (ENABLE_FRAUD_TAG) { echo "<td><font color=#" . $cTheme->table_headtextcolor . ">Fraud</font><br><input type=button value=\"a\" onClick=\"f_select_all();\">&nbsp;<input type=button value=\"n\" onClick=\"f_select_none();\">&nbsp;<input type=button value=\"r\" onClick=\"f_revert_selection();\"></td>"; }
+    if (ENABLE_DEL_TAG) { echo "<td><font color=#" . $cTheme->table_headtextcolor . ">Del./Noreg<br><input type=button value=\"a\" onClick=\"d_select_all();\">&nbsp;<input type=button value=\"n\" onClick=\"d_select_none();\">&nbsp;<input type=button value=\"r\" onClick=\"d_revert_selection();\"></font></td>\n"; }
+    if (ENABLE_SUSP_TAG) { echo "<td><font color=#" . $cTheme->table_headtextcolor . ">Suspend<br><input type=button value=\"a\" onClick=\"s_select_all();\">&nbsp;<input type=button value=\"n\" onClick=\"s_select_none();\">&nbsp;<input type=button value=\"r\" onClick=\"s_revert_selection();\"></font></td>"; }
+    echo "<td><i><font color=#" . $cTheme->table_headtextcolor . ">Flag list</font></i></td>";
+    echo "</tr>\n";
+
+    $current_time=time();
+    $susp_count=0;
+
+
+    for ($x=0;$x<$count;$x++) {
+      $res0 = pg_safe_exec("SELECT levels.access,levels.channel_id,channels.name FROM channels,levels WHERE levels.user_id='" . (int)$temp_id[$x] . "' AND channels.id=levels.channel_id AND (channels.registered_ts>0 OR channels.id=1)");
+      $nm_chanz = pg_numrows($res0);
+      $isAdmin = 0; $isAdminLvl = 0;
+      for ($zz=0;$zz<$nm_chanz;$zz++) {
+        $vobj = pg_fetch_object($res0,$zz);
+        if ($vobj->channel_id==1) {
+          $isAdmin = 1;
+          $isAdminLvl = $vobj->access;
+          break;
+        }
+      }
+      if ($minchan==-1 || ($minchan>=MIN_CHAN_TOASTER_QRY && $nm_chanz>=$minchan)) {
+        $res1 = pg_safe_exec("SELECT flags FROM users WHERE id='" . (int)$temp_id[$x] . "'");
+        $row1 = pg_fetch_object($res1);
+        $isOperFlag = 0;
+        if ($row1->flags & 256) { $isOperFlag = 1; }
+        echo "<tr>\n";
+        echo "<td><input type=hidden name=id[] value=" . $temp_id[$x] . ">" . $temp_id[$x] . "</td>"; $ecount++;
+        echo "<td><input type=hidden name=username[] value=\"" . $temp_username[$x] . "\"><a href=\"../users.php?id=" . $temp_id[$x] . "\" target=_blank>" . $temp_username[$x] . "</a>"; $ecount++;
+        if ($showlasthost==1) {
+          if ($temp_lasthost[$x]!="") {
+            if (($isOperFlag || $isAdmin) && $admin<SHOW_IP_LEVEL) {
+              echo "<br><font size=-2 color=#aaaaaa><i>" . remove_ip($temp_lasthost[$x]) . "</i></font>";
+            } else {
+              echo "<br><font size=-2 color=#aaaaaa><i>" . $temp_lasthost[$x] . "</i></font>";
+            }
+          } else {
+            echo "<br><font size=-2 color=#aa0000><i>no last_hostmask</i></font>";
+          }
+        }
+        echo "</td>";
+        echo "<td align=right><input type=hidden name=email[] value=\"" . $temp_email[$x] . "\">" . $temp_email_user[$x] . "@</td>"; $ecount++;
+        echo "<td>" . $temp_email_addy[$x] . "</td>";
+        if ($temp_verifdata[$x]=="") { echo "<td><font color=#" . $cTheme->main_no . ">* NOT SET *</font></td>\n"; } else { echo "<td>" . $temp_verifdata[$x] . "</td>"; }
+        if ($temp_signup_ts[$x]<=0) { echo "<td>-</td>"; } else { echo "<td>" . cs_time($temp_signup_ts[$x]) . "</td>"; }
+        $rls = pg_safe_exec("SELECT last_seen FROM users_lastseen WHERE user_id='" . (int)$temp_id[$x] . "'");
+        if ($rlo = pg_fetch_object($rls)) {
+          if ($rlo->last_seen == 0) {
+            echo "<td align=center>n/a</td>";
+          } else {
+            $duration_sec = time()-$rlo->last_seen;
+            (int)$nb_days = ($duration_sec/86400);
+            $dcolor = "00aa00";
+            if ((int)$nb_days>=$MAX_LOW_DAYS) { $dcolor = "990000"; }
+            if ((int)$nb_days>=$MAX_HIGH_DAYS) { $dcolor = "ff1111"; }
+            echo "<td align=center><font color=#" . $dcolor . "><b>" . (int)$nb_days . "</b></font></td>";
+          }
+        } else {
+          echo "<td align=center>n/a</td>";
+        }
+        if ($temp_signup_ip[$x]=="") { echo "<td>-</td>"; } else { echo "<td>" . $temp_signup_ip[$x] . "</td>"; }
+
+        echo "<td>" . $nm_chanz . "</td>";
+        $is500 = 0;
+        if (pg_numrows($res0)>0) {
+          $chanz_namez = "";
+          for ($y=0;$y<pg_numrows($res0);$y++) {
+            $gugu=pg_fetch_object($res0,$y);
+            if ($gugu->access==500 && $gugu->name!='*') { $is500 = 1; $chanz_namez .= $gugu->name . "<br>\n"; }
+          }
+          if ($is500) {
+            echo "<td><font color=#" . $cTheme->main_yes . "><b>Yes</b>";
+            echo "<br><font size=-1 color=#777777>" . $chanz_namez;
+            echo "</font></font></td>";
+          } else {
+            echo "<td>No";
+            if ($lookup_apps) {
+              $humpf0 = pg_safe_exec("SELECT pending.status,channels.name,pending.created_ts,pending.channel_id FROM pending,channels WHERE pending.status<3 AND pending.manager_id='" . (int)$temp_id[$x] . "' AND channels.id=pending.channel_id");
+              if ($obbb0 = pg_fetch_object($humpf0)) {
+                echo "<font color=#" . $cTheme->main_no . "><br><b>Has_App!</b>";
+                echo "<br><font size=-1 color=#777777>";
+                echo "<a href=\"../view_app.php?id=" . $obbb0->created_ts . "-" . $obbb0->channel_id . "\" target=_blank>" . $obbb0->name . "</a>\n";
+                echo "</font></font>";
+              }
+            }
+            echo "</td>";
+          }
+        } else {
+          echo "<td>No</td>";
+        }
+        $zzcount = 3;
+        if (ENABLE_FRAUD_TAG) {
+          $ecount++;
+          $res1 = pg_safe_exec("SELECT * FROM noreg WHERE user_name='" . $temp_username[$x] . "' AND type=4");
+          if (pg_numrows($res1)==0) {
+            echo "<td><input type=checkbox name=fraud_" . $temp_id[$x] . " value=1></td>";
+          } else {
+            echo "<td><font color=#" . $cTheme->main_no . "><b>Yes</b></font><input type=hidden name=fraud[] value=0></td>";
+          }
+          $zzcount++;
+        }
+
+        $resX = pg_safe_exec("SELECT * FROM fraud_list_data,fraud_lists WHERE fraud_list_data.user_id='" . (int)$temp_id[$x] . "' AND fraud_lists.id=fraud_list_data.list_id");
+        $cresX = pg_numrows($resX);
+
+        if (ENABLE_DEL_TAG) {
+          $ecount++;
+          if ($is500) {
+            echo "<td bgcolor=#eeeeee>";
+  //          echo "<b>n/a</b>";
+            echo "<a href=\"javascript:setFLAG(" . ($ecount-$zzcount) . ",'R');\">Report&#151;&gt;</a>";
+            echo "<input type=hidden name=delete[] value=0></td>";
+          } else {
+            echo "<td bgcolor=#ff9999><input type=checkbox name=delete_" . $temp_id[$x] . " value=1></td>";
+          }
+          $zzcount++;
+        }
+        if (ENABLE_SUSP_TAG) {
+          $ecount++;
+          if ((int)$row1->flags & 1) { // suspended globally already !
+            echo "<td><font color=#" . $cTheme->main_no . "><b>Yes</b></font><input type=hidden name=susptag[] value=0></td>";
+            $susp_count++;
+          } else {
+            if ($is500 && !ALLOW_SUSP_500) {
+              echo "<td bgcolor=#eeeeee>";
+  //            echo "<b>n/a</b>";
+              echo "<a href=\"javascript:setFLAG(" . ($ecount-$zzcount) . ",'R');\">Report&#151;&gt;</a>";
+              echo "<input type=hidden name=susptag[] value=0></td>";
+            } else {
+              echo "<td><input type=checkbox name=susptag_" . $temp_id[$x] . " value=1></td>";
+            }
+          }
+        }
+        echo "<td>";
+        if ($cresX>0) {
+          for ($xx=0;$xx<$cresX;$xx++) {
+            $crowX = pg_fetch_object($resX,$xx);
+            echo strtoupper($crowX->name);
+            if ($xx<($cresX-1)) { echo ","; } else { echo ".<br>"; }
+          }
+
+        }
+        echo "<b>+</b><input type=text name=flagadd_" . $temp_id[$x] . " size=2 maxlength=1>"; $ecount++;
+        if ($cresX>0) { echo "<br><b>-</b><input type=text name=flagrem_" . $temp_id[$x] . " size=2 maxlength=50>"; $ecount++; } else { echo "<input type=hidden name=flagrem_" . $temp_id[$x] . " value=\"\">"; $ecount++; }
+        echo "</td>";
+        echo "</tr>\n";
+      }
+    }
+    echo "<tr>";
+    echo "<td colspan=10>&nbsp;</td>";
+    if (ENABLE_FRAUD_TAG) {
+      echo "<td align=center>";
+      echo "<input type=button value=\"a\" onClick=\"f_select_all();\">&nbsp;<input type=button value=\"n\" onClick=\"f_select_none();\">&nbsp;<input type=button value=\"r\" onClick=\"f_revert_selection();\">";
+      echo "</td>";
+    }
+    if (ENABLE_DEL_TAG) {
+      echo "<td align=center>";
+      echo "<input type=button value=\"a\" onClick=\"d_select_all();\">&nbsp;<input type=button value=\"n\" onClick=\"d_select_none();\">&nbsp;<input type=button value=\"r\" onClick=\"d_revert_selection();\">";
+      echo "</td>";
+    }
+    if (ENABLE_SUSP_TAG) {
+      echo "<td align=center>";
+      echo "<input type=button value=\"a\" onClick=\"s_select_all();\">&nbsp;<input type=button value=\"n\" onClick=\"s_select_none();\">&nbsp;<input type=button value=\"r\" onClick=\"s_revert_selection();\">";
+      echo "</td>";
+    }
+    echo "<td>&nbsp;</td>";
+    echo "</tr>";
+    echo "</table>\n";
+    echo "<br>";
+    echo "<br>";
+    if (ENABLE_FRAUD_TAG) {
+      echo "If you tagged any use with 'FRAUD tag', enter a self-explain reason below :<br>";
+      echo "<font size=+0>";
+      echo "<input type=text size=60 maxlength=255 name=freason>\n";
+      echo "</font><br><br>";
+    }
+    if (ENABLE_DEL_TAG) {
+      echo "If you tagged any use with 'DEL/NOREG tag', enter a self-explain reason below :<br>";
+      echo "<font size=+0>";
+      echo "<input type=text size=60 maxlength=255 name=dreason>\n";
+      echo "</font><br><br>";
+    }
+    if (ENABLE_SUSP_TAG) {
+      echo "If you tagged any use with 'SUSPEND tag', enter a self-explain reason below :<br>";
+      echo "<font size=+0>";
+      echo "<input type=text size=60 maxlength=255 name=sreason>\n";
+      echo "</font><br><br>";
+    }
+
+    echo "<br><br><input type=submit value=\" APPLY TAGS \">\n";
+  ?>
+  <script language="JavaScript1.2">
+  <!--
+  var maxargs = <?=$count?>;
+  var zeform = document.forms[1];
+  var num_fl = 0;
+  document.forms[0].suspcount.value=<? if ($susp_count>0) { echo $susp_count; } else { echo "'none'"; }?>;
+  function setFLAG(elt, value) {
+    zeform.elements[elt].value=value;
+  }
+  <? if (ENABLE_FRAUD_TAG) { ?>
+  var f_delta = <?=F_FRAUD?>; // first fraud[] element
+  var num_fraud = 0;
+  function f_select_all() {
+    var y = f_delta+1;
+    for (i=0;i<maxargs;i++) {
+      zeform.elements[y].checked=true;
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function f_select_none() {
+    var y = f_delta+1;
+    for (i=0;i<maxargs;i++) {
+      zeform.elements[y].checked=false;
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function f_revert_selection() {
+    var y = f_delta+1;
+    for (i=0;i<maxargs;i++) {
+      if (zeform.elements[y].checked) {
+        zeform.elements[y].checked=false;
+      } else {
+        zeform.elements[y].checked=true;
+      }
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function f_check(f) {
+    var y = f_delta+1;
+    for (i=0;i<maxargs;i++) {
+      if (f.elements[y].checked) {
+        num_fraud = num_fraud+1;
+      }
+      y = y + <?=DELTA_ELTS?>;
+    }
+  }
+  <? } ?>
+  <? if (ENABLE_DEL_TAG) { ?>
+  var d_delta = <?=F_DELNOREG?>; // first delnoreg[] element
+  var num_delnoreg = 0;
+  function d_select_all() {
+    var y = d_delta+1;
+    for (i=0;i<maxargs;i++) {
+      zeform.elements[y].checked=true;
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function d_select_none() {
+    var y = d_delta+1;
+    for (i=0;i<maxargs;i++) {
+      zeform.elements[y].checked=false;
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function d_revert_selection() {
+    var y = d_delta+1;
+    for (i=0;i<maxargs;i++) {
+      if (zeform.elements[y].checked) {
+        zeform.elements[y].checked=false;
+      } else {
+        zeform.elements[y].checked=true;
+      }
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function d_check(f) {
+    var y = d_delta+1;
+    for (i=0;i<maxargs;i++) {
+      if (f.elements[y].checked) {
+        num_delnoreg = num_delnoreg+1;
+      }
+      y = y + <?=DELTA_ELTS?>;
+    }
+  }
+  <? } ?>
+  <? if (ENABLE_SUSP_TAG) { ?>
+  var s_delta = <?=F_SUSPEND?>; // first susptag[] element
+  var num_suspend = 0;
+  function s_select_all() {
+    var y = s_delta+1;
+    for (i=0;i<maxargs;i++) {
+      zeform.elements[y].checked=true;
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function s_select_none() {
+    var y = s_delta+1;
+    for (i=0;i<maxargs;i++) {
+      zeform.elements[y].checked=false;
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function s_revert_selection() {
+    var y = s_delta+1;
+    for (i=0;i<maxargs;i++) {
+      if (zeform.elements[y].checked) {
+        zeform.elements[y].checked=false;
+      } else {
+        zeform.elements[y].checked=true;
+      }
+      y = y + <?=DELTA_ELTS?>;
+    }
+    return(true);
+  }
+  function s_check(f) {
+    var y = s_delta+1;
+    for (i=0;i<maxargs;i++) {
+      if (f.elements[y].checked) {
+        num_suspend = num_suspend+1;
+      }
+      y = y + <?=DELTA_ELTS?>;
+    }
+  }
+  <? } ?>
+  function fl_check(f) {
+    <?
+    if (ENABLE_SUSP_TAG) {
+      echo "var y = s_delta;\n";
+    } else {
+      if (ENABLE_DEL_TAG) {
+        echo "var y = d_delta;\n";
+      } else {
+        if (ENABLE_FRAUD_TAG) {
+          echo "var y = f_delta;\n";
+        }
+      }
+    }
+    ?>
+    y = y + 2;
+    for (i=0;i<maxargs;i++) {
+      if (f.elements[y].value!='' || f.elements[y+1].value!='' ) {
+          num_fl = num_fl+1;
+      }
+      y = y + <?=DELTA_ELTS?>;
+    }
+  }
+
+  function check(f) {
+    var all_ok = true;
+    var total_tagged = 0;
+    num_fl = 0;
+    fl_check(f);
+    total_tagged = total_tagged+num_fl;
+    <? if (ENABLE_FRAUD_TAG) { ?>
+    num_fraud = 0;
+    f_check(f);
+    total_tagged = total_tagged+num_fraud;
+    <? } ?>
+    <? if (ENABLE_DEL_TAG) { ?>
+    num_delnoreg = 0;
+    d_check(f);
+    total_tagged = total_tagged+num_delnoreg;
+    <? } ?>
+    <? if (ENABLE_SUSP_TAG) { ?>
+    num_suspend = 0;
+    s_check(f);
+    total_tagged = total_tagged+num_suspend;
+    <? } ?>
+    if (total_tagged == 0) {
+      all_ok = false;
+      alert("You must check at least ONE TAG !");
+      return(all_ok);
+    }
+    <? if (ENABLE_DEL_TAG) { ?>
+    if ((num_delnoreg > 0) && (f.dreason.value=="")) {
+      all_ok = false;
+      alert("The reason for DEL/NOREG users is *MANDATORY*");
+      return(all_ok);
+    }
+    <? } ?>
+    <? if (ENABLE_FRAUD_TAG) { ?>
+    if ((num_fraud > 0) && (f.freason.value=="")) {
+      all_ok = false;
+      alert("The reason for FRAUD users is *MANDATORY*");
+      return(all_ok);
+    }
+    <? } ?>
+    <? if (ENABLE_SUSP_TAG) { ?>
+    if ((num_suspend > 0) && (f.sreason.value=="")) {
+      all_ok = false;
+      alert("The reason for SUSPEND users is *MANDATORY*");
+      return(all_ok);
+    }
+    <? } ?>
+    return(all_ok);
+  }
+  //-->
+  </script>
+  <?
+    echo "<br>";
+    echo "<input type=hidden name=sendlist value=\"" . SEND_TOAST_LIST . "\">\n";
+    echo "<input type=hidden name=dorder value=\"" . ($or+0) . "\">\n";
+    echo "<input type=hidden name=dstatus value=\"" . ($st+0) . "\">\n";
+    echo "<input type=hidden name=dnb value=\"" . ($nb+0) . "\">\n";
+    echo "<input type=hidden name=dmode value=\"" . ($mode+0) . "\">\n";
+    echo "<input type=hidden name=dsp value=\"" . $sp . "\">\n";
+    echo "<input type=hidden name=ccname value=\"" . post2input($_GET["cname"]) . "\">\n";
+    echo "</form>\n";
+    echo "<script language=\"JavaScript1.2\">\n";
+    echo "<!--\n";
+    echo "function new_order(or) {\n";
+    switch ($mode) {
+      case 1:
+        echo "\tlocation.href='list.php?mode=1&st=" . $st . "&sp=" . $sp . "&onlyfresh=" . ($onlyfresh+0) . "&showlasthost=" . ($showlasthost+0) . "&or='+or;\n";
+        break;
+      case 2:
+        echo "\tlocation.href='list.php?mode=2&nb=" . $nb . "&onlyfresh=" . ($onlyfresh+0) . "&showlasthost=" . ($showlasthost+0) . "&or='+or;\n";
+        break;
+      case 3:
+        echo "\tdocument.forms[2].or.value=or;\n";
+        echo "\tdocument.forms[2].submit();\n";
+        break;
+      case 4:
+        echo "\tlocation.href='list.php?mode=4&fl=" . $fl . "&onlyfresh=" . ($onlyfresh+0) . "&showlasthost=" . ($showlasthost+0) . "&or='+or;\n";
+        break;
+      case 6:
+        echo "\tlocation.href='list.php?mode=6&cname=" . urlencode($_GET["cname"]) . "&onlyfresh=" . ($onlyfresh+0) . "&showlasthost=" . ($showlasthost+0) . "&listtype=" . (int)$listtype . "&or='+or;\n";
+        break;
+      default:
+        break;
+    }
+    echo "}\n";
+    echo "//-->\n";
+    echo "</script>\n";
+    if ($mode==3) {
+      echo "<form name=reorder method=post action=list.php>";
+      echo "<input type=hidden name=mode value=3>\n";
+      echo "<input type=hidden name=paste_type value=\"" . $_POST["paste_type"] . "\">\n";
+      echo "<input type=hidden name=the_paste value=\"" . urlencode(urldecode($_POST["the_paste"])) . "\">\n";
+      echo "<input type=hidden name=onlyfresh value=\"" . ($_POST["onlyfresh"]+0) . "\">\n";
+      echo "<input type=hidden name=showlasthost value=\"" . ($_POST["showlasthost"]+0) . "\">\n";
+      echo "<input type=hidden name=or value=0>\n";
+      echo "</form>\n";
+    }
+  }
+  unset($temp_id);
+  unset($temp_username);
+  unset($temp_email);
+  unset($temp_email_user);
+  unset($temp_email_addy);
+  unset($temp_verifdata);
+  unset($temp_signup_ts);
+  unset($temp_signup_ip);
+}
+
+function show_ticket_events($complaint_ID,$hilight_last = 0) {
+  global $user_id,$admin;
+  echo "<table width=100% border=1 cellpadding=5 cellspacing=0>";
+  echo "<tr bgcolor=#ffff11><td colspan=3><b>Ticket Events</b> (most recent last)</td></tr>\n";
+  echo "<tr><td><b>From</b></td><td><b>Date</b></td><td><b>Reply</b></td></tr>\n";
+  $rr = pg_safe_exec("SELECT * FROM complaints WHERE id='" . (int)$complaint_ID . "'");
+  $o = pg_fetch_object($rr);
+  if (acl(XCOMPLAINTS_ADM_READ) || acl(XCOMPLAINTS_ADM_REPLY)) {
+    $fq = pg_safe_exec("SELECT * FROM complaints_threads WHERE complaint_ref='" . (int)$complaint_ID . "' ORDER BY reply_ts ASC");
+  } else {
+    $fq = pg_safe_exec("SELECT * FROM complaints_threads WHERE reply_text!='' AND complaint_ref='" . (int)$complaint_ID . "' ORDER BY reply_ts ASC");
+  }
+  $totalnum = pg_numrows($fq);
+  $cnum = 0;
+  while ($fo = pg_fetch_object($fq)) {
+    $cnum++;
+    echo "<tr";
+    if ($hilight_last && $totalnum == $cnum) { echo " bgcolor=#99ff99"; }
+    echo ">\n";
+    echo "<td valign=top>";
+    if ((int)$fo->reply_by == 0) { // its a user reply
+      if ((int)$o->from_id==0) { // not a known user
+        echo $o->from_email;
+      } else {
+        $rr = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$o->from_id . "'");
+        $ro = pg_fetch_object($rr);
+        echo $ro->user_name;
+      }
+    } else { // its an official reply
+      if (acl(XCOMPLAINTS_ADM_READ) || acl(XCOMPLAINTS_ADM_REPLY)) {
+        $rr = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$fo->reply_by . "'");
+        $ro = pg_fetch_object($rr);
+        echo $ro->user_name . "&nbsp;(*)";
+      } else {
+        echo "*ADMIN*";
+      }
+    }
+    echo "</td>\n";
+    echo "<td valign=top>" . str_replace(" ","&nbsp;",cs_time($fo->reply_ts)) . "</td>\n";
+    echo "<td valign=top width=99%>\n";
+    if ($fo->reply_text!="") { echo db2disp($fo->reply_text); }
+    if ((acl(XCOMPLAINTS_ADM_READ) || acl(XCOMPLAINTS_ADM_REPLY)) && trim($fo->actions_text)!="") {
+      if ($fo->reply_text!="") { echo "<br><br>"; }
+      echo "<font color=#ff1111><b>Admin's actions</b> (admin view only) :</font><br>\n";
+      echo db2disp($fo->actions_text);
+    }
+    echo "</td>\n";
+    echo "</tr>\n";
+    $lastid=$fo->id;
+  }
+  echo "</table>\n";
+  return $lastid;
+}
+
+
+/* Forms and strings manipulation functions */
+
+define(RPL_CR,"¤@¤");
+
+function N_get_pure_string($POST_OR_GET_VAR) {
+  return(trim(str_replace(RPL_CR,"\n",str_replace("\r","",stripslashes(urldecode($POST_OR_GET_VAR))))));
+}
+
+function N_to_input_value($PURE_STRING) {
+  $ret = str_replace("\"","&quot;",$PURE_STRING);
+  $ret = str_replace("\n",RPL_CR,$ret);
+  return($ret);
+}
+
+function N_to_dbstring($PURE_STRING) {
+  $ret = str_replace("\\","\\\\",$PURE_STRING); // PgSQL wants the \ escaped with \.
+  $ret = str_replace("'","''",$ret);    // PgSQL wants the ' escaped with \.
+  $ret = str_replace("\n","\\n",$ret);
+  return($ret);
+}
+
+function N_compare_DB_POST($dbstring,$other) {
+  return($dbstring == N_get_pure_string($other));
+}
+
+function N_to_displayable($PURE_STRING) {
+  $ret = htmlentities($PURE_STRING);
+  $ret = str_replace("\n","<br>\n",$ret);
+  return($ret);
+}
+
+function post2textarea($postData) {
+  return(N_get_pure_string($postData));
+}
+
+function post2input($postData) {
+  return(N_to_input_value(N_get_pure_string($postData)));
+}
+
+function post2db($postData) {
+  return(N_to_dbstring(N_get_pure_string($postData)));
+}
+
+function db2disp($dbData) {
+  $dbData = N_get_pure_string(addslashes($dbData));
+  return(N_to_displayable($dbData));
+}
+
+function display_level ($level, $show_edit, $viewer_level, $user_records, $last_mod = 0) {
+  global $cTheme, $user_id, $admin;
+  if (($level->id=="1") && ($admin <1)) {
+    echo("");
+  } else {
+
+  $colour="#" . $cTheme->table_bgcolor;
+  if ($level->suspend_expires>time()) { $colour="#" . $cTheme->main_warnmsg; }
+
+  if ($user_records=="Y" && $level->channel_id==1) { $colour = "#" . $cTheme->table_tr_enlighten; }
+
+  if ($user_records=="N" && $level->channel_id==1 && ($level->uflags & 128)) { $colour = "#eeeeee"; }
+
+  echo("
+<tr bgcolor=$colour>
+  <td valign=top><font size=-1>");
+  if ($user_records=="Y") {
+    echo("<a href=\"channels.php?id=$level->channel_id\">$level->name</a>");
+  } else {
+    echo("<a href=\"users.php?id=$level->user_id\">$level->user_name</a>");
+    if (  ( (acl(XIPR_VIEW_OWN) && ($level->user_id==$user_id)) ||
+      (acl(XIPR_VIEW_OTHERS)) ||
+      (acl(XIPR_MOD_OWN) && ($level->user_id==$user_id)) ||
+      (acl(XIPR_MOD_OTHERS)) ||
+      $admin >= 800 ) && $level->channel_id==1
+      ) {
+        echo "<br>";
+        echo "<font color=#";
+        $rtt = pg_safe_exec("SELECT COUNT(id) AS count FROM ip_restrict WHERE user_id='" . (int)$level->user_id . "'");
+        $rto = pg_fetch_object($rtt);
+        switch ($rto->count) {
+          case 0:
+            echo "33aa33>";
+            //echo "NO IPR";
+            break;
+          default:
+            echo "aa3333>";
+            echo "IPR";
+            break;
+        }
+        echo "</font>";
+      }
+    if ($level->channel_id==1 && ($level->uflags & 128)) { echo " ALUMNI"; }
+  }
+  echo("</td>");
+  if ($last_mod) {
+    echo "<td valign=top><font size=-1>";
+    echo "<font color=#" . $cTheme->main_linkover . "><b>added by</b></font> :<br><i>";
+    if ($level->added<40000) {
+      echo "<b>Information not available</b> - (the eternity and ages ago ...)";
+    } else {
+      echo $level->added_by . "<br>(" . drake_duration((time()-($level->added))) . " ago)";
+    }
+    echo "</i>\n";
+    if ($level->last_modif != $level->added) {
+      echo "<br><br><b>last modif by</b> :<br><i>";
+      echo $level->last_modif_by . "<br>(" . drake_duration((time()-($level->last_modif))) . " ago)";
+      echo "</i>\n";
+    }
+    echo "</font></td>\n";
+  }
+  echo ("<td valign=top align=center>
+    <font size=-1>");
+  if ($level->access==1000 || ($level->access==500 && $level->channel_id!=1)) {
+    echo "<b>" . $level->access . "</b>";
+  } else {
+    echo $level->access;
+  }
+  echo ("</td>
+  <td valign=top align=center>");
+
+  if ($level->flags&0x01) { // AUTO OP On
+    echo "<img src=\"images/inuse.gif\" alt=\"[@]\">";
+  } else {
+    echo "&nbsp;";
+  }
+
+  echo("</td><td valign=top align=center>");
+
+  if ($level->flags&0x08) { // AUTO VOICE On
+    echo "<img src=\"images/inuse.gif\" alt=\"[+]\">";
+  } else {
+    echo "&nbsp;";
+  }
+
+        echo("</td><td valign=top align=center>");
+
+        if ($level->flags&0x20) { // AUTO INVITE On
+                echo "<img src=\"images/inuse.gif\" alt=\"[+]\">";
+        } else {
+                echo "&nbsp;";
+        }
+
+  echo("
+  </td>
+  <td valign=top align=left>");
+
+  $expire=$level->suspend_expires;
+  $now=time();
+  $duration=$expire-$now;
+
+  if ($duration < 1) { echo "&nbsp;"; }
+
+  if ($level->suspend_expires>time()) {
+    echo("<font size=-2>By " . $level->suspend_by . "<br> " . drake_duration($duration) . " remains</font>");
+  }
+
+  if ($show_edit == "Y") {
+    if (($viewer_level >= $level_modinfo) && (($viewer_level > $level->access) || ($level->id == $user_id))) {
+
+      $button="   <form action=\"access.php\" method=\"get\">
+        <input type=\"hidden\" name=\"action\" value=\"edit\">
+        <input type=\"hidden\" name=\"channel\" value=\"$level->channel_id\">
+        <input type=\"hidden\" name=\"user\" value=\"$level->user_id\">
+        <input type=\"submit\" value=\"Edit\"></form>";
+
+    } else if ($admin > $level_modinfo) {
+
+      $button="   <form action=\"access.php\" method=\"get\">
+        <input type=\"hidden\" name=\"action\" value=\"edit\">
+        <input type=\"hidden\" name=\"channel\" value=\"$level->channel_id\">
+        <input type=\"hidden\" name=\"user\" value=\"$level->user_id\">
+        <input type=\"submit\" value=\"Force\"></form>";
+
+    } else {
+
+      $button="&nbsp;";
+
+    }
+
+    echo("</td>
+    <td valign=top>
+    $button
+    </td>");
+  } else {
+    echo "</td>\n";
+  }
+
+  echo("</tr>");
+  }
+}
+
+function review_count_add($UID) {
+  if (($UID+0)<=0) { return false; }
+  $qtest = "SELECT * FROM statistics WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
+  $rt = pg_safe_exec($qtest);
+  if (!$rt) { return false; }
+  if (pg_numrows($rt)==0) {
+    $qcr = "INSERT INTO statistics (users_id,stats_type,stats_value_int,stats_value_chr,last_updated) VALUES ('" . (int)$UID . "',1,1,'',now()::abstime::int4)";
+    $rcr = pg_safe_exec($qcr);
+    if (!$rcr) { return false; }
+    return($rcr);
+  } else {
+    $ro = pg_fetch_object($rt);
+    $qupd = "UPDATE statistics SET stats_value_int='" . ($ro->stats_value_int+1) . "',last_updated=now()::abstime::int4 WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
+    $rupd = pg_safe_exec($qupd);
+    return($rupd);
+  }
+}
+
+function review_count_rem($UID) {
+  if (($UID+0)<=0) { return false; }
+  $qtest = "SELECT * FROM statistics WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
+  $rt = pg_safe_exec($qtest);
+  if (!$rt) { return false; }
+  if (pg_numrows($rt)==0) { return false; } else {
+    $ro = pg_fetch_object($rt);
+    $qupd = "UPDATE statistics SET stats_value_int='" . (($ro->stats_value_int)-1) . "',last_updated=now()::abstime::int4 WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
+    $rupd = pg_safe_exec($qupd);
+    return($rupd);
+  }
+}
+
+function is_locked_va($VDATA,$forceignorecase = 0) {
+  // load lock list
+  $r = pg_safe_exec("SELECT user_name FROM noreg WHERE type=6");
+  while ($o = pg_fetch_object($r)) {
+    unset($pattern);unset($tocheck);
+    if (substr($o->user_name,0,1)=="!") {
+      // ignore case in check
+      $pattern = strtolower(substr($o->user_name,1));
+      $tocheck = strtolower($VDATA);
+    } else {
+      if ($forceignorecase == 1) {
+        // ignore case in check
+        $pattern = strtolower($o->user_name);
+        $tocheck = strtolower($VDATA);
+      } else {
+        $pattern = $o->user_name;
+        $tocheck = $VDATA;
+      }
+    }
+    if (ereg("^".str_replace("*",".*",str_replace("?",".",$pattern))."$", $tocheck)) { // MATCH! (locked !@#)
+      return true;
+    }
+  }
+  return false;
+}
+
+function log_channel($channel_id,$event_id,$msg) {
+  global $user_id,$admin,$channel_events,$IPNOLOG_UIDS;
+  if (not_in_tab($user_id,$IPNOLOG_UIDS)) {
+    if (cl_host()!="NO_DNS") {
+      $uhost = cl_host();
+    } else {
+      $uhost = cl_ip();
+    }
+  } else {
+    $uhost = "xx.xx.xx.xx";
+  }
+  $auser = "";
+  if ($admin==0 && has_acl($user_id)) { $auser = " [ACL]"; }
+  $res0 = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$user_id . "'");
+  if (pg_numrows($res0)==0) {
+    echo "<b>Invalid User ID</b>";
+    return(0);
+  }
+  $row0 = pg_fetch_object($res0,0);
+  $user_name = $row0->user_name;
+  $res0 = pg_safe_exec("SELECT name FROM channels WHERE id='" . (int)$channel_id . "'");
+  if (pg_numrows($res0)==0) {
+    echo "<b>Invalid Channel ID</b>";
+    return(0);
+  }
+  $row0 = pg_fetch_object($res0,0);
+  $channel_name = $row0->name;
+  if ($event_id<1 || $event_id>count($channel_events)) {
+    echo "<b>Invalid Event ID</b>";
+    return(0);
+  }
+  $message = "[Web]: $user_name!unknown@$uhost" . $auser . " ($user_name) " . $msg;
+  $query = "INSERT INTO channellog (ts,channelid,event,message,last_updated,deleted) VALUES (now()::abstime::int4," . (int)$channel_id . "," . (int)$event_id . ",'$message',now()::abstime::int4,0)";
+  //echo $query;
+  $res = pg_safe_exec($query);
+  return($res);
+}
+
+function log_user($uid,$event_id,$msg) {
+  global $user_id,$admin,$ENABLE_COOKIE_TABLE,$user_events,$IPNOLOG_UIDS;
+  $auser = "";
+  if ($admin==0 && has_acl($user_id)) { $auser = " [ACL]"; }
+  if (not_in_tab($user_id,$IPNOLOG_UIDS)) {
+    if (cl_host()!="NO_DNS") {
+      $uhost = cl_host();
+    } else {
+      $uhost = cl_ip();
+    }
+  } else {
+    $uhost = "xx.xx.xx.xx";
+  }
+
+  $res0 = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$uid . "'");
+  if (pg_numrows($res0)==0) {
+    echo "<b>Invalid User ID (1)</b>";
+    return(0);
+  }
+  $row0 = pg_fetch_object($res0,0);
+  $uname = $row0->user_name;
+
+  $res0 = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$user_id . "'");
+  if (pg_numrows($res0)==0) {
+    $user_name = $uname;
+  } else {
+    $row0 = pg_fetch_object($res0,0);
+    $user_name = $row0->user_name;
+  }
+
+  if ($event_id<1 || $event_id>count($user_events)) {
+    echo "<b>Invalid Event ID</b>";
+    return(0);
+  }
+  $msg = str_replace("%I","$uid",$msg);
+  $msg = str_replace("%U","$uname",$msg);
+  $message = "[Web]: " . $user_name . "!unknown@" . $uhost . $auser . " (" . $user_name . ") " . $msg;
+  if (($event_id == 5))  { $message = $msg . " (by " . $user_name . ")"; }
+  $query = "INSERT INTO userlog (ts,user_id,event,message,last_updated) VALUES (now()::abstime::int4," . (int)$uid . "," . (int)$event_id . ",'$message',now()::abstime::int4)";
+  //echo $query;
+  $res = pg_safe_exec($query);
+  return($res);
+}
+
+function make_duration($duration)
+{
+  $ret="";
+  if ($duration<=0)
+    return "";
+//  if ($duration>7*24*60*60) {
+//    $ret .= (int)($duration/(7*24*60*60)) . "w ";
+//    $duration %= (7*24*60*60);
+//      }
+        if ($duration>24*60*60) {
+    $ret .= (int)($duration/(24*60*60)) . "d ";
+    $duration %= (24*60*60);
+  }
+  if ($duration>60*60) {
+    $ret .= (int)($duration/(60*60)) . "h ";
+    $duration %= (60*60);
+  }
+  if ($duration>60) {
+    $ret .= (int)($duration/60) . "m ";
+    $duration %= 60;
+  }
+  if ($duration>0) {
+    $ret .= $duration . "s ";
+  }
+  return $ret;
+}
+
+function drake_duration($duration)
+{
+  $days .= (int)($duration/(24*60*60));
+  $duration %= (24*60*60);
+  $hours .= (int)($duration/(60*60));
+  $duration %= (60*60);
+  $mins .= (int)($duration/60);
+  $duration %= 60;
+  $ret=sprintf("%01d days, %02d:%02d:%02d",$days,$hours,$mins,$duration);
+  return $ret;
+}
+
+function gen_server_url() {
+  if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) { // proxy connection
+      if (ereg(":",$_SERVER["HTTP_HOST"])) {
+        $pxp = explode(":",$_SERVER["HTTP_HOST"]);
+        $port = (int)$pxp[1];
+      } else {
+      if (ereg("^https\:\/\/",$_SERVER["HTTP_REFERER"])) {
+          // hack because apache doesnt return 443 in $_SERVER['SERVER_PORT'] (!)
+        $port = 443;
+      } else {
+          $port = 80;
+      }
+      }
+  } else {
+    $port = (int)$_SERVER["SERVER_PORT"];
+  }
+  if ($port <= 0) { $port = 80; }
+
+  if (ereg("cscportal.net",$_SERVER["SERVER_NAME"])) { $_SERVER["SERVER_NAME"]="cservice.undernet.org"; }
+
+  if ($port == "80") {
+        return "http://" . $_SERVER["SERVER_NAME"];
+    } else if ($port == "443" || $port = "4443") {
+    return "https://" . $_SERVER["SERVER_NAME"];
+  } else {
+    return "http://" . $_SERVER["SERVER_NAME"] . ":" . $port;
+  }
+}
+
+function C_strtolower($txt){
+  return(strtolower(strtr($txt,"ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝ","àáâãäåçèéêëìíîïñòóôõöøùúûüý")));
+}
+
+function js_redir($url, $toTop = 0) {
+  echo "<script language=\"JavaScript\">\n";
+  echo "<!--\n";
+  if ($toTop == 1) { echo "top."; }
+  echo "location.href='" . $url . "';\n";
+  echo "//-->\n";
+  echo "</script>\n";
+}
+
+function initial_complaint( $ticketNumber , $showCurrentOwner = 1) {
+  global $user_id, $admin, $cpt_name;
+  $ret = "";
+  $idt = explode("-",$ticketNumber);
+  $r = pg_safe_exec("SELECT * FROM complaints WHERE id='" . (int)$idt[0] . "' AND ticket_number='" . $ticketNumber . "'");
+  if ($o = pg_fetch_object($r)) {
+    // check if this is a referenced complaints for the "reader"
+    $refline = "";
+    $rref = pg_safe_exec("SELECT * FROM complaints_reference WHERE complaints_ref='" . (int)$idt[0] . "' AND referenced_to='" . (int)$user_id . "'");
+    if ($oref = pg_fetch_object($rref)) {
+      // yes !
+      $refline .= "<tr>";
+      $refline .= "<td bgcolor=#000000 valign=top align=right><font color=#ffffff>";
+      $refline .= "Referenced by</font></td>";
+      $refline .= "<td width=99% valign=top>";
+      $ruQ = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$oref->referenced_by . "'");
+      $roQ = pg_fetch_object($ruQ);
+      $refline .= "<b>" . $roQ->user_name . "</b> on " . cs_time($oref->reference_ts) . " (" . $oref->reference_ts . ")";
+      $refline .= "</td></tr>\n";
+      if ($oref->is_new == 1) { // update "is_new" when viewing it the first time...
+        pg_safe_exec("UPDATE complaints_reference SET is_new='0' WHERE complaints_ref='" . (int)$idt[0] . "' AND referenced_to='" . (int)$user_id . "'");
+      }
+    }
+    //$ret .= "<table width=100% border=1 cellpadding=5 cellspacing=0>";
+    $ret .= $refline;
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#000000 valign=top align=right><font color=#ffffff>";
+    $ret .= "From&nbsp;authenticated&nbsp;user</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    if ($o->from_id == 0) { $ret .= "<b>NO</b>"; } else {
+      $rr = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$o->from_id . "'");
+      if ($oo = pg_fetch_object($rr)) {
+        $ret .= "<a href=\"../users.php?id=" . $o->from_id . "\" target=_blank>" . $oo->user_name . "</a>";
+      } else {
+        $ret .= "<b>NOT FOUND</b>";
+      }
+    }
+    $ret .= "</td></tr>\n";
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#990000 valign=top align=right><font color=#ffffff>";
+    $ret .= "From&nbsp;IP</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    $ret .= $o->created_ip;
+    $iphost = gethostbyaddr($o->created_ip);
+    $ret .= " (" . $iphost . ")";
+    $ret .= "</td></tr>\n";
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#000000 valign=top align=right><font color=#ffffff>";
+    $ret .= "Posted&nbsp;date</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    $ret .= cs_time($o->created_ts) . " (" . $o->created_ts . ")";
+    $ret .= "</td></tr>\n";
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#000000 valign=top align=right><font color=#ffffff>";
+    $ret .= "E-Mail&nbsp;for&nbsp;replies</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    $ret .= "<a href=\"mailto:" . $o->from_email . "\"><b>" . $o->from_email . "</b></a>";
+    $ret .= "</td></tr>\n";
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#000000 valign=top align=right><font color=#ffffff>";
+    $ret .= "E-Mail&nbsp;in&nbsp;record</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    if ($o->inrec_email=="") { $ret .= "<b>N/A</b>"; } else { $ret .= $o->inrec_email; }
+    $ret .= "</td></tr>\n";
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+    $ret .= "Original&nbsp;Complaint&nbsp;type</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    $ret .= $cpt_name[$o->complaint_type];
+    $ret .= "</td></tr>\n";
+
+    switch ($o->complaint_type) {
+      case 1:
+        $ret .= "<tr><td colspan=2 valign=center>Username/Password&nbsp;checked&nbsp;OK</td></tr>\n";
+        break;
+      case 2:
+        $ret .= "<tr>";
+        $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+        $ret .= "Victim&nbsp;channel</font></td>";
+        $ret .= "<td width=99% valign=top>";
+        $ret .= $o->complaint_channel1_name;
+        if ($o->complaint_channel1_id>0) { $ret .= " (<a href=\"../channels.php?id=" . $o->complaint_channel1_id . "\" target=_blank>registered</a>)"; }
+        $ret .= "</td></tr>\n";
+
+        $ret .= "<tr>";
+        $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+        $ret .= "Offending&nbsp;channel</font></td>";
+        $ret .= "<td width=99% valign=top>";
+        $ret .= $o->complaint_channel2_name;
+        if ($o->complaint_channel2_id>0) { $ret .= " (<a href=\"../channels.php?id=" . $o->complaint_channel2_id . "\" target=_blank>registered</a>)"; }
+        $rcc = pg_safe_exec("SELECT COUNT(id) AS count FROM complaints WHERE status!=99 AND created_ts<" . (int)$o->created_ts . " AND complaint_type=2 AND lower(complaint_channel2_name)='" . post2db(strtolower($o->complaint_channel2_name)) . "'");
+        $rco = pg_fetch_object($rcc);
+        $ret .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        $ret .= "<b>" . (int)$rco->count . "</b> previous complaint";
+        if ($rco->count>1) { $ret .= "s"; }
+        $ret .= " (excluding this one)</td></tr>\n";
+
+        break;
+      case 3:
+        $ret .= "<tr>";
+        $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+        $ret .= "Channel&nbsp;to&nbsp;be&nbsp;objected</font></td>";
+        $ret .= "<td width=99% valign=top>";
+        $ret .= $o->complaint_channel1_name;
+        $rp = pg_safe_exec("SELECT pending.status,pending.channel_id,pending.created_ts FROM channels,pending WHERE lower(channels.name)='" . post2db(strtolower($o->complaint_channel1_name)) . "' AND pending.channel_id=channels.id");
+        if ($ro = pg_fetch_object($rp)) {
+          $ret .= " (<a href=\"../view_app.php?id=" . $ro->created_ts . "-" . $ro->channel_id . "\" target=_blank>";
+          $ret .= "application";
+          $ret .= "</a>)";
+        }
+        $ret .= "</td></tr>\n";
+
+        break;
+      case 4:
+        $ret .= "<tr>";
+        $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+        $ret .= "Purged channel name</font></td>";
+        $ret .= "<td width=99% valign=top>";
+        $ret .= $o->complaint_channel1_name;
+        $ret .= "</td></tr>\n";
+
+        break;
+      case 5:
+        $ret .= "<tr>";
+        $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+        $ret .= "Purged&nbsp;channel&nbsp;name</font></td>";
+        $ret .= "<td width=99% valign=top>";
+        $ret .= $o->complaint_channel1_name;
+        $ret .= "</td></tr>\n";
+
+        break;
+      default:
+      case 99:
+        break;
+
+    }
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+    $ret .= "Original&nbsp;Complaint&nbsp;summary</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    $ret .= trim(str_replace("\n","<br>\n",htmlspecialchars($o->complaint_text)));
+    $ret .= "</td></tr>\n";
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#0000b2 valign=top align=right><font color=#ffffff>";
+    $ret .= "Original&nbsp;Complaint&nbsp;logs</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    if (trim(str_replace("\n","<br>\n",htmlspecialchars($o->complaint_logs)))!="") {
+      $ret .= trim(str_replace("\n","<br>\n",htmlspecialchars($o->complaint_logs)));
+    } else {
+      $ret .= "<b>N/A</b>";
+    }
+    $ret .= "</td></tr>\n";
+
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#990000 valign=top align=right><font color=#ffffff>";
+    $ret .= "First&nbsp;replied&nbsp;by</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    if ($o->reviewed_by_id==0) {
+      $ret .= "<b>NOT&nbsp;REPLIED</b>";
+    } else {
+      $rx = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$o->reviewed_by_id . "'");
+      $ox = pg_fetch_object($rx);
+      $ret .= "<b>" . $ox->user_name . "</b> on <b>" . cs_time($o->reviewed_ts) . "</b> (" . $o->reviewed_ts . ")";
+    }
+    $ret .= "</td></tr>\n";
+    if ($showCurrentOwner) {
+      $ret .= "<tr>";
+      $ret .= "<td bgcolor=#990000 valign=top align=right><font color=#ffffff>";
+      $ret .= "Currently&nbsp;owned&nbsp;by</font></td>";
+      $ret .= "<td width=99% valign=top>";
+      if ($o->current_owner==0) {
+        $ret .= "<b>NOT&nbsp;OWNED</b>";
+      } else {
+        $rx = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$o->current_owner . "'");
+        $ox = pg_fetch_object($rx);
+        $ret .= "<b>" . $ox->user_name . "</b>";
+      }
+      $ret .= "</td></tr>\n";
+    }
+
+/*
+    $ret .= "<tr>";
+    $ret .= "<td bgcolor=#990000 valign=top align=right><font color=#ffffff>";
+    $ret .= "Priority&nbsp;level</font></td>";
+    $ret .= "<td width=99% valign=top>";
+    $ret .= $o->nicelevel;
+    if ($o->nicelevel>0) {
+      $ret .= " (<big>";
+      for ($x=0;$x<$o->nicelevel;$x++) {
+        $ret .= "*";
+      }
+      $ret .= "</big>)&nbsp;";
+    }
+    $ret .= "</td></tr>\n";
+*/
+  }
+  return $ret;
+}
+
+function local_seclog( $logMessage, $logFileName = "/tmp/cs.log", $logDescription = "SecLog" ) {
+  global $user_id,$admin;
+  $fp = fopen($logFileName, "a+");
+  if ($fp) {
+    $username = "(unknown)";
+    $ip = cl_ip();
+    $admlvl = (int)$admin;
+    if ($user_id>0) {
+      $rr = @pg_safe_exec("SELECT user_name FROM users WHERE id=" . (int)$user_id);
+      if ($oo = @pg_fetch_object($rr,0)) {
+        $username = $oo->user_name;
+      }
+    }
+    if ($admlvl==0 && has_acl($user_id)) { $admlvl = "ACL"; }
+    $msgToWrite = "[" . $logDescription . "] {" . date("Y-m-d H:i:s T") . "} " . $username . " (" . (int)$user_id . ") " . $ip . " *" . $admlvl . " :";
+    $msgToWrite .= $logMessage;
+    $msgToWrite .= "\n";
+    fwrite($fp, $msgToWrite);
+    fclose($fp);
+    return 1;
+  }
+  return 0;
+}
+
+function log_webrelay( $logMessage ) {
+  global $user_id,$admin;
+  $username = "(unknown)";
+  $ip = cl_ip();
+  $admlvl = (int)$admin;
+  if ($user_id>0) {
+    $rr = @pg_safe_exec("SELECT user_name FROM users WHERE id=" . (int)$user_id);
+    if ($oo = @pg_fetch_object($rr,0)) {
+      $username = $oo->user_name;
+    }
+  }
+  if ($admlvl==0 && has_acl($user_id)) { $admlvl = "ACL"; }
+  $msgToWrite = "[Web] " . N_get_pure_string($username) . " (" . (int)$user_id . ") ";
+  $msgToWrite .= $logMessage;
+  $msgToWrite .= "\n";
+  @pg_safe_exec("INSERT INTO webnotices (created_ts,contents) VALUES (now()::abstime::int4,'" . post2db($msgToWrite) . "')");
+  return 1;
+}
+
+function isinarray($array,$value) {
+  $l_array = count($array); $is_in = 0;
+  for ($x=0;$x<$l_array;$x++) { if ($value == $array[$x]) { $is_in = 1; } }
+  return $is_in;
+}
+
+/*  Old function pre inet type
+function is_ip_restrict() { // assumes user_id is defined or returns TRUE.
+  global $user_id;
+  if ((int)$user_id<=0) { return 1; }
+  $ipmatch = 0;
+  $rrip = @pg_safe_exec("SELECT * FROM ip_restrict2 WHERE user_id=" . (int)$user_id . "");
+  if ($rrip) {
+    if (pg_numrows($rrip)>0) {
+      while ($rripo = pg_fetch_object($rrip)) {
+        if (matches_ip_restrict($rripo)) { $ipmatch = 1; break; }
+      }
+      if ($ipmatch == 0) { return 1; } else { return 0; }
+    }
+  }
+  if (IPR_REQUIRED) { return 1; } else { return 0; }
+}
+
+*/
+
+function is_ip_restrict() { // assumes user_id is defined or returns TRUE.
+    global $user_id;
+    if ((int)$user_id <= 0) { return 1; }
+    $curr_IP = cl_ip();
+    $invalid = 1;
+    $now = time();
+
+    $res = @pg_safe_exec("SELECT id, flags from users WHERE id ='" . (int)$user_id . "'");
+    if (pg_numrows($res)) { // Check if totp is set and ipr check is disabled, then return FALSE.
+        $user = pg_fetch_object($res, 0);
+        if (($user->flags & TOTP_USR_FLAG) && ($user->flags & TOTP_ADMIN_IPR_FLAG) == 0) {
+            return 0;
+        }
+    } else {
+        return $invalid;
+    }
+
+    $res = @pg_safe_exec("SELECT id, type from ip_restrict where value >>= '".$curr_IP."' and type > 0 and user_id ='" . (int)$user_id . "' and (expiry > ".$now." or expiry = 0)");
+
+    if ($res && pg_num_rows($res) > 0) {
+        while ($row=pg_fetch_object($res)) {
+            if ($row->type == 2 && has_totp($user_id)) {
+                print_r($row->id);
+                $invalid = 0;
+            } else if ($row->type == 1) {
+                $invalid = 0;
+            }
+
+            // Return immediately if a match is found, and update last_used
+            if (!$invalid) {
+                @pg_safe_exec("UPDATE ip_restrict set last_used='".time()."' where id='".$row->id."'");
+                return $invalid;
+            }
+        }
+    }
+    return $invalid;
+}
+
+function matches_wild($string_to_match,$wildcard_mask) {
+  $regexp = "/^" . str_replace("?",".",str_replace("*",".*",str_replace(".","\.",str_replace("-","\-",str_replace("_","\_",$wildcard_mask))))) . "$/";
+  return (preg_match($regexp,$string_to_match));
+}
+
+function std_sanitise_username(&$username) {
+  $username2="";
+  while ($username!="") {
+    $c=$username[0];
+    if (($c>="A" && $c<="Z" ) || ($c>="a" && $c<="z") || ($c>="0" && $c<="9")) {
+      $username2=$username2 . $c;
+    }
+    $username=substr($username,2);
+  }
+  $username=$username2;
+}
+
+function std_admin() { // Return admin level
+  global $user_id,$database,$REQUEST_URI,$mode,$auth,$uuflags,$r_admin,$is_alumni;
+
+  if (($user_id+0)<=0) { return (0); }
+
+
+  $query="SELECT access,suspend_expires FROM levels WHERE channel_id=1 AND user_id=" . (int)$user_id;
+//  echo "Q: $query";
+  $adminR = pg_safe_exec($query);
+
+  if (pg_numrows($adminR)==0) {
+    $admin=0;
+    $suspex=-1;
+  } else {
+    $adminO=pg_fetch_object($adminR,0);
+    $admin=$adminO->access;
+    $suspex=$adminO->suspend_expires;
+  }
+
+  if (BOFH_PASS_ADMIN && !BOFH_PASS_USER) {
+          if (!is_pw_secure_logged()) {
+            if (ereg("left.php",$REQUEST_URI)) {
+              $mode = "empty";
+            } else {
+              if (!ereg("confirm",$REQUEST_URI) && !ereg("pwreset.php",$REQUEST_URI) && !ereg("main.php",$REQUEST_URI) && !ereg("logout.php",$REQUEST_URI) && !ereg("right.php",$REQUEST_URI) && !ereg("securize_pw.php",$REQUEST_URI)) {
+                $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5( $user_id . CRC_SALT_0013 . $auth );
+          header("Location: " . $unsecure_pw_url . "\n\n");
+          die;
+        }
+            }
+          }
+  }
+
+  $r_admin = $admin;
+  if ($uuflags & 64) { return(0); } // if DISABLEAUTH is set to ON, you're seen as no * person.
+  if (($uuflags & 128) && $admin>0) { $is_alumni = 1; return(0); } // if ALUMNI is set to ON, you're seen as no * person.
+  if ($suspex>0 && $suspex>time()) { return(0); } // if suspended on '*' (ID=1) -> seen as no * person
+
+  return $admin;
+}
+
+unset($is_alumni); $is_alumni = 0;
+unset($current_page); $current_page='any';
+
+function gen_totp_cookie ($value) {
+$dynts = time();
+$temp_totp_hash=md5(TOTP_SALT.$value.$dynts.TOTP_SALT);
+return $temp_totp_hash;
+}
+
+
+
+function std_security_chk($authcookline) {
+  // TODO: Make sure auth is 0-9a-z
+  global $user_id,$database,$ENABLE_COOKIE_TABLE,$USER_TZ,$REQUEST_URI,$mode,$uuflags,$r_admin,$current_page;
+
+  $authz = explode(":",$authcookline);
+  $auth_user = $authz[0];
+  $auth_uid = $authz[1];
+  $auth_ts = $authz[2];
+  $authcook = $authz[3];
+
+  if ($authz[5]!=md5($authz[4] . CRC_SALT_EXT1 . $authcook)) { return 0; }
+
+  $query="SELECT user_id,tz_setting FROM webcookies WHERE cookie='" . $authcook . "' AND expire>now()::abstime::int4";
+  $ENABLE_COOKIE_TABLE = 1;
+  $auth=pg_safe_exec($query);
+  $ENABLE_COOKIE_TABLE = 0;
+
+
+  if (pg_numrows($auth) == 0) {
+    $user_id=0;
+  } else {
+    $user=pg_fetch_object($auth,0);
+    $user_id=$user->user_id;
+    $rrr = pg_safe_exec("SELECT flags FROM users WHERE id='" . (int)$user_id . "'");
+    $ooo = pg_fetch_object($rrr,0);
+    $uuflags = (int)$ooo->flags;
+    if ((int)$ooo->flags & 1) { // suspended, no auth !
+      $ENABLE_COOKIE_TABLE = 1;
+      pg_safe_exec("DELETE FROM webcookies WHERE cookie='" . $authcook . "' AND user_id='" . $user_id . "'");
+      $ENABLE_COOKIE_TABLE = 0;
+      return(0);
+    }
+    $USER_TZ = $user->tz_setting;
+    $sexpire=get_custom_session($user->user_id);
+    $query="UPDATE webcookies SET expire=(now()::abstime::int4+" . $sexpire . ") WHERE user_id='" . (int)$user_id . "' AND cookie='" . $authcook . "'";
+    $dynts = time();
+    $cook2 = md5( $dynts . CRC_SALT_EXT1 . $authcook );
+    $web_s_c=time()+$sexpire;
+    if (COOKIE_DOMAIN!="") {
+      SetCookie("auth",$auth_user . ":" . $auth_uid . ":" . $auth_ts . ":" . $authcook . ":" . $dynts . ":" . $cook2,time()+$sexpire,"/",COOKIE_DOMAIN);
+      SetCookie("sauth", "$web_s_c", $web_s_c, "/", COOKIE_DOMAIN)  or die ("Can not set cookie");
+      SetCookie("sepoch",time(),$web_s_c,"/",COOKIE_DOMAIN);
+    } else {
+      SetCookie("sauth", "$web_s_c", $web_s_c, "/")  or die ("Can not set cookie");
+      SetCookie("auth",$auth_user . ":" . $auth_uid . ":" . $auth_ts . ":" . $authcook . ":" . $dynts . ":" . $cook2,time()+$sexpire,"/");
+      SetCookie("sepoch",time(),$web_s_c,"/");
+    }
+    $ENABLE_COOKIE_TABLE = 1;
+    pg_safe_exec($query);
+    $ENABLE_COOKIE_TABLE = 0;
+    if (TOTP_ON==1)
+    {
+    if ($current_page !="v_totp.php")
+      {
+      if(has_totp($user_id))
+        {
+        $totp=has_totp($user_id);
+        $set_totp=$_COOKIE['totp'];
+        $ENABLE_COOKIE_TABLE = 1;
+        $res = pg_safe_exec("select totp_cookie from webcookies WHERE user_id='" . (int)$user_id . "' AND cookie='" . $authcook . "'");
+        $ENABLE_COOKIE_TABLE = 0;
+        if (pg_numrows($res))
+        {
+        $resobj = pg_fetch_object($res);
+        $check_totp=$resobj->totp_cookie;
+        }
+
+        if (strcmp($set_totp, $check_totp) != 0 )
+          {
+          if (($current_page !="left.php") && ($current_page !="logout.php"))
+          header ("Location: v_totp.php \n\n");
+          die;
+          }
+        if (COOKIE_DOMAIN!="")
+        SetCookie("totp",$set_totp,time()+$sexpire,"/",COOKIE_DOMAIN);
+        else
+        SetCookie("totp",$set_totp,time()+$sexpire,"/");
+        }
+
+      }
+      }
+  }
+  if (std_admin()==0 && !acl()) {
+    if (site_off()) {
+      return 0;
+    }
+  } else {
+    if (is_ip_restrict()) {
+      return 0;
+    }
+  }
+
+  if (BOFH_PASS_USER && (($user_id+0)>0)) {
+          if (!is_pw_secure_logged()) {
+            if (ereg("left.php",$REQUEST_URI)) {
+              $mode = "empty";
+            } else {
+              if (!ereg("confirm",$REQUEST_URI) && !ereg("pwreset.php",$REQUEST_URI) && !ereg("main.php",$REQUEST_URI) && !ereg("logout.php",$REQUEST_URI) && !ereg("right.php",$REQUEST_URI) && !ereg("securize_pw.php",$REQUEST_URI)) {
+                $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5( $user_id . CRC_SALT_0013 . $authcook );
+          header("Location: " . $unsecure_pw_url . "\n\n");
+          die;
+        }
+            }
+          }
+  }
+
+  return $user_id;
+}
+
+function get_theme_info() {
+  global $ENABLE_COOKIE_TABLE;
+  $ECT = $ENABLE_COOKIE_TABLE;
+  $ENABLE_COOKIE_TABLE = 1;
+
+/* TBF
+  $c_ts = time();
+  if (AUTO_SWITCH_THEMES) {
+    $cyear = date("Y",$c_ts);
+
+    $start_halloween = mktime(0,0,0,10,31,$cyear);
+    $end_halloween = mktime(23,59,59,11,1,$cyear);
+
+    $start_xmas = mktime(0,0,0,12,22,$cyear);
+    $end_xmas = mktime(23,59,59,12,27,$cyear);
+
+    if ($c_ts>=$start_halloween && $c_ts<=$end_halloween) { $ishalloween = 1; } else { $ishalloween = 0; }
+    if ($c_ts>=$start_xmas && $c_st<=$end_xmas) { $isxmas = 1; } else { $isxmas = 0; }
+
+    if ($ishalloween) {
+
+    } else if ($isxmas) {
+
+    }
+
+  } else {
+
+  }
+*/
+if ($_COOKIE['cstheme']=='')
+  {
+  $res = pg_safe_exec("SELECT * FROM themes WHERE name='" . STD_THEME . "'"); // Select STD theme from config.inc
+  if (pg_numrows($res)==0) { // if it doesnt exist...
+    unset($res);
+    $res = pg_safe_exec("SELECT * FROM themes WHERE id=1"); // .. select the default theme
+    if (pg_numrows($res)==0) { // if it doesnt exist (bad !)
+      die("Your default Theme is not present, please check your site is configured correctly. Recent changes may have caused this.");
+    }
+  }
+
+  $row = pg_fetch_object($res,0);
+
+  $cTheme = $row;
+  $cTheme->status = 1;
+  $ENABLE_COOKIE_TABLE = $ECT;
+
+
+  return $cTheme;
+}
+
+  else
+  {
+
+    $res = pg_safe_exec("SELECT * FROM themes WHERE name='" . $_COOKIE['cstheme'] . "'"); // Select STD theme from config.inc
+  if (pg_numrows($res)==0) { // if it doesnt exist...
+    unset($res);
+    $res = pg_safe_exec("SELECT * FROM themes WHERE id=1"); // .. select the default theme
+    if (pg_numrows($res)==0) { // if it doesnt exist (bad !)
+      die("Your default Theme is not present, please check your site is configured correctly. Recent changes may have caused this.");
+    }
+  }
+
+  $row = pg_fetch_object($res,0);
+
+  $cTheme = $row;
+  $cTheme->status = 1;
+  $ENABLE_COOKIE_TABLE = $ECT;
+
+
+  return $cTheme;
+
+
+  }
+}
+function std_theme_body($special_path = "",$onLoadScript = "") { // for "main" only
+  global $cTheme;
+
+  echo "<body bgcolor=#" . $cTheme->main_bgcolor . " text=#" . $cTheme->main_textcolor . " link=#" . $cTheme->main_linkcolor . " vlink=#" . $cTheme->main_linkcolor . " alink=#" . $cTheme->main_linkover . "";
+
+  if ($cTheme->main_bgimage!="") {
+    echo " background=\"" . $special_path . "themes/data/" . $cTheme->sub_dir . "/" . $cTheme->main_bgimage . "\"";
+  }
+  if ($onLoadScript!="") { echo " onLoad=\"" . $onLoadScript . "\""; }
+  echo ">\n";
+  show_web_warning();
+  echo "<font face=\"arial,helvetica\" size=-1>\n";
+}
+
+function std_theme_styles($include_html = 0) { // for "main" only
+  global $cTheme;
+  if ($include_html) {
+    echo "<html><head><title>CService</title>\n";
+  }
+  echo "<style type=text/css>\n";
+  echo "<!--\n";
+  echo "a:link { font-family: arial,helvetica; color: #" . $cTheme->main_linkcolor . ";  }\n";
+  echo "a:visited { font-family: arial,helvetica; color: #" . $cTheme->main_linkcolor . "; }\n";
+  echo "a:hover { font-family: arial,helvetica; color: #" . $cTheme->main_linkover . "; }\n";
+  echo "//-->\n";
+  echo "</style>\n";
+
+  if ($include_html) { echo "</head>\n"; }
+
+}
+
+function std_connect() {
+  global $database;
+
+  if (REMOTEDB_PASS!="") {
+    $database= @pg_connect("host=" . REMOTEDB_HOST . " port=" . REMOTEDB_PORT . " user=" . REMOTEDB_USER . " password=" . REMOTEDB_PASS . " dbname=" . REMOTEDB_NAME);
+  } else {
+    $database= @pg_connect("host=" . REMOTEDB_HOST . " port=" . REMOTEDB_PORT . " user=" . REMOTEDB_USER . " dbname=" . REMOTEDB_NAME);
+  }
+  if ($database == "") {
+    echo("<head><title>Database unavailable</title></head>");
+    echo("<body bgcolor=#ffffff><h1>The database is currently unavailable (R)</h1>");
+    echo("Please try again later</body></html>");
+    exit;
+  }
+}
+
+function get_user_info($id = 0) {
+       global $user_id;
+       $uInfo->req_status = 0;
+       $idchk = ($id+0);
+       if ($idchk == 0) { $idchk = $user_id; }
+       if ($idchk>0) {
+               $res = pg_safe_exec("SELECT * FROM users WHERE id='" . (int)$idchk . "'");
+               $uInfo = pg_fetch_object($res);
+               $uInfo->req_status = 1;
+       }
+       return $uInfo;
+}
+
+function is_email_valid($email) {
+  return(preg_match("/^[A-Za-z0-9_+-.]+@[A-Za-z0-9.-]+\.[A-Za-z][A-Za-z]+$/",$email));
+}
+
+function err_newuser($errMsg) {
+  echo "<font color=#ff1111>Error</font><br>\n";
+  echo "<ul>\n";
+  echo $errMsg;
+  echo "</ul>\n";
+}
+
+function remove_ip($string,$type=1) {
+  $retv = $string;
+  if ($type==1) {
+    if (ereg("@",$string)) {
+      $bb = explode("@",$string);
+      $retv = $bb[0] . "@&lt;IP_HIDDEN&gt;";
+    }
+  } elseif ($type==2) {
+    $xx = explode(" ",$string);
+    if (preg_match('/^\(.*\)$/',$xx[2])) {
+      $uname = str_replace("(","",str_replace(")","",$xx[2]));
+      $rru = pg_safe_exec("SELECT levels.access,users.flags FROM users,levels WHERE lower(users.user_name)='" . strtolower($uname) . "' AND levels.channel_id=1 AND levels.user_id=users.id");
+      $fl = 0; $axs = 0;
+      if ($oru = @pg_fetch_object($rru)) {
+        $axs = $oru->access;
+        $fl = $oru->flags;
+      }
+    }
+    if (ereg("@",$xx[1])) {
+      if ($axs>0 || $fl&256) {
+        $bb = explode("@",$xx[1]);
+        $xx1 = $bb[0] . "@<IP_HIDDEN>";
+        $xx[1] = $xx1;
+      }
+      $retv = "";
+      for ($x=0;$x<count($xx);$x++) { $retv .= $xx[$x] . " "; }
+    }
+  }
+  return $retv;
+}
+
+function std_init() {
+  global $user_id,$admin,$auth,$HTTP_SERVER_VARS,$r_admin;
+
+  std_connect();
+
+  $user_id = std_security_chk($auth);
+
+  if ($user_id == 0) {
+    $url=$HTTP_SERVER_VARS["PHP_SELF"];
+    header("Location: " . LIVE_LOCATION . "/login.php?redir=" . urlencode($url));
+    exit;
+  }
+
+  $admin = std_admin();
+}
+
+function std_pwd_chk($password,$crypt) {
+        if ($crypt=="")
+                return 1; // Succes
+        $salt=substr($crypt,0,8);
+        $crypt=substr($crypt,8);
+        if (md5($salt . $password) == $crypt)
+                return 1; // Success!
+        return 0; // Failed
+}
+
+function chk_password($username,$password,$failret = 0) {
+  global $database,$cookie_cnx;
+        $chk = pg_safe_exec("SELECT password,id FROM users WHERE lower(user_name)='" . strtolower($username) . "'");
+  if (pg_numrows($chk)==0) {
+    return $failret; // Failed
+  }
+  $chkO = pg_fetch_object($chk,0);
+  $crypt=$chkO->password;
+//  if ($crypt=="") { // empty password field = login without password
+//    return $chkO->id; // Success!
+//  }
+  $salt=substr($crypt,0,8);
+  $crypt=substr($crypt,8);
+  if (md5($salt . $password) == $crypt) {
+    return $chkO->id; // Success!
+  }
+  return $failret; // Failed
+}
+
+if (file_exists("../../php_includes/config.inc")) {
+  include("../../php_includes/config.inc");
+} else {
+  if (file_exists("../../../php_includes/config.inc")) {
+    include("../../../php_includes/config.inc");
+  } else {
+    if (file_exists("../../../../php_includes/config.inc")) {
+      include("../../../../php_includes/config.inc");
+    } else {
+      echo "Missing required <b>config.inc</b> !!";
+      die;
+    }
+  }
+}
+
+$x_at_email = XAT_EMAIL;
+$purge_at_email = PURGE_EMAIL;
+$ipchk_dbuser = LOCALDB_USER;
+define(CLEAR_COOKIES_QUERY,"DELETE FROM webcookies WHERE expire<now()::abstime::int4");
+$mail_from_new=FROM_NEWUSER;
+$mail_subject_new=FROM_NEWUSER_SUBJECT;
+$mail_from_pass=FROM_FPASS;
+$mail_subject_pass=FROM_FPASS_SUBJECT;
+$min_time_between_requests=LREQ_TIME; // in seconds (set to 1 for testing purposes, preferably set to 600 (10 minutes)).
+
+
+// do not change the above values here... edit 'config.inc' instead.
+
+if (!extension_loaded("gd")) { // checking if LibGD is present in apache/php
+  define(SHOW_GFXUSRCHK,0);
+} else {
+  define(SHOW_GFXUSRCHK,1);
+}
+
+define(HOSTING_STATS_FILENAME,"/tmp/hosting_stats");
+if (HOSTING_STATS) {
+  $ftest = @fopen(HOSTING_STATS_FILENAME,"r");
+  if (!$ftest) {
+    // file not found, crete it (or try)
+    $ftest3 = @fopen(HOSTING_STATS_FILENAME,"w");
+    if (!$ftest3) {
+      //die("i can't create the file '" . HOSTING_STATS_FILENAME . "', duh !");
+      define(HOSTING_CLICK_CHECK,0);
+    } else {
+      define(HOSTING_CLICK_CHECK,1);
+      @fclose($ftest3);
+    }
+  } else {
+    @fclose($ftest);
+    $ftest2 = @fopen(HOSTING_STATS_FILENAME,"a");
+    if (!$ftest2) {
+      //die("file '" . HOSTING_STATS_FILENAME . "' exists and is not writable by me !");
+      define(HOSTING_CLICK_CHECK,0);
+    } else {
+      define(HOSTING_CLICK_CHECK,1);
+      @fclose($ftest2);
+    }
+  }
+} else {
+  define(HOSTING_CLICK_CHECK,0);
+}
+
+if (!extension_loaded("pgsql")) { // original idea by Leigh.
+  echo "<b>Your apache server has no <b>PgSQL support</b> built-in.<br><br>Please re-install apache properly to use this web interface.</b>";
+  echo "<br><br>See: <a href=\"http://coder-com.undernet.org/gnuworld-setup/\" target=_blank>http://coder-com.undernet.org/gnuworld-setup/</a> for detailed information.<br>";
+  die;
+}
+
+if (PHP_VERSION_ID < 40000) {
+    echo "<b>Your apache server has </b>PHP " . phpversion() . "<b> support (you need at least version 4+ (<a href=\"http://www.php.net/\" target=\"_blank\">http://www.php.net/</a>))<br><br>Please re-install the latest version of PHP.</b>";
+  echo "<br><br>See: <a href=\"http://coder-com.undernet.org/gnuworld-setup/\" target=_blank>http://coder-com.undernet.org/gnuworld-setup/</a> for detailed information.<br>";
+  die;
+}
+
+$reg_globs = ini_get("register_globals");
+if ( (($reg_globs+0) == 1) || (strtolower($reg_globs) == "on") ) {
+    $bypass42 = 1;
+} else {
+    $bypass42 = 0;
+}
+
+if (PHP_VERSION_ID >= 40200 && !$bypass42) {
+    echo "<font size=+1><br><br>";
+    echo "Your apache server has <b>PHP ". phpversion() . "</b><br>";
+    echo "Lots of changes in 4.2 oblige us to update a lot of things.<br><br>\n";
+    echo "Fortunately, you can solve this problem by activating a now by default desactivated feature<br>\n";
+    echo "Go edit your <b>php.ini</b> file and find the line defining <b>register_globals</b>, set its value<br>";
+    echo "to <b>On</b> and then restart your apache (<b>/usr/local/apache/bin/apachectl restart</b>)<br><br>";
+    echo ".. then reload this page <b>:)</b>\n";
+    echo "</font><br>\n";
+    die;
+}
+
+if (DEFAULT_REQUIRED_SUPPORTERS>10 || DEFAULT_REQUIRED_SUPPORTERS<0 || (DEFAULT_REQUIRED_SUPPORTERS+0)!=DEFAULT_REQUIRED_SUPPORTERS ) {
+    echo "<b>Incorrect default config.inc's value for </b>DEFAULT_REQUIRED_SUPPORTERS<b>, requires a value between 0 and 10.</b>";
+    echo "<br><br>See: <a href=\"http://coder-com.undernet.org/gnuworld-setup/\" target=_blank>http://coder-com.undernet.org/gnuworld-setup/</a> for detailed information.<br>";
+    die;
+}
+
+unset($ENABLE_COOKIE_TABLE);
+$ENABLE_COOKIE_TABLE = 0;
+unset($dns_cache);
+
+std_connect();
+$res = pg_safe_exec("SELECT contents FROM variables WHERE var_name='REQUIRED_SUPPORTERS'");
+if (!$res && (cl_ip()=="193.178.138.1" || cl_ip()==gethostbyname("jahlive.roots.org"))) {
+  echo pg_errormessage() . "<br><br>" . pg_connection_status($database);
+  echo " (OK=" . PGSQL_CONNECTION_OK . ", BAD=" . PGSQL_CONNECTION_BAD . ")<br><br>" . pg_last_error();
+  if (pg_connection_busy($database)) {
+    echo "<br><br>Connexion busy<br>";
+  } else {
+    echo "<br><br>Connection NOT busy<br>";
+  }
+  die;
+}
+if (pg_numrows($res)==0) {
+  pg_safe_exec("INSERT INTO variables VALUES ('REQUIRED_SUPPORTERS','" . DEFAULT_REQUIRED_SUPPORTERS . "',now()::abstime::int4)");
+  $reqsup = DEFAULT_REQUIRED_SUPPORTERS;
+} else {
+  $row = pg_fetch_object($res,0);
+  $reqsup = ($row->contents+0);
+}
+
+define(REQUIRED_SUPPORTERS,$reqsup);
+unset($res);
+unset($reqsup);
+
+if (cl_ip()=="0.0.0.0") { die("For some reason we cannot determine your IP, you cannot access this service."); }
+
+if (isset($cTheme)) { unset($cTheme); }
+if (isset($uuflags)) { unset($uuflags); }
+if (isset($r_admin)) { unset($r_admin); }
+
+include ("extras.php");
+
+?>

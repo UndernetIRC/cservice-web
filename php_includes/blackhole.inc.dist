@@ -1,0 +1,48 @@
+<?
+
+/* $Id: blackhole.inc,v 1.5 2002/09/09 01:29:31 nighty Exp $ */
+
+if (isset($blackholeips)) { unset($blackholeips); }
+
+/* Example, add lines like this one to blackhole netblocks
+
+	$blackholeips[]="10.";
+	$blackholeips[]="192.168.";
+	$blackholeips[]="4.3.2.";
+	$blackholeips[]="1.2.3.4";
+	[...]
+
+
+	All the IPs/Netblocks listed here will be blocked from any page in the site
+	where you put the "require('../../php_include/blackhole.inc');" line.
+
+	Pages currently concerned by this are :
+		confirm.php		New user confirmation
+		newuser.php		New user main script
+		regproc/index.php	New channel registration index
+		regproc/regproc.php	New channel registration processing
+
+
+*/
+
+/* begin list here */
+
+/* end of list */
+
+for ($x=0;$x<count($blackholeips);$x++) {
+        if (ereg("^" . str_replace(".","\\.",$blackholeips[$x]),$_SERVER["REMOTE_ADDR"])) {
+                echo "<html>\n";
+                echo "<head><title>ERROR</title></head>\n";
+                echo "<body bgcolor=#a0a0a0 text=#000000 link=#004400 vlink=#004400 alink=#004400>\n";
+                echo "<h2>";
+		echo "Due to repeated abuse, and until further notice, this domain is blocked from registering usernames and channels.<br>\n";
+		echo "This cannot be over turned by any Cservice person.<br>\n";
+		echo "This will be reviewed, when and if the abuse from this domain stops.<br>\n";
+		echo "<br>We regret having to do this but, at this time, we have no other choice.<br>\n";
+                echo "</h2>\n";
+                echo "</body></html>\n\n";
+                die;
+        }
+}
+
+?>
