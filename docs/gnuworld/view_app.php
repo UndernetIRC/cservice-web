@@ -553,7 +553,7 @@
 		}
 		echo "</font></td></tr>\n";
 	}
-	if (($status==3 || $status==4 || $status==9 || $status==8) && $decision_ts>0) {
+	if (in_array($status, array(3, 4, 8, 9)) && $decision_ts>0) {
 		$decision_date = cs_time($decision_ts);
 		$decision_comment = str_replace("\'","'",$decision);
 
@@ -561,7 +561,7 @@
 		echo "<tr><td valign=top align=right><u>Decision comment :</u>&nbsp;</td><td bgcolor=#eeeeee valign=center><font size=+1><b>$decision_comment</b></font></td></tr>\n";
 	}
 
-	if ($status==0 || $status==1 || $status==2) {
+	if (in_array($status, array(0, 1, 2, 8))) {
 		$c_id=0;
 		if ($user_id>0) {
 			$res = pg_safe_exec("SELECT * FROM objections WHERE user_id='$user_id' AND channel_id='$channel_id' AND admin_only='N'");
