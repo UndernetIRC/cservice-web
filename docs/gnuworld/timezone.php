@@ -34,7 +34,7 @@ $cTheme = get_theme_info();
 
 	$zets = time();
 	$zecrc = md5( $zets . $user_id . $HTTP_USER_AGENT );
-	if (ereg("users.php",$HTTP_REFERER)) {
+	if (preg_match("users.php",$HTTP_REFERER)) {
 		echo "<h1>Change your current timezone</h1>\n";
 	} else {
 		echo "<h1>Pick up your current timezone</h1>\n";
@@ -68,7 +68,7 @@ $cTheme = get_theme_info();
 		$l_index=0;
 		for ($x=0;$x<count($alllines);$x++) {
 			$linepos=0;
-			if (ereg("/",$alllines[$x])) {
+			if (preg_match("/",$alllines[$x])) {
 				$ccode = "";
 				$tznam = "";
 				// first .. ccode...
@@ -126,7 +126,7 @@ $cTheme = get_theme_info();
 ?>
 	</select><br><br>
 <?
-	if (ereg("users.php",$HTTP_REFERER)) {
+	if (preg_match("users.php",$HTTP_REFERER)) {
 		echo "<input type=submit value=\" Change my default timezone to the above ! \"><br><br><a href=\"users.php?id=$user_id\">go back</a>\n";
 	} else {
 		echo "<input type=submit value=\" Record the above as my default timezone ! \">\n";

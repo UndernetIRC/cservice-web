@@ -13,6 +13,18 @@ if (!defined('PHP_VERSION_ID')) {
     define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
 }
 
+if (file_exists("../../php_includes/config.inc")) {
+    include_once("../../php_includes/config.inc");
+} elseif (file_exists("../../../php_includes/config.inc")) {
+    include_once("../../../php_includes/config.inc");
+} elseif (file_exists("../../../../php_includes/config.inc")) {
+    include_once("../../../../php_includes/config.inc");
+} else {
+    echo "Missing required <b>config.inc</b> !!";
+    die;
+}
+
+
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
 ini_set('log_errors', '1');
 ini_set('error_log', 'page_errors.log');
@@ -20,56 +32,56 @@ ini_set('display_errors', '0');
 //error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
 $MAX_ALLOWED_USERS = 1000; // after that count, new users are locked and needs a manual unlock (resetting the count).
 
-define(HIJACK_LOGFILE, ""); // optional fullpath to file where to log queries found 'bogus' by pg_safe_exec();
+define("HIJACK_LOGFILE", ""); // optional fullpath to file where to log queries found 'bogus' by pg_safe_exec();
 
-define(MAX_MAXLOGINS,3); // Maximum settable "maxlogins".
-define(MOD_MAXLOGINS_LEVEL,800);
+define("MAX_MAXLOGINS",3); // Maximum settable "maxlogins".
+define("MOD_MAXLOGINS_LEVEL",800);
 
-define(CRIT_LOADAVG,6.0); // if loadavg5 goes over this number, the login/newuser/regproc/emailchange/pwreset are locked out.
-define(CRIT_MAX_LOADAVG,15.0); // if loadavg5 goes over this number, everything is stopped to make the load lower.
+define("CRIT_LOADAVG",6.0); // if loadavg5 goes over this number, the login/newuser/regproc/emailchange/pwreset are locked out.
+define("CRIT_MAX_LOADAVG",15.0); // if loadavg5 goes over this number, everything is stopped to make the load lower.
 
-define(NOPURGE_USER_VIEWLEVEL,750);
-define(NOPURGE_USER_EDITLEVEL,750);
-define(SHOW_IP_LEVEL,800);  // level above which you can see IP numbers for * accounts (userinfo, logs, last_updated, last_hostmask, etc.)
+define("NOPURGE_USER_VIEWLEVEL",750);
+define("NOPURGE_USER_EDITLEVEL",750);
+define("SHOW_IP_LEVEL",800);  // level above which you can see IP numbers for * accounts (userinfo, logs, last_updated, last_hostmask, etc.)
 
-define(MIN_CHAN_TOASTER_QRY,0); // the bigger your database is and the lower you set this number, the more your DB will be hammered,
+define("MIN_CHAN_TOASTER_QRY",0); // the bigger your database is and the lower you set this number, the more your DB will be hammered,
          // however, 0 disables the feature.
 
-define(NON_BOGUS,'/^[A-Za-z0-9`\^\|\}\{_-]+$/');
+define("NON_BOGUS",'/^[A-Za-z0-9`\^\|\}\{_-]+$/');
 
-define(XCHGMGR_REVIEW,         1);
-define(XCHGMGR_ADMIN,          2);
-define(XMAILCH_REVIEW,         4);
-define(XMAILCH_ADMIN,          8);
-define(XHELP,                  16);
-define(XHELP_CAN_ADD,          32);
-define(XHELP_CAN_EDIT,         64);
-define(XWEBAXS_2,              128);
-define(XWEBAXS_3,              256);
-define(XWEBCTL,                512);
-define(XWEBACL,                1024);
-define(XWEBUSR_TOASTER,        2048);
-define(XAT_CAN_VIEW,           4096);
-define(XAT_CAN_EDIT,           8192);
-define(XDOMAIN_LOCK,           16384);
-define(XSUSPEND_USR,           32768);
-define(XUNSUSPEND_USR,         65536);
-define(XWEBSESS,               131072);
-define(XCOMPLAINTS_ADM_READ,   262144);
-define(XCOMPLAINTS_ADM_REPLY,  524288);
-define(XLOGGING_VIEW,          1048576);
-define(XIPR_VIEW_OWN,          2097152);
-define(XIPR_VIEW_OTHERS,       4194304);
-define(XIPR_MOD_OWN,           8388608);
-define(XIPR_MOD_OTHERS,        16777216);
-define(XWEBUSR_TOASTER_RDONLY, 33554432);
-define(MIA_VIEW,               67108864);
-define(XTOTP_DISABLE_OTHERS,   134217728);
+define("XCHGMGR_REVIEW",         1);
+define("XCHGMGR_ADMIN",          2);
+define("XMAILCH_REVIEW",         4);
+define("XMAILCH_ADMIN",          8);
+define("XHELP",                  16);
+define("XHELP_CAN_ADD",          32);
+define("XHELP_CAN_EDIT",         64);
+define("XWEBAXS_2",              128);
+define("XWEBAXS_3",              256);
+define("XWEBCTL",                512);
+define("XWEBACL",                1024);
+define("XWEBUSR_TOASTER",        2048);
+define("XAT_CAN_VIEW",           4096);
+define("XAT_CAN_EDIT",           8192);
+define("XDOMAIN_LOCK",           16384);
+define("XSUSPEND_USR",           32768);
+define("XUNSUSPEND_USR",         65536);
+define("XWEBSESS",               131072);
+define("XCOMPLAINTS_ADM_READ",   262144);
+define("XCOMPLAINTS_ADM_REPLY",  524288);
+define("XLOGGING_VIEW",          1048576);
+define("XIPR_VIEW_OWN",          2097152);
+define("XIPR_VIEW_OTHERS",       4194304);
+define("XIPR_MOD_OWN",           8388608);
+define("XIPR_MOD_OTHERS",        16777216);
+define("XWEBUSR_TOASTER_RDONLY", 33554432);
+define("MIA_VIEW",               67108864);
+define("XTOTP_DISABLE_OTHERS",   134217728);
 
-define(COMPLAINTS_DO_FOLLOWUP, 0); // if this is set to 1, only the admins that have originated a message to a user see the replies and can reply to him again.
+define("COMPLAINTS_DO_FOLLOWUP", 0); // if this is set to 1, only the admins that have originated a message to a user see the replies and can reply to him again.
                                   // thus making the admin that opens a ticket dedicated for the given case until the ticket is closed.
 
-define(COOKIE_EXPIRE, 1800); // time after which if you are inactive (dont load any page) on the website, you are logged out.
+define("COOKIE_EXPIRE", 1800); // time after which if you are inactive (dont load any page) on the website, you are logged out.
 
 if (isset($channel_events)) { unset($channel_events); }
 if (isset($user_events)) { unset($user_events); }
@@ -88,32 +100,32 @@ example of use:
 $IPNOLOG_UIDS[]=1; // Admin
 
 /* stuff for GFX code check */
-define(ALLOWED_EXT,".ttf");
-define(DEFAULT_BG_COLOR,"#FFFFFF");
-define(DEFAULT_FG_COLOR,"#CACACA");
-define(DEFAULT_FONT_SIZE,36);
+define("ALLOWED_EXT",".ttf");
+define("DEFAULT_BG_COLOR","#FFFFFF");
+define("DEFAULT_FG_COLOR","#CACACA");
+define("DEFAULT_FONT_SIZE",36);
 
-define(GFX_SECURE_MODE,1);
-define(ENABLE_ANGLE_VARIATION,1);
+define("GFX_SECURE_MODE",1);
+define("ENABLE_ANGLE_VARIATION",1);
 
 /* GFX_SECURE_MODE == 1 */
-define(DEFAULT_LINES_COLOR,"#CACACA");
-define(DEFAULT_DOTS_COLOR,"#CACACA");
-define(DEFAULT_NUM_LINES,10);
-define(DEFAULT_NUM_DOTS,2000);
-define(ENABLE_H_LINES,1);
-define(ENABLE_V_LINES,1);
-define(ENABLE_DOTS,0);
+define("DEFAULT_LINES_COLOR","#CACACA");
+define("DEFAULT_DOTS_COLOR","#CACACA");
+define("DEFAULT_NUM_LINES",10);
+define("DEFAULT_NUM_DOTS",2000);
+define("ENABLE_H_LINES",1);
+define("ENABLE_V_LINES",1);
+define("ENABLE_DOTS",0);
 
 /* GFX_SECURE_MODE == 2 */
-define(SPECIFIC_FONT2,"b5.ttf");
-define(TILE_UP,"tile_up2.jpg");
-define(TILE_DW,"tile_down.jpg");
-define(RANDOM_UP_DW,1);
+define("SPECIFIC_FONT2","b5.ttf");
+define("TILE_UP","tile_up2.jpg");
+define("TILE_DW","tile_down.jpg");
+define("RANDOM_UP_DW",1);
 
 
 
-define(MIN_TIMES_VA_MATCH,50); // the minimum number that can be entered to search on similar VA matches, if you put a low number you allow a larger amount
+define("MIN_TIMES_VA_MATCH",50); // the minimum number that can be entered to search on similar VA matches, if you put a low number you allow a larger amount
           // of possible results, it would be very bad on a broad network .. usually 10 or 5 is nice for small networks, but 50 or 70
         // is more to recommend for broad IRC networks.
 
@@ -160,8 +172,8 @@ $user_events = array (
     17=> "Removed IPR"
 );
 
-define(MIN_COMPLAINT_REPORT_LEVEL,600);
-define(MAX_COMPLAINT_TYPE,5);
+define("MIN_COMPLAINT_REPORT_LEVEL",600);
+define("MAX_COMPLAINT_TYPE",5);
 unset($cpt_name);
 $cpt_name = Array(
     1=>"My username is suspended",
@@ -326,7 +338,7 @@ function get_font_face_list() {
     $retVal = Array();
     if ($handle = opendir(FONT_PATH)) {
         while (false !== ($file = readdir($handle))) {
-            if ($file != "." && $file != ".." && ereg(ALLOWED_EXT,strtolower($file))) {
+            if ($file != "." && $file != ".." && preg_match(ALLOWED_EXT,strtolower($file))) {
                 $retVal[] = $file;
             }
         }
@@ -591,7 +603,7 @@ function cl_ipdmaskchk($ip) {
     );
     $count = count($dmask);
     for ($x=0;$x<$count;$x++) {
-        if (ereg($dmask[$x],$ip)) { return 1; }
+        if (preg_match($dmask[$x],$ip)) { return 1; }
     }
     return 0;
 }
@@ -603,7 +615,7 @@ function cl_ipwmaskchk($ip) {
     );
     $count = count($wmask);
     for ($x=0;$x<$count;$x++) {
-        if (ereg($wmask[$x],$ip)) { return 1; }
+        if (preg_match($wmask[$x],$ip)) { return 1; }
     }
     return 0;
 }
@@ -619,7 +631,7 @@ function cl_ip($rettype = 1) {
         $ips[] = $_SERVER["REMOTE_ADDR"];
         $hst[] = $_SERVER["REMOTE_HOST"];
     } else if ($_SERVER["HTTP_X_FORWARDED_FOR"]!="") { // from a proxy
-        if (ereg(",",$_SERVER["HTTP_X_FORWARDED_FOR"])) {
+        if (preg_match(",",$_SERVER["HTTP_X_FORWARDED_FOR"])) {
             $ipp = explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]);
             $ipc = count($ipp);
             for ($x=0;$x<$ipc;$x++) {
@@ -683,16 +695,16 @@ function pg_safe_exec($query) {
     $safe_query = urldecode($query);
     $query_ok=1;$warning=0;
 
-    if (!ereg("^insert",strtolower($safe_query)) &&
-        !ereg("^delete",strtolower($safe_query)) &&
-        !ereg("^update",strtolower($safe_query)) &&
-        !ereg("^begin",strtolower($safe_query)) &&
-        !ereg("^rollback",strtolower($safe_query)) &&
-        !ereg("^abort",strtolower($safe_query)) &&
-        !ereg("^end",strtolower($safe_query)) &&
-        !ereg("^commit",strtolower($safe_query)) &&
-        !ereg("^select",strtolower($safe_query))) { $query_ok = 0; }
-    if (ereg(";",$safe_query) && $query_ok) {
+    if (!preg_match("/^insert/",strtolower($safe_query)) &&
+        !preg_match("/^delete/",strtolower($safe_query)) &&
+        !preg_match("/^update/",strtolower($safe_query)) &&
+        !preg_match("/^begin/",strtolower($safe_query)) &&
+        !preg_match("/^rollback/",strtolower($safe_query)) &&
+        !preg_match("/^abort/",strtolower($safe_query)) &&
+        !preg_match("/^end/",strtolower($safe_query)) &&
+        !preg_match("/^commit/",strtolower($safe_query)) &&
+        !preg_match("/^select/",strtolower($safe_query))) { $query_ok = 0; }
+    if (preg_match("/;/",$safe_query) && $query_ok) {
         // check if there's a ";" not between ' (quotes) or " (double-quotes)
         $long = strlen($safe_query);
         $quoteopen=0;$dquoteopen=0;
@@ -743,9 +755,9 @@ function pg_safe_exec($query) {
     if ($ENABLE_COOKIE_TABLE==1) {
         $localdb = "";
         if (LOCALDB_PASS!="") {
-            $localdb = @pg_connect("host=localhost user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
+            $localdb = @pg_connect("host=" . LOCALDB_HOST . " user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
         } else {
-            $localdb = @pg_connect("host=127.0.0.1 user=" . LOCALDB_USER . " dbname=" . LOCALDB_NAME);
+            $localdb = @pg_connect("host=" . LOCALDB_HOST . " user=" . LOCALDB_USER . " dbname=" . LOCALDB_NAME);
         }
         if ($localdb == "") {
             echo("<head><title>Database unavailable</title></head>");
@@ -1090,7 +1102,7 @@ function newu_ipcheck($mode) { // return false on locked.
 
 function ip_check($user_name,$mode) {
     global $unlock_ts,$ipchk_dbuser,$ENABLE_COOKIE_TABLE;
-    if (cl_ip()=="" || ereg("^127.0.0.",cl_ip())) { return 0; }
+    if (cl_ip()=="" || preg_match("^127.0.0.",cl_ip())) { return 0; }
 
     if ($mode!=0) { $mode = 1; } else { $mode = 0; }
 
@@ -1114,9 +1126,9 @@ function ip_check($user_name,$mode) {
     $unlock_ts = 0;
 
     if (LOCALDB_PASS!="") {
-        $cid = @pg_connect("host=localhost user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
+        $cid = @pg_connect("host=" . LOCALDB_HOST . " user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
     } else {
-        $cid = @pg_connect("host=localhost user=" . LOCALDB_USER . " dbname=" . LOCALDB_NAME);
+        $cid = @pg_connect("host=" . LOCALDB_HOST . " user=" . LOCALDB_USER . " dbname=" . LOCALDB_NAME);
     }
 
     $ENABLE_COOKIE_TABLE = 1;
@@ -1176,7 +1188,7 @@ function ip_check($user_name,$mode) {
 
 function ip_check_totp($user_name,$mode) {
     global $unlock_ts,$ipchk_dbuser,$ENABLE_COOKIE_TABLE;
-    if (cl_ip()=="" || ereg("^127.0.0.",cl_ip())) { return 0; }
+    if (cl_ip()=="" || preg_match("^127.0.0.",cl_ip())) { return 0; }
 
     if ($mode!=0) { $mode = 1; } else { $mode = 0; }
 
@@ -2002,7 +2014,7 @@ function show_ticket_events($complaint_ID,$hilight_last = 0) {
 
 /* Forms and strings manipulation functions */
 
-define(RPL_CR,"¤@¤");
+define("RPL_CR","¤@¤");
 
 function N_get_pure_string($POST_OR_GET_VAR) {
   return(trim(str_replace(RPL_CR,"\n",str_replace("\r","",stripslashes(urldecode($POST_OR_GET_VAR))))));
@@ -2240,7 +2252,7 @@ function is_locked_va($VDATA,$forceignorecase = 0) {
         $tocheck = $VDATA;
       }
     }
-    if (ereg("^".str_replace("*",".*",str_replace("?",".",$pattern))."$", $tocheck)) { // MATCH! (locked !@#)
+    if (preg_match("^".str_replace("*",".*",str_replace("?",".",$pattern))."$", $tocheck)) { // MATCH! (locked !@#)
       return true;
     }
   }
@@ -2370,11 +2382,11 @@ function drake_duration($duration)
 
 function gen_server_url() {
   if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) { // proxy connection
-      if (ereg(":",$_SERVER["HTTP_HOST"])) {
+      if (preg_match(":",$_SERVER["HTTP_HOST"])) {
         $pxp = explode(":",$_SERVER["HTTP_HOST"]);
         $port = (int)$pxp[1];
       } else {
-      if (ereg("^https\:\/\/",$_SERVER["HTTP_REFERER"])) {
+      if (preg_match("^https\:\/\/",$_SERVER["HTTP_REFERER"])) {
           // hack because apache doesnt return 443 in $_SERVER['SERVER_PORT'] (!)
         $port = 443;
       } else {
@@ -2386,7 +2398,7 @@ function gen_server_url() {
   }
   if ($port <= 0) { $port = 80; }
 
-  if (ereg("cscportal.net",$_SERVER["SERVER_NAME"])) { $_SERVER["SERVER_NAME"]="cservice.undernet.org"; }
+  if (preg_match("cscportal.net",$_SERVER["SERVER_NAME"])) { $_SERVER["SERVER_NAME"]="cservice.undernet.org"; }
 
   if ($port == "80") {
         return "http://" . $_SERVER["SERVER_NAME"];
@@ -2760,10 +2772,10 @@ function std_admin() { // Return admin level
 
   if (BOFH_PASS_ADMIN && !BOFH_PASS_USER) {
           if (!is_pw_secure_logged()) {
-            if (ereg("left.php",$REQUEST_URI)) {
+            if (preg_match("left.php",$REQUEST_URI)) {
               $mode = "empty";
             } else {
-              if (!ereg("confirm",$REQUEST_URI) && !ereg("pwreset.php",$REQUEST_URI) && !ereg("main.php",$REQUEST_URI) && !ereg("logout.php",$REQUEST_URI) && !ereg("right.php",$REQUEST_URI) && !ereg("securize_pw.php",$REQUEST_URI)) {
+              if (!preg_match("confirm",$REQUEST_URI) && !preg_match("pwreset.php",$REQUEST_URI) && !preg_match("main.php",$REQUEST_URI) && !preg_match("logout.php",$REQUEST_URI) && !preg_match("right.php",$REQUEST_URI) && !preg_match("securize_pw.php",$REQUEST_URI)) {
                 $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5( $user_id . CRC_SALT_0013 . $auth );
           header("Location: " . $unsecure_pw_url . "\n\n");
           die;
@@ -2885,10 +2897,10 @@ function std_security_chk($authcookline) {
 
   if (BOFH_PASS_USER && (($user_id+0)>0)) {
           if (!is_pw_secure_logged()) {
-            if (ereg("left.php",$REQUEST_URI)) {
+            if (preg_match("left.php",$REQUEST_URI)) {
               $mode = "empty";
             } else {
-              if (!ereg("confirm",$REQUEST_URI) && !ereg("pwreset.php",$REQUEST_URI) && !ereg("main.php",$REQUEST_URI) && !ereg("logout.php",$REQUEST_URI) && !ereg("right.php",$REQUEST_URI) && !ereg("securize_pw.php",$REQUEST_URI)) {
+              if (!preg_match("confirm",$REQUEST_URI) && !preg_match("pwreset.php",$REQUEST_URI) && !preg_match("main.php",$REQUEST_URI) && !preg_match("logout.php",$REQUEST_URI) && !preg_match("right.php",$REQUEST_URI) && !preg_match("securize_pw.php",$REQUEST_URI)) {
                 $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5( $user_id . CRC_SALT_0013 . $authcook );
           header("Location: " . $unsecure_pw_url . "\n\n");
           die;
@@ -3048,7 +3060,7 @@ function err_newuser($errMsg) {
 function remove_ip($string,$type=1) {
   $retv = $string;
   if ($type==1) {
-    if (ereg("@",$string)) {
+    if (preg_match("@",$string)) {
       $bb = explode("@",$string);
       $retv = $bb[0] . "@&lt;IP_HIDDEN&gt;";
     }
@@ -3063,7 +3075,7 @@ function remove_ip($string,$type=1) {
         $fl = $oru->flags;
       }
     }
-    if (ereg("@",$xx[1])) {
+    if (preg_match("@",$xx[1])) {
       if ($axs>0 || $fl&256) {
         $bb = explode("@",$xx[1]);
         $xx1 = $bb[0] . "@<IP_HIDDEN>";
@@ -3121,25 +3133,10 @@ function chk_password($username,$password,$failret = 0) {
   return $failret; // Failed
 }
 
-if (file_exists("../../php_includes/config.inc")) {
-  include("../../php_includes/config.inc");
-} else {
-  if (file_exists("../../../php_includes/config.inc")) {
-    include("../../../php_includes/config.inc");
-  } else {
-    if (file_exists("../../../../php_includes/config.inc")) {
-      include("../../../../php_includes/config.inc");
-    } else {
-      echo "Missing required <b>config.inc</b> !!";
-      die;
-    }
-  }
-}
-
 $x_at_email = XAT_EMAIL;
 $purge_at_email = PURGE_EMAIL;
 $ipchk_dbuser = LOCALDB_USER;
-define(CLEAR_COOKIES_QUERY,"DELETE FROM webcookies WHERE expire<now()::abstime::int4");
+define("CLEAR_COOKIES_QUERY","DELETE FROM webcookies WHERE expire<now()::abstime::int4");
 $mail_from_new=FROM_NEWUSER;
 $mail_subject_new=FROM_NEWUSER_SUBJECT;
 $mail_from_pass=FROM_FPASS;
@@ -3155,7 +3152,7 @@ if (!extension_loaded("gd")) { // checking if LibGD is present in apache/php
   define(SHOW_GFXUSRCHK,1);
 }
 
-define(HOSTING_STATS_FILENAME,"/tmp/hosting_stats");
+define("HOSTING_STATS_FILENAME","/tmp/hosting_stats");
 if (HOSTING_STATS) {
   $ftest = @fopen(HOSTING_STATS_FILENAME,"r");
   if (!$ftest) {
@@ -3195,25 +3192,6 @@ if (PHP_VERSION_ID < 40000) {
   die;
 }
 
-$reg_globs = ini_get("register_globals");
-if ( (($reg_globs+0) == 1) || (strtolower($reg_globs) == "on") ) {
-    $bypass42 = 1;
-} else {
-    $bypass42 = 0;
-}
-
-if (PHP_VERSION_ID >= 40200 && !$bypass42) {
-    echo "<font size=+1><br><br>";
-    echo "Your apache server has <b>PHP ". phpversion() . "</b><br>";
-    echo "Lots of changes in 4.2 oblige us to update a lot of things.<br><br>\n";
-    echo "Fortunately, you can solve this problem by activating a now by default desactivated feature<br>\n";
-    echo "Go edit your <b>php.ini</b> file and find the line defining <b>register_globals</b>, set its value<br>";
-    echo "to <b>On</b> and then restart your apache (<b>/usr/local/apache/bin/apachectl restart</b>)<br><br>";
-    echo ".. then reload this page <b>:)</b>\n";
-    echo "</font><br>\n";
-    die;
-}
-
 if (DEFAULT_REQUIRED_SUPPORTERS>10 || DEFAULT_REQUIRED_SUPPORTERS<0 || (DEFAULT_REQUIRED_SUPPORTERS+0)!=DEFAULT_REQUIRED_SUPPORTERS ) {
     echo "<b>Incorrect default config.inc's value for </b>DEFAULT_REQUIRED_SUPPORTERS<b>, requires a value between 0 and 10.</b>";
     echo "<br><br>See: <a href=\"http://coder-com.undernet.org/gnuworld-setup/\" target=_blank>http://coder-com.undernet.org/gnuworld-setup/</a> for detailed information.<br>";
@@ -3244,7 +3222,7 @@ if (pg_numrows($res)==0) {
   $reqsup = ($row->contents+0);
 }
 
-define(REQUIRED_SUPPORTERS,$reqsup);
+define("REQUIRED_SUPPORTERS",$reqsup);
 unset($res);
 unset($reqsup);
 

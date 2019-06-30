@@ -154,7 +154,7 @@ class XMLSchema extends nusoap_base  {
         if(count($attrs) > 0){
         	foreach($attrs as $k => $v){
                 // if ns declarations, add to class level array of valid namespaces
-				if(ereg("^xmlns",$k)){
+				if(preg_match("^xmlns",$k)){
                 	//$this->xdebug("$k: $v");
                 	//$this->xdebug('ns_prefix: '.$this->getPrefix($k));
                 	if($ns_prefix = substr(strrchr($k,':'),1)){
@@ -224,7 +224,7 @@ class XMLSchema extends nusoap_base  {
 					$this->currentComplexType = $attrs['name'];
 					$this->complexTypes[$this->currentComplexType] = $attrs;
 					$this->complexTypes[$this->currentComplexType]['typeClass'] = 'complexType';
-					if(isset($attrs['base']) && ereg(':Array$',$attrs['base'])){
+					if(isset($attrs['base']) && preg_match(':Array$',$attrs['base'])){
 						$this->complexTypes[$this->currentComplexType]['phpType'] = 'array';
 					} else {
 						$this->complexTypes[$this->currentComplexType]['phpType'] = 'struct';
@@ -393,7 +393,7 @@ class XMLSchema extends nusoap_base  {
 	*/
 	function expandQname($qname){
 		// get element prefix
-		if(strpos($qname,':') && !ereg('^http://',$qname)){
+		if(strpos($qname,':') && !preg_match('^http://',$qname)){
 			// get unqualified name
 			$name = substr(strstr($qname,':'),1);
 			// get ns prefix

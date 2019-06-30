@@ -41,7 +41,7 @@ if (pg_numrows($r)==0) { // no admins have reviewed applications
 }
 ?>
 <br>
-<? if (ereg("stats.php",$HTTP_REFERER)) { ?>
+<? if (preg_match("stats.php",$HTTP_REFERER)) { ?>
 <a href="stats.php">Back to Newregs Status</a><br>
 <? } else { ?>
 <a href="../admin/index.php">Back to reports</a><br>

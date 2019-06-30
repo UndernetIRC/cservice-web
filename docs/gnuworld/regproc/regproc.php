@@ -226,7 +226,7 @@ $control_chars = "";
 for ($x=1;$x<33;$x++) { // everything below and including 'space' is not acceptable for ircu.
 	$control_chars .= chr($x);
 }
-if ( strcspn($channel_nameF,$control_chars)!=strlen($channel_nameF) || ereg(",",$channel_nameF) || ereg("@",$channel_nameF) ) {
+if ( strcspn($channel_nameF,$control_chars)!=strlen($channel_nameF) || preg_match(",",$channel_nameF) || preg_match("@",$channel_nameF) ) {
 	echo "The channel name can't contain any <b>space</b>, <b>null</b> , <b>comma (,)</b>, <b>@</b> or <b>control chars</b>.<br>\n";
 	echo "<a href=\"javascript:reg_form();\">Correct your entry</a>.\n";
 	echo "</body></html>\n\n";
@@ -239,7 +239,7 @@ $dlist[2]="password";
 $dlist[3]="mp3";
 $count=count($dlist);
 for ($x=0;$x<$count;$x++) {
-	if ( ereg("" . strtolower($dlist[$x]) . "",strtolower($channel_nameF)) ) {
+	if ( preg_match("" . strtolower($dlist[$x]) . "",strtolower($channel_nameF)) ) {
 		echo "CService does not allow registration of channels involved in illegal activities, such as warez, mp3s, vivos, passwords...<br>\n";
 		echo "<a href=\"javascript:reg_form();\">Correct your entry</a>.\n";
 		echo "</body></html>\n\n";
@@ -248,7 +248,7 @@ for ($x=0;$x<$count;$x++) {
 }
 
 
-//if ( !ereg("^#.", $channel_nameF) ) {
+//if ( !preg_match("^#.", $channel_nameF) ) {
 
 if (isset($allow)) { unset($allow); }
 $allow = 1;

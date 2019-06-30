@@ -63,7 +63,7 @@ if ($id=="" || $id<=0 || $decision=="" || $pcts<=0) {
 	echo "<br><br>";
 	echo "<hr width=100%><br><br>\n";
 	echo "<b>If you plan to put either the applicant or the channel in NOREG,<br>\n";
-	if (ereg("bogus_",$QUERY_STRING)) {
+	if (preg_match("bogus_",$QUERY_STRING)) {
 		echo "please check that box : <input type=checkbox value=\"NOREG\" checked name=extaction>, and check if the information<br>\n";
 	} else {
 		echo "please check that box : <input type=checkbox value=\"NOREG\" name=extaction>, and check if the information<br>\n";

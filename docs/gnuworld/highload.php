@@ -4,7 +4,7 @@
 </head>
 <body bgcolor=#ffffff text=#000000>
 <?php
-	if (!ereg("worldwide.go.ro",$_SERVER['HTTP_REFERER'])) { ?>
+	if (!preg_match("worldwide.go.ro",$_SERVER['HTTP_REFERER'])) { ?>
 <p>This server is currently experiencing a very high volume
 of transactions.  Please try again in a moment.</p>
 <p>We are sorry for the inconvenience.</p>

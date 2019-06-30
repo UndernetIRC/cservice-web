@@ -21,8 +21,8 @@
 		echo "<a href=\"" . str_replace("#","%23",$special_ret) . "\">Back to list/check/previous page</a><br><br>\n";
 		$backlink=urldecode(str_replace("#","%23",$special_ret));
 	} else {
-		if (!ereg("right.php",$HTTP_REFERER)) {
-			if (!ereg("list_app.php",$HTTP_REFERER)) {
+		if (!preg_match("right.php",$HTTP_REFERER)) {
+			if (!preg_match("list_app.php",$HTTP_REFERER)) {
 				if ($back=="checkapp") {
 					echo "<a href=\"check_app.php\">Check another application</a><br><br>\n";
 					$backlink="check_app.php";
@@ -455,7 +455,7 @@
 	$decision = $ptable->decision;
 	$channel_description = $ptable->description;
 
-	if (ereg("<",$channel_description) || ereg(">",$channel_description)) {
+	if (preg_match("<",$channel_description) || preg_match(">",$channel_description)) {
 		$channel_description = htmlspecialchars($channel_description);
 	}
 

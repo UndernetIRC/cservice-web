@@ -1,4 +1,6 @@
-<? include("../../php_includes/cmaster.inc");
+<?php 
+
+include("../../php_includes/cmaster.inc");
 
 if (isset($securize_mode)) { unset($securize_mode); }
 $securize_mode = 0;

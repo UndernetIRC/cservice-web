@@ -272,7 +272,7 @@ if ($mode==3) {
 		}
 		if ($p_type==3) { // find Auth:, list usernames from a "/msg X status" ...
 			$trim_line = trim($p_lines[$x]);
-			if (ereg("Auth: ",$trim_line)) {
+			if (preg_match("Auth: ",$trim_line)) {
 				$elts = explode(" ",$trim_line);
 				$elts_c = count($elts);
 				$enabled = 0;
@@ -290,7 +290,7 @@ if ($mode==3) {
 						if ($prev_elt == -1) { // username !
 							$prev_elt = 1;
 							//echo "***<br>";
-							if (ereg("/",$elts[$xx])) {
+							if (preg_match("/",$elts[$xx])) {
 								$spp = explode("/",$elts[$xx]);
 								$da_username_list[] = $spp[0];
 								//echo "+user: " . $spp[0] . "<br>";
@@ -302,12 +302,12 @@ if ($mode==3) {
 							switch($prev_elt) {
 								default:
 								case 1: // previous was a username(/nickname)
-									if (ereg("\[",$elts[$xx])) { $prev_elt = 3; } else { $prev_elt = 2; }
+									if (preg_match("\[",$elts[$xx])) { $prev_elt = 3; } else { $prev_elt = 2; }
 									break;
 								case 2: // previous was a nickname
-									if (ereg("\[",$elts[$xx])) { $prev_elt = 3; } else {
+									if (preg_match("\[",$elts[$xx])) { $prev_elt = 3; } else {
 										$prev_elt = 1;
-										if (ereg("/",$elts[$xx])) {
+										if (preg_match("/",$elts[$xx])) {
 											$spp = explode("/",$elts[$xx]);
 											$da_username_list[] = $spp[0];
 											//echo "+user: " . $spp[0] . "<br>";
@@ -319,7 +319,7 @@ if ($mode==3) {
 									break;
 								case 3: // previous was a [level]
 									$prev_elt = 1;
-									if (ereg("/",$elts[$xx])) {
+									if (preg_match("/",$elts[$xx])) {
 										$spp = explode("/",$elts[$xx]);
 										$da_username_list[] = $spp[0];
 										//echo "+user: " . $spp[0] . "<br>";

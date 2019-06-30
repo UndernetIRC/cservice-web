@@ -165,7 +165,7 @@ if ($rtype=="u") {
 			} else {
 				if (($log->event>count($user_events) || $log->event==0) && $rtype=="u") {echo "(old)</td><td>"; } else { echo($type[$log->event] . "</td><td>"); }
 			}
-			if (($log->event==1) && (ereg(") NON-SUPPORT from ",$log->message))) {
+			if (($log->event==1) && (preg_match(") NON-SUPPORT from ",$log->message))) {
 				echo $log->message . "</td></tr>\n";
 			} else {
 				if ($admin<SHOW_IP_LEVEL) {

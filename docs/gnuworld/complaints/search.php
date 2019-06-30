@@ -36,7 +36,7 @@ $matchstring = post2db(strtolower(str_replace("*","%",str_replace("?","_",str_re
 unset($cidz);
 $cidz = Array();
 
-if (ereg("\*",N_get_pure_string($_POST["q"])) || ereg("\?",N_get_pure_string($_POST["q"]))) {
+if (preg_match("\*",N_get_pure_string($_POST["q"])) || preg_match("\?",N_get_pure_string($_POST["q"]))) {
 	$cmp_oper = "LIKE";
 } else {
 	$cmp_oper = " = ";

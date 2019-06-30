@@ -52,17 +52,17 @@ if ($domain=="") {
 //if (preg_match("/^((\*)[A-Za-z0-9.-])|[A-Za-z0-9.-]+\.(([A-Za-z][A-Za-z])|(\*))+$/",$domain)) { echo "MATCHES REGEXP02<br>\n"; } else { echo "DO NOT MATCH REGEXP02<br>\n"; }
 //echo $badargs;
 
-if (ereg("@",$domain)) {
+if (preg_match("@",$domain)) {
 	if( !(preg_match( "/^[A-Za-z0-9_.-]+@+$/", $domain )) ) {
 		echo "<li> [001] The user prefix <b>" . htmlspecialchars($domain) . "</b> sounds invalid.\n";
 		$badargs = 1;
 	}
 } else {
-	if (ereg("\*",$domain) && $admin<$min_lvl && !acl(XDOMAIN_LOCK)) {
+	if (preg_match("\*",$domain) && $admin<$min_lvl && !acl(XDOMAIN_LOCK)) {
 		echo "<li><font color=#" . $cTheme->table_tr_enlighten . "> <b>WILDCARDS ARE RESERVED FOR LEVELS " . $min_lvl . "+&nbsp;and DOMAIN_LOCK ACL users&nbsp;;P</b></font>\n";
 		$badargs=1;
 	} else {
-		if ((ereg("\*",$domain) || ereg("\?",$domain)) && ($admin>=$min_lvl || acl(XDOMAIN_LOCK))) {
+		if ((preg_match("\*",$domain) || preg_match("\?",$domain)) && ($admin>=$min_lvl || acl(XDOMAIN_LOCK))) {
 			if( !(preg_match( "/^[A-Za-z0-9\?\*.-]+\.[A-Za-z\?\*][A-Za-z\?\*]+$/", $domain )) ) {
 				echo "<li> [002] The domain name <b>" . htmlspecialchars($domain) . "</b> sounds invalid.\n";
 				$badargs = 1;
@@ -112,7 +112,7 @@ if ($badargs) {
 
 /*
 		$diedie=0;
-		if (ereg("@",$domain)) { $low_u_email = strtolower($tmp[0]) . "@"; } else { $low_u_email = strtolower($tmp[1]); }
+		if (preg_match("@",$domain)) { $low_u_email = strtolower($tmp[0]) . "@"; } else { $low_u_email = strtolower($tmp[1]); }
 		if (strtolower($domain)==$low_u_email) {
 			$diedie=1;
 		}
@@ -120,7 +120,7 @@ if ($badargs) {
 		$regmatch = "";
 		if (substr($dom,0,1)!="*") { $regmatch .= "^"; }
 		$regmatch .= str_replace("*","",$dom);
-		if (ereg(strtolower($regmatch),$low_u_email)) {
+		if (preg_match(strtolower($regmatch),$low_u_email)) {
 			$diedie=1;
 		}
 

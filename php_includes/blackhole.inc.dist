@@ -30,7 +30,7 @@ if (isset($blackholeips)) { unset($blackholeips); }
 /* end of list */
 
 for ($x=0;$x<count($blackholeips);$x++) {
-        if (ereg("^" . str_replace(".","\\.",$blackholeips[$x]),$_SERVER["REMOTE_ADDR"])) {
+        if (preg_match("^" . str_replace(".","\\.",$blackholeips[$x]),$_SERVER["REMOTE_ADDR"])) {
                 echo "<html>\n";
                 echo "<head><title>ERROR</title></head>\n";
                 echo "<body bgcolor=#a0a0a0 text=#000000 link=#004400 vlink=#004400 alink=#004400>\n";

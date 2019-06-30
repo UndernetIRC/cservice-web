@@ -290,7 +290,7 @@ echo "<table cellpadding=5 bgcolor=#" . $cTheme->table_bgcolor . " width=\"100%\
 echo "<tr><td><center>\n";
 echo "<font color=#" . $cTheme->main_textcolor . ">\n";
 echo "<font size=+2><b>CService Login</b></font>\n";
-if (ereg("^http",$redir)) { $tgt = ""; } else { $tgt = " target=body"; }
+if (preg_match("^http",$redir)) { $tgt = ""; } else { $tgt = " target=body"; }
    	if ($username!="" && !preg_match(NON_BOGUS,$username)) {
 	echo "<h2>Bogus username</h2><br><a href=\"login.php\">Try again</a></td></tr></table></td></tr></table></center></body></html>\n\n";
 	die;

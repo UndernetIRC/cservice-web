@@ -69,7 +69,7 @@ class soap_server extends nusoap_base {
 			$qs = $QUERY_STRING;
 		}
 		// gen wsdl
-		if(isset($qs) && ereg('wsdl', $qs) ){
+		if(isset($qs) && preg_match('wsdl', $qs) ){
 			if($this->externalWSDLURL){
 				header('Location: '.$this->externalWSDLURL);
 				exit();
@@ -137,7 +137,7 @@ class soap_server extends nusoap_base {
 			// get the character encoding of the incoming request
 			if(strpos($this->headers['Content-Type'],'=')){
 				$enc = str_replace('"','',substr(strstr($this->headers["Content-Type"],'='),1));
-				if(eregi('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
+				if(preg_match('^(ISO-8859-1|US-ASCII|UTF-8)$',$enc)){
 					$this->xml_encoding = $enc;
 				} else {
 					$this->xml_encoding = 'us-ascii';

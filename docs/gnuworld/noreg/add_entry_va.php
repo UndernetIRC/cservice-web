@@ -56,7 +56,7 @@ if ($user_name=="*") {
 	$badargs = 1;
 }
 
-if (strlen($user_name)<4 && ereg("\*",$user_name)) {
+if (strlen($user_name)<4 && preg_match("\*",$user_name)) {
 	echo "<li> Pattern too wide. The pattern lenght must be at least 4 chars among with wildcards.\n";
 	$badargs = 1;
 }

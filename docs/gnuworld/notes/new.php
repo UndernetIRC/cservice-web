@@ -190,7 +190,7 @@ echo "</table>\n";
 $da_crc = md5( $authcsc . $user_id . CRC_SALT_0015 );
 
 echo "<input type=hidden name=crc value=\"" . $da_crc . "\">\n";
-if (ereg("users.php",$HTTP_REFERER)) {
+if (preg_match("users.php",$HTTP_REFERER)) {
 	$BP = "../users.php?id=" . $user_id;
 } else {
 	$BP = "index.php";

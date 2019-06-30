@@ -138,7 +138,7 @@ function search_check(f) {
 		die;
 	}
 
-	if (ereg("\x20",$q) || ereg("\x07",$q) || ereg(",",$q)) {
+	if (preg_match("\x20",$q) || preg_match("\x07",$q) || preg_match(",",$q)) {
 		echo "</td></tr></table>\n";
 		echo "<br><hr size=2 noshade></form>\n";
 		echo "<font color=#" . $cTheme->main_warnmsg . "><b>Invalid chars in search field</b></font>\n";
@@ -148,7 +148,7 @@ function search_check(f) {
 
 	if ($type==-1) { $force_fs = ""; }
 
-	if (!ereg("^#.",$q) && ($force_fs!="FULL" || $admin==0 || $type==-1)) {
+	if (!preg_match("^#.",$q) && ($force_fs!="FULL" || $admin==0 || $type==-1)) {
 		echo "</td></tr></table>\n";
 		echo "<br><hr size=2 noshade></form>\n";
 		echo "<font color=#" . $cTheme->main_warnmsg . "><b>Channel name must start with a # followed by at least a letter as a search criteria</b></font>\n";
@@ -243,7 +243,7 @@ function search_check(f) {
 	if (($x==3 || $x==4 || $x==9) && ($force_all=="OK")) { echo " <b>ADMIN VIEW ALL</b>"; }
 	echo "<br><hr noshade size=1>\n";
 	$total_pages = $total_app_count / $uplim;
-	if (ereg(".",$total_pages)) {
+	if (preg_match(".",$total_pages)) {
 		$tmp = explode(".",$total_pages);
 		$ent = $tmp[0];
 		$dec = $tmp[1];
