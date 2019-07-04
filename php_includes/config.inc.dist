@@ -45,22 +45,22 @@ define("TOASTER_FROM_MAIL","toaster@yournetwork.org");
 /******************************/
 /* LOCAL DATABASE DEFINITIONS */
 /******************************/
-define("LOCALDB_NAME", getenv("LOCALDB_NAME") ?? "local_db"); // the local database that contains the gnuworld/doc/local_db.sql information.
-define("LOCALDB_USER", getenv("LOCALDB_USER") ?? ""); // the local user that has full access to LOCALDB_NAME.
-define("LOCALDB_PASS", getenv("LOCALDB_PASS") ?? ""); // the password, use blank if you dont use passwords.
-define("LOCALDB_HOST", getenv("LOCALDB_HOST") ?? "127.0.0.1"); // the local database ip or hostname
+define("LOCALDB_NAME", getenv("LOCALDB_NAME") ?: "local_db"); // the local database that contains the gnuworld/doc/local_db.sql information.
+define("LOCALDB_USER", getenv("LOCALDB_USER") ?: ""); // the local user that has full access to LOCALDB_NAME.
+define("LOCALDB_PASS", getenv("LOCALDB_PASS") ?: ""); // the password, use blank if you dont use passwords.
+define("LOCALDB_HOST", getenv("LOCALDB_HOST") ?: "127.0.0.1"); // the local database ip or hostname
 
 /*******************************/
 /* REMOTE DATABASE DEFINITIONS */
 /*******************************/
-define("REMOTEDB_NAME", getenv("REMOTEDB_NAME") ?? ""); // the remote database that contains cservice.sql, cservice.web.sql information.
-define("REMOTEDB_USER", getenv("REMOTEDB_USER") ?? ""); // the user that has access remotely to that db
-define("REMOTEDB_PASS", getenv("REMOTEDB_PASS") ?? ""); // the password, use blank if you dont use passwords.
-define("REMOTEDB_HOST", getenv("REMOTEDB_HOST") ?? ""); // the remote database ip or hostname
+define("REMOTEDB_NAME", getenv("REMOTEDB_NAME") ?: ""); // the remote database that contains cservice.sql, cservice.web.sql information.
+define("REMOTEDB_USER", getenv("REMOTEDB_USER") ?: ""); // the user that has access remotely to that db
+define("REMOTEDB_PASS", getenv("REMOTEDB_PASS") ?: ""); // the password, use blank if you dont use passwords.
+define("REMOTEDB_HOST", getenv("REMOTEDB_HOST") ?: ""); // the remote database ip or hostname
 define("REMOTEDB_PORT", 5432);
 
-$stdout = fopen('php://stderr', 'w');
-fwrite($stdout, "+++++++++ Db host=" . REMOTEDB_HOST . " dbname=" . REMOTEDB_NAME);
+//$stdout = fopen('php://stderr', 'w');
+//fwrite($stdout, "+++++++++ Db host=" . REMOTEDB_HOST . " dbname=" . REMOTEDB_NAME);
 
 
 /*******************************/
