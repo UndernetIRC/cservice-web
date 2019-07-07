@@ -52,17 +52,17 @@ if ($domain=="") {
 //if (preg_match("/^((\*)[A-Za-z0-9.-])|[A-Za-z0-9.-]+\.(([A-Za-z][A-Za-z])|(\*))+$/",$domain)) { echo "MATCHES REGEXP02<br>\n"; } else { echo "DO NOT MATCH REGEXP02<br>\n"; }
 //echo $badargs;
 
-if (preg_match("@",$domain)) {
+if (preg_match("/@/",$domain)) {
 	if( !(preg_match( "/^[A-Za-z0-9_.-]+@+$/", $domain )) ) {
 		echo "<li> [001] The user prefix <b>" . htmlspecialchars($domain) . "</b> sounds invalid.\n";
 		$badargs = 1;
 	}
 } else {
-	if (preg_match("\*",$domain) && $admin<$min_lvl && !acl(XDOMAIN_LOCK)) {
+	if (preg_match("/\*/",$domain) && $admin<$min_lvl && !acl(XDOMAIN_LOCK)) {
 		echo "<li><font color=#" . $cTheme->table_tr_enlighten . "> <b>WILDCARDS ARE RESERVED FOR LEVELS " . $min_lvl . "+&nbsp;and DOMAIN_LOCK ACL users&nbsp;;P</b></font>\n";
 		$badargs=1;
 	} else {
-		if ((preg_match("\*",$domain) || preg_match("\?",$domain)) && ($admin>=$min_lvl || acl(XDOMAIN_LOCK))) {
+		if ((preg_match("/\*/",$domain) || preg_match("/\?/",$domain)) && ($admin>=$min_lvl || acl(XDOMAIN_LOCK))) {
 			if( !(preg_match( "/^[A-Za-z0-9\?\*.-]+\.[A-Za-z\?\*][A-Za-z\?\*]+$/", $domain )) ) {
 				echo "<li> [002] The domain name <b>" . htmlspecialchars($domain) . "</b> sounds invalid.\n";
 				$badargs = 1;

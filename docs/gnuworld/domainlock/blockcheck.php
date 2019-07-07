@@ -22,7 +22,7 @@ echo "</head>\n";
 std_theme_body("../");
 echo "<b>Domain/User Lock</b> Checker - <a href=\"./index.php\">Home</a><br><br>\n";
 
-if (preg_match("@",$_GET["im"])) { // considere it a full email
+if (preg_match("/@/",$_GET["im"])) { // considere it a full email
 	if (preg_match("/^[A-Za-z0-9_+-.]+@[A-Za-z0-9.-]+\.[A-Za-z][A-Za-z]+$/", $_GET["im"])) {
 		if (is_email_locked(-1,$_GET["im"])) {
 			echo "<h3>The e-mail address '" . $_GET["im"] . "' is LOCKED by the '" . $LOCK_MATCH . "' entry.</h3>";

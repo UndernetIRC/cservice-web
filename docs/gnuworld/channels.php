@@ -247,17 +247,17 @@ if ($button == "Save Changes") {
 		$test = strspn($c_mode,"+stnimlkprSTNIMLKPR")!=strlen($c_mode);
 	} else if ($counr_spc==1) {
 		$tmp = explode(" ",$c_mode);
-		if (!preg_match("k",strtolower($tmp[0])) && !preg_match("l",strtolower($tmp[0]))) {
+		if (!preg_match("/k/",strtolower($tmp[0])) && !preg_match("/l/",strtolower($tmp[0]))) {
 			$t2 = 1;
 			$t1 = 1;
 		} else {
 			$t1 = strspn($tmp[0],"+stnimlkprSTNIMLKPR")!=strlen($tmp[0]);
-			if (preg_match("l",strtolower($tmp[0])) && preg_match("k",strtolower($tmp[0]))) {
+			if (preg_match("/l/",strtolower($tmp[0])) && preg_match("/k/",strtolower($tmp[0]))) {
 				$t2 = 1;
 			} else {
-				if (preg_match("l",strtolower($tmp[0]))) {
+				if (preg_match("/l/",strtolower($tmp[0]))) {
 					$t2 = strspn($tmp[1],"0123456789")!=strlen($tmp[1]);
-				} else if (preg_match("k",strtolower($tmp[0]))) {
+				} else if (preg_match("/k/",strtolower($tmp[0]))) {
 					$t2 = strspn($tmp[1],",'\\\"+-\x20\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F")==strlen($tmp[1]);
 				}
 			}
@@ -265,12 +265,12 @@ if ($button == "Save Changes") {
 		$test = ($t1 || $t2);
 	} else {
 		$tmp = explode(" ",$c_mode);
-		if (!preg_match("k",strtolower($tmp[0])) && !preg_match("l",strtolower($tmp[0]))) {
+		if (!preg_match("/k/",strtolower($tmp[0])) && !preg_match("/l/",strtolower($tmp[0]))) {
 			$test = 1;
 		} else {
 			$t1 = strspn($tmp[0],"+stnimlkprSTNIMLKPR")!=strlen($tmp[0]);
-			if (preg_match("l",strtolower($tmp[0])) && preg_match("k",strtolower($tmp[0]))) {
-				if (strpos(strtolower($tmp[0]),"l")<strpos(strtolower($tmp[0]),"k")) {
+			if (preg_match("/l/",strtolower($tmp[0])) && preg_match("/k/",strtolower($tmp[0]))) {
+				if (strpos(strtolower($tmp[0]),"l")<strpos(strtolower($tmp[0]),"/k/")) {
 					$t2 = strspn($tmp[1],"0123456789")!=strlen($tmp[1]);
 					$t3 = strspn($tmp[2],",'\\\"+-\x20\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F")==strlen($tmp[2]);
 				} else {
@@ -279,9 +279,9 @@ if ($button == "Save Changes") {
 				}
 				$test = ($t1 || $t2 || $t3);
 			} else {
-				if (preg_match("l",strtolower($tmp[0]))) {
+				if (preg_match("/l/",strtolower($tmp[0]))) {
 					$t2 = strspn($tmp[1],"0123456789")!=strlen($tmp[1]);
-				} else if (preg_match("k",strtolower($tmp[0]))) {
+				} else if (preg_match("/k/",strtolower($tmp[0]))) {
 					$t2 = strspn($tmp[1],",'\\\"+-\x20\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F")==strlen($tmp[1]);
 				}
 				$test = ($t1 || $t2);
@@ -369,7 +369,7 @@ echo("
 <tr>
 	<td colspan=2>
 	<center><h1>Channel Information for $channel->name $cid_info</h1>");
-if (preg_match("MSIE",$HTTP_USER_AGENT)) {
+if (preg_match("/MSIE/",$HTTP_USER_AGENT)) {
 	echo "<font size=-2>mIRC v5.81+/MSIE Users only: Click <A HREF=\"irc://" . IRC_SERVER . "/" . substr($channel->name,1) . "\">here</a> to join this channel</font>";
  }
 	echo ("</center></Td>
@@ -421,13 +421,13 @@ if (($access >= $level_status) || ($admin > 0)) {
 	number($edit && $access>=$level_set_massdeoppro,$channel->mass_deop_pro,"Mass Deop Protection","massdeop");
 	number($edit && $access>=$level_set_floodpro,$channel->flood_pro,"Flood Protection","floodpro");
 	if ($edit && $access>=$level_set_url) {
-		if ($channel->url!="" && !preg_match("^https?://",$channel->url)) {
+		if ($channel->url!="" && !preg_match("/^https?:\/\//",$channel->url)) {
 			echo "<b>Channel Homepage: </b><input type=text size=50 name=url maxlength=75 value=\"http://" . $channel->url . "\"><br>\n";
 		} else {
 			echo "<b>Channel Homepage: </b><input type=text size=50 name=url maxlength=75 value=\"" . $channel->url . "\"><br>\n";
 		}
 	} else {
-		if ($channel->url!="" && !preg_match("^https?://",$channel->url)) {
+		if ($channel->url!="" && !preg_match("/^https?:\/\//",$channel->url)) {
 			echo "<b>Channel Homepage: </b><a href=\"http://" . $channel->url . "\" target=\"_blank\">http://" . htmlspecialchars($channel->url) . "</a><br>\n";
 		} else {
 			echo "<b>Channel Homepage: </b><a href=\"" . $channel->url . "\" target=\"_blank\">" . htmlspecialchars($channel->url) . "</a><br>\n";
@@ -436,7 +436,7 @@ if (($access >= $level_status) || ($admin > 0)) {
 	if ($edit && $access>=$level_set_desc) {
 		echo "<b>Description: </b><input type=text name=desc size=50 maxlength=80 value=\"" . $channel->description . "\"><br>\n";
 	} else {
-		if (preg_match("<",$channel->description) || preg_match(">",$channel->description)) {
+		if (preg_match("/</",$channel->description) || preg_match("/>/",$channel->description)) {
 			echo "<b>Description: </b>" . htmlspecialchars($channel->description) . "<br>\n";
 		} else {
 			echo "<b>Description: </b>" . $channel->description . "<br>\n";

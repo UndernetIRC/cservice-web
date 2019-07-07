@@ -410,7 +410,7 @@ if ($multiple==1) {
 	$forcechannel_C = $fc[1];
 	$forcechannel_I = $fc[0];
 }
-if (pg_numrows($res2)>1 && $multiple==1 && isset($forcechannel) && $forcechannel!="" && preg_match("^#",$forcechannel_C) && $forcechannel_I>1) {
+if (pg_numrows($res2)>1 && $multiple==1 && isset($forcechannel) && $forcechannel!="" && preg_match("/^#/",$forcechannel_C) && $forcechannel_I>1) {
 	if ($crc == md5($ts . $HTTP_USER_AGENT . $user_id . CRC_SALT_0004)) {
 		$multiple_ok=1;
 	}

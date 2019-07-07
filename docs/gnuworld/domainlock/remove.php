@@ -42,7 +42,7 @@ if ($id<=0 || $id=="") {
 		$res = pg_safe_exec("select * from $lock_domain_table where id='$id'");
 		$row = pg_fetch_object($res,0);
 		$dom = $row->domain;
-		if (preg_match("@",$dom)) { echo "User@ prefix : $dom<br>\n"; } else { echo "E-Mail addy : $dom<br>\n"; }
+		if (preg_match("/@/",$dom)) { echo "User@ prefix : $dom<br>\n"; } else { echo "E-Mail addy : $dom<br>\n"; }
 		echo "</h3></h2>\n";
 
 		$ts = time();

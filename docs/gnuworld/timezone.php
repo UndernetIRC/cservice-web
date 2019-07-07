@@ -34,7 +34,7 @@
 
 	$zets = time();
 	$zecrc = md5( $zets . $user_id . $HTTP_USER_AGENT );
-	if (preg_match("users.php",$HTTP_REFERER)) {
+	if (is_needle_in_haystack("users.php", $HTTP_REFERER)) {
 		echo "<h1>Change your current timezone</h1>\n";
 	} else {
 		echo "<h1>Pick up your current timezone</h1>\n";

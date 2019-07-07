@@ -107,7 +107,7 @@ if (pg_numrows($ras)>0) {
 if (pg_numrows($res)>0) {
 	for ($x=0;$x<pg_numrows($res);$x++) {
 		$row = pg_fetch_object($res,$x);
-		if (!preg_match("-" . $row->id . "!",$tst_str)) {
+		if (!preg_match("/-/" . $row->id . "!",$tst_str)) {
 			echo "<option value=" . $row->id . ">" . $row->user_name . " (" . $row->access . ")</option>\n";		
 		}
 	}

@@ -42,7 +42,7 @@ review_count_add($user_id);
 log_channel($channel_id,17,"Reviewed Application");
 //header("Location: view_app.php?id=$id&special_ret=" . urlencode($sret) . "\n\n");
 
-if (preg_match("/",$sret)) {
+if (preg_match("/\//",$sret)) {
 	$fslpos = strpos($sret,"/");
 	$ssret = substr($sret,$fslpos+2);
 	$sslpos = strpos($ssret,"/");

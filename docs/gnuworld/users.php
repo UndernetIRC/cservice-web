@@ -339,7 +339,7 @@ if (!$edit) {
             echo("<TR><TD><font size=-1><b>Theme</b></td><td><font size=-1><a href=\"#\" onclick=\"window.open('theme_change.php', 'THEME','width=500,height=120')\");\">Open Popup</a> to change your theme.</font></td></tr>");
     }
     if ($user->url != "") {
-        if ($user->url != "" && !preg_match("^http://", $user->url)) {
+        if ($user->url != "" && !preg_match("/^http:\/\//", $user->url)) {
             echo "<tr><td><font size=-1><b>Homepage </b></td><td><font size=-1><a href=\"http://$user->url\" target=\"_blank\">http://" . htmlspecialchars($user->url) . "</a></td></tr>";
         } else {
             echo "<tr><td><font size=-1><b>Homepage </b></td><td><font size=-1><a href=\"$user->url\" target=\"_blank\">" . htmlspecialchars($user->url) . "</a></td></tr>";
@@ -694,7 +694,7 @@ if (pg_numrows($r) > 0) {
 }
 if ($admin > 0) {
 
-    if (preg_match("^forgotten.password.", $user->last_updated_by)) { // forgotten passord...
+    if (preg_match("/^forgotten.password./", $user->last_updated_by)) { // forgotten passord...
         if ($admin < SHOW_IP_LEVEL) { // non SHOW_IP_LEVEL+ admin, hide IP in 'forgotten password'.
             $blah = trim(preg_replace("/\((.*)\)/", "", $user->last_updated_by));
             echo("<tr bgcolor=#ffdddd><td><b>Last Updated</b> (*1+)</td><td>" . cs_time($user->last_updated) . " by " . $blah . "</td></tr>");
@@ -960,7 +960,7 @@ if (!$edit || $admin < 800) {
                     }
                 }
                 echo "</font>";
-                if (preg_match(" ", $user->verificationdata)) {
+                if (preg_match("/ /", $user->verificationdata)) {
                     echo "<br><b>DISPLAY WARNING</b> secret answer contains litteral space(s) : <font color=#999999><big>";
                     echo str_replace(" ", "<font color=#ff00ff>_</font>", $user->verificationdata);
                     echo "</big></font>";

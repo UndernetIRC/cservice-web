@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 include("../../php_includes/cmaster.inc");
 

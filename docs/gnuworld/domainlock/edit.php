@@ -37,17 +37,17 @@ if ($crc == md5("$special_pass$HTTP_USER_AGENT$ts")) {
 		echo "<li> Fill with a <b>domain_name</b> or <b>user@ prefix</b> please.\n";
 		$baad=1;
 	}
-if (preg_match("@",$domain)) {
+if (preg_match("/@/",$domain)) {
 	if( !(preg_match( "/^[A-Za-z0-9_.-]+@+$/", $domain )) ) {
 		echo "<li> [001] The user prefix <b>" . htmlspecialchars($domain) . "</b> sounds invalid.\n";
 		$badargs = 1;
 	}
 } else {
-	if (preg_match("\*",$domain) && $admin<$min_lvl && !acl(XDOMAIN_LOCK)) {
+	if (preg_match("/\*/",$domain) && $admin<$min_lvl && !acl(XDOMAIN_LOCK)) {
 		echo "<li><font color=#" . $cTheme->table_tr_enlighten . "> <b>WILDCARDS ARE RESERVED FOR LEVELS " . $min_lvl . "+&nbsp;&nbsp;;P</b></font>\n";
 		$badargs=1;
 	} else {
-		if ((preg_match("\*",$domain) || preg_match("\?",$domain)) && ($admin>=$min_lvl || acl(XDOMAIN_LOCK))) {
+		if ((preg_match("/\*/",$domain) || preg_match("/\?/",$domain)) && ($admin>=$min_lvl || acl(XDOMAIN_LOCK))) {
 			if( !(preg_match( "/^[A-Za-z0-9\?\*.-]+\.[A-Za-z\?\*][A-Za-z\?\*]+$/", $domain )) ) {
 				echo "<li> [002] The domain name <b>" . htmlspecialchars($domain) . "</b> sounds invalid.\n";
 				$badargs = 1;
