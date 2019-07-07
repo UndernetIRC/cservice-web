@@ -1,10 +1,11 @@
-<?
+<?php
+    require("../../../php_includes/blackhole.inc");
+    require("../../../php_includes/cmaster.inc");
+
 	$cache_page=1;
 	if ($aup!=1) {
 		header("Location: aup.php");
 	}
-	require("../../../php_includes/blackhole.inc");
-        require("../../../php_includes/cmaster.inc");
 
 	if($loadavg5 >= CRIT_LOADAVG)
 	{
