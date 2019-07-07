@@ -26,7 +26,7 @@ if (isset($blackholeips)) { unset($blackholeips); }
 */
 
 /* begin list here */
-$blackholeips[]≈"1.2.3.4";
+$blackholeips[]="1.2.3.4";
 
 /* end of list */
 

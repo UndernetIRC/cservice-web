@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 	NOTE: You shouldn't be editing this file, you should be editing the 'config.inc' file,
 	which contains all data you have to, and can edit for this website module.
@@ -24,12 +24,64 @@ if (file_exists("../../php_includes/config.inc")) {
     die;
 }
 
+// Composer support to automatically load external libraries
+if (file_exists("../../vendor/autoload.php")) {
+    require_once "../../vendor/autoload.php";
+} else {
+    echo "Missing vendor/autoload.php, did you run composer install?";
+    die;
+}
+
+// Ugly hack, but this code will never be fixed not to require register_globals which was
+// deprecated in PHP 5.4.
+function register_global_array( $sg ) {
+  Static $superGlobals = array(
+        'e' => '_ENV'       ,
+        'g' => '_GET'       ,
+        'p' => '_POST'      ,
+        'c' => '_COOKIE'    ,
+        'r' => '_REQUEST'   ,
+        's' => '_SERVER'    ,
+        'f' => '_FILES'
+    );
+    Global ${$superGlobals[$sg]};
+
+    foreach( ${$superGlobals[$sg]} as $key => $val ) {
+    $GLOBALS[$key]  = $val;
+  }
+}
+
+function register_globals( $order = 'gpc' ) {
+  $_SERVER;
+  $_ENV;
+  $_REQUEST;
+
+  $order  = str_split( strtolower( $order ) );
+  array_map( 'register_global_array' , $order );
+}
+
+if (ENABLE_REGISTER_GLOBALS) {
+    register_globals();
+}
 
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
 ini_set('log_errors', '1');
 ini_set('error_log', 'page_errors.log');
 ini_set('display_errors', '0');
 //error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
+
+// Setup global logging using monolog
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+
+define("LOG_STREAM_HANDLER", getenv("LOG_STREAM_HANDLER") ?: "../../logs/cservice.log");
+define("LOG_LEVEL", getenv("LOG_LEVEL") ?: Logger::INFO);
+
+$stream = new StreamHandler(LOG_STREAM_HANDLER, LOG_LEVEL);
+$logger = new Logger('cservice');
+$logger->pushHandler($stream);
+
 $MAX_ALLOWED_USERS = 1000; // after that count, new users are locked and needs a manual unlock (resetting the count).
 
 define("HIJACK_LOGFILE", ""); // optional fullpath to file where to log queries found 'bogus' by pg_safe_exec();
@@ -48,6 +100,16 @@ define("MIN_CHAN_TOASTER_QRY",0); // the bigger your database is and the lower y
          // however, 0 disables the feature.
 
 define("NON_BOGUS",'/^[A-Za-z0-9`\^\|\}\{_-]+$/');
+
+define("BOFH_IGNORED_URIS", array(
+    'confirm',
+    'pwreset.php',
+    'main.php',
+    'logout.php',
+    'right.php',
+    'securize_pw.php'
+  )
+);
 
 define("XCHGMGR_REVIEW",         1);
 define("XCHGMGR_ADMIN",          2);
@@ -100,7 +162,7 @@ example of use:
 $IPNOLOG_UIDS[]=1; // Admin
 
 /* stuff for GFX code check */
-define("ALLOWED_EXT",".ttf");
+define("ALLOWED_EXT","/\.ttf/");
 define("DEFAULT_BG_COLOR","#FFFFFF");
 define("DEFAULT_FG_COLOR","#CACACA");
 define("DEFAULT_FONT_SIZE",36);
@@ -290,7 +352,7 @@ if (!$cache_page) {
 $main_rr = ROUNDROBIN;
 $local_mirror = LOCALMIRROR;
 
-if ($HTTP_HOST==$main_rr) {
+if ($_SERVER['HTTP_HOST'] == $main_rr) {
     header("Location: http://" . $local_mirror);
     die;
 }
@@ -408,7 +470,7 @@ function img_label($text_label, $font_name = SPECIFIC_FONT, $font_size = DEFAULT
         }
     }
     // output the picture
-    ImageJPEG($newIm,"",JPEG_OUT_QUALITY); // JPEG Quality
+    ImageJPEG($newIm,NULL,JPEG_OUT_QUALITY); // JPEG Quality
     die;
 }
 
@@ -591,19 +653,19 @@ function cs_time($ts) {
 function cl_ipdmaskchk($ip) {
     if (!DISALLOW_RESERVED_BLOCKS) { return 0; }
     $dmask = Array(
-        0=>'^127\.0\.0\.',
-        1=>'^192\.168\.',
-        2=>'^10\.',
-        3=>'^169\.254\.',
-        4=>'^172\.16\.',
-        5=>'^192\.0\.2\.',
-        6=>'^224\.',
-        7=>'^240\.',
-        8=>'^0\.'
+        0=>'/^127\.0\.0\./',
+        1=>'/^192\.168\./',
+        2=>'/^10\./',
+        3=>'/^169\.254\./',
+        4=>'/^172\.16\./',
+        5=>'/^192\.0\.2\./',
+        6=>'/^224\./',
+        7=>'/^240\./',
+        8=>'/^0\./'
     );
     $count = count($dmask);
     for ($x=0;$x<$count;$x++) {
-        if (preg_match($dmask[$x],$ip)) { return 1; }
+        if (preg_match($dmask[$x], $ip)) { return 1; }
     }
     return 0;
 }
@@ -611,11 +673,11 @@ function cl_ipdmaskchk($ip) {
 function cl_ipwmaskchk($ip) {
     if (DISALLOW_RESERVED_BLOCKS) { return 0; }
     $wmask = Array(
-        0=>'^10\.101\.'
+        0=>'/^10\.101\./'
     );
     $count = count($wmask);
     for ($x=0;$x<$count;$x++) {
-        if (preg_match($wmask[$x],$ip)) { return 1; }
+        if (preg_match($wmask[$x], $ip)) { return 1; }
     }
     return 0;
 }
@@ -631,7 +693,7 @@ function cl_ip($rettype = 1) {
         $ips[] = $_SERVER["REMOTE_ADDR"];
         $hst[] = $_SERVER["REMOTE_HOST"];
     } else if ($_SERVER["HTTP_X_FORWARDED_FOR"]!="") { // from a proxy
-        if (preg_match(",",$_SERVER["HTTP_X_FORWARDED_FOR"])) {
+        if (strpos(",", $_SERVER["HTTP_X_FORWARDED_FOR"]) !== false) {
             $ipp = explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]);
             $ipc = count($ipp);
             for ($x=0;$x<$ipc;$x++) {
@@ -685,7 +747,7 @@ function cl_host() {
 }
 
 function pg_safe_exec($query) {
-    global $REMOTE_USER,$need_rollback,$ipchk_dbuser,$database,$ENABLE_COOKIE_TABLE;
+    global $REMOTE_USER,$need_rollback,$ipchk_dbuser,$database,$ENABLE_COOKIE_TABLE, $logger;
 
     // parses EVERY SQL query passed to the db.
     // add any query integrity check here (*).
@@ -726,6 +788,8 @@ function pg_safe_exec($query) {
 
     // (*)
 
+    $logger->debug('SQL Query: ' . $safe_query2);
+
     if (!$query_ok) {
         echo "</td></tr></table>";
         echo "<h2><font color=#990000>\n";
@@ -753,7 +817,6 @@ function pg_safe_exec($query) {
     }
 
     if ($ENABLE_COOKIE_TABLE==1) {
-        $localdb = "";
         if (LOCALDB_PASS!="") {
             $localdb = @pg_connect("host=" . LOCALDB_HOST . " user=" . LOCALDB_USER . " password=" . LOCALDB_PASS . " dbname=" . LOCALDB_NAME);
         } else {
@@ -894,19 +957,32 @@ function has_a_channel($user_id) {
 }
 
 function make_secure_form($additional_salt = "", $form_timeout = COOKIE_EXPIRE) {
-    global $user_id,$admin,$HTTP_USER_AGENT;
+    global $user_id,$admin;
+    $HTTP_USER_AGENT = $_SERVER['HTTP_USER_AGENT'];
     $FTS=time()+get_custom_session($user_id);
     $user_id2 = $user_id+0; $admin2 = $admin+0;
     //$FTS = time()+$form_timeout;
     echo "<input type=hidden name=SECUREFTS value=\"" . $FTS . "\">\n";
     echo "<input type=hidden name=SECUREFCRC value=\""  . md5( $user_id2 . CRC_SALT_0013 . $additional_salt . $admin2 . $FTS . $HTTP_USER_AGENT ) . "\">\n";
+    $stdout = fopen('php://stderr', 'w');
+    fwrite($stdout, "+++ SECURERFCRC: " . md5( $user_id2 . CRC_SALT_0013 . $additional_salt . $admin2 . $FTS . $HTTP_USER_AGENT )  . "\n");
 }
 
 function check_secure_form($additional_salt = "") {
-    global $user_id,$admin,$SECUREFTS,$SECUREFCRC,$HTTP_USER_AGENT;
+    global $user_id, $admin;
+    $HTTP_USER_AGENT = $_SERVER['HTTP_USER_AGENT'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $SECUREFCRC = $_POST["SECUREFCRC"];
+      $SECUREFTS = $_POST["SECUREFTS"];
+    } else {
+        return 0;
+    }
     $user_id2 = $user_id+0; $admin2 = $admin+0;
     $crc_check = md5( $user_id2 . CRC_SALT_0013 . $additional_salt . $admin2 . $SECUREFTS . $HTTP_USER_AGENT );
-    if (($crc_check == $SECUREFCRC) && ($SECUREFTS>time())) {
+    $stdout = fopen('php://stderr', 'w');
+    fwrite($stdout, "+++ CRC: " . $crc_check . " FCRC: " . $SECUREFCRC . " FTS: " . $SECUREFTS . "\n");
+
+  if (($crc_check == $SECUREFCRC) && ($SECUREFTS>time())) {
         return 1;
     } else {
         return 0;
@@ -1102,7 +1178,7 @@ function newu_ipcheck($mode) { // return false on locked.
 
 function ip_check($user_name,$mode) {
     global $unlock_ts,$ipchk_dbuser,$ENABLE_COOKIE_TABLE;
-    if (cl_ip()=="" || preg_match("^127.0.0.",cl_ip())) { return 0; }
+    if (cl_ip()=="" || preg_match("/^127\.0\.0\./", cl_ip())) { return 0; }
 
     if ($mode!=0) { $mode = 1; } else { $mode = 0; }
 
@@ -1188,7 +1264,7 @@ function ip_check($user_name,$mode) {
 
 function ip_check_totp($user_name,$mode) {
     global $unlock_ts,$ipchk_dbuser,$ENABLE_COOKIE_TABLE;
-    if (cl_ip()=="" || preg_match("^127.0.0.",cl_ip())) { return 0; }
+    if (cl_ip()=="" || preg_match("/^127\.0\.0\./",cl_ip())) { return 0; }
 
     if ($mode!=0) { $mode = 1; } else { $mode = 0; }
 
@@ -2252,7 +2328,7 @@ function is_locked_va($VDATA,$forceignorecase = 0) {
         $tocheck = $VDATA;
       }
     }
-    if (preg_match("^".str_replace("*",".*",str_replace("?",".",$pattern))."$", $tocheck)) { // MATCH! (locked !@#)
+    if (preg_match("/^".str_replace("*",".*",str_replace("?",".",$pattern))."$/", $tocheck)) { // MATCH! (locked !@#)
       return true;
     }
   }
@@ -2382,23 +2458,21 @@ function drake_duration($duration)
 
 function gen_server_url() {
   if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) { // proxy connection
-      if (preg_match(":",$_SERVER["HTTP_HOST"])) {
+      if (strpos(":", $_SERVER["HTTP_HOST"]) !== false) {
         $pxp = explode(":",$_SERVER["HTTP_HOST"]);
         $port = (int)$pxp[1];
-      } else {
-      if (preg_match("^https\:\/\/",$_SERVER["HTTP_REFERER"])) {
+      } else if (preg_match("/^https\:\/\//",$_SERVER["HTTP_REFERER"])) {
           // hack because apache doesnt return 443 in $_SERVER['SERVER_PORT'] (!)
         $port = 443;
       } else {
           $port = 80;
-      }
       }
   } else {
     $port = (int)$_SERVER["SERVER_PORT"];
   }
   if ($port <= 0) { $port = 80; }
 
-  if (preg_match("cscportal.net",$_SERVER["SERVER_NAME"])) { $_SERVER["SERVER_NAME"]="cservice.undernet.org"; }
+  if (is_needle_in_haystack("cscportal.net", $_SERVER["SERVER_NAME"])) { $_SERVER["SERVER_NAME"]="cservice.undernet.org"; }
 
   if ($port == "80") {
         return "http://" . $_SERVER["SERVER_NAME"];
@@ -2751,14 +2825,23 @@ function std_sanitise_username(&$username) {
   $username=$username2;
 }
 
+function is_needle_in_haystack($needles, $haystack) {
+    if (!is_array($needles)) {
+        $needles = array($needles);
+    }
+
+    if (str_replace($needles, '', $haystack) != $haystack){
+        return true;
+    }
+    return false;
+}
+
 function std_admin() { // Return admin level
   global $user_id,$database,$REQUEST_URI,$mode,$auth,$uuflags,$r_admin,$is_alumni;
 
   if (($user_id+0)<=0) { return (0); }
 
-
   $query="SELECT access,suspend_expires FROM levels WHERE channel_id=1 AND user_id=" . (int)$user_id;
-//  echo "Q: $query";
   $adminR = pg_safe_exec($query);
 
   if (pg_numrows($adminR)==0) {
@@ -2771,17 +2854,15 @@ function std_admin() { // Return admin level
   }
 
   if (BOFH_PASS_ADMIN && !BOFH_PASS_USER) {
-          if (!is_pw_secure_logged()) {
-            if (preg_match("left.php",$REQUEST_URI)) {
-              $mode = "empty";
-            } else {
-              if (!preg_match("confirm",$REQUEST_URI) && !preg_match("pwreset.php",$REQUEST_URI) && !preg_match("main.php",$REQUEST_URI) && !preg_match("logout.php",$REQUEST_URI) && !preg_match("right.php",$REQUEST_URI) && !preg_match("securize_pw.php",$REQUEST_URI)) {
-                $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5( $user_id . CRC_SALT_0013 . $auth );
-          header("Location: " . $unsecure_pw_url . "\n\n");
-          die;
-        }
-            }
-          }
+    if (!is_pw_secure_logged()) {
+      if (is_needle_in_haystack("left.php", $REQUEST_URI)) {
+        $mode = "empty";
+      } else if (!is_needle_in_haystack(BOFH_IGNORED_URIS, $REQUEST_URI)) {
+        $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5($user_id . CRC_SALT_0013 . $auth);
+        header("Location: " . $unsecure_pw_url . "\n\n");
+        die;
+      }
+    }
   }
 
   $r_admin = $admin;
@@ -2895,18 +2976,16 @@ function std_security_chk($authcookline) {
     }
   }
 
-  if (BOFH_PASS_USER && (($user_id+0)>0)) {
-          if (!is_pw_secure_logged()) {
-            if (preg_match("left.php",$REQUEST_URI)) {
-              $mode = "empty";
-            } else {
-              if (!preg_match("confirm",$REQUEST_URI) && !preg_match("pwreset.php",$REQUEST_URI) && !preg_match("main.php",$REQUEST_URI) && !preg_match("logout.php",$REQUEST_URI) && !preg_match("right.php",$REQUEST_URI) && !preg_match("securize_pw.php",$REQUEST_URI)) {
-                $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5( $user_id . CRC_SALT_0013 . $authcook );
-          header("Location: " . $unsecure_pw_url . "\n\n");
-          die;
-        }
-            }
-          }
+  if (BOFH_PASS_USER && (($user_id + 0) > 0)) {
+    if (!is_pw_secure_logged()) {
+      if (is_needle_in_haystack("left.php", $REQUEST_URI)) {
+        $mode = "empty";
+      } else if (is_needle_in_haystack(BOFH_IGNORED_URIS, $REQUEST_URI)) {
+        $unsecure_pw_url = "securize_pw.php?sba=1&SECURE_ID=" . md5($user_id . CRC_SALT_0013 . $authcook);
+        header("Location: " . $unsecure_pw_url . "\n\n");
+        die;
+      }
+    }
   }
 
   return $user_id;
@@ -3060,7 +3139,7 @@ function err_newuser($errMsg) {
 function remove_ip($string,$type=1) {
   $retv = $string;
   if ($type==1) {
-    if (preg_match("@",$string)) {
+    if (strpos("@", $string) !== false) {
       $bb = explode("@",$string);
       $retv = $bb[0] . "@&lt;IP_HIDDEN&gt;";
     }
@@ -3075,7 +3154,7 @@ function remove_ip($string,$type=1) {
         $fl = $oru->flags;
       }
     }
-    if (preg_match("@",$xx[1])) {
+    if (strpos("@", $xx[1]) !== false) {
       if ($axs>0 || $fl&256) {
         $bb = explode("@",$xx[1]);
         $xx1 = $bb[0] . "@<IP_HIDDEN>";
@@ -3147,9 +3226,9 @@ $min_time_between_requests=LREQ_TIME; // in seconds (set to 1 for testing purpos
 // do not change the above values here... edit 'config.inc' instead.
 
 if (!extension_loaded("gd")) { // checking if LibGD is present in apache/php
-  define(SHOW_GFXUSRCHK,0);
+  define("SHOW_GFXUSRCHK", 0);
 } else {
-  define(SHOW_GFXUSRCHK,1);
+  define("SHOW_GFXUSRCHK", 1);
 }
 
 define("HOSTING_STATS_FILENAME","/tmp/hosting_stats");
@@ -3170,14 +3249,14 @@ if (HOSTING_STATS) {
     $ftest2 = @fopen(HOSTING_STATS_FILENAME,"a");
     if (!$ftest2) {
       //die("file '" . HOSTING_STATS_FILENAME . "' exists and is not writable by me !");
-      define(HOSTING_CLICK_CHECK,0);
+      define("HOSTING_CLICK_CHECK", 0);
     } else {
-      define(HOSTING_CLICK_CHECK,1);
+      define("HOSTING_CLICK_CHECK", 1);
       @fclose($ftest2);
     }
   }
 } else {
-  define(HOSTING_CLICK_CHECK,0);
+  define("HOSTING_CLICK_CHECK", 0);
 }
 
 if (!extension_loaded("pgsql")) { // original idea by Leigh.

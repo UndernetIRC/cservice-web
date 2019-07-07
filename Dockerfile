@@ -1,9 +1,12 @@
 FROM alpine:3.10
 MAINTAINER ratler@undernet.org
 
+ENV PYTHONUNBUFFERED 1
+
 RUN apk --no-cache update && apk --no-cache upgrade && \
     apk --no-cache add \
     bash \
+    busybox-extras \
     apache2 \
     php7-apache2 \
     curl \
@@ -12,6 +15,7 @@ RUN apk --no-cache update && apk --no-cache upgrade && \
     openssh \
     git \
     php7 \
+    python3 \
     tzdata
 
 RUN apk --no-cache add \
@@ -51,6 +55,9 @@ RUN apk --no-cache add \
     php7-apcu \
     php7-simplexml
 
+# Composer
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
 # Setup apache
 RUN for m in rewrite_module session_module session_cookie_module ession_crypto_module deflate_module; do \
     sed -i "/^#LoadModule $m/s;#;;" /etc/apache2/httpd.conf; done
@@ -60,6 +67,7 @@ RUN sed -i "s;^#DocumentRoot.*;DocumentRoot /app/docs/gnuworld;" /etc/apache2/ht
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
+WORKDIR /app
 ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 5000
 

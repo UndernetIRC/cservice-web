@@ -21,10 +21,22 @@ if [ "$1" == "httpd" ]; then
   if [ ! -f "/app/php_include/config.inc.dist" ]; then
     sed "/^die/d" /app/php_includes/config.inc.dist > /app/php_includes/config.inc
     sed -i '/STD_THEME/s;default;unetnew;' /app/php_includes/config.inc
+    sed -i '/FONT_PATH/s;\.\.\.;/app/fonts;' /app/php_includes/config.inc
   fi
   if [ ! -f "/app/php_includes/blackhole.inc" ]; then
     cp "/app/php_includes/blackhole.inc.dist" "/app/php_includes/blackhole.inc"
   fi
 fi
+
+# Run composer
+if [ ! -d "/app/vendor" ]; then
+  composer install
+else
+  composer update
+fi
+
+chown apache:apache /app/logs
+
+python3 -m smtpd -n -c DebuggingServer localhost:25 &
 
 exec "$@"

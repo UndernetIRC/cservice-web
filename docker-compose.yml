@@ -14,6 +14,9 @@ services:
       - REMOTEDB_USER=cservice
       - REMOTEDB_PASS=cservice
       - REMOTEDB_HOST=db
+      - ENABLE_REGISTER_GLOBALS=1
+      - LOG_LEVEL=Logger::DEBUG
+      - LOG_STREAM_HANDLER=php://stdout
     volumes:
       - ./:/app
     depends_on:
@@ -31,6 +34,8 @@ services:
     environment:
       - POSTGRES_USER=cservice
       - POSTGRES_PASSWORD=cservice
+      - POSTGRES_INITDB_ARGS="-E SQL_ASCII"
+      - LANG=C
 
 volumes:
   pgdata:
