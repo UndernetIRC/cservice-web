@@ -13,6 +13,8 @@ if (!defined('PHP_VERSION_ID')) {
     define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
 }
 
+//TODO: this should be fixable by setting include_path
+
 if (file_exists("../../php_includes/config.inc")) {
     include_once("../../php_includes/config.inc");
 } elseif (file_exists("../../../php_includes/config.inc")) {
@@ -26,7 +28,11 @@ if (file_exists("../../php_includes/config.inc")) {
 
 // Composer support to automatically load external libraries
 if (file_exists("../../vendor/autoload.php")) {
-    require_once "../../vendor/autoload.php";
+  require_once "../../vendor/autoload.php";
+} else if (file_exists("../../../vendor/autoload.php")) {
+  require_once "../../../vendor/autoload.php";
+} else if (file_exists("../../../../vendor/autoload.php")) {
+  require_once "../../../../vendor/autoload.php";
 } else {
     echo "Missing vendor/autoload.php, did you run composer install?";
     die;
