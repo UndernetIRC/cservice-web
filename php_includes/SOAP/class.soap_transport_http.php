@@ -153,7 +153,7 @@ class soap_transport_http extends nusoap_base {
 		$data = $this->incoming_payload."\r\n\r\n\r\n\r\n";
 		
 		// remove 100 header
-		if(preg_match('^HTTP/1.1 100',$data)){
+		if(preg_match('/^HTTP/1.1 100/',$data)){
 			if($pos = strpos($data,"\r\n\r\n") ){
 				$data = ltrim(substr($data,$pos));
 			} elseif($pos = strpos($data,"\n\n") ){
@@ -327,7 +327,7 @@ class soap_transport_http extends nusoap_base {
 		//$t->setMarker('closed curl');
 		
 		// remove 100 header
-		if(preg_match('^HTTP/1.1 100',$data)){
+		if(preg_match('/^HTTP/1.1 100/',$data)){
 			if($pos = strpos($data,"\r\n\r\n") ){
 				$data = ltrim(substr($data,$pos));
 			} elseif($pos = strpos($data,"\n\n") ){

@@ -229,7 +229,7 @@ class wsdl extends XMLSchema {
      */
     function start_element($parser, $name, $attrs)
     {
-        if ($this->status == 'schema' || preg_match('schema$', $name)) {
+        if ($this->status == 'schema' || preg_match('/schema$/', $name)) {
             // $this->debug("startElement for $name ($attrs[name]). status = $this->status (".$this->getLocalPart($name).")");
             $this->status = 'schema';
             $this->schemaStartElement($parser, $name, $attrs);
@@ -241,7 +241,7 @@ class wsdl extends XMLSchema {
             $this->depth_array[$depth] = $pos;
             $this->message[$pos] = array('cdata' => ''); 
             // get element prefix
-            if (preg_match(':', $name)) {
+            if (preg_match('/:/', $name)) {
                 // get ns prefix
                 $prefix = substr($name, 0, strpos($name, ':')); 
                 // get ns
@@ -253,7 +253,7 @@ class wsdl extends XMLSchema {
             if (count($attrs) > 0) {
                 foreach($attrs as $k => $v) {
                     // if ns declarations, add to class level array of valid namespaces
-                    if (preg_match("^xmlns", $k)) {
+                    if (preg_match("/^xmlns/", $k)) {
                         if ($ns_prefix = substr(strrchr($k, ':'), 1)) {
                             $this->namespaces[$ns_prefix] = $v;
                         } else {
@@ -422,7 +422,7 @@ class wsdl extends XMLSchema {
 	*/
 	function end_element($parser, $name){ 
 		// unset schema status
-		if (preg_match('types$', $name) || preg_match('schema$', $name)) {
+		if (preg_match('/types$/', $name) || preg_match('/schema$/', $name)) {
 			$this->status = "";
 		} 
 		if ($this->status == 'schema') {

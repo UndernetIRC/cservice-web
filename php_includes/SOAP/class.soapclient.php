@@ -240,7 +240,7 @@ class soapclient extends nusoap_base  {
 		// detect transport
 		switch(true){
 			// http(s)
-			case preg_match('^http',$this->endpoint):
+			case preg_match('/^http/',$this->endpoint):
 				$this->debug('transporting via HTTP');
 				if($this->persistentConnection && is_object($this->persistentConnection)){
 					$http =& $this->persistentConnection;
@@ -258,10 +258,10 @@ class soapclient extends nusoap_base  {
 					$http->setEncoding($this->http_encoding);
 				}
 				$this->debug('sending message, length: '.strlen($msg));
-				if(preg_match('^http:',$this->endpoint)){
+				if(preg_match('/^http:/',$this->endpoint)){
 				//if(strpos($this->endpoint,'http:')){
 					$response = $http->send($msg,$timeout);
-				} elseif(preg_match('^https',$this->endpoint)){
+				} elseif(preg_match('/^https/',$this->endpoint)){
 				//} elseif(strpos($this->endpoint,'https:')){
 					//if(phpversion() == '4.3.0-dev'){
 						//$response = $http->send($msg,$timeout);
