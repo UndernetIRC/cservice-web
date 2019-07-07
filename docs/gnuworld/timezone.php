@@ -1,9 +1,9 @@
-<?
+<?php
 	require("../../php_includes/cmaster.inc");
-/* $Id: timezone.php,v 1.5 2004/09/13 12:29:02 nighty Exp $ */
+
 	$zonetab_name = "/usr/share/zoneinfo/zone.tab";
 	std_init();
-$cTheme = get_theme_info();
+    $cTheme = get_theme_info();
 	if ($user_id==0) {
 		die("Error: you must be logged in.");
 	}
@@ -44,15 +44,15 @@ $cTheme = get_theme_info();
 	<form name=tz action=timezone.php method=post>
 	<select name=tzname>
 	<option value="">-- click here --</option>
-<?
+<?php
 	$tz_query = "SELECT * FROM timezones";
 	$res = pg_safe_exec($tz_query);
 	if (pg_numrows($res)==0) { // table empty, first run : let's fill it.
 		$tmp_fname = "/tmp/webtz.tmp." . md5(time());
 		if (file_exists($zonetab_name)) { $fp = fopen($zonetab_name,"r"); } else { $fp=0; }
 		if (!$fp) { // invalid zone.tab file.
-			if (file_exists("../../zone.tab")) { $fp = fopen("../../zone.tab","r"); } else { $fp=0; }
-			$zonetab_name = "../../zone.tab";
+			if (file_exists("../../php_includes/zone.tab")) { $fp = fopen("../../zone.tab","r"); } else { $fp=0; }
+			$zonetab_name = "../../php_includes/zone.tab";
 			if (!$fp) {
 				echo "</select><br><br>\n";
 				echo "<h1><br>Unable to read file '$zonetab_name' and table 'timezones' is empty, check your config.<br></h1>\n";
@@ -68,7 +68,7 @@ $cTheme = get_theme_info();
 		$l_index=0;
 		for ($x=0;$x<count($alllines);$x++) {
 			$linepos=0;
-			if (preg_match("/",$alllines[$x])) {
+			if (strpos($alllines[$x], "/")) {
 				$ccode = "";
 				$tznam = "";
 				// first .. ccode...
@@ -125,8 +125,8 @@ $cTheme = get_theme_info();
 
 ?>
 	</select><br><br>
-<?
-	if (preg_match("users.php",$HTTP_REFERER)) {
+<?php
+	if (is_needle_in_haystack("users.php", $HTTP_REFERER)) {
 		echo "<input type=submit value=\" Change my default timezone to the above ! \"><br><br><a href=\"users.php?id=$user_id\">go back</a>\n";
 	} else {
 		echo "<input type=submit value=\" Record the above as my default timezone ! \">\n";
