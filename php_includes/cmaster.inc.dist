@@ -41,6 +41,7 @@ if (file_exists("../../vendor/autoload.php")) {
 // Ugly hack, but this code will never be fixed not to require register_globals which was
 // deprecated in PHP 5.4.
 function register_global_array( $sg ) {
+  std_connect();
   Static $superGlobals = array(
         'e' => '_ENV'       ,
         'g' => '_GET'       ,
@@ -50,9 +51,12 @@ function register_global_array( $sg ) {
         's' => '_SERVER'    ,
         'f' => '_FILES'
     );
-    Global ${$superGlobals[$sg]};
+  Global ${$superGlobals[$sg]};
 
-    foreach( ${$superGlobals[$sg]} as $key => $val ) {
+  foreach( ${$superGlobals[$sg]} as $key => $val ) {
+    if ($superGlobals[$sg] == "_GET" || $superGlobals[$sg] == "_POST") {
+      $val = pg_escape_string($val);
+    }
     $GLOBALS[$key]  = $val;
   }
 }
