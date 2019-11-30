@@ -17,10 +17,18 @@ services:
       - ENABLE_REGISTER_GLOBALS=1
       - LOG_LEVEL=Logger::DEBUG
       - LOG_STREAM_HANDLER=php://stdout
+      - SMTPHOST=mailhog:1025
     volumes:
       - ./:/app
     depends_on:
       - db
+      - mailhog
+
+  mailhog:
+    image: "mailhog/mailhog"
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
   db:
     image: postgres:11-alpine

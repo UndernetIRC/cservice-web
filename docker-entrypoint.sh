@@ -14,11 +14,13 @@ if [ "$1" == "httpd" ]; then
     echo "Set Apache ErrorLog to $APACHE_ERRORLOG..."
   fi
 
+  sed -i "s;\;sendmail_path.*;sendmail_path = /usr/sbin/sendmail;" /etc/php7/php.ini
+
   # Setup default config for cservice website
   if [ ! -f "/app/php_includes/cmaster.inc" ]; then
     cp "/app/php_includes/cmaster.inc.dist" "/app/php_includes/cmaster.inc"
   fi
-  if [ ! -f "/app/php_include/config.inc.dist" ]; then
+  if [ ! -f "/app/php_include/config.inc" ]; then
     sed "/^die/d" /app/php_includes/config.inc.dist > /app/php_includes/config.inc
     sed -i '/STD_THEME/s;default;unetnew;' /app/php_includes/config.inc
     sed -i '/FONT_PATH/s;\.\.\.;/app/fonts;' /app/php_includes/config.inc
@@ -36,7 +38,5 @@ else
 fi
 
 chown apache:apache /app/logs
-
-python3 -m smtpd -n -c DebuggingServer localhost:25 &
 
 exec "$@"
