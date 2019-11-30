@@ -51,9 +51,9 @@ a:hover { font-family: arial,helvetica; color: #<?=$cTheme->left_linkover?>; fon
 
 <a href="check_app.php" target="right"><b>Check App</b></a><br><br>
 <a href="forms/index.php" target="right"><b>Forms</b></a><br><br>
+<a href="docs/xcmds.txt" target="right"><b>All X Commands</b></a><br><br>
 <? if (ENABLE_COMPLAINTS_MODULE == 1) { ?>
 <!--<a href="complaints/complaints.php" target="right"><b>Complaints</b></a><br><br>//-->
-<a href="/docs/xcmds.txt" target="right"><b>All X Commands</b></a><br><br>
 <? } ?>
 <? } ?>
 <?
