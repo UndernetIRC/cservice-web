@@ -1,0 +1,164 @@
+###########################################################################                                                                    
+##                                                          
+##      The Channel 
+##
+##                       Service                                                
+##
+##                                   Committee
+##
+##                                                   Guidelines                        
+##
+##   
+###########################################################################
+  
+                                                Revised: May 28th, 2005
+ 
+ 
+ 
+ 
+~ A few words ~
+ 
+  The CSC (Channel Service Committee) gives the opportunity to users 
+to manage a channel by registering it and being provided with the X bot.  
+This is *not* ownership because the service will only be placed on the channel 
+if there is a general demand for it.  It can't be used in channel wars/opwars, 
+or in any attempt to "take over" a channel.  The purpose of this service is to 
+help users maintain/protect their channels, service which can and will be 
+revoked at any sign of abusing from the channel manager/ops.  The channel 
+manager is expected to participate in the channel on a regular basis.  If it's 
+found that the manager has not logged into X within a period of 21+ days, a vote 
+for a new manager is posted for the channel trusted ops (400+).  If the manager 
+does not return within this vote period and also the channel ops fail to vote a 
+new manager, the channel will be purged.
+ 
+  If you have a specific question regarding the Channel Service mail 
+cservice@undernet.org 
+ 
+ 
+ 
+ 
+~ Committee Guidelines ~
+ 
+* Structure of committee, and general aims
+ 
+ 
+* The Channel Service committee is a volunteer based user group.
+ 
+* The CSC (Channel Service Committee) are in charge of administrating the 
+  channel service.
+ 
+* The CSC will attempt to provide stability to a channel.
+ 
+* The CSC will only register one channel per username.  This rule may be relaxed
+  at the discretion of the committee for special channels which provide a service,
+  such as help channels.
+ 
+ 
+ 
+ 
+~ Committee Procedure ~
+ 
+ 
+* Standard Registration:
+ 
+ 
+* Channel applications are reviewed on a regular basis by the CSC 
+to ensure the proper information has been included.
+ 
+* The CSC may deny access to registration to anyone that has been abusive of the
+  service or of Undernet.  The CSC may also suspend the registration and supporters
+  priviledges to any user.
+ 
+ 
+ 
+ 
+* Special Registrations:
+ 
+ 
+* A channel maybe registered for special events at the request of IRCops or by 
+  CSC Administrators.
+        
+* A channel may also be emergency registered if it is shown that registering the
+  channel will add stability to the channel itself.  The channel must still go
+  through the posting period. 
+       
+* All special registrations must be approved by the special registrations group
+  within the CSC.       
+ 
+ 
+ 
+ 
+* Involvement in Channels
+ 
+ 
+* CSC Administrators will only use their administrative access in order to perform
+  channel maintenance, to enforce the CSC guidelines, and to aid channels in times
+  of need.
+ 
+* CSC Administrators can reasonably act on a channel if it is found to be used by
+  abusive users, such as flooders and users engaged in harassment of other channels.
+  Action taken may include suspension of problem users and notification to the
+  manager, or purging (removal of channel service) from the channel.
+ 
+* Any CSC Administrator/helper that abuses their access can have it suspended or
+  removed without notification.
+   
+ 
+   
+ 
+~ Registration Process ~
+ 
+ 
+IMPORTANT: Channel registrations are here to help established channels, 
+not to start them.  You should only be applying for a channel if you have a regular
+userbase to the channel.
+ 
+ 
+* Make sure that you have read these guidelines carefully, and are willing to use
+  the channel service (X) in conjunction with the rules of use.
+ 
+* Applications are to be submitted through the Channel Service registration page,
+  found via the WWW (World Wide Web) as following:           
+   - go to http://cservice.undernet.org/live, login using your username and apply
+     using the "Register a channel!" form.  If you don't have access to the web page
+     for some reason, please visit #CService on Undernet or mail cservice@undernet.org
+     and a CSC volunteer should be able to help you.
+* Once the application form is submitted, it is automatically checked for the following:  
+  a) Everything's all right.  Meaning, the supporters doesn't use multiple usernames,
+     they're not known abusers, they're joining on a regular basis, they're joining
+     logged to X before joining the channel, etc.
+  b) The channel description. 
+             
+ 
+  If any of the above checks fail, the form is rejected, stating what parts of the
+  form were incomplete or incorrect.  You may then make whatever additions or changes
+  which are necessary and try to submit again.
+       
+ 
+  After everything's ok and the supporters did a "/msg X support #channel_name yes" it
+  goes to PENDING stage.  Pending notification and traffic check.  After PENDING, there's
+  READY FOR REVIEW. The application will be checked carefully by CSC members and it'll be
+  rejected or accepted. Note: all objections are checked by the CSC members, if the
+  objections posted are false or non-sense, they will be ignored.
+  
+  The registration procedure takes between 7 and 12 days.
+ 
+ 
+ 
+ 
+~ Disclaimer ~
+ 
+ 
+ The Channel Service will not be responsible for any activity that occurs on the channel.
+ Anything that occurs on the channel are the responsibilities of the people involved and
+ has nothing to do with the Channel Service, it's Administrators and the Undernet as a whole,
+ including the operators that run it.  The guidelines may change without notice.
+ 
+ - Original CSC Guidelines written by Super
+ - Amended by Super
+ - This Draft #Ox.1
+ - Amended by Teal and Super
+ - Amended by DinTx and Goncalves
+ - Amended by kn and zappst|ko
+ - HTML fixed by nighty
+ - Last Review: Jan, 2006

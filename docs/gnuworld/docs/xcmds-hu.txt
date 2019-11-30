@@ -1,0 +1,522 @@
+--------------------------------------------------------------------------------
+
+ Undernet Channel Service Committee - Undernet Csatorna Szerviz Bizottsag
+               CMaster Command List - CMaster Parancs Lista
+                          Feltoltve - 2002 Marcius 24.
+
+--------------------------------------------------------------------------------
+
+
+MEGJEGYZESEK:
+
+* A <> jelek kozotti parameterek hasznalata kotelezo.
+* A [] jelek kozotti parameterek hasznalata opcionalis.
+* x|y ugyanazt jelenti, mint x vagy y.
+* <nick> egy adott szemely nevet jelenti (amivel online van).
+* <usernev> egy adott szemely felhasznaloi nevet jelenti, amivel a csatorna felhasznaloi listaban 
+  is szerepel. Nem szabad osszeteveszteni a <nick>-el. Tobb informaciot a felhasznaloi nevekrol, es 
+  hogy hogyan kapod meg egy adott szemely felhasznaloi nevet, a VERIFY es az INFO parancsnal talalsz. 
+  (0 szintu parancsok)
+* Minden olyan parancsot, amelyikben <usernev> szerepel, ki lehet cserelni egy = jellel es az illeto
+  nicknevevel utana. Peldaul van egy ^[Test]^ nevu felhasznalo, akinek a felhasznaloi neve Test.
+  Ketfelekeppen hasznalhatod az ACCESS parancsot:
+  1. /msg x access <#csatorna> Test
+   vagy
+  2. /msg x access <#csatorna> =^[Test]^
+  Az elso eljaras megnezi, hogy szerepel-e "Test" nevu felhasznalo a felhasznaloi listaban.
+  A masodik pedig megnezi hogy ^[Test]^ nevu felhasznalonak mi a felhasznaloi neve (ha azonositva 
+  van), szoval ez is a "Test" felhasznalot fogja majd keresni. Ezt az eljarast minden olyan 
+  parancsal lehet hasznalni ahol szerepel a <usernev>, de csakis akkor fog mukodni ha a felhasznalo 
+  azonositva van, maskepp "Nem talaltam semmit!" valaszt vagy hasonlot kapunk.
+
+
+--------------------------------------------------------------------------------
+500-as szintu parancsok : Channel Manager (Csatorna Vezeto)
+--------------------------------------------------------------------------------
+
+  PART -  Kikuldi X-et a csatornarol.
+
+    /msg x part <#csatorna>
+
+  SET - Kulonbozo X modokat tudunk valtoztatni ennek a parancsnak a segitsegevel.
+
+    /msg x SET <#csatorna> <valtozo> <ertek>
+
+   * Valtozok es Ertekek:
+
+   AUTOJOIN - Ha az opcio erteke ON, akkor X mindig be fog menni a csatornara. Ha ki van kapcsolva, 
+   tehat OFF, akkor X kimegy a csatornarol, es nem megy vissza egy netszakadas utan sem.
+
+     /msg x set <#csatorna> autojoin <on|off>
+
+   MASSDEOPPRO - Ennek az erteke az a maximum szam, ahany embert deopolhat valaki 15 masodperc 
+   leforgasa alatt. Barmely felhasznalo amelyik megszegi ezt a hatart, az ki lesz rugva, az 
+   accesse felfuggesztve (ha rajta van a felhasznaloi listan), es egy 25-os szintu bant rak ra X, 
+   tehat nem lehet Op az illeto csatornan. A felfuggesztes es a ban idotartalma 5 perc. A 
+   MASSDEOPPRO erteke 1 es 7 kozott valtozhat. A 0-s ertek kikapcsolja az opciot. 
+
+     /msg x set <#csatorna> massdeoppro <0-7>
+
+   NOOP - Ez azt jelenti hogy X-en kivul senki mas nem lehet Op a csatornan. Vigyazat, mert ez meg 
+   korantsem jelenti azt, hogy nem lehet iranyitasod a csatornan, mert ha azonositottad magad, 
+   akkor barmikor tudsz BAN-nolni, KICK-elni, stb. X-en keresztul, csak epp nem tudod majd 
+   felopolni magad. 
+
+     /msg x set <#csatorna> noop <on|off>
+
+   STRICTOP - Ez az opcio csak azoknat a felhasznaloknak enged Opot adni, akiknek legalabb 100 
+   access-uk van es azonositottak magukat.
+
+     /msg x set <#csatorna> strictop <on|off>
+
+--------------------------------------------------------------------------------
+450-499-es szintu parancsok : Trusted Channel Admin. (Megbizott Csatorna Adminisztrator)
+--------------------------------------------------------------------------------
+
+  SET - Kulonbozo X modokat tudunk valtoztatni ennek a parancsnak a segitsegevel.
+
+    /msg x SET <#csatorna> <valtozo> <ertek>
+
+   * Valtozok es Ertekek:
+
+   AUTOTOPIC - Ez az opcio annyit csinal, hogy X minden 30 percben ujracsereli a csatorna topic-jat,
+   tartalmazva a csatorna KORULIRASA-t (DESCRIPTION), es a csatorna URL-jet. Ha a csatornat nem 
+   hasznaljak, akkor ez a folyamat nem tortenik meg.  
+
+     /msg x set <#csatorna> autotopic <on|off>
+
+   DESCRIPTION - Megvaltoztatja a csatorna alap topic-jat (maximum 80 betus lehet). Ez nem 
+   befolyasolja az aktualis csatorna topic-ot, es ha nincs bekapcsolva az AUTOTOPIC, akkor csak a 
+   CHANINFO parancsal lehet majd lekerni. Ha uresen hagyjuk a szoveg helyet, akkor automatikusan 
+   letorli a csatorna korulirasat.
+   MASNEVEN: Desc
+
+     /msg x set <#csatorna> description [szoveg]
+     vagy
+     /msg x set <#csatorna> desc [szoveg]
+
+   FLOATLIM - A parancs segitsegevel megvaltoztathatjuk a 'floating-limit' erteket. Ha be van 
+   kapcsolva, akkor X bizonyos periodusonkent ujraallitja a csatorna limitet (hatart), annak 
+   fuggvenyeben, hogy hany felhasznalo tartozkodik a csatornan. Igy megelozhetjuk a nagy 
+   mennyisegu floodbotok bejoveset, es floodolasat. Alaperteke KI, tehat ha aktivalni akarjuk,
+   akkor be kell hogy tegyuk ezt az opciot. Ha be van kapcsolva, a STATUS paranccsal lekerhetjuk
+   ennek az erteket, amit a kovetkezokeppen lathatunk majd: "Flags set:", es utana: 
+   "FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)." Ez annyit jelent, hogy be van kapcsolva az opcio, 
+   a FLOATMARGIN erteke 3, a FLOADPERIOD-e 20, a FLOATGRACE-e 1, es a FLOATMAX ki van kapcsolva.
+   Bovebb informaciot a SET FLOATGRACE, SET FLOATMARGIN, SET FLOATMAX, es a SET FLOATPERIOD cimszok
+   alatt talalhatunk.
+
+     /msg x set <#csatorna> floatlim <on|off>
+   
+   FLOATGRACE - Bellitja a 'floating-limit' toleralasi erteket. Ez 0 es 19 kozott lehet. X tehat nem 
+   fogja cserelni az adott limitet, ha ennel a szamnal kevesebb felhasznalo kozlekedik. Ugy is 
+   mondhatnank, hogy ez az a szam, amit X 'elnez', es nem csereli meg a hatart. Kovetkezeskeppen
+   X nem fogja zavarni a csatornakat annyi mod cserevel. Az opcio alaperteke 1.
+
+     /msg x set <#csatorna> floatgrace <0-19>
+
+   FLOATMARGIN - Ide azt az erteket kell megadnunk, amennyivel akarjuk, hogy nevelje X a csatorna
+   limitet. Ez 2 es 20 kozott lehet. Tehat X megnezi hany ember van a csatornan, hozzaadja ezt az
+   erteket, es ugy teszi a csatorna limitet. Az alapertek 3.
+
+     /msg x set <#csatorna> floatmargin <2-20>
+
+   FLOATMAX - Beallitja a 'floating-limit' opcionak a felso hatarerteket. Ez egy barmilyen szam
+   lehet, ezaltal X nem fogja valtoztatni a csatorna limitet az adott szamnal magasabbra. Igy 
+   megadhatjuk azt a szamot, hogy maximalisan hanyan lehetnek az illeto csatornan. Az apalerteke 0,
+   tehat ki van kapcsolva az opcio. 
+
+     /msg x set <#csatorna> floatmax <0 | maximum ertek>
+
+   FLOATPERIOD - Be lehet allitani, hogy X milyen idokozonkent allitsa ujra a csatorna limitet. 
+   Ezt masodpercekben kell megadnunk, 20 es 200 kozott vehet fel ertekeket. Az opcio alaperteke
+   20 masodperc.
+
+     /msg x set <#csatorna> floatperiod <20-200>
+
+   KEYWORDS - A parancs segitsegevel kulcsszavakat rakhatunk egy csatornara, ezekre a szavakra 
+   majd a SEARCH parancsal kereshetunk. Ha nem adunk erteket neki, akkor automatikusan kitorli 
+   az opciot. Maximum 80 betut hasznalhatunk a szavak megadasanal.
+
+     /msg x set <#csatorna> keywords [szoveg]
+
+   MODE - Ez az opcio megmenti a csatorna modokat alapkent, tehat ha X bejon a csatornara, 
+   es egyedul van, akkor visszaallitja azokat a modokat, amelyikek neki meg vannak mentve.
+
+     /msg x set <#csatorna> mode
+
+   URL - Meg lehet addni a csatorna honlapja(i)t, ami maximum 75 karakterbol allhat. Tobb URL-t is 
+   megaddhatunk, ezert lehet a szokozt is hasznalni. Ez az opcio nem befolyasolja a topic-ot ha 
+   nincs berakva az AUTOTOPIC funkcio (450-es szintu parancs).
+   Az URL-t, es a csatorna korulirasat a CHANINFO parnacsal tekinthetjuk meg. Ha nem irunk semmit
+   az url helyebe, akkor automatikusan torlodik az URL erteke. 
+   
+   /msg x set <#csatorna> url [url url2 ... urlN]
+
+
+   USERFLAGS - Meghatarozza, hogy milyen erteket vegyen fel az AUTOMODE az uj felhasznaloknak, 
+   akiket felteszunk. Az alapertek 0 (Semmilyen). MEGJEGYZES: Ha egyszer egy felhasznalo fent 
+   van a felhasznaloi listan, akkor barmikor megvaltoztathatjuk az o sajat parametereit a MODINFO 
+   AUTOMODE (400-as szintu) parancsal.  
+
+   * Ertekek: 0 = Semmilyen AutoMode sem lesz rakva az uj usereknek.
+              1 = Minden uj usernek Op AutoMode-ja lesz.
+              2 = Minden uj usernek Voice AutoMode-ja lesz.
+ 
+   
+      /msg x set <#csatorna> userflags <0-2>
+
+  JOIN - A parancs segitsegevel X-et lehet behozni a csatornara.
+
+    /msg x join <#csatorna>
+
+--------------------------------------------------------------------------------
+400-449-es szintu parancsok : Userlist Admin (Felhasznaloi Lista-Adminisztrator)
+--------------------------------------------------------------------------------
+
+  ADDUSER - Uj felhasznalot ad hozza a csatorna felhasznaloi listajahoz. Nem tudsz a sajat
+  accessednel nagyobb vagy vele egyerteku joggal rendelkezo felhasznalokat feltenni.
+
+    /msg x adduser <#csatorna> <usernev> <access>
+
+  CLEARMODE - Letorli az osszes csatona modot. Akkor ajanlatos hasznalni mikor a csatornat 
+  lezartak (+i, vagy +k-ra tettek a csatornat a tudtod nelkul). MEGJEGYZES: Ez nem a legjobb ut 
+  visszaszerezni a csatornad, mert azok az emberek (vagy botok) akik fel vannak Opolva a csatornan 
+  mindig visszaallithatjak a csatorna modjait miutan te letorolted. Bovebb informacioert ott a 
+  STATUS parancs (200-as szintu).  
+
+    /msg x clearmode <#csatorna>
+
+  MODINFO - A kovetkezo parancsok segitsegevel modosithatunk a csatorna felhasznaloi listajan. 
+
+  * Valtozok:
+
+     ACCESS - Megvaltoztatja az access erteket egy felhasznalonak. Ez az ertek 1 es a te erdeked 
+     minusz egy kozott valtozhat (Tehat ha neked 400 access-ed van, akkor te csak maximum 399-et 
+     tudsz addni). 
+
+       /msg x modinfo <#csatorna> access <usernev> <uj szint>
+
+     AUTOMODE - Segitsegevel felhasznaloi parametereket valtoztathatunk meg, amik a kovetkezok 
+     lehetnek: SEMMILYEN (NONE), OP, VOICE. Az OP, es a VOICE parameterek op-ot, vagy voice-ot 
+     addnak az azonositott felhasznalonak ahogy belep a csatornara. Ha SEMMILYEN-re (NONE-ra) 
+     van allitva, akkor nem csinal semmit mikor bejon a felhasznalo a csatornara. 
+
+       /msg x modinfo <#csatorna> automode <usernev> <none|op|voice>
+
+  REMUSER - Letorol egy felhasznalot a csatorna adatbazisabol. Nagyobb joggal kell rendelkezz, 
+  mint a felhasznalo, akit le akarsz szedni a felhasznaloi listarol. Maskepp magad is le tudod 
+  szedni a felhasznaloi listarol, de csak akkor, ha nem te vagy a csatorna vezetoje (500-as szint 
+  az adott csatornan). Azok a vezetok, akik le szeretnek torolni a csatornajukat, azoknak kulon 
+  mas modszert kell hasznaljanak. (Purge)
+
+    /msg x remuser <#csatorna> <usernev>
+
+--------------------------------------------------------------------------------
+200-as szintu parancsok : Userlist Op (Felhasznaloi Lista-Operator)
+--------------------------------------------------------------------------------
+
+  KICK - A parancs segitsegevel kirughatunk egy adott *!*user@*.host maszkal rendelkezo
+  felhasznalokat, es nem rugja ki a parancs hasznalojat, ha ot is belefoglalja ez a maszk. Ezt a 
+  parancsot ritkan szabad hasznalni. Clone-ok vagy floodolok ellen ajanlatos hasznalni. Ajanlatos 
+  hogy tegyel egy bant a felhasznalokra, vagy tedd +i-re (invite only-ra) a csatornat mielott 
+  hasznalod a parancsot, hogy ne jojjenek vissza a nem kivant felhasznalok. 
+
+    /msg x kick <#csatorna> <nick | *!*user@*.host> [indok]
+
+  STATUS - Megmutatja az osszes X beallitast, a csatorna modokat, a csatornan tartozkodo 
+  felhasznalok es opok szamat, a csatornan tartozkodo bejelentkezett felhasznalokat, es hogy X bent 
+  van-e a csatornan vagy sem. A pillanatnyi azonositott felhasznalokat "felhasznaloi nev/nicknev
+  [access szint]" formaban mutatja. Ha tobben azonositjak magukat egy felhasznaloi nevvel, akkor
+  ezt ilyen formaban latjuk majd: "felhasznaloi nev/nick1 nickn [access szint]". Csak akkor 
+  mutatja meg a felhasznalok usernevet, ha a csatornan tartozkodnak, maskepp csak a felhasznaloi 
+  nevuket, es az access szintuket lathatjuk. Sokat segit ez a parancs amikor a csatorna +k-ra 
+  (kulcs van teve) van allitva, igy meg tudja mutatni a csatorna kulcsot. A parancsot akkor is
+  hasznalhatjuk, amikor X nincs bent az illeto csatornan.
+
+    /msg x status <#csatorna>
+
+--------------------------------------------------------------------------------
+100-399-es szintu parancsok : Channel Operator (Csatorna Operator)
+--------------------------------------------------------------------------------
+
+  DEOP - Elveszi egy vagy tobb embernek az operatori jogat egy adott csatornan. Ha nincs nev 
+  megadva, es operator vagy az adott csatornan, akkor X toled veszi el az Operatori jogot. 
+  MEGJEGYZES: Vigyazz ezzel a parancsal, es ugyelj arra hogy a deop-ok szama ne haladja meg a 
+  MASSDEOPPRO  erteket. (Lasd a SET MASSDEOPPRO-t, ami 500-as szintu parancs)
+
+    /msg x deop <#csatorna> [nick] [nick2] ... [nickN]
+
+  OP - Operatori jogot ad egy vagy tobb szemelynek is. Ha nincs nev megadva, es nem vagy Operator
+  az adott csatornan, akkor X teged for Operatorra tenni.
+
+     /msg x op <#csatorna> [nick] [nick2] ... [nickN]
+
+  INVITE - X behiv egy adott csatornara.
+
+    /msg x invite <#csatorna>
+
+  SUSPEND - Felfuggeszti egy adott felhasznalonak egy adott periodusig a csatornahoz valo jogat.
+  A felfuggesztendo felhasznalonak kevesebb joga kell hogy legyen mint neked, ahhoz hogy veghez 
+  tudd vinni a parancsot. Ha nem adunk meg szintet, akkor a felfuggesztes szintje a felfuggesztett
+  szemely jogaval lesz egyenerteku. Termeszetesen a parancs hasznalatahoz nagyobb joggal kell 
+  rendelkezzel, mint a felfuggesztendo szemely. A maximum idotartalom 372 nap (8928 ora, 
+  535680 perc).
+
+  * Ido Ertekek: D = napok
+                 H = orak
+                 M = percek
+
+    /msg x suspend <#csatorna> <usernev> <idotartalom> <szint>
+    * Idoegyseg pelda: "5 d" = 5 nap (Idezojel nelkul ird be)
+
+  UNSUSPEND - Leszedi a felfuggesztest az adott szemelyrol. Csak olyan felhasznalokon tudod 
+  haszanlni, akinek kisebb joguk van mint neked, vagy akik kevesebb vagy akkora joggal voltak
+  felfuggesztve. 
+
+    /msg x unsuspend <#csatorna> <usernev> 
+
+--------------------------------------------------------------------------------
+75-99-es szintu parancsok : New Channel Operator (Uj CSatorna-Operator)
+--------------------------------------------------------------------------------
+
+  BAN - Feltesz egy adott *!*user@*.host-ot X balistajara. Ha az illeto online van, akkor eleg 
+  hogy egyszeruen a nick-jet irod be, vagy megadhatod a  *!*user@*.host-jat is (ha az illeto 
+  nincs online). Azok a ban-ok amelyek nagyobb hataskoruek es magukba foglalnak egy masik mar 
+  megadott ban-t, akkor  termeszetesen a nagyobb hataskoruek megmaradnak, a masik(ok) torlodnek. 
+  Az idotartalmat oraban kell megadni, a maximum ertek 336 ora (2 het). A ban szintje (errosege) 
+  1-tol a te access szintedig terjedhet. A ban indoka maximum 128 karakterbol allhat. Ha nem adunk 
+  meg idotartalmat es szintet sem, akkor 3 oraig tarto, 75-os szintu bant tesz fel X.
+
+  * Ban szintek: 1-74 = Az illeto nem lehet Op az illeto csatornan.
+                  75+ = Az illeto egyaltalan nem tartozkodhat az illeto csatornan.
+
+    /msg x ban <#csatorna> <nick | *!*user@*.host> [idotartalom] [szint] [indok]
+
+  UNBAN - Leszed egy adott *!*user@*.host-ot az X banlistajabol, de egyben azokat is amelyek 
+  megeggyeznek vele. X banlistajarol csak olyan szintu ban-okat szedhetsz le amelyek naladnal 
+  kisebb, vagy a te jogoddal egyenerteku szintel vannak felteve. Ha meg szerened tekinteni X 
+  banlistajat akkor bovebb informaciot kapsz a LBANLIST parancs alatt. (0-s szintu parancs)
+
+    /msg x unban <#csatorna> <nick | *!*user@*.host>
+
+--------------------------------------------------------------------------------
+50-74-es szintu parancsok : Trusted Channel Regular (Megbizott Csatorna-Szabalyzo)
+--------------------------------------------------------------------------------
+
+  KICK - Ki lehet rugni egy szemelyt X-en keresztul. Az indok opcionalis. A neved ki lesz teve a 
+  kick uzenetbe.
+
+   /msg x kick <#csatorna> <nick> [indok]
+
+  TOPIC - Meg lehet valtoztatni a csatorna topic-jat (maximum 145 karakter hosszu), es a topic 
+  majd fogja tartalmazni a felhasznaloi neved, ami zarojelben lesz a topic elejen. MEGJEGYZES: 
+  Ha a csatornanak van korulirasa (DESCRIPTION), vagy URL-je allitva, az AUTOTOPIC erteke ON, 
+  es a csatorna aktiv, akkor a csatorna topic-ja ujra lesz cserelve minden 30 percben. 
+
+    /msg x topic <#csatorna> <szoveg>
+
+--------------------------------------------------------------------------------
+25-49-es szintu parancsok : Channel Regular (Csatorna Szabalyzo)
+--------------------------------------------------------------------------------
+
+  DEVOICE - Elveszi egy, vagy akar tobb felhasznalonak a beszelgetesi jogat.
+
+    /msg x devoice <#csatorna> [nick] [nick2] ... [nickN]
+
+  VOICE - Beszelgetesi jogot ad egy, vagy akar tobb felhasznalonak is.
+
+    /msg x voice <#csatorna> [nick] [nick2] ... [nickN]
+
+--------------------------------------------------------------------------------
+1-24-es szintu parancsok : Minimum Access (Legkisebb jog)
+--------------------------------------------------------------------------------
+
+  BANLIST - Megmutatja a csatorna banlistajat. A parancs hasznalatahoz nem kotelezo a csatornan 
+  tartozkodj. 
+
+    /msg x banlist <#csatorna>  
+  STATUS - Ugyanazt mutatja mint a 200-as szintu STATUS, csak annyiban kulombozik, hogy a 200-nal 
+  kevesebb joggal rendelkezo felhasznaloknak nem mutatja meg a csatorna modjait (+nt stb.). 
+
+  /msg x status #csatorna
+
+--------------------------------------------------------------------------------
+0-s szinu parancsok : Everyone else (Mindenki mas)
+--------------------------------------------------------------------------------
+
+  ACCESS - Egy adott szemely jogat tudjunk leellenorizni. A valasz magabavonja a szemely access 
+  szintjet, felfuggesztesi helyzetet (ha felvan fuggesztve), es hogy mikor volt bejelentkezve 
+  utoljara. Ha az osszes felhasznalot szeretnenk megtekinteni: /msg x access <#csatorna> * .
+  Ha 15-nel tobb felhasznalo van, akkor menj a http://cservice.undernet.org/live/ -ra, azonositsd
+  magad, utana menj a "Channel Information" linkre, ott megnezheted az osszes felhasznalot.
+  Sok mas parametereket lehet megadni ahhoz, hogy a kulombozo adottsagokkal rendelkezo 
+  felhasznalokat listazza ki.
+
+  * Access opciok:
+
+    usernev - Megmutatja az adott felhasznalonak a jogat.
+       /msg x access <#csatorna> <userev>
+
+    -min <szint> - Egy adott szamnal nagyobb joggal rendelkezo felhasznalokat listazza.
+       /msg x access <#csatorna> -min <szint>
+
+    -max <szint> - Egy adott szamnam kisebb joggal rendelkezo felhasznalokat listazza.
+       /msg x access <#csatorna> -max <szint>
+
+    -op - Azokat a felhasznalokat listazza, akiknek az AUTOMODE ertekuk OP-ra van allitva.
+       /msg x access <#csatorna> -op
+
+    -voice - Azokat a felhasznalokat listazza, akiknek az AUTOMODE ertekuk VOICE-ra van allitva.
+       /msg x access <#csatorna> -voice
+
+    -none - Azokat a felhasznalokat listazza, akiknek nincs semmi rakva az AUTOMODE ertekhez.
+       /msg x access <#csatorna> -none
+
+    -modif - Megmutatja hogy ki modositott utoljara a felhasznaloi listan.
+       /msg x access <#csatorna> -modif
+
+  CHANINFO - Megmutatja hogy regisztralva van-e egy csatorna vagy nem, ki a vezetoje, a csatorna 
+  korulirasat (DESCRIPTION) es az URL-jet (ha van allitva).
+  Masneven: INFO
+
+     /msg x chaninfo <#csatorna>
+     vagy
+     /msg x info <#csatorna>
+
+  HELP - Segitseget kerhetunk le egy adott parancs hasznalatarol.
+
+     /msg x help [parancs]
+
+  INFO - Informaciot ad meg egy adott felhasznalorol, beleertve a nick-je(i)t, meg a user@host-ja(i)t 
+  (ha online van), a nyelvi beallitasokat, hogy lathatatlan-e, vagy sem, mikor volt bejelentkezve 
+  utoljara, es hogy fel van-e fuggesztve egy CService Adminisztrator altal. Ha sajat magadon hasz-
+  nalod a parancsot, megmutatja az email cimedet, utolso nick!user@host-ot, amivel be voltal 
+  jelentkezve, a max logins erteket, es azokat a csatornakat amelyikekre jogod van. (Ezt csak sajat 
+  magad es a CService kepviselok lathatjak). Ha azt akarod, hogy ezek az informaciok ne legyenek 
+  lathatoak a kozonseg szamara, akkor nezd meg az INVISIBLE parancsot (0-s szintu parancs).
+
+    /msg x INFO <usernev>
+
+  LBANLIST - Ki lehet listazni adott banokat X banlistajabol. Ha az egesz listat akarod megnezni, 
+  akkor hasznalj *-ot. Ha pedig egy specialis bant keresel, akkor hasznald a keresendo szemely 
+  *!*user@*.host-jat. 
+
+    /msg x lbanlist <#csatorna> <* | *!*user@*.host>
+
+  LOGIN - A parancs segitsegevel azonositani tudod magad, es igy MINDEN csatornan tudod majd 
+  hasznalni a jogod. Mostantol tobbszor loginolhatsz, tehat nem csak egy felhasznalo azonosithatja
+  magat egy usernev alatt. Ez megkonnyiti azoknak a dolgat, akiknek tobb kliensuk van nyitva, es
+  tobb kapcsolatuk van az IRC serverrel. A MAXLOGINS erteke (lasd a SET MAXLOGINS - 0-s szintu 
+  parancs) hatarozza meg, hogy egyidejuleg hany felhasznalo azonosithatja magat az adott felhasz-
+  naloi nevvel. Amikor valaki azonositja magat a te neveddel, X szolni fog neked az illeto 
+  adatairol, es latni fogod a SUSPENDME parancs formajat is, ha netalan valaki rajott volna a 
+  jelszvadra (lasd SUSPENDME - 0-s szintu parancs).
+
+    /msg x@channels.undernet.org login <usernev> <jelszo>
+
+  MOTD - Meg lehet tekinteni X-nek a napi hireit (Message of the day - MOTD).
+
+    /msg x motd
+
+  NEWPASS - Ez a parancs mar nem aktualis az IRC-n, es csakis a CService oldalon talalhato
+  link segitsegevel cserelhetjuk meg a jelszavat (http://cservice.undernet.org/live/). Ha
+  azonositod magad az oldalon, megtalalod ott a "New Password" linket, es ennek segitsegevel 
+  lehet megvaltoztatni a jelszavakat. Ha elfelejted a jelszavad, vagy mas okokbol nem tudsz 
+  loginolni, lepj a "Forgotten Password" linkre, es ezaltal ujra tudod kerni a jelszavad, amit
+  majd email utjan kapsz meg. Ha tovabbra is problemaid vannak a jelszoval - vagy annak 
+  megvaltoztatasaval -, legy szives menj a #CService csatornara, es kerj segitseget.
+  
+  REMUSER - Ennek a parancsnak a segitsegevel le tudod magad szedni barmelyik csatorna felhasznaloi 
+  listajabol, ha nem te vagy a vezeto, tehat 500-nal kolombozo joggal rendelkezel az illeto 
+  csatornan. A vezetok mas uthoz kell fojamodjanak. (Purge) 
+
+    /msg x remuser <#csatorna> <sajat usereved>
+
+  SEARCH - X kilistazza azokat a csatornakat, amelyek kulcsszava megegyezik a keresett 
+  parametereknek (ha van megadva).
+
+    /msg x search <keresesi parameter>
+
+  SET - Kulonbozo modokat valtoztathatunk meg a felhasznaloi nevunk beallitasan.
+
+    /msg x SET <valtozo> <ertek>
+
+   * Valtozok es Ertekek:
+
+  INVISIBLE - Ez egy sajatos mod, ami lehetove teszi hogy elrejtsd az informaciot, ami a 
+  userneveddel kapcsolatban van.Ezeket az INFO parancsal lehet lekerni. Tobb informaciot errol a 
+  parancsrol az INFO cimszo alatt is talalhatsz.
+
+    /msg x set invisible <on|off>
+
+  LANG - Megvaltoztatja azt a nyelvet, amivel X valaszol.
+
+    /msg x set lang <nyelv kod>
+
+     Jelenlegi nyelvek:
+     Kod - Nyelv
+     · ar - Arab
+     · ca - Katalan
+     · de - Nemet	*
+     · dk - Dan
+     · en - Angol
+     · es - Spanyol
+     · fr - Francia
+     · hu - Magyar
+     · it - Olasz
+     · nl - Flamand	*
+     · no - Norveg
+     · pt - Portugal	*
+     · ro - Roman
+     · tr - Torok
+
+     * = Ezek a nyelvek meg nem hasznalhatok, de tervunkben all hogy tamogassuk oket.
+
+  MAXLOGINS - A parancs hasznalasaval megadhatjuk, hogy azonos idopotban hany felhasznalo azonosit-
+  hatja magat a te felhasznaloi neveddel. Igy tobb klieset is azonositva tarthatsz, akar otthonrol,
+  munkahelyedrol, vagy esetleg az iskolabol vagy. Egy masik lehetoseg, hogy megoszd a jogaidat
+  a sajat botoddal. A parancs akkor is hasznos lehet, mikor kiesunk, es igy utana majd nem fog
+  kelleni megvarjuk, hogy kiessen a bentmaradott nevunk. Az opcio alaperteke 1, es nem veszi 
+  figyelembe, hogy az oldalon azonositottad magad vagy sem.
+
+    /msg x set maxlogins <1-3>
+
+  SHOWCOMMANDS - Megmutat minden parancsot, amit a jogoddal tudsz haszanlni a csatornan. Ha nem 
+  adsz meg semmilyen csatornat, akkor csak a 0-s szintu parancsokat fogja kilistazni. 
+
+    /msg x showcommands [#csatorna]
+
+  SHOWIGNORE - Megmutatja X ignore listajat. X akkor ignore-al valakit ha veletlenul,, vagy talan 
+  szandekosan floodolja. Az idotartam 60 perc. 
+  
+    /msg x showignore
+
+  SUPPORT - A felhasznalok kapnak egy uzenetet, ha azonositjak magukat, es tamogatokent szerepelnek
+  egy csatorna regisztralasahoz. Ennek a parancsnak a segitsegevel tudjak tamogatni, vagy nem 
+  tamogatni az illeto csatorna regisztralasat. Termeszetesen a felhasznalo tamogatokent kell 
+  szerepeljen az illeto csatornan, maskepp ertesitve lesz, hogy nincsen listazva tamogatokent. 
+  Ez csak egy  masodlagos megoldas hogyan tudunk tamogatni egy csatornat. Ezt az eljarast a web
+  segitsegevel is megtehetjuk, ott szavazhatunk, megnezhetjuk a csatorna informaciot, es meg 
+  ha netalan kifogasunk van a csatorna regisztralasaval kapcsolatosan, akkor azt is leirhatjuk oda.
+
+    /msg x support #csatorna <yes|no>
+
+  SUSPENDME - A parancs globalisan felfuggeszti a jogaidat, igy 0 jogod lesz, barmilyen parancsot is
+  probalnal hasznalni utana. Akkor hasznalhatjuk a parancsot, ha egyidejuleg legalabb 2 felhasznalo 
+  azonositva van a te felhasznaloi nevunkel. Ezutan kuldened kell egy levelet az X@undernet.org -ra
+  es kerd a felfuggesztes leszedeset. Ajanlatos ezelott egy uj jelszot lekerni az oldalrol, hogy 
+  miutan levevodik a felfuggesztes, csak te tudd a pontos jelszvat, es senki mas. 
+
+    /msg x@channels.undernet.org suspendme <jelszo>
+
+  VERIFY - Megmutatja, hogy egy adott szemely hivatalos CService kepviselo-e, kimutatja a 
+  felhasznaloi nevet (ha azonositva van), es megmutatja hogyha a szemely IRC Operator. 
+
+    /msg x verify <nick>
+
+--------------------------------------------------------------------------------
+Ez a dokument 2002 Marcius 24-en volt modositva, Ace es Laccc altal. 
+A file az Undernet CService Bizottsag tulajdona.
+Eszreveteleket, otleteket a CService@UnderNet.org E-mailcimre varunk.
+--------------------------------------------------------------------------------

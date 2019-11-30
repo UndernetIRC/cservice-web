@@ -1,0 +1,61 @@
+		Undernet Kanal Servisi
+				   Eposta De�i�tirme Formu
+			      -----------------------------
+
+- L�TFEN BU A�IKLAMALARI OKUYUNUZ!
+- L�tfen formu tamamen doldurunuz, yoksa iste�iniz i�leme al�nmayacakt�r.
+- Bu formu sadece websitesinden, kullan�c� ad�n�zla giri� yapam�yorsan�z (login olam�yorsan�z) ya da kullan�c� ad�n�z i�in ge�erli olan
+  eski epostan�za eri�emiyorsan�z kullan�n�z.
+- E�er eski epostan�z �al���yorsa bu iste�iniz dikkate al�nmayacakt�r.
+
+��FRE DE���T�RME BA�VURUSU
+-E�er �ifrenizi de�i�tirmek istiyorsan�z l�tfen bunu web sitesi arac�l��� ile yap�n�z. http://cservice.undernet.org  adresinde �nce Web Interface
+ yaz�s�na ve sonra Forgotten Password yaz�s�na t�klay�n.
+ Sadece eski epostan�z� kullanam�yorsan�z bu Eposta De�i�tirme Formunu kullan�n�z.
+ Daha �nce s�yledi�imiz gibi, kullan�c� ad�n�za yeni bir eposta adresi sa�lad�ktan sonra, websitesinden �ifrenizi yenileyebilirsiniz.
+
+EPOSTA DE���T�RME BA�VURUSU
+-Kullan�c� ad�n�za, bizde kay�tl� olan, eposta adresinizi de�i�tirmeniz gerekiyorsa http://cservice.undernet.org/live adresine kullan�c�
+ ad�n�zla giri� yap�n ve Forms / Email Change k�sm�na t�klay�n. E�er eski eposta adresiniz kullan�lam�yorsa bu Eposta De�i�tirme
+ Formunu kullan�n.
+ Ayr�ca kullan�c� ad�n�z�n yeni eposta adresi i�in bedava eposta alan adlar�n� L�TFEN KULLANMAYINIZ.
+ 
+DO�RULAMA/SORU CEVAP BA�VURUSU:
+-E�er do�rulama soru/cevap bilginizi de�i�tirmeniz gerekiyorsa http://cservice.undernet.org/live adresinde Forgotten Password k�sm�n� kullan�n.
+ Orda kullan�c� ad�n�z� yaz�n ve gizli cevab�n�zda bir hata yap�n. Do�rulama Soru/Cevap Yenileme Formuna y�nlendirileceksiniz.
+ Formu doldurun ve yollay�n. E�er eski eposta adresinizi kullanam�yorsan�z, bu Eposta De�i�tirme Formunu kullanarak de�i�tirin.
+ De�i�iklik yap�ld�ktan sonra, siteden do�rulama soru/cevap bilginizi yenileyin.
+ 
+- T�M BU FORMU bir epostan�n i�ine (kullan�c� ad�n�z�n yeni eposta adresine) KOPYALAYIN VE YAPI�TIRIN ve bu adrese yollay�n:
+        X@undernet.org 
+        
+- Yeniden ba�vuru yapmadan �nce, de�i�ikli�in tamamlanmas� i�in 3-5 g�n bekleyin.
+
+                  -------------------------------
+
+L�tfen gerekli bilgileri girin:
+
+a. Kullan�c� Ad� (Takma ad de�il): 
+
+b. Eski Eposta Adresi: 
+
+c. Yeni Eposta Adresi: 
+      
+d. - Do�rulama Soru Cevab�: 
+     (Bu kullan�c� ad�n�z� al�rken se�ti�iniz a�a��daki sorulardan birinin
+      cevab�d�r)
+   
+   - L�tfen daha �nce cevaplamay� se�ti�iniz soruyu belirtin.
+      a) What's your mother's maiden name?
+      b) What's your dog's (or cat's) name?
+      c) What's your father's birthdate?
+       
+
+e. Kullan�c� ad�n�z�n eri�imli oldu�u kanallar:
+
+Yorum (gerekliyse):
+
+------------------------------
+Do�rulama Eposta De�i�tirme Formu
+Undernet Kanal Servisi
+s�r�m 10042002

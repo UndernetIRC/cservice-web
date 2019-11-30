@@ -1,0 +1,659 @@
+*--------------------------------------------------------------------------------*  
+
+Comité de Servicio para Canales en Undernet
+CMaster Lista de comandos  
+Actualizado: 28 de Noviembre del 2005
+
+*--------------------------------------------------------------------------------*  
+NOTAS con respecto a las SINTAXIS y PARÁMETROS: 
+            
+*  Los parámetros adjuntados en <>'s son obligatorios. 
+                              
+*  Los parámetros adjuntados en []'s son opcionales. 
+                             
+*  El x|y significa x o y.  
+                    
+*  <nick> se refiere al apodo de una persona en el IRC. 
+                     
+*  <username> se refiere a la cuenta username de una persona como aparece 
+   en la lista de usuarios registrada en CService; para no ser confundido 
+   con el <nick>. Para más información sobre el username y cómo determinar 
+   el username de una persona, refiérase a los comandos INFO y VERIFY 
+   (Nivel 0). 
+                   
+* Todos los comandos mostrados con el campo del <username> pueden también 
+   trabajarse especificando el nickname del usuario en el IRC si ellos 
+   están online, poniendo al frente de su nickname un signo de igual (=).  
+                                
+   Por ejemplo, considere a una persona con el nickname ^Prueba^ y el 
+   username Prueba2k3. El comando de ACCESS puede realizarse en este 
+   usuario en cualquier a de estos 2 métodos.
+                        
+       /msg x access <#canal> Prueba2k3
+       /msg x access <#canal> ^Prueba^
+         
+   El método 1 pregunta diréctamente a X si el username Prueba2k3 está o 
+   no en la lista de usuarios. 
+   El método 2 hace que X busque el username de ^Prueba^ si está autenticado, 
+   y si está autentificado le mostrará el nivel de access de la cuenta del 
+   username Prueba2k3.
+   Esto puede realizarse con cualquier comando que requiera un <username>, 
+   pero sólo trabajará si el usuario está autentificado, por otra parte X 
+   contestará con un "No hay coincidencias!" o su equivalente. 
+              
+*  <patrón> se refiere a cualquier búsqueda de cadenas utilizando comodines 
+   (* y ?). Las cadenas de *!*userid@host es un ejemplo de patrones de 
+   comodines.
+                 
+   Por ejemplo, los dos comandos, tanto el ACCESS como el LBANLIST aceptan 
+   <el patrón>:
+                
+       /msg x access <#canal> ?irc*
+       /msg x lbanlist <#canal> *.users.undernet.org
+            
+   El comando ACCESS mostrará cualquier username en el canal que coincida con 
+   la cadena del comodín ?irc*.
+   El comando de LBANLIST mostrará todos los bans de los usuarios con el 
+   host virtual de Undernet (el modo +x del usuario)
+      
+--------------------------------------------------------------------------------                      
+NOTA: Modos Especiales de Canales
+--------------------------------------------------------------------------------                      
+                                                  
+   Undernet ha puesto dos nuevos modos en ejecución (un modo del canal, y un 
+   modo del usuario) que se relacionan directamente con el sistema de la cuenta 
+   del username de CService. 
+                                       
+*  +r es un modo del canal que restringe el canal a permitir "usuarios 
+   registrados solamente", significando esto que solo los usuarios que tengan 
+   registrados su cuenta de username con CService y que estén logueados con X 
+   puede entrar a ese canal. 
+                           
+*  +x es un modo del usuario que permite un "Hostmask virtual de Undernet", que 
+   enmascarará o esconderá su dirección verdadera de host/IP con el 
+   users.undernet.org. Otros usuarios verán este hostmask virtual en vez de su 
+   dirección real de host/IP.  Sin embargo, los CService Admin y los IRC Ops 
+   pueden ver a través del modo +x, al igual que con X. Por supuesto, usted 
+   podrá siempre ver su host/IP verdadero. A diferencia del hostmask virtual 
+   que otros servidores del IRC usan, el de Undernet no puede quitarse, el 
+   usuario debe desconectarse de Undernet para desabilitarlo.
+                                                
+--------------------------------------------------------------------------------                      
+NOTA para los SCRIPTERS: 
+--------------------------------------------------------------------------------  
+
+* El script de IRC debe siempre utilizar /msg x@channels.undernet.org para 
+   todos los comandos, no solo LOGIN, asegúrese que el comando sea enviado 
+   a X en el evento, o antes del cambio de nick para X, u otras circunstancias 
+   imprevistas que podrían que su script sea temporalmente inutilizable.
+
+                         
+--------------------------------------------------------------------------------  
+NIVEL 500 Commandos: Gerente del canal
+--------------------------------------------------------------------------------  
+         
+  PART - Hace que X salga del canal. Para hacer que X permanezca fuera del 
+  canal, o refiérase al SET AUTOJOIN.
+      
+       /msg x part <#canal>
+          
+  SET - Fija las flags para su canal. Flags son las opciones especiales 
+  que le dicen a X como comportarse en ciertas condiciones.
+
+       /msg x set <#canal> <autojoin|massdeoppro|noop|strictop> <valor>
+
+  AUTOJOIN - Cuando la opción está ON, hace que X siempre entre a su 
+  canal. (ejemplo: después de un mantenimiento o Netsplit). Cuando está 
+  OFF,  hará a X salir si está en el canal, y no regresará después de 
+  un Netsplit. 
+
+       /msg x set <#canal> autojoin <on|off>
+
+  MASSDEOPPRO - Número máximo de deops que X permite a un usuario (vea 
+  la nota) en un periodo de 15 segundos. Cualquier usuario que sobrepase 
+  el límite será suspendido (si tiene access) por 5 minutos y tendrá un 
+  ban nivel 25 para impedir que tenga op y necesitará enviar el comando 
+  unban después que expire la suspensión.
+  Al poner el Massdeopro, el valor puede ser desde 1, que es el más 
+  sensible, hasta 7, el cual es menos sensible. Un valor de 0 desactiva 
+  la función.
+
+  NOTA: La versión actual de MASSDEOPPRO comprueba solamente cuando los 
+  usuarios realizan deops con el comando de /mode, no con el comando de 
+  DEOP con X.
+
+       /msg x set <#canal> massdeoppro <0-7>
+
+  NOOP - Esto significa que nadie puede ser un operador del canal excepto 
+  X. Esto no significa que usted no pueda ejecutar comandos con la X en 
+  el canal. Si usted se autentifica, usted puede ejecutar comandos como 
+  el KICK, BAN, a través de X, solo que usted no puede subir a op. 
+
+       /msg x set <#canal> noop <on|off>
+
+  STRICTOP - Este comando permite a usuarios de nivel 100+ que están 
+  autentificados subir a op. 
+
+       /msg x set <#canal> strictop <on|off>
+
+
+--------------------------------------------------------------------------------  
+NIVEL 450+ (Administrador Confiado del canal)
+--------------------------------------------------------------------------------  
+
+  JOIN - Hace que X entre a su canal. Para hacer que la X entre siempre 
+  automáticamente a su canal refiérase al SET AUTOJOIN.
+
+       /msg x join <#canal>
+
+  SET - Fija las flags para su canal. Flags son las opciones especiales 
+  que le dicen a X como comportarse en ciertas condiciones.
+
+       /msg x set <#canal> <flag> <valor>
+
+    * Flags y Valores:
+
+    AUTOTOPIC - Esta opción hace que X restablezca el tópico del canal 
+    cada 30 minutos con el texto fijado en la URL y DESCRIPTION. Note 
+    que si el canal está inactivo, el tópico no se restablecerá en ese
+    tiempo. 
+
+        /msg x set <#canal> autotopic <on|off>
+
+    DESCRIPTION - Establece el tópico del canal predeterminado (máximo 
+    80 caracteres). Este tópico se utiliza sólo cuando AUTOTOPIC está ON. 
+    El comando puede verse con el comando CHANINFO (Nivel 0), o logueándose 
+    en la página de CService. Si ningún texto se especifica en la descripción, 
+    la descripción actual se remueve. 
+    Alias: DESC
+
+        /msg x set <#canal> description [texto]
+        /msg x set <#canal> desc [texto]
+
+    FLOATLIM - Activa o desactiva la opción del Límite-Flotante(floatlim). Si está 
+    activada, X restablecerá el límite del canal (modo de canal +l) con un número 
+    predeterminado por encima del número actual de usuarios en el canal, 
+    y con un número predeterminado de tiempo. Esta opción evita las 
+    entradas masivas al canal, evitando inundaciones a éste. Esta opción 
+    se encuentra desactivada, si se activa se mostrarán los modos en la 
+    línea de "flags set" al enviar el comando STATUS.
+ 
+    Por ejemplo: 
+    "Flags set: FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)"
+    En este ejemplo, FLOATLIM esta ON, con un FLOATMARGIN de 3, un 
+    FLOATPERIOD de 20 segundos, un FLOATGRACE de 1, y un FLOATMAX en OFF.
+                            
+    Refiérase a los comandos SET FLOATGRACE, SET FLOATMARGIN, SET FLOATMAX 
+    y SET FLOATPERIOD para más información.
+
+        /msg x set <#canal> floatlim <on|off>
+
+    FLOATGRACE - Fija un valor de tolerancia para el Límite-Flotante del canal. Si la 
+    diferencia  entre el límite actual y lo que el límite nuevo será, es menor que el 
+    valor tolerante, X no reajustará el límite, para no dejar en desorden canales 
+    reservados con los cambios de modo.   Este valor puede estar entre 0-19.  
+    El valor prefijado es 1.
+
+        /msg x set <#canal> floatgrace <0-19>
+
+    FLOATMARGIN - Fija el margen de usuarios para el Límite-Flotante. El límite que X 
+    restablecerá será: el número de usuario en el canal + el fijado en el FLOATMARGIN. 
+    Este número puede ser entre 2-20. El valor predeterminado es 3. 
+
+        /msg x set <#canal> floatmargin <2-20>
+
+    FLOATMAX - Fija un límite máximo para el ajuste del Límite-Flotante. 
+    Cuando está activado X no reajustará el límite del canal mayor que el de FLOATMAX. 
+    Este valor puede ser desde 0-65536. El valor por defecto es 0 (off).
+
+        /msg x set <#canal> floatmax <0-65536>  
+
+    FLOATPERIOD - Fija el periodo de tiempos en segundos, antes de que X
+    restablezca el límite del canal. El valor debe ser entre 20-200. El valor 
+    predeterminado es de 20 segundos. 
+
+        /msg x set <#canal> floatperiod <20-200>
+
+    KEYWORDS - Establece palabras claves para el canal. X usa estas palabras 
+    claves cuando un usuario envía el comando SEARCH (Nivel 0). 
+    Si no se especifica nada al enviar el comando, los valores actuales 
+    serán removidos. La extensión máxima de largo de palabras claves son 
+    80 caracteres. 
+
+        /msg x set <#canal> keywords [texto]
+
+    MODE - Este comando guardará los modos actuales del canal. Cuando X
+    entre a un canal, restablecerá aquellos modos si es que no están puestos 
+    en ese momento. 
+
+        /msg x set <#canal> mode
+
+    URL - Usted puede anunciar la URL(s) de la página web de su canal con 
+    esta opción (máximo de 75 caracteres).  La URL pueden ser vista al enviar
+    el comando CHANINFO o logueándose en la página de cservice
+    http://cservice.undernet.org/live/ y luego de clic en "Channel Information" e 
+    ingrese el nombre del canal. Si al enviar el comando la URL no se especifica, 
+    la actual URL se remueve.
+
+        /msg x set <#canal> url [url(s)]
+
+    USERFLAGS - Fija por defecto el AUTOMODE cuando un nuevo usuario se 
+    agrega a la lista de usuarios (userlist). El valor por defecto es 0.
+    0 (Ninguno). 
+        
+    Valores: 
+
+    0 = No AutoMode puesto para todos los usuarios agregados.
+    1 = Op AutoMode para todos los usuarios agregados. 
+    2 = Voice AutoMode para todos los usuarios agregados. 
+
+        /msg x set <#canal> userflags <0-2>
+
+    Refiérarse al comando MODINFO AUTOMODE para más información.
+
+--------------------------------------------------------------------------------  
+NIVEL 400+  (Administrador de la Lista de Usuarios)
+--------------------------------------------------------------------------------  
+
+  ADDUSER - Agrega a un usuario a la lista de usuarios del canal. 
+  Usted no puede AGREGAR a alguien con acceso igual o más 
+  alto que el suyo.
+
+       /msg x adduser <#canal> <username> <access> 
+
+  CLEARMODE - Este comando limpia todos los modos del canal. Puede ser 
+  usado cuando su canal ha sido cerrado (puesto en +i, +l o en +k). 
+
+  NOTA: Este comando necesariamente no es el mejor método para ganar la 
+  entrada a su canal, porque otros usuarios o bots pueden tener fijados 
+  el modo de operador en el canal y pueden restablecer los modos cuando 
+  usted los limpia. Refiérase al comando de STATUS para la 
+  información relacionada. 
+
+       /msg x clearmode <#canal>
+
+  MODINFO - Los comandos siguientes pueden usarse para hacer cambios a 
+  los usuarios existentes en la lista de usuarios de su canal. Usted no puede  
+  modificar a alguien con un nivel igual o más alto que el suyo.
+
+       /msg x modinfo <#canal> <access|automode> <username> <valor>
+
+  ACCESS - Cambia el nivel de acceso de un usuario. El nivel de acceso 
+  puede fijarse entre 1 y uno menos de su propio nivel (ejemplo: si usted tiene un 
+  nivel de acceso de 400, el máximo nivel que usted puede asignar es un 
+  nivel de 399 a otros usuarios).
+
+       /msg x modinfo <#canal> access <username> <nuevo nivel de acceso> 
+
+  AUTOMODE - Cambia el automode de un usuario a uno de los modos 
+  especificados: NONE, OP, o VOICE. De acuerdo a esta fijación, X dará Op 
+  o Voice cuando un usuario autentificado entre al canal, o si el usuario 
+  está ya en el canal, el automode ocurrirá una vez que el usuario se 
+  autentifique con X. 
+
+       /msg x modinfo <#canal> automode <username> <none|op|voice>
+
+  REMUSER - Remueve a un usuario de la base de datos del canal. Usted 
+  debe tener acceso más alto que el usuario que usted quiere remover. 
+  Usted también puede removerse de cualquier canal, con tal de que usted 
+  no sea el Gerente del Canal (nivel 500 de acceso en ese canal).  Los Gerentes
+  (Managers) de canales que desean removerse necesitarán purgar su canal, 
+  o transferir el canal a otro usuario.
+
+       /msg x remuser <#canal> <username>
+
+--------------------------------------------------------------------------------  
+NIVEL 200+ (Lista de usuarios de Op)
+--------------------------------------------------------------------------------  
+
+  KICK - Hace a X patear a todos los usuarios que coincidan con el 
+  *!*userid@host mask especificado, pero no patea a la persona que 
+  envía el comando si ellos también coinciden. Su uso debe limitarse 
+  extremadamente a un canal que ha sido inundado(flooding) o a clones. 
+  Usted puede querer poner un ban en la máscara, o activar el modo +i (modo 
+  de invite only) en el canal antes de enviar el pateo para prevenir que 
+  los usuarios pateados regresen al canal. Su username aparecerá en el
+  mensaje del kick cerrado entre paréntesis.
+
+       /msg x kick <#canal> <nick | *!*userid@host> [razón]
+
+  STATUS - Muestra todas las opciones especiales, modos del canal, el 
+  número de usuarios y ops en el canal, usuarios actualmente 
+  autentificados en el canal y si X está en el canal o no. Se muestran 
+  los usuarios actualmente autentificados en un formato: 
+  "username/nickname (nivel)". El nickname de los usuarios sólo se 
+  mostrarán si el usuario está actualmente en el canal, por otra parte 
+  se despliegan sólo su username y nivel. 
+                   
+  La habilidad de ver los modos del canal es sumamente útil en 
+  caso de que el canal esté cerrado (modos de canales +i, +l o +k). 
+  Si el canal tiene una llave (+k), X le mostrará la llave actual del canal.
+  Usted puede utilizar el comando de la INVITE para hacer que X le invite 
+  al canal, eliminando todos los modos actuales del canal, o alternativamente, 
+  usted puede utilizar el comando de CLEARMODE para limpiar todos los 
+  modos del canal, y después entra al canal.
+
+       /msg x status <#canal>
+
+--------------------------------------------------------------------------------  
+NIVEL 100+ (Operador del Canal)
+--------------------------------------------------------------------------------  
+
+  DEOP - Le quita el op a uno o más usuarios en su canal. Si ningún nick 
+  se especifica, y usted es op en el canal, X le quita el op a usted. 
+
+       /msg x deop <#canal> [nick] [nick2] ... [nickN]
+
+  OP - Le da Op a uno o más usuarios en su canal. Si ningún nick se 
+  especifica, y usted no tiene op en el canal, X le da op a usted. 
+
+       /msg x op <#canal> [nick] [nick2] ... [nickN]
+
+  INVITE - Hace que X lo invite al canal. Permitiéndole que usted logre 
+  entrar sin importar los modos actuales del canal.
+
+       /msg x invite <#canal>
+
+  SUSPEND - Suspende el acceso de un usuario de la lista de usuarios con 
+  X de su canal por el periodo especificado de tiempo al nivel 
+  especificado. Si el nivel no se especifica, X usará y pondrá su nivel de acceso. 
+  Usted solamente puede suspender a alguien con acceso menor al suyo. 
+  La máxima duración es 372 días (8928 horas, 535680 minutos). 
+
+  Los Valores de Tiempo:  
+        M = minutos 
+        H = horas
+        D = días 
+
+       /msg x suspend <#canal> <username> <duración> <M|H|D> [nivel]
+
+  UNSUSPEND - Des-suspende el acceso de un usuario a X en la lista de 
+  usuarios de su canal. Usted solamente puede des-suspender a alguien con 
+  acceso menor al suyo, con tal de que el nivel de la suspensión también es 
+ menor o igual a su propio nivel de acceso.
+
+      /msg x unsuspend <#canal> <username>
+
+--------------------------------------------------------------------------------  
+NIVEL 75+ (Nuevo Operador del Canal)
+--------------------------------------------------------------------------------  
+
+  BAN - Agrega un *!*userid@host específico a la lista de ban de X de su 
+  canal. Si el usuario esta online, usted puede poner el ban al nick, y 
+  X automáticamente baneará el  *!*userid@host de ese usuario. 
+                
+  Los banes que cubren un rango más amplio que los banes que previamente 
+  han sido fijados, reemplazarán estos previos banes. Cualquier usuario en el 
+  canal que coincida a un ban determinado será pateado del canal si el nivel 
+  de este ban es de 75+. La duración es en horas, con un máximo de 336 
+  horas (2 semanas). El nivel del ban puede ser de 1 a su propio nivel. 
+  La razón del ban puede ser de un máximo de 128 caracteres de largo. 
+  Si ninguna duración se especifica, el valor predeterminado será de 3 horas 
+  y el nivel de 75. 
+
+  NOTA: Si el usuario baneado tiene el "hostmask virtual" de Undernet 
+  (el modo +x del usuario) fijado, X puede ver a través de el su host actual,  
+  y banear su username vía *!*@*username. * y también prohibirá su host actual.
+
+      *Niveles de Ban: 
+                                 1-74  le impide al usuario tener ops (+o) en el canal.
+                                 75-500   le impide al usuario entrar en absoluto en el canal.
+
+       /msg x ban <#canal> <nick | *!*userid@host> [duración] [nivel] [razón]
+
+  UNBAN - Remueve un ban con X de la lista de ban de su canal y 
+  cualquiera que también coincida con el ban de la lista de ban del canal. 
+  Usted puede remover sólo banes de la lista de ban con X si el nivel del 
+  ban es igual a menor a su propio acceso. Para investigar la lista de 
+  ban con la X (como está puesto el ban), refiérase al comando de LBANLIST. 
+  Para ver la lista actual de ban del canal, refiérase al comando de BANLIST.
+
+      /msg x unban <#canal> <nick | *!*userid@host>
+
+--------------------------------------------------------------------------------  
+NIVEL 50+ (Confiado Regular del Canal)
+--------------------------------------------------------------------------------  
+
+  KICK - Hace a X dar kick a alguien de su canal. Su username aparecerá 
+  en el mensaje del kick cerrado entre paréntesis.
+
+       /msg x kick <#canal> <nick> [razón]
+
+  TOPIC - Hace a X cambiar el tópico en su canal (máximo de 145 caracteres) 
+  e incluye su username, puesto entre paréntesis, al principio del tópico. 
+
+  NOTA: Si la DESCRIPTION o URL han sido fijados y AUTOTOPIC está ON, el 
+  tópico del canal será reajustado cada 30 minutos, a menos que el canal esté 
+  inactivo. 
+
+       /msg x topic <#canal> <tópico>
+
+--------------------------------------------------------------------------------  
+NIVEL 25+ (Regular en el Canal)
+--------------------------------------------------------------------------------  
+
+  DEVOICE - Quita voz a uno o más usuarios en el canal. 
+
+       /msg x devoice <#canal> [nick] [nick2] ... [nickN]
+
+  VOICE - Pone voz a uno o más usuarios en el canal. 
+
+       /msg x voice <#canal> [nick] [nick2] ... [nickN]
+
+--------------------------------------------------------------------------------  
+NIVEL 1+ (Acceso Mínimo)
+--------------------------------------------------------------------------------  
+
+  BANLIST - Muestra la lista de bans del canal.
+
+       /msg x banlist <#canal>
+
+  REMUSER - A este nivel, y al anterior, usted puede removerse de 
+  cualquier canal, con tal de que usted no sea el Gerente del Canal (500 
+  de nivel de acceso en ese canal). Los Gerentes de Canales que deseen 
+  removerse deben purgar su canal o transferirlo a otro usuario.
+
+       /msg x remuser <#canal> <su username>
+
+  STATUS - Este comando despliega todos los flags fijados, el número de 
+  usuarios y operadores en el canal, los actuales usuarios autentificados 
+  en el canal y si la X esta en el canal o no. Se muestran los usuarios 
+  actualmente autentificados en un formato: "username/nickname (nivel)". 
+  El nickname de los usuarios sólo se mostrarán si el usuario está 
+  actualmente en el canal, por otra parte se despliegan sólo su username 
+  y nivel. 
+
+       /msg x status <#canal>
+
+--------------------------------------------------------------------------------  
+NIVEL 0 (Todos los demás)
+--------------------------------------------------------------------------------  
+
+  ACCESS - Puede ver el acceso de cierta persona por medio de su nick o 
+  username o múltiples usuarios por medio del patrón del comodín. 
+  La información indica: el nivel de access, el automode fijado, 
+  estado y nivel de la suspensión si está suspendido, y cuando vieron al usuario 
+  por última vez. Si hay más de 15 resultados, usted debe entrar a la página 
+  http://cservice.undernet.org/live/ y loguearse para ver la entera lista y hacer clic 
+  en "Channel information", luego escriba el nombre del canal. y buscar en la lista de acceso. 
+            
+  Usted también puede usar y puede combinar estas opciones para conseguir 
+  resultados específicos. 
+         
+        /msg x access <#canal> <*|patrón|username|=nickname> [-min <nivel>] 
+      [-max <nivel>] [-modif] [-none|-voice|-op]
+         
+  Opciones:
+         
+     * - Le muestra la lista completa de access del canal.
+        /msg x access <#canal> *
+
+     patrón - Le nuestra el nivel de acceso de todos los username  que 
+                      coincidan con el patrón del comodín.
+        /msg x access <#canal> <patrón>
+
+     username - muestra el nivel de acceso de un solo usuario. 
+        /msg x access <#canal> <username>
+ 
+      =nickname - muestra el nivel de access de un usuario por medio de su 
+                               nickname.
+        /msg x access <#canal> <=nickname>
+
+      -min <nivel> - muestra solamente los usuarios sobre el nivel dado. 
+         /msg x access <#canal> -min <nivel>
+
+      -max <nivel> - muestra solamente los usuarios debajo del nivel dado. 
+        /msg x access <#canal> -max <nivel>
+
+      -op - muestra solamente los usuarios con el OP fijado en AUTOMODE. 
+        /msg x access <#canal> -op
+
+      -voice - muestra solamente usuarios con la VOZ fijada en AUTOMODE. 
+        /msg x access <#canal> -voice
+
+     -none - muestra solamente los usuarios que no tienen fijados AUTOMODE (Ninguno). 
+       /msg x access <#canal> -none
+
+      -modif - muestra quién fue el último en modificar la lista de acceso. 
+        /msg x access <#canal> -modif
+
+  CHANINFO - Le muestra información de si un canal es o no registrado, 
+  quien es el dueño, y la DESCRIPTION y URL, si está actualmente fijada. 
+  Alias: INFO
+
+        /msg x chaninfo <#canal>
+        /msg x info <#canal>
+
+  HELP - Le muestra información de ayuda sobre un comando especificado. 
+
+        /msg x help [comando]
+
+  INFO - Le muestra información sobre un username, tal y como su nick y 
+  userid@host están visibles, además, su lenguaje y configuración invisible. 
+  Su última información vista y si fueron suspendidos por un administrador 
+  de CService. Si envía el comando para usted, le muestra su dirección del correo 
+  electrónico registrado, la última máscara del host (el formato nick!userid@host) 
+  usado, cuando el username fue logueado, su fijación de maxlogins, y le 
+  enumera todos los canales que usted tiene acceso (solamente CService y 
+  usted podrán ver su información, otro usuario no podrá verla). Si usted 
+  desea que ésta información sea escondida al público, refiérase al comando 
+  SET INVISIBLE. 
+
+        /msg x INFO <username>
+
+  ISREG - Verifica si un canal esta registrado o no.
+
+        /msg x isreg <#canal>
+
+  LBANLIST - Investiga la lista de ban con la X para cierta cadena de 
+  usuarios. Use * para ver la lista entera, o especifique un patrón de 
+  comodín para encontrar un ban específico. Si hay más de 15 entradas 
+  entre a la página http://cservice.undernet.org/live/ y haga su login, 
+  luego de clic en "Channel information" y escriba el nombre del canal.
+
+        /msg x lbanlist <#canal> <patrón>
+
+  LOGIN - Esto carga su listado de acceso en la memoria de X y lo 
+  autentifica en todos los canales que usted tiene acceso. 
+  Recuerda:  Nadie de cservice va a preguntarle por su password! 
+  NO le de su password a nadie que diga que reclame que es de cservice!
+
+        /msg x@channels.undernet.org login <username> <contraseña>
+
+  MOTD - Despliega el mensaje del día de la X. 
+
+        /msg x motd
+
+  SEARCH - Hace a X listar cualquier canal registrado que tengan fijadas 
+  las palabras claves especificadas. El uso de comodines no se 
+  requiere. Un máximo de 10 resultado le serán mostrados. 
+
+        /msg x search <palabra clave>
+
+  SET - Cambios de modos especiales para su username.
+
+        /msg x set <invisible|lang> <valor>
+
+      INVISIBLE - Activa la opción de visibilidad de la información de 
+      su username. Cuando la fijación está en ON, otros usuarios no
+      podrán ver si usted está  en línea(conectado) ni ver nada
+      de la información de su username usando el comando INFO. 
+
+        /msg x set invisible <on|off>
+
+     NOADDUSER -  Esta es otra fijación personal. Cuando la opción 
+     está ON, hace que X no permita que su username sea agregado a 
+     otro canal sin su autorización. 
+
+        /msg x set NOADDUSER <on|off>
+
+     LANG - Cambios del idioma para X contestarle a usted. 
+
+        /msg x set lang <código del lenguaje>
+
+     Lenguajes Disponibles:
+     Código   -    Idioma  
+     · ar    -    Arabic
+     · ca    -    Catalán
+     · ch    -    Christmas
+     · de    -    Alemán   
+     · dk    -    Dinamarqués
+     · ea    -    Easter 
+     · en    -    Inglés
+     · es    -    Español
+     · fr    -    Francés
+     · gr    -    Griego
+     · ha    -    Halloween 
+     · hu    -    Húngaro
+     · it    -    Italiano
+     · mk    -    Macedonian
+     · nl    -    Holandés  
+     · no    -    Noruego
+     · pt    -    Portugués 
+     · ro    -    Romano
+     · sv    -    Svenska
+     · tr    -    Turco
+
+  SHOWCOMMANDS - Muestra todos los comandos que usted puede usar en un 
+  canal, según su nivel de acceso. Si ningún canal se especifica, entonces sólo 
+  los comandos nivel 0 se muestran. 
+
+        /msg x showcommands [#canal]
+
+  SHOWIGNORE - Muestra la lista de ignorados por X. Si alguien 
+  intencionalmente o accidentalmente floodea a X, automáticamente X fijará 
+  1 hora en la cual ignorará al usuario que envia el flood. 
+                
+  NOTA: X no le contestará si usted ha sido ignorado. Si usted no recibe 
+  respuestas de X, pregunte a un amigo para que verifique en la lista de 
+  ignore si usted ha sido ignorado por la X.
+
+        /msg x showignore
+
+  SUPPORT - Un método alternado que le permite confirmar o negar el apoyo 
+  por un canal si en la aplicación usted se lista como un apoyador. Al 
+  autentificarse, X le notificará de cualquier aplicación del canal que 
+  usted se lista como un apoyador y también lo notificará de este comando 
+  de SUPPORT. Alternativamente, usted puede escoger ver la aplicación en 
+  la página de CService y observar más información sobre el, poner una 
+  objeción, o confirmar o negar su apoyo desde allí. El comando no será eficáz 
+  si usted no aparece listado en un canal como un apoyador, o un canal no 
+  tenga una aplicación pendiente en la página de CService. 
+
+        /msg x support <#canal> <yes|no>
+
+  VERIFY - Muestra si una persona está logueada o no, y en ese caso, 
+  muestra su username, y también indica si es o no es Administrador de 
+  CService Oficial o Representante, Developer, o Operador de IRC. 
+
+        /msg x verify <nick>
+                  
+*--------------------------------------------------------------------------------*  
+  Este documento se actualizó en inglés el 26 de Agosto del 2003 por Ace
+  Actualizado y traducido al español el 28 de Noviembre del 2005 por veroushka.
+  Este archivo es mantenido por el Comité de CService de Undernet 
+  E-mail cservice@undernet.org con cualquier sugerencia o comentarios
+  Página de CService: http://cservice.undernet.org
+  Página de Undernet: http://www.undernet.org
+*---------------------------------------------------------------------------------*
+

@@ -1,0 +1,555 @@
+--------------------------------------------------------------------------------
+
+                        Undernet Channel Service Committee
+                              CMaster Command List
+                             Aktualisiert: 28. Maerz 2002
+
+--------------------------------------------------------------------------------
+
+Bitte beachten:
+* Parameter die in spitzen Klammern stehen (<>) sind IMMER anzugeben.
+* Parameter die in eckigen Klammern stehen ([]) sind optional.
+* x|y steht fuer x ODER y
+* <nick> wird durch den Namen einer Person ersetzt mit dem die betreffende Person Online ist.
+* <username> (<Nutzername>) wird durch den Nutzernamen ersetzt wie er in der Userliste aufgefuehrt ist; dies sollte man
+  nicht mit <nick> verwechseln. Fuer weitere Informationen bezueglich Benuetzernamen und wie man diese 
+  feststellen kann, lest bitte unter den VERIFY und INFO Befehlen weiter (level 0).
+* Alle Befehle die mit <Nutzername> aufgefuehrt sind, funktionieren auch indem man dem Nickname
+  eines Nutzers ein Gleichheitszeichen (=) voranstellt.
+  Als Beispiel: Es ist eine Person mit dem Nicknamen ^[Test]^ und dem Benuetzernamen Test online.
+  Der ACCESS Befehl auf diesen Benuetzer kann auf zwei Arten angewandt werden:
+  1. /msg x access <#channel> Test
+  oder
+  2. /msg x access <#channel> =^[Test]^
+  Die erste Methode fragt bei X direkt ab , ob der Benuetzername Test in der Benutzerliste des angegebenen
+  Channels enthalten ist.
+  Die zweite Methode veranlasst X nachzusehen welchen Benuetzernamen ^[Test]^ hat sofern er angemeldet ist.
+  Diese Methode kann bei allen Befehlen verwendet werden die den Benuetzernamen erfordern, aber es funktioniert
+  nur dann wenn der Benuetzer sich autentifiziert hat, andernfalls wird "No Match" oder aehnliches ausgegeben.
+
+--------------------------------------------------------------------------------
+LEVEL 500 Commands : Channel Manager
+--------------------------------------------------------------------------------
+
+  PART -  Veranlasst X den Channel zu verlassen.
+
+    /msg x part <#channel>
+
+  SET - Aendert verschiedene Einstellungen des Channels bei X .
+
+    /msg x set <#channel> <variable> <wert>
+
+   * Variablen und Werte:
+
+   AUTOJOIN - wenn als Einstellung ON gewaehlt wurde, wird X veranlasst den Channel immer aufzusuchen.
+   Wenn die Einstellung OFF gewaehlt wurde, verlaesst X den Channel und kommt auch nach Netsplits
+   nicht automatisch wieder in den Channel.
+  
+     /msg x set <#channel> autojoin <on|off>
+
+   MASSDEOPPRO - Gibt die maximal zulaessige Anzahl von deops innerhalb einer 15 sekuendigen Zeitspanne an.
+   Jeder der mehr OPs innerhalb dieser Zeit deopt wird gekickt, suspendiert (wenn in der Benuetzerliste) und
+   ein Ban des Levels 25 wird ueber denjenigen verhaengt um zu verhindern das sie sich wieder oppen koennen.
+   Die Suspendierung und der Ban werden nach 5 Minuten wieder aufgehoben. Wird die Option MASSDEOPPRO verwendet,
+   kann mit Werten zwischen 1 und 7 die Empfindlichkeit eingestellt werden, wobei 1 die schaerfste und 7 die
+   schwaechste Stufe sind. Mit dem Wert 0 wird die Option abgeschaltet.
+
+     /msg x set <#channel> massdeoppro <0-7>
+
+   NOOP - Wird diese Funktion aktiviert kann nur X OP erlangen. Das bedeutet nicht das man keine Kontrolle
+   ueber den Channel oder X hat. Ist man autentifiziert, kann man Befehle wie KICK, BAN, usw. ueber X ausfuehren,
+   es ist jedoch nicht moeglich sich zu oppen.
+
+     /msg x set <#channel> noop <on|off>
+
+   STRICTOP - Wird diese Einstellung verwendet ist es nur angemeldeten (autentifizierten) Nutzern mit einem 
+   Level von 100 oder mehr moeglich sich via X zu oppen.
+
+     /msg x set <#channel> strictop <on|off>
+
+--------------------------------------------------------------------------------
+LEVELS 450-499 : Trusted Channel Admin.
+--------------------------------------------------------------------------------
+
+  SET - Aendert verschiedene Einstellungen des Channels bei X .
+
+     /msg x set <#channel> <variable> <wert>
+
+   * Variablen und Werte:
+
+   AUTOTOPIC - Diese Option veranlasst X das Channel topic (Ueberschrift, Thema) alle 30 Minuten auf den 
+   wert zurueckzustellen, der in DESCRIPTION und URL gesetzt wurde. Ist im Channel keine Aktivitaet zu verzeichnen,
+   wird das topic nicht zurueckgesetzt.
+
+     /msg x set <#channel> autotopic <on|off>
+
+   DESCRIPTION - Setzt das Standard Channel topic (maximal 80 Zeichen). Diese Einstellung beeinflusst das
+   aktuell gesetzte Topic nicht, solange nicht AUTOTOPIC auf ON gesetzt ist. Der aktuelle Wert von DESCRIPTION 
+   wird angezeigt wenn man den CHANINFO Befehl (level0) anwendet. Wird der Befehl ohne Text ausgefuehrt
+   wird der aktuell gespeicherte Wert ueberschrieben.
+   Alias: DESC
+
+     /msg x set <#channel> description [text]
+     or
+     /msg x set <#channel> desc [text]
+
+   FLOATLIM - Schaltet das floating-limit an oder aus. Ist diese Funktion angeschaltet, setzt X 
+   das Channellimit um einen vordefinierten Wert in einer vordefinierten Zeit ueber die aktuell 
+   anwesende Useranzahl. Dies verhindert, das groessere Floodnets den Channel aufsuchen koennen 
+   und diesen damit flooden. Standardmaesig ist die Funktion abgeschaltet.
+   Ist diese Funktion aktiviert, werden bei Abfrage durch den STATUS Befehl z.B. folgende Werte 
+   angezeigt: "FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)." Dies bedeutet das die Funktion FLOATLIM
+   aktiviert ist, mit einer Spanne von 3 um die das limit angehoben oder verringert wird, wenn sich
+   innerhalb von 20 sekunden die Useranzahl veraendert und sich nur noch eins ueber der derzeitigen
+   Anzahl von Usern befindet. MAX ist die die maxiamle Anzahl an Usern im Channel die in diesem
+   Beispiel jedoch abgeschaltet ist. Mehr Informationen zu den einzelnen Funktionen SET FLOATGRACE,
+   SET FLOATMARGIN, SET FLOATMAX und SET FLOATPERIOD sind unten erhaeltlich.
+
+     /msg x set <#channel> floatlim <on|off>
+
+   FLOATGRACE - Setzt die Minimalbegrenzung die im Channel verwendet werden soll. Es sind Zahlen 
+   zwischen 0 und 19 moeglich. Mit dieser Einstellung wird verhindert, das das limit des Channels
+   von X zu dicht an die aktuell anwesende Anzahl von Usern gesetzt wird. Das bedeutet das zwischen
+   der aktuellen Anzahl von Usern und dem Channellimit immer die mit diesem Setting angegebene
+   Anzahl von kommenden oder verlassenden Usern liegen muss bevor X das Limit aendert. Dies bewirkt
+   auch das X in wenig besuchten Channels unnoetige Modusaenderungen vermeidet. Voreingestellt ist
+   der Wert 1.
+
+     /msg x set <#channel> floatgrace <0-19>
+
+   FLOATMARGIN - Gibt die Abstufung an um die X das limit im Channel erhoeht. Die Zahl kann zwischen 
+   2 und 20 liegen. Das neue limit das X setzt errechnet sich wie folgt: Anzahl der aktuell im 
+   Channel anwesenden User + FLOATMARGIN. Der voreingestellte Wert betraegt 3.
+
+     /msg x set <#channel> floatmargin <2-20>
+
+   FLOATMAX - Setzt die Obergrenze des Channellimits fest. Das kann jede gewuenschte Zahl sein
+   und verhindert, das X eine hoehere Zahl von usern im Channel zulaesst als gewuenscht. Auf diese
+   Weise ist es moeglich eine maximale Anzahl festzulegen die nie ueberschritten wird. Der vor-
+   eingestellte Wert ist 0, d.h. die Funktion ist ausgeschaltet.
+
+     /msg x set <#channel> floatmax <0 | max. gewuenschtes limit>
+
+   FLOATPERIOD - Setzt die Zeitspanne in Sekunden die X wartet bevor das Channellimit veraendert
+   wird. Die Zeitspanne kann sich zwischen 20 und 200 sekunden bewegen. Der voreingestellte
+   Wert ist 20 Sekunden.
+
+     /msg x set <#channel> floatperiod <20-200>
+
+   KEYWORDS - Mit diesem Befehl setzt man Schluesselwoerter die bei einer Suche mit dem Kommando 
+   SEARCH (level 0) den Channel als Suchergebnis ausgeben. Wird der Befehl ohne Schluesselwoerter
+   ausgefuehrt, werden alle bisherig gesetzten Schluesselwoerter geloescht. Maximal stehen
+   80 Zeichen fuer die Schlueselwoerter zur Verfuegung.
+
+     /msg x set <#channel> keywords [text]
+
+   MODE - Dieser Befehl dient dazu die aktuellen Channelmodi als Voreinstellung zu uebernehmen.
+   Immer wenn X in den Channel kommt werden die hier eingestellten Modes wiederhergestellt wenn
+   die Modes nicht mit der Voreinstellung uebereinstimmen und niemand im Channel ist.
+
+     /msg x set <#channel> mode
+
+   URL - Mit dieser Funktion kann man die Adresse der Homepage des Channels bekanntgeben.
+   (maximal 75 Zeichen). Leerzeichen sind erlaubt, so das es moeglich ist mehrere URLs
+   einzutragen. Dieser Befehl betrifft das Channeltopic nicht, solange nicht AUTOTOPIC auf ON
+   gestellt ist (Level 450). Die mit DESCRIPTION und URL gesetzten Werte kann man mit dem
+   Befehl CHANINFO (level 0) abfragen. Wird das Kommando ausgefuehrt ohne eine URL anzugeben,
+   wird die aktuell eingestellte URL geloescht.
+
+    /msg x set <#channel> url [url url2 ... urlN]
+
+   USERFLAGS - bestimmt ob ein neuer Benutzer automatisch OP oder VOICE erhaelt wenn er der Benutzer-
+   liste hinzugefuegt wird. Die Voreinstellung ist 0 (keine). Bitte beachten: Ist ein Nutzer erst
+   eingetragen, ist es mit dem MODINFO AUTOMODE Befehl (level 400) moeglich die Werte fuer diesen
+   Benutzer zu aendern.
+
+   * Values: 0 = Kein Automodus wird fuer neue User gesetzt.
+             1 = OP Automodus wird fuer alle neuen User gesetzt.
+             2 = VOICE Automodus wird fuer alle neuen User gesetzt.
+
+      /msg x set <#channel> userflags <0-2>
+
+  JOIN - Bewirkt das X den Channel aufsucht.
+
+    /msg x join <#channel>
+
+--------------------------------------------------------------------------------
+LEVELS 400-449 : Userlist Admin
+--------------------------------------------------------------------------------
+  
+  ADDUSER - Fuegt einen User zur Channel-Benuetzerliste hinzu. Es ist nicht moeglich
+  jemanden mit gleicher oder hoeherer Zugriffsberechtigungsstufe einzutragen.
+
+    /msg x adduser <#channel> <Nutzername> <access>
+
+  CLEARMODE - Setzt alle channelmodi ausser Kraft. Dieser Befehl kann benuetzt werden wenn
+  um einen abgesperrten Channel wieder zugaenglich zu machen. (wenn +i oder +k unbefugt gesetzt wurden).
+  Bitte beachten: Diese Methode ist nicht unbedingt die erste Wahl um wieder Kontrolle
+  ueber einen Channel zu bekommen, weil andere oder Bots die Channelmodes sofort wieder 
+  aendern koennten. Siehe auch STATUS (level 200) fuer artverwandte Infos.
+
+    /msg x clearmode <#channel>
+
+  MODINFO - Die folgenden Befehle koennen fuer Aenderungen an den Einstellungen an bereits 
+  eingetragenen Benuetzern verwendet werden.
+
+    /msg x modinfo <#channel> <variable> <Nutzername> <wert>
+
+  * Variablen von MODINFO:
+
+     ACCESS - Aendert die Zugriffsberechtigungseinstufung eines Nutzers. Die Abstufungen koennen
+     zwischen 1 und 1 unter der eigenen Stufe vergeben werden (Wenn man Stufe 400 hat kann man
+     anderen maximal 399 zuweisen).
+
+       /msg x modinfo <#channel> access <Nutzername> <Stufe>
+
+     AUTOMODE - Aendert den Automode eines Nutzers, folgende Werte stehen zur Wahl: NONE, OP,
+     oder VOICE. OP oder VOICE bewirkt, das X den betreffenden Nutzer OP oder VOICE gibt wenn
+     der Nutzer autentifiziert ist. NONE bewirkt das X keine Aktion ausfuehrt wenn ein 
+     autentifizierter Benutzer mit Zugriffsrechten den Channel betritt.
+
+       /msg x modinfo <#channel> automode <Nutzername> <none|op|voice>
+
+  REMUSER - Entfernt einen Nutzer aus der Channel Benuetzerliste. Um diesen Befehl auf einen 
+  Nutzer anzuwenden muss man hoehere Zugriffsberechtigungsstufe haben als der, der ausgetragen werden
+  soll. Man kann sich mit diesem Befehl auch selbst austragen, solange man ihn nicht als Channel Manager
+  anzuwenden versucht (Stufe 500 in diesem Channel). Manager die sich austragen wollen muessen
+  ihren Channel aufloesen.
+
+    /msg x remuser <#channel> <Nutzername>
+
+--------------------------------------------------------------------------------
+LEVEL 200 : Userlist Op
+--------------------------------------------------------------------------------
+
+  KICK - Bewirkt das X alle Nutzer kickt die die angegebene Hostmask haben, nur der OP
+  selbst wird nicht gekickt wenn auch er die betreffende Hostmask haben sollte. Dieser
+  Befehl sollte nur selten angewendet werden, die Nutzung sollte auf extreme Faelle von 
+  Channelfloods oder bei vielen Clones beschraenkt werden. Man sollte vor der Anwendung 
+  des Befehls erst den Channel auf modus +i setzen oder einen Ban auf die betreffende Hostmask 
+  legen, um zu vermeiden das die entfernten Nutzer den Channel wieder aufsuchen koennen.
+
+    /msg x kick <#channel> <nick | *!*user@*.host> [Grund]
+
+  STATUS - Zeigt alle derzeit geltenden Einstellungen fuer X, alle gesetzten Channelmodi, 
+  die Anzahl der anwesenden Nutzer und OPs im Channel, alle derzeit autentifizierten Nutzer
+  und ob X im Channel ist oder nicht. Aktuell autentifizierte Nutzer werden im Format
+  "Nutzername/Nickname [stufe]" angezeigt. Nutzer die mehrfach anwesend sind werden im 
+  Format "Nutzername/nickname1 nickname2 [Stufe]" aufgefuehrt. Der Nickname wird nur dann
+  angezeigt, wenn der betreffende User auch im Channel ist, wenn dies nicht der fall ist, wird 
+  nur der Nutzername mit der Zugriffsberechtigungsstufe aufgefuehrt. Die Moeglichkeit
+  die aktuell geltenden Channelmodes von aussen einzusehen ist im Falle eines auf +k ge-
+  setzten Channels (passwortmodus) sehr hilfreich, man bekommt neben den oben genannten Angaben 
+  auch das Passwort angezeigt. Der Befehl funktioniert egal ob X im Channel ist oder nicht.
+
+    /msg x status <#channel>
+
+--------------------------------------------------------------------------------
+LEVELS 100-399 : Channel Operator
+--------------------------------------------------------------------------------
+
+  DEOP - Deopt eine oder mehrere Personen im Channel. Ist man geopt und wird kein Nick angegeben,
+  wird man selbst deopt. Bitte beachten: Man sollte die in den Settings SET MASSDEOPPRO gesetzten
+  Hoechstgrenzen von kicks nicht ueberschreiten, da man sonst von X gekickt wird 
+  (siehe SET MASSDEOPPRO - level 500).
+
+    /msg x deop <#channel> [nick] [nick2] ... [nickN]
+
+  OP - Opt eine oder mehrere Personen im Channel. Ist man nicht geopt und wird kein Nick angegeben,
+  wird man selbst von X geopt.
+
+    /msg x op <#channel> [nick] [nick2] ... [nickN]
+
+  INVITE - Veranlasst X eine Einladung in den Channel zu verschicken.
+
+    /msg x invite <#channel>
+
+  SUSPEND - Suspendiert die Zugriffsberechtigung eines Nutzers auf X im Channel fuer die angegebene
+  Dauer und auf der gewuenschten Stufe soweit diese angegeben wird. Wird keine Stufe angegeben, ergibt
+  sich die Stufe der Suspension aus der Zugriffsberechtigungsstufe desjenigen, der die Suspendierung
+  verhaengt. Man kann nur Nutzer mit niedrigerer Zugriffsberechtigung suspendieren. Die Maximaldauer
+  betraegt 372 Tage (8928 Stunden, 535680 Minuten)
+
+  * Zeit Werte:  D = Tage
+                 H = Stunden
+                 M = Minuten
+
+    /msg x suspend <#channel> <Nutzername> <Dauer> [Stufe]
+    * Zeit Beispiel: "5 d" = 5 Tage (ohne anfuehrungszeichen eingeben)
+
+  UNSUSPEND - Hebt eine bestehende Suspendierung vom Zugriff auf X auf. Man kann nur eine Suspension
+  aufheben, wenn die Zugriffsberechtigungsstufe des Nutzers geringer ist als die eigene, immer vorausgesetzt
+  das die Stufe der Suspension gleich oder kleiner der eigenen Stufe ist.
+
+    /msg x unsuspend <#channel> <Nutzername>
+
+--------------------------------------------------------------------------------
+LEVELS 75-99 : New Channel Operator
+--------------------------------------------------------------------------------
+
+  BAN - Fuegt der X banliste des Channels einen Ban mit dem Muster *!*user@*.host hinzu.
+  Es ist auch moeglich einen Nick zu bannen wenn der betreffende Online ist, ist er dies
+  nicht ist ein ban auf *!*user@*.host angezeigt. Bans die einen breiteren Bereich abdecken als 
+  die zuvor aufgefuehrten ersetzen diese. Alle Nutzer die vom Ban betroffen sind werden aus dem 
+  Channel gekickt, sofern die Stufe des Bans 75 oder mehr ist. Die Dauer eines Bans wird in Stunden
+  angegeben, maximal sind 336 Stunden (2 Wochen) moeglich. Die Stufe des Bans kann von 1 bis zur 
+  Stufe der eigenen Zugriffsberechtigung gehen. Der Grund fuer den ban kann mit maximal
+  128 Zeichen angegeben werden. Ist keine Dauer und/oder keine Stufe angegeben worden, so
+  betraegt die Standarddauer 3 Stunden, die Stufe 75.
+
+  * Ban Levels: 1-74 = Verhindert das der Nutzer OP (+o) im Channel erhaelt.
+                75+ = Verhindert die Anwesenheit des Nutzers im Channel.
+
+    /msg x ban <#channel> <nick | *!*user@*.host> [Dauer] [Stufe] [Grund]
+
+  UNBAN - Entfernt eine Adressmaske *!*user@*.host von der X banliste des Channels und auch alle 
+  passenden Bans der Channelbanliste. Es ist nicht moeglich Bans von der X-Banliste zu entfernen
+  wenn diese mit einer hoeheren Stufe als der eigenen Zugriffsberechtigung gesetzt wurden. Um die
+  X-banlist des Channels angezeigt zu bekommen siehe den Befehl LBANLIST (level 0).
+
+    /msg x unban <#channel> <nick | *!*user@*.host>
+
+--------------------------------------------------------------------------------
+LEVELS 50-74 : Trusted Channel Regular
+--------------------------------------------------------------------------------
+
+  KICK - Veranlasst X jemanden aus dem Channel zu kicken; die Angabe des Grundes ist optional.
+  Der Name des ausfuehrenden wird in der Begruendung angegeben.  
+
+   /msg x kick <#channel> <nick> [Grund]
+
+  TOPIC - Veranlasst X das topic (Ueberschrift, Motto) des Channels zu aendern (max. 145 Zeichen),
+  und gibt auch den Nutzernamen desjenigen mit an, der das Topic aendert. Bitte beachten: 
+  Sofern DESCRIPTION und/oder URL vorhanden ist und die Funktion AUTOTOPIC angeschaltet ist,
+  wird das Channel topic durch die dort gemachten Angaben alle 30 Minuten ueberschrieben, es
+  sei denn im Channel findet keine Aktivitaet statt.
+
+    /msg x topic <#channel> <topic>
+
+--------------------------------------------------------------------------------
+LEVELS 25-49 : Channel Regular
+--------------------------------------------------------------------------------
+
+  DEVOICE - Entzieht einem Nutzer den Modus v  
+
+    /msg x devoice <#channel> [nick] [nick2] ... [nickN]
+
+  VOICE - Verleiht einem Nutzer den Modus v
+
+    /msg x voice <#channel> [nick] [nick2] ... [nickN]
+
+--------------------------------------------------------------------------------
+LEVELS 1-24 : Minimum Access
+--------------------------------------------------------------------------------
+
+  BANLIST - Zeigt die Channelbanliste an. Dieser Befehl funktioniert auch ausserhalb des Channels.  
+
+    /msg x banlist <#channel>
+
+  STATUS - Bewirkt das gleiche wie der STATUS Befehl der Stufe 200, mit der Ausnahme das man
+  keine Channelmodi angezeigt bekommt (+nt usw.), es sei denn man hat die Stufe 200 oder mehr.
+
+    /msg x status #channel
+
+--------------------------------------------------------------------------------
+LEVEL 0 : Everyone else
+--------------------------------------------------------------------------------
+
+  ACCESS - Mit diesem Befehl laesst sich die Zugriffsberechtigungsstufe fuer eine bestimmte Person
+  oder eine Zeichenfolge die Bestandteil eines Nutzernamens sind ausgeben. Die ausgegebenen Informationen
+  bestehen aus Zugriffsberechtigungsstufe, Suspensionsstatus und der Suspensionsstufe wenn der 
+  Betreffende suspendiert ist sowie der zeitpunkt der letzten Anwesenheit. Um sich alle Nutzer
+  die in einem Channel eingetragen sind anzeigen zu lassen, sollte man folgenden Befehl benuetzen:
+  /msg x access <#channel> *
+  Sind in der Liste mehr als 15 Eintraege, kann man sich - nach dem man sich eingelogt hat - die ganze 
+  Nutzerliste unter http://cservice.undernet.org/live/ anzeigen lassen, in dem man dort auf 
+  "Channel Information" klickt und dann den Namen des Channels angibt und das Formular abschickt.
+  Es sind auch Abfragen eines Nutzernamens oder einer zeichenfolge eines Nutzernamens in gemischter Form
+  moeglich um spezifische Ergebnisse zu erhalten.
+
+  * Access options:
+
+    username - Gibt die Zugriffsberechtigungsstufe eines bestimmten Nutzers aus.
+       /msg x access <#channel> <Nutzername>
+
+    -min <level> - Zeigt nur Nutzer der angegebenen Stufe und darueber an.
+       /msg x access <#channel> -min <level>
+
+    -max <level> - Zeigt nur Nutzer unterhalb der Stufe und darunter an.
+       /msg x access <#channel> -max <level>
+
+    -op - shows Zeigt ausschliesslich Nutzer mit dem AUTOMODE OP an.
+       /msg x access <#channel> -op
+
+    -voice - Zeigt ausschliesslich Nutzer mit dem AUTOMODE VOICE an.
+       /msg x access <#channel> -voice
+
+    -none - Zeigt ausschliesslich Nutzer mit AUTOMODE NONE an.
+       /msg x access <#channel> -none
+
+    -modif - Zeigt an wer zuletzt die Nutzerliste modifiziert hat.
+       /msg x access <#channel> -modif
+
+  CHANINFO - Gibt aus ob ein Channel registriert ist, und wenn ja, wer ihn registriert hat, sowie die
+  derzeitig gesetzte DESCRIPTION und die URL, sofern vorhanden.
+  Alias: INFO
+
+     /msg x chaninfo <#channel> 
+
+     oder
+
+     /msg x info <#channel>
+
+  HELP - Zeigt Hilfsinformationen zum angegebenen Befehl an.
+
+     /msg x help [Befehl]
+
+  INFO - Zeigt Informationen bezueglich eines Nutzernamens an wie Nick(s) und user@host(s) wenn
+  der betreffende Nutzer Online ist, die Sprache und die Einstellungen bezueglich der Unsichtbarkeit
+  (invisible), letzte Sichtung sowie ob sie von einem CService Administrator suspendiert wurden. Wendet
+  man den Befehl auf sich selbst an, bekommt man zusaetzlich die registrierte Mailadresse, die Adress-
+  maske die zur letzten Anmeldung verwendet wurde, die maximale Anzahl der Anmeldungen sowie
+  alle Channels auf denen man Zugriffsbrechtigung hat angezeigt (nur man selbst und der CService koennen
+  diese Information abfragen). Wuenscht man diese Angaben vor anderen Nutzern zu verbergen, sollte
+  man sich den SET INVISIBLE Befehl anschauen (level 0).
+
+    /msg x info <Nutzername>
+
+  LBANLIST - Durchsucht die X Banliste nach einer Zeichenfolge. Um die ganze Liste angezeigt zu bekommen,
+  muss man * verwenden und um eine bestimmte Adressmaske ausgegeben zu bekommen, muss man diese 
+  nach dem Schema *!*user@*.host angeben. Enthaelt die Banliste mehr als 15 Eintraege, sollte man
+  die Seite http://cservice.undernet.org/live/ aufsuchen und sich dort anmelden um die ganze Liste
+  angezeigt zu bekommen in dem man auf "Channel Information" klickt, dann den Channelnamen angibt und das
+  Formular abschickt.
+
+    /msg x lbanlist <#channel> <* | *!*user@*.host>
+
+  LOGIN - Dieser Befehl dient dazu die Zugriffsberechtigungen eines Nutzers in den Speicher zu laden
+  und sich auf ALLEN Channel zu autentifizieren auf denen man Zugriffsberechtigungen hat. Man kann sich
+  auch mehrfach anmelden um mehrere Programme oder Verbindungen zum IRC-Server zu nutzen. Die Anzahl
+  der moeglichen Verbindungen haengt von den MAXLOGINS Einstellungen ab (siehe SET MAXLOGINS - level 0).
+  Immer wenn eine zusaetzliche Verbindung aufgebaut wird, schickt X eine Benachrichtigung welcher login
+  zuletzt verwendet wurde und die Anweisung den SUSPENDME Befehl anzuwenden, wenn das letzte login nicht
+  von einem selbst ausgefuehrt worden ist. Dies bedeutet das unter Umstaenden der Nutzereintrag (Account)
+  von anderen uebernommen wurde und somit nicht mehr sicher ist (siehe SUSPENDME - level 0).
+
+    /msg x@channels.undernet.org login <Nutzername> <Passwort>
+
+  MOTD - Gibt X큦 Tagesnachricht aus. (Message of the day)
+
+    /msg x motd
+
+  NEWPASS - Dieser Befehl wurde abgeschafft im IRC, er kann nur noch von der CService Website aus
+  (http://cservice.undernet.org/live/) ausgefuehrt werden. Sobald man sich auf der Website auf seinem
+  Nutzerkonto angemeldet hat, kann man sein Passwort aendern in dem man auf "New Password" klickt, und
+  dann das gewuenschte neue Passwort angibt. Hat man sein passwort vergessen, oder kann man sich aufgrund eines 
+  ungueltigen Passwortes nicht mehr anmelden, bekommt man mittels Verwendung von "Forgotten Password" sein
+  Passwort an die frueher angegebene EMailadresse zugeschickt. Sollten dann immer noch Probleme mit
+  dem Passwort auftreten sollte man den Channel #CService besuchen und dort fragen (ENGLISCH!).
+
+  BITTE BEACHTEN: 1. Auf Gross/Kleinschreibung achten. Zum Beispiel: "CService" ist nicht "cservice."
+
+                  2. Passwoerter koennen aus mehr als einem Wort bestehen damit man z.B. Saetze oder Sprueche
+                     als Passworte verwenden kann um die Gefahr zu verringern das diese entschluesselt werden
+                     koennen. Wir empfehlen diese Moeglichkeit zu nutzen. Die maximale Laenge des Passworts
+                     betraegt 50 Zeichen. Als Beispiel ist folgendes Passwort moeglich: "Undernet Channel Service".
+
+  REMUSER - Auf dieser Stufe und darueber kann man sich selbst aus jeder Nutzerliste von Channels
+  selbst entfernen, dies gilt NICHT fuer Channel Manager (Stufe 500 im Channel). Manager die sich selbst
+  austragen wollen, muessen den Channel aufgeben.
+
+    /msg x remuser <#channel> <eigener Nutzername>
+
+  SEARCH - Veranlasst X eine Liste von Channels auszugeben die mittels gesetzter Schluesselwoerter (keywords)
+  auf die Suchabfrage passen. Die Benutzung von Wildcards (Stellvertreterzeichen *) ist nicht noetig.
+
+  SEARCH - Makes X list channels where the given search parameters match set keywords on the
+  channel, if any. The use of wildcards are not required.
+
+    /msg x search <Suchparameter>
+
+  SET - Aendert spezielle Einstellungen des Nutzers.
+
+    /msg x set <Variable> <Wert>
+
+   * Variablen und Werte:
+
+  INVISIBLE - Hierbei handelt es sich um eine persoenliche Einstellmoeglichkeit, sie steuert die Sichtbarkeit
+  der Nutzerinformationen die man mittels des INFO Befehls erhaelt, also ob diese angezeigt werden sollen
+  oder nicht. Fuer weiterfuehrende Informationen sollte man sich die Angaben zum INFO Befehl durchlesen
+  (level 0).
+
+    /msg x set invisible <on|off>
+
+  LANG - Aendert die Sprache in der X die Ausgaben macht.
+
+    /msg x set lang <Sprachcode>
+
+     verfuegbare Sprachen:
+     Code - Sprache
+     � ar - Arabisch
+     � ca - Catalanisch
+     � de - Deutsch	
+     � dk - Daenisch
+     � en - Englisch
+     � es - Spanisch
+     � fr - Franzoesisch
+     � hu - Ungarisch
+     � it - Italienisch
+     � nl - Niederlaendisch	*
+     � no - Norwegisch
+     � pt - Portugiesisch	
+     � ro - Rumaenisch
+     � tr - Tuerkisch
+     � il - Hebraeisch
+
+     * = Die so gekennzeichneten Sprachen sind noch nicht verfuegbar, wir planen diese jedoch bald zu unterstuetzen.
+
+  MAXLOGINS - Diese persoenliche Einstellmoeglichkeit legt die erlaubte Anzahl von verschiedenen Anmeldungen fest
+  die auf einen Nutzernamen moeglich sind. Dies ist dafuer gedacht um beispielsweise von Zuhause/Arbeit/Schule und 
+  von irgendwo anders aus den gleichen Nutzernamen verwenden zu koennen. Es besteht auch die Moeglichkeit den eigenen
+  Nutzernamen fuer sich und einen BOT zu verwenden. Eine weitere Anwendung ist es sich nach einer Unterbrechung sofort
+  wieder auf dem Nutzernamen anzumelden ohne zu warten bis der sog. Ghost (Leiche der vorherigen Anmeldung) offline 
+  gegangen ist. Standardmaesig ist die Einstellung 1, das gleichzeitige anmelden auf der Website zaehlt hierbei nicht.
+
+    /msg x set maxlogins <1-3>
+
+  SHOWCOMMANDS - Zeigt alle auf dem Channel verwendbaren Befehle in Abhaengigkeit der Zugriffsberechtigungsstufe.
+  Wird kein Channel angegeben, werden nur die Stufe 0 Befehle ausgegeben.
+
+    /msg x showcommands [#channel]
+
+  SHOWIGNORE - Gibt X큦 Liste der ignorierten Nutzer aus. X ignoriert Nutzer dann, wenn absichtlich oder versehentlich
+  ein flood auf X ausgeuebt wurde. Die Dauer betraegt 60 Minuten.
+
+    /msg x showignore
+
+  SUPPORT - Eine alternative Methode die es erlaubt eine Eingabe auf Erteilung einer Channelregistration zu 
+  unterstuetzen, oder diese Unterstuetzung zu verweigern wenn man als Unterstuetzer der Eingabe aufgefuehrt wurde.
+  Sobald man sich bei X anmeldet wird man davon unterrichtet ob man als Unterstuetzer fuer eine Channelregistration
+  angegeben wurde, gleichzeitig gibt X Informationen ueber dieses SUPPORT Kommando. Es ist auch moeglich den 
+  Antrag via Web anzusehen um mehr Informationen zu bekommen, einen Widerspruch einzugeben und die Unterstuetzung
+  des Antrags oder dessen Ablehnung bekanntzumachen. Der Befehl kann nicht angewendet werden wenn man nicht als 
+  Unterstuetzer angegeben wurde oder auf die Registration (noch) kein Antrag vorliegt.
+
+    /msg x support <#channel> <yes|no>
+
+  SUSPENDME - Mit diesem Befehl kann man sich selbst suspendieren, was dazu fuehrt das man nur noch Level 0
+  Befehle anwenden kann. Dieser Befehl funktioniert nur dann, wenn mindestens zwei Nutzer auf den selben Nutzernamen
+  angemeldet sind. Um die Suspendierung aufzuheben muss man eine EMail an X@undernet.org schicken. Es ist ausserdem
+  eine gute Idee sich VOR einer aufhebung des Suspenses ein neues Passwort auf der Website zu besorgen so das
+  es niemandem mehr moeglich ist mit dem entschluesselten Passwort Schaden anzurichten.
+
+    /msg x@channels.undernet.org suspendme <Passwort>
+
+  VERIFY - Zeigt an ob eine person angemeldet ist oder nicht, sofern angemeldet wird der Nutzername ausgegeben, 
+  ausserdem bekommt man angezeigt ob der betreffende Nutzer ein offizieller CService Administrator oder Vertreter
+  ist und/oder ein IRC Operator.
+
+    /msg x verify <nick>
+
+--------------------------------------------------------------------------------
+Diese Datei wurde zuletzt am 08. Mai 2002 von ElGringo bearbeitet.
+Diese Datei wird vom CService des Undernets zur Verfuegung gestellt.
+E-mail cservice@undernet.org fuer Anregungen und Vorschlaege.
+--------------------------------------------------------------------------------

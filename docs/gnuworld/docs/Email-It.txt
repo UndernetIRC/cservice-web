@@ -1,0 +1,75 @@
+Undernet Channel Service
+
+Formula di Cambiamento di email
+
+-------------------------------- 
+
+- PER FAVORE DI LEGGERE LE ISTRUZIONI!
+
+- Per favore di riempire la forma in completamente, o la sua richiesta non-sar� elaborata.
+
+- USARE questa forma soltanto quando lei non-pu� accedere sul sito web col suo nome utente o su lei non-pu� usare pi� la sua vecchia email che lei ha per il nome utente.
+
+- Se lei tuttavia pu� accedere alla sua vecchia email, noi non-considereremo questa richiesta.  
+
+RICHIESTA DI RIPRISTINO DI PAROLA D'ORDINE
+
+- Se lei ha bisogno di avere il suo ripristino di parola d'ordine, per favore il tentativo averlo fatto via la pagina web. Il http: //cservice.undernet.org lo Scatta su "Web Interface" e poi scatta su "Forgetten Password". SOLTANTO se la sua vecchia email non-pu� essere usata pi� usa questa Formula di Cambiamento di Email. Dopo che lei avr� un indirizzo di email nuovo sul nome utente, lei sar� in grado di ricuperare la parola d'ordine dal sito web come l'abbiamo detta prima.  
+
+RICHIESTA DI CAMBIAMENTO DI EMAIL
+
+- Se lei ha bisogno di cambiare il suo email che abbiamo sulla registrazione per la sua apertura di sessione di nome utente col suo nome utente al http://cservice.undernet.org/live e scatta su "Forms / Email Change Section.. SOLTANTO se la sua vecchia email non pu� essere usata pi� usa questa "Email Change Form". APER FAVORE NON usare i domini di email liberi per l'indirizzo di email nuovo del nome utente.  
+
+LA RICHIESTA DI RISPOSTA DI VERIFICA/DOMANDA
+
+- Se lei ha bisogno di un ripristino del suo uso di risposta/domanda di verifica la sezione "Forgetten Password" di http: //cservice.undernet.org/live. Scrivere il suo nome utente l� e fare un errore nel suo risposta. Lei sar� deviato al "Verification Question/Answer Reset Form. Riempire quella forma e presentare il esso. Se la tua vecchia email non pu� essere usata pi� usa "Email Change Form" da qui per cambiarlo. Dopo che il cambiamento � fatto, ottiene un ripristino di domanda/risposta di verifica dal sito web.  
+
+- COPIA ED INCOLLA QUESTA FORMULA in un'email (l'indirizzo di email nuovo del nome utente) ed invia a:
+
+X@undernet.org 
+
+Consentire 3-5 giorni per questo cambiamento di essere completati prima che inviano di nuovo la richiesta.  
+
+------------------------------- 
+
+Per favore di fornire le informazioni seguenti: 
+
+a. Username (non Soprannome): 
+
+b. Il vecchio Indirizzo di Email: 
+
+c. L'Indirizzo di Email nuovo: 
+
+d. - La risposta della Domanda di verifica:
+
+(Questa � la risposta a uao delle domande sotto che lei ha scelto quando lei ha preso il nome utente)
+
+- Per favore di indicare che interroga lei ha scelto precedentemente per rispondere
+
+a) What's your mother's maiden name?
+
+b) What's your dogs (or cat's) name?
+
+c) What's your father's birthdate? 
+
+e. Canali che lei ha accesso su con il nome utente: 
+
+Commenti (se bisogno avuto di): 
+
+------------------------------------------
+
+Forma di Cambiamento di Email di verifica
+
+Undernet Channel Service
+
+Version 10042002
+Check Mail Compose 	
+
+
+*-------------------------------------------------------------------------*
+  This document was last updated on May, 28 2005 - by Chiklis
+  This file is maintained by Undernet CService Committee
+  E-mail cservice@undernet.org with any suggestions or comments
+  CService URL: http://cservice.undernet.org
+  Undernet URL: http://www.undernet.org
+ 

@@ -1,0 +1,540 @@
+*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*
+
+                      Undernet Channel Service Committee
+                            CMaster Command List
+                          Updated: February 03, 2006
+*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*
+
+NOTES regarding SYNTAX and PARAMETERS:
+
+* Parameters enclosed in <> are mandatory.
+* Parameters enclosed in [] are optional.
+* x|y means x or y.
+* <nick> refers to a user's current nickname.
+* <username> refers to the username account that a user has registered with CService, not to be confused with <nick>. 
+  - For more information about username accounts and how to determine someone's username, refer to the INFO and VERIFY 
+    commands.
+* All commands shown with the <username> field can also work with a
+  nickname by preceding the nickname with an equal (=) sign.
+  - For example, consider a user with the nickname ^Test^ and the username Test2K3. 
+  - The ACCESS command can be performed on this user in either of these methods:
+
+    /msg x access <#channel> Test2K3
+    /msg x access <#channel> =^Test^
+
+  - The first method directly queries X as to whether or not the username Test2K3 is in the channel userlist.
+  - The second method has X verify if ^Test^ is authenticated, and if so, performs the ACCESS lookup 
+    on his username account, Test2K3.
+  - This can be performed with any command that requires a <username>, but will only work if the user is authenticated, 
+    otherwise X will reply with "No Match!"
+* <pattern> refers to any search string utilizing wildcards (* and ?). 
+  - A *!*userid@host string is one example of a wildcard pattern.
+  - For example, both the ACCESS and LBANLIST commands accept <pattern>:
+
+    /msg x access <#channel> ?irc*
+    /msg x lbanlist <#channel> *.users.undernet.org
+
+  - The ACCESS command would return any usernames on the channel who matched the ?irc* wildcard string.
+  - The LBANLIST command would return all bans set for users who had enabled Undernet's virtual hostmask (usermode +x).
+
+NOTE for SCRIPTERS:
+
+* IRC scripts should always use /msg x@channels.undernet.org for all 
+  commands, not just LOGIN, to ensure the command gets sent to X in the 
+  event of a temporary nick change for X or other unforeseen circumstances
+  which could render your script temporarily unusable.
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                       LEVEL 500 (Channel Manager)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  PART - Tells X to part your channel. To have X remain out of the channel, refer to SET AUTOJOIN.
+
+       /msg X part <#channel>
+
+  SET - Sets flags for your channel.  
+      - Flags are special settings that tell X how to behave under certain conditions.
+
+       /msg X set <#channel> <autojoin|massdeoppro|noop|strictop> <value>
+
+  AUTOJOIN - When this flag is ON, X will always join the channel when it returns online 
+             (eg. after maintenance or a netsplit).
+
+       /msg X set <#channel> autojoin <on|off>
+
+  MASSDEOPPRO - The maximum deops X will allow a user (see note) to perform within 15 seconds. 
+              - Any user exceeding this will be deopped and, if on the channel userlist, suspended for 5 minutes.
+              - They will also have a level 25 ban placed on them and will need to unban themselves after the
+                suspension expires.
+
+     NOTE: The current version of MASSDEOPPRO only checks when users perform
+           deops with the /mode command (/mode #channel -oo nick1 nick2), not with X's DEOP command.
+
+       /msg X set <#channel> massdeoppro <0-7>
+
+  NOOP - When this flag is ON, X will not allow any other users to be opped.
+       - However, you and all your level 100+ ops will still have full access to all op commands and after you login,
+         you can use X to kick, ban, etc
+
+       /msg X set <#channel> noop <on|off>
+
+  STRICTOP - When this flag is ON, X will only allow authenticated level 100+ users be opped.
+
+       /msg X set <#channel> strictop <on|off>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                  LEVEL 450+ (Trusted Channel Admin)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  JOIN - Tells X to join the channel.  To have X always join the channel automatically, refer to SET AUTOJOIN.
+   
+       /msg X join <#channel>
+
+  SET - Sets flags for the channel.  Flags are special settings that tell X how to behave under certain conditions.
+
+       /msg X set <#channel> <flag> <value>
+
+     * Flags and Values:
+  
+  AUTOTOPIC - This flag makes X reset the topic to the channel DESCRIPTION and URL every 30 minutes. 
+            - Note that if the channel is idle, the topic will not be reset during that time. (idle = no users joining)
+
+       /msg X set <#channel> autotopic <on|off>
+
+  DESCRIPTION - Sets the channel description (80 characters max), which can be seen in the CHANINFO reply.  
+              - If no description text is specified, the current description is cleared.
+
+     Alias: DESC
+
+       /msg X set <#channel> description [text]
+       /msg X set <#channel> desc [text]
+
+  FLOATLIM - Toggles the channel "floating limit" feature on or off. 
+           - If enabled, X will reset the channel limit (channel mode +l) within a preset margin above the number of users 
+             in the channel, and within a preset period of time. 
+           - This can help prevent large botnets from joining and flooding the channel.  
+           - By default, this feature is off.
+           - When enabled, the FLOATLIM flags will be displayed in the STATUS reply.
+
+     Example STATUS reply:
+    
+ -X- Flags set: FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)
+    - In this example, FLOATLIM is ON, with a FLOATMARGIN of 3, a
+     FLOATPERIOD of 20 seconds, a FLOATGRACE of 1, and FLOATMAX is OFF. 
+    
+   -  Refer to SET FLOATGRACE, SET FLOATMARGIN, SET FLOATMAX, and SET FLOATPERIOD for more information.
+
+       /msg X set <#channel> floatlim <on|off>
+
+  FLOATGRACE - Sets a grace value for the floating limit feature. 
+             - If the difference between the current limit and what the new limit would be is less than the grace value, 
+               X will not reset the limit, so that quiet channels are not littered with mode changes. 
+             - This value can be between 0-19. 
+             - The default value is 1.
+
+       /msg x set <#channel> floatgrace <0-19>
+
+  FLOATMARGIN - Sets the user margin for the floating limit. 
+              - The limit that X resets will be: FLOATMARGIN + the current number of users in the channel.
+              - This value can be between 2-20. 
+              - The default value is 3.
+
+       /msg X set <#channel> floatmargin <2-20>
+
+  FLOATMAX - Sets a maximum limit for the floating limit setting. 
+           - When enabled, X will not reset the channel limit higher than FLOATMAX.
+           - This value may be from 0-65536. 
+           - The default value is 0 (Off).
+
+       /msg X set <#channel> floatmax <0-65536>
+
+  FLOATPERIOD - Sets the time period, in seconds, before X resets the channel limit. 
+              - The value may be from 20-200. 
+              - The default value is 20 seconds.                            
+
+       /msg X set <#channel> floatperiod <20-200>
+
+  KEYWORDS - Sets the keywords for the channel (80 characters max).
+           - Keywords should be separated by a space.
+
+       /msg X set <#channel> keywords [keywords]
+
+  MODE - This will save the current channel modes as default. 
+       - When X joins the channel, it will reset those modes if it is alone in the channel.
+
+       /msg X set <#channel> mode
+
+  URL - You can state the channel's web site URL(s) with this option (75 characters max). 
+      - The URL can be viewed in the CHANINFO reply or by logging into http://cservice.undernet.org/live/ then
+        clicking "Channel Information" and submitting the channel name.
+      - If no URL is specified, the current URL setting is cleared.
+
+       /msg X set <#channel> url [url(s)]
+
+  USERFLAGS - Set the default AUTOMODE for when a new user is added to the userlist.
+            - Default value is 0.
+            - Values: 0 = None, 1 = Op, 2 = Voice.
+     
+       /msg X set <#channel> userflags <0-2>
+
+    - Refer to MODINFO AUTOMODE for more information.
+     
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                      LEVEL 400+ (Userlist Admin)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  ADDUSER - Adds a user to the channel's userlist. 
+          - You cannot add a user with equal or higher access than your own.
+
+                       
+       /msg X adduser <#channel> <username> <access>
+
+  CLEARMODE - Clears all channel modes.
+            - Can be used when the channel has been locked up (channel modes +i, +l, and/or +k).
+
+  NOTE:- This is not necessarily the best method to gain entry to your channel, because other people or bots may be opped 
+         in the channel that may reset the modes as you clear them.  
+       - Refer to the STATUS command for related information.
+
+       /msg X clearmode <#channel>
+
+  MODINFO - The following commands can be used to make changes to existing users in the channel's userlist. 
+          - You cannot modify someone with an equal or higher level.
+
+       /msg X modinfo <#channel> <access|automode> <username> <value>
+
+  ACCESS - Changes the access level of a user. 
+         - Access level can be set between 1 and your access level -1 (ie. if you have an access level of 400, you may 
+           assign a level of up to 399 to other users).
+         - You can not modify your own access and can only modify an access lower than your own.
+
+       /msg X modinfo <#channel> access <username> <new access level>
+
+  AUTOMODE - Changes the automode of a user to one of these specified modes: NONE, OP, or VOICE. 
+           - Based on this setting a user can be voiced or opped when he joins the channel, or if the user is already 
+             on the channel, the automode will take place once the user is authenticated with X.
+
+       /msg X modinfo <#channel> automode <username> <none|op|voice>
+
+  REMUSER - Removes a user from the channel database. 
+          - You must have higher access than the user you want to remove. 
+          - You can also remove yourself from any channel, as long as you are not the Channel Manager (500 access level 
+            in that channel). 
+          - Channel Managers wishing to remove themselves will need to purge their channel, or transfer the channel to 
+            another user.
+
+       /msg X remuser <#channel> <username>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                        LEVEL 200 (Userlist Op)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  KICK - Makes X kick all users matching the specified *!*userid@host mask, but does not kick the person issuing the 
+         command if they match also. 
+       - Use should be limited to extreme channel flooding or clones. 
+       - You may wish to set a ban on the mask, or +i (invite-only) on the channel before issuing the kick to prevent 
+         matching users from rejoining after being kicked. 
+       - Your username will be placed in the kick message, enclosed in parentheses.
+
+       /msg X kick <#channel> <nick | *!*userid@host> [reason]
+
+  STATUS - Displays all channel flags and settings, channel modes, the number of users and ops in the channel, currently 
+           authenticated users for the channel, and whether X is on the channel or not. 
+         - Currently authenticated users are shown in a "username/nickname [level]" format. 
+         - A user's nickname will only be shown if that user is currently on the channel, otherwise only their username 
+           and level are displayed.
+
+  ***- The ability to see channel modes is extremely helpful in case the channel is locked up 
+       (channel modes +i, +l, and/or +k). 
+     - If the channel has a key  (+k), X will display the current channel key. 
+     - You may use the INVITE command to have X invite you into the channel, overriding all current channel modes, 
+       or alternatively, you may use the CLEARMODE command to clear all channel modes, then join the channel.
+
+       /msg X status <#channel>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                      LEVEL 100+ (Channel Operator)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+  DEOP - Deops one or more persons in the channel. 
+       - If no nick is specified, and you are opped on the channel, X will deop you.
+
+       /msg X deop <#channel> [nick] [nick2] ... [nickN]
+
+  OP - Ops one or more persons in the channel. 
+     - If no nick is specified, and you are not opped on the channel, X will op you.
+
+       /msg X op <#channel> [nick] [nick2] ... [nickN]
+
+  INVITE - X will invite you into the channel, allowing you to join regardless of current channel modes.
+
+       /msg X invite <#channel>
+
+  SUSPEND - Suspends a user's access to X on the channel's userlist for the specified period of time, at the specified 
+            level, if given. 
+          - If a level is not specified, X will use your access level. 
+          - You can only suspend someone with access lower than your own. 
+          - The maximum duration is 372 days (8928 hours, 535680 minutes :P).
+          * M = minutes, H = hours, D = days
+
+       /msg X suspend <#channel> <username> <duration> <M|H|D> [level]
+
+  UNSUSPEND - Unsuspends a user's access to X on the channel's userlist.
+            - You can only unsuspend a user with access lower than your own, provided that the suspension level is also less
+              than or equal to your access level.
+
+       /msg X unsuspend <#channel> <username>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                    LEVEL 75+ (New Channel Operator)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  BAN - Adds a specific *!*userid@host to X's channel banlist.
+      - If the user is online, you can specify their nick, and X will automatically ban the *!*userid@host for that user.
+      - Bans that cover a broader range than previously set bans will replace the previous bans. 
+      - Any user in the channel who matches the ban will also be kicked if the ban level is 75+. 
+      - The duration is in hours, with a maximum of 2400 hours (100 days). 
+      - The ban level can range from 1 to your own level.
+      -  The ban reason can be a maximum of 128 characters. 
+      -  If no duration and/or level is specified, the default will be a duration of 3 hours at level 75.
+
+  NOTE: If the banned user has Undernet's "virtual hostmask" (user mode +x) enabled, X is able to see through it to 
+        their actual host, so banning their username via *!*@username.* will also ban their actual host.
+
+       * Ban Levels:   1-74 = Prevents the user from having ops (+o) on the channel.
+                     75-500 = Prevents the user from joining the channel.
+
+       /msg X ban <#channel> <nick!*@* | *!*userid@host> [duration] [leve] [reason]
+
+  UNBAN - Removes a ban from X's channel banlist, and also any matching bans from the current channel banlist. 
+        - You can only remove bans from X's banlist that are equal to or less than your own access. 
+        - To search X's banlist, refer to the LBANLIST command. 
+        - To view the current channel banlist, refer to the BANLIST command.
+
+       /msg X unban <#channel> <nick | *!*userid@host>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                    LEVEL 50+ (Trusted Channel Regular)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  KICK - Makes X kick someone from the channel. 
+       - Your username will be placed in the kick message, enclosed in parentheses.
+
+       /msg X kick <#channel> <nick> [reason]
+
+  TOPIC - Makes X change the topic in the channel (145 characters max) and includes your username, enclosed in parentheses, 
+          at the beginning of the topic.
+  
+  NOTE: If a DESCRIPTION or URL has been set and AUTOTOPIC is ON, the channel topic will be reset in 30 minutes, 
+        unless the channel is idle. (no users joining)
+
+       /msg X topic <#channel> <topic>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                       LEVEL 25+ (Channel Regular)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  DEVOICE - Devoices one or more users in the channel.
+
+       /msg X devoice <#channel> [nick] [nick2] ... [nickN]
+
+  VOICE - Voices one or more users in the channel.
+
+       /msg X voice <#channel> [nick] [nick2] ... [nickN]
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                       LEVEL 1+ (Minimum Access)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  BANLIST - Displays the channel banlist.
+
+       /msg x banlist <#channel>
+
+  REMUSER - At this level, and above, you can remove yourself from any channel, as long as you are not the Channel 
+            manager (Access Level 500 in that channel). 
+          - Channel Managers who wish to remove themselves must purge the channel, or transfer the channel to another user.
+
+       /msg X remuser <#channel> <your username>
+
+  STATUS - Displays all channel flags and settings, the number of users and ops in the channel, currently authenticated 
+           users for the channel, and whether X is on the channel or not. 
+         - Currently authenticated users are shown in a "username/nickname [level]" format. 
+         - A user's nickname will only be shown if that user is currently on the channel, otherwise only their username
+           and level are displayed. 
+         - At this level, you won't see channel modes.
+
+       /msg X status <#channel>
+
+
+  ACCESS - Looks up access information for a certain user via nick or username, or multiple users via wildcard pattern. 
+         - The information displayed is: access level, automode if applicable, suspension status and level if suspended, 
+           and when the user was last seen. 
+         - If there are more than 15 results, log into http://cservice.undernet.org/live/ to see the entire list 
+           by clicking on the "Channel Information" link and submitting the channel name. 
+         - You can also combine these options to get specific results.
+
+       /msg x access <#channel> <*|pattern|username|=nickname> [-min <level>] [-max <level>] [-modif] [-none|-voice|-op]
+
+     * - shows the entire channel access list.
+       /msg x access <#channel> *
+
+     pattern - shows the access level of all usernames matching the wildcard pattern.
+       /msg x access <#channel> <pattern>
+
+     username - shows the access level of a single user.
+       /msg x access <#channel> <username>
+
+     =nickname - shows the access level of a single user by nickname.
+       /msg x access <#channel> <=nickname>
+
+     -min <level> - shows only users above the given level.
+       /msg x access <#channel> -min <level>
+
+     -max <level> - shows only users below the given level.
+       /msg x access <#channel> -max <level>
+
+     -op - shows only users with the OP AUTOMODE flag.
+       /msg x access <#channel> -op
+
+     -voice - shows only users with the VOICE AUTOMODE flag.
+       /msg x access <#channel> -voice
+
+     -none - shows only users with no AUTOMODE flag (None).
+       /msg x access <#channel> -none
+
+     -modif - shows who last modified the access listing.
+       /msg x access <#channel> -modif
+
+  CHANINFO - Displays whether or not a channel is registered, to whom, and the currently set DESCRIPTION and URL, if any.
+
+  Alias: INFO
+
+       /msg x chaninfo <#channel>
+       /msg x info <#channel>
+
+
+  INFO - Displays information about a username such as their nick and userid@host if they are currently online, 
+         their language and invisible settings, last seen information, and whether they may have been suspended
+         by a CService Administrator. 
+       - If used on yourself, it also shows your registered email address, the last hostmask (nick!userid@host format)
+         used when the username was logged into, and   lists all channels which you have access on (only CService and you 
+         can see this information, not other users). 
+       - If you wish to make this information hidden to the public, refer to the SET INVISIBLE command.
+
+       /msg X info <username>
+
+  ISREG - Checks if a channel is registered or not.
+
+       /msg X isreg <#channel>
+
+  LBANLIST - Searches X's banlist for the specified string. Use * to see the whole list, or specify a wildcard pattern 
+             to find specific bans. 
+           - If there are more than 15 results, log into http://cservice.undernet.org/live/ to see the entire list 
+             by clicking on the "Channel Information" link and submitting the channel name.
+
+       /msg x lbanlist <#channel> <pattern>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                           LEVEL 0 (Everyone)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+  LOGIN - This loads your access listing into memory and authenticates you for all registered channels which 
+          you have access on.
+         *** Remember: No one from CService will ever ask you for your password!  
+                       Do NOT give out your password to anyone claiming to be CService!
+
+       /msg x@channels.undernet.org login <username> <password>
+
+  NOTE : - You can hide your real IP with /mode nickname-here +x
+         +x is a user mode which enables Undernet's "Virtual Hostmask," which will mask your true host/IP address with 
+         <your_username>.users.undernet.org.
+         - Other users will see this virtual hostmask instead of your actual host/IP address.  
+         - CService Admin and IRC Operators can see through +x, as can X.
+         - You will always be able to see your true host/IP, of course.
+         - Unlike the virtual hostmask mode that some other IRC networks use, Undernet�s cannot be unset; 
+           the user must disconnect from Undernet to disable it.
+
+
+  MOTD - Displays X's "Message of the Day."
+
+       /msg X motd
+
+
+  SET - Changes special modes for your username.
+
+       /msg x set <invisible|lang> <value>
+
+  INVISIBLE - Toggles the invisibility setting for your username info.
+            - When this setting is on, another user cannot see if you are online, or see any of your username info 
+              using the INFO command.
+
+       /msg X set invisible <on|off>
+
+  NOADDUSER - Toggle noadduser on or off for your username. 
+            - When this setting is on, another user cannot add you to any channels.
+      /msg X set noadduser <on|off>
+
+  LANG - Selects the language in which X will reply to you.
+
+       /msg X set lang <language code>
+
+          Languages available:
+          Code - Language
+          � ar - Arabic
+          � ca - Catalan
+          � ch - Christmas
+          � de - German
+          � dk - Danish
+          � ea - Easter
+          � en - English
+          � es - Spanish
+          � fr - Fran�ais
+          . gr - Greek
+          � ha - Halloween
+          � hu - Hungarian
+          � it - Italian
+          � mk - Macedonian
+          � nl - Dutch
+          � no - Norsk
+          � pt - Portuguese
+          � ro - Romanian
+          � sv - Svenska
+          � tr - Turkce
+
+  SHOWCOMMANDS - Shows all the commands you can use on a channel, according to your access level. 
+                 If no channel is specified, only level 0 commands are shown.
+  
+       /msg X showcommands [#channel]
+
+  SHOWIGNORE - Shows X's current ignore list. X automatically sets a 1 hour ignore on anyone who accidentally or 
+               intentionally floods it. 
+
+  NOTE: - X will not reply to you if you are being ignored. 
+        - If you don't receive replies from X, ask a friend to check the ignore list for you.
+
+       /msg X showignore
+
+  SUPPORT - A method allowing you to confirm or deny support for a channel application which you are listed 
+            as a supporter on. 
+          - Upon authenticating, X will notify you of any channel applications that you are listed as a supporter on 
+            and will also notify you of this SUPPORT command. 
+          - Alternatively, you can choose to view the application on the web to see more information about it, post an 
+            objection, and confirm or deny your support from there. 
+          - The command will not be effective if you are not listed on a channel as a supporter, or a channel does not have
+            a pending application on the web.
+
+       /msg X support <#channel> <yes|no>
+
+  VERIFY - Displays whether or not a person is logged in, and if so displays their username, and also indicates whether 
+           or not they are an Official CService Administrator, Developer, or Representative, and/or an IRC Operator.
+
+       /msg X verify <nick>
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  This document was last updated on February 03, 2006 - by KoGiTo
+  This file is maintained by Undernet CService Committee
+  E-mail cservice@undernet.org with any suggestions or comments
+  CService URL: http://cservice.undernet.org
+  Undernet URL: http://www.undernet.org
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

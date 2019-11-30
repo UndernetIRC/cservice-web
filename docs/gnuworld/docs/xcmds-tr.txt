@@ -1,0 +1,500 @@
+--------------------------------------------------------------------------------
+
+                            Undernet Kanal Servis Komitesi
+                              CMaster Komutlar Listesi
+                             Güncelleme: 08 Mayýs 2002
+
+--------------------------------------------------------------------------------
+
+NOT:
+* <> karakterleri ile sýnýrlandýrýlmýþ deðiþkenlerin kullanýlmasý zorunludur.
+* [] karakterleri arasýnda kalan deðiþkenler ise opsiyoneldir.
+* x|y þeklinde yazýmýn anlamý x ya da y'dir.
+* <rumuz> kiþinin IRC'ye baðlý olduðu anda kullandýðý rumuzdur.
+* <kullanýcý_adý> kiþinin kullanýcý listesinde görünen kullanýcý adýný, <rumuz> deðiþkeni ile 
+  karýþtýrýlmamasý için, temsil eder. Kullanýcý adlarý ve kiþinin kullanýcý adýnýn bulunmasý ile
+  ilgili ileri bilgileri, VERIFY ve INFO komutunda bulabilirsiniz (Seviye 0).
+* <kullanýcý_adý> alanýna kullanýcýnýn rumuzu, eþittir iþareti (=) hemen önünde gelmek
+  koþuluyla, yazýlarak da kullanýlabilir.
+  Örneðin, ^[Test]^ rumuzuyla ve Test kullanýcý adýyla bir kiþi olduðunu düþünelim. ACCESS
+  komutu bu kiþi üzerinde iki yöntemle de uygulanabilir:
+  1. /msg x access <#kanal> Test
+  ya da
+  2. /msg x access <#kanal> =^[Test]^
+  Ýlk yöntem X'e, kullanýcý listesinde, "Test" kullanýcý adýnda birisi olup olmadýðýný doðrudan
+  doðruya sorar.
+  Ýkinci yöntemde ise, öncelikle X'in ^[Test]^ rumuzlu kiþinin, eðer tanýmlanmýþsa, "Test" olan
+  kullanýcý adýný bulmasýný saðlar.
+  Bu, <kullanýcý_adý> gerektiren her komutta kullanýlabilir. Ama sadece kiþi tanýmlanmýþsa iþe
+  yarar, aksi takdirde "No Match" ya da "Eþleþme yok" cevabý veya eþ bir yanýta dönüþür.
+
+
+--------------------------------------------------------------------------------
+SEVÝYE 500 Komutlarý : Kanal Sahibi
+--------------------------------------------------------------------------------
+
+
+  PART - X'in kanaldan ayrýlmasýný saðlar.
+
+    /msg x part <#kanal>
+
+  SET - Kanal ile ilgili özel modlarý deðiþtirir.
+
+    /msg x SET <#kanal> <deðiþken> <deðer>
+
+   * Deðiþkenler ve deðerler:
+
+   AUTOJOIN - Deðer ON durumunda iken, bu komut X'in herzaman kanalýnýza girmesini saðlayacaktýr. 
+   Deðer OFF iken ise, kanalýnýzdan X'i çýkartacak, ayný zamanda að kopmalarý (netsplit)
+   sonrasýnda kanala, X, yeniden girmeyecektir.
+
+     /msg x set <#kanal> autojoin <on|off>
+
+   MASSDEOPPRO - X'in 15 saniyelik süreç içerisinde izin vereceði en fazla DEOP komutu
+   kullanma sýnýrýdýr. Bunu aþan kullanýcý kanaldan atýlacak, (eriþim listesinde ise) eriþimi
+   askýya alýnacak ve operatör olmasýný engellemek için, seviyesi 25 olan yasaklama (BAN)
+   konulacaktýr. Askýya alma ve yasaklama süresi; 5 dakikadýr. MASSDEOPPRO komutu kullanýlýrken,
+   deðer 1'den -ki 1 deðeri en hassasýdýr- 7'ye kadar farklý deðerler alabilir. 0 deðeri ise
+   özelliði kapatýr.
+
+     /msg x set <#kanal> massdeoppro <0-7>
+
+   NOOP - X'in dýþýnda hiç kimsenin operatör olamamasý anlamýna gelmektedir. Bu X'in komutlarýna
+   eriþiminizi ya da kanal kontrolünüzü engellemez. Eðer X'e kendinizi tanýttýysanýz (login 
+   olduysanýz), KICK, BAN vb. komutlarý X üzerinden kullanabilirsiniz, lakin kendinize
+   operatörlük yetkisi veremezsiniz.
+
+     /msg x set <#kanal> noop <on|off>
+
+   STRICTOP - Bu komut bir kanalda, sadece, X'e kendini 100 ya da daha fazla eriþim seviyesi 
+   (access level) ile tanýtanlarýn operatör olabilmesine izin vermektedir.
+
+     /msg x set <#kanal> strictop <on|off>
+
+--------------------------------------------------------------------------------
+SEVÝYE 450-499 : Güvenilir Kanal Yöneticisi.
+--------------------------------------------------------------------------------
+
+  SET - Kanal ile ilgili özel modlarý deðiþtirir.
+
+    /msg x SET <#kanal> <deðiþken> <deðer>
+
+   * Deðiþkenler ve deðerler:
+
+   AUTOTOPIC - Bu komut, X'in kanal internet adresini (URL) ve açýklamasýný (DESCRIPTION), her
+   30 dakikada bir, kaydedildiði þekilde, güncellemesini saðlar. Bu süre dahilinde kanala giriþ
+   çýkýþýn olmamasý halinde, kanal baþlýðýnýn yenilenmeyeceði unutulmamalýdýr.
+
+     /msg x set <#kanal> autotopic <on|off>
+
+   DESCRIPTION - Varsayýlan kanal baþlýðýný tayin eder (en fazla 80 karakter). Bu gerçek baþlýðý
+   AUTOTOPIC ON olmadýkça, etkilemez. Baþlýk ancak CHANINFO komutu ile ya da web sitesinde
+   görüntülenir. Eðer hiçbir açýklama yazýsý kullanýlmadý ise, mevcut açýklama silinir.
+   Takma Adý: DESC
+
+     /msg x set <#kanal> description [yazý]
+     ya da
+     /msg x set <#kanal> desc [yazý]
+
+   FLOATLIM - Gelip-geçici-limit özelliðini açar ya da kapatýr. Eðer açýlýrsa X, periyodik
+   olarak belirlenmiþ zaman aralýðýnda ve belirlenmiþ sýnýrý mevcut kanaldaki kiþi sayýsýna
+   ekleyerek, kanal limitini düzenleyecektir. Bu kanala yapýlan fazla sayýda ani giriþleri ve
+   saldýrýlarý önleyecektir. Vasrayýlan olarak, bu özellik kapalýdýr. Açýldýðýnda STATUS komutu
+   ayarlarý "Flags set:" satýrýnda "FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)." þeklinde
+   gösterecektir. Bu FLOATLIM açýk, FLOATMARGIN 3, FLOATPERIOD 20 saniye, FLOATGRACE 1 ve
+   FLOATMAX 0 anlamýna gelir. Daha fazla bilgi için SET FLOATGRACE, SET FLOATMARGIN,
+   SET FLOATMAX, ve SET FLOATPERIOD komutlarýna baþvurun.
+
+     /msg x set <#kanal> floatlim <on|off>
+
+   FLOATGRACE - Gelip-geçici-limit erteleme deðerini belirler. Bu sayý 0-19 arasý olabilir.
+   Bu X'in belirtilen sayý kadar kullanýcý kanala girip çýkmadan, limiti deðiþtirmesini önler.
+   Sonuç olarak X sakin kanallarý bir sürü mod deðiþikliðiyle doldurmayacaktýr. Varsayýlan
+   deðer 1'dir.
+
+     /msg x set <#kanal> floatgrace <0-19>
+
+   FLOATMARGIN - Kanalda kullanýlacak gelip-geçici-limit sýnýrýný belirler. Bu sayý 2-20
+   arasý olabilir. X'in koyacaðý limit: kanaldaki kullanýcý sayýsý + FLOATMARGIN olacaktýr.
+   Varsayýlan deðer 3'tür.
+
+     /msg x set <#kanal> floatmargin <2-20>
+
+   FLOATMAX - Gelip-geçici-limit özelliðinde konabilecek en fazla limiti belirler. Burda
+   herhangi bir sayý kullanýlabilir ve X'in seçilen sayýdan fazla bir limit koymasýný
+   engeller. Böylelikle, herhangi bir zamanda kanala en fazla kaç kiþi girebileceði
+   sýnýrlandýrýlmýþ olur. Varsayýlan deðer 0'dýr ve özelliði kapatýr.
+
+     /msg x set <#kanal> floatmax <0 | istenen en fazla limit>
+
+   FLOATPERIOD - X'in kanal limitini deðiþtirmeden bekleyeceði gelip-geçici-limit
+   periyodunu, saniye cinsinden belirler. Bu sayý 20-200 arasýndadýr. Varsayýlan deðer
+   20 saniyedir.
+
+     /msg x set <#kanal> floatperiod <20-200>
+
+   KEYWORDS - Kanal aramalarýnda (SEARCH - seviye 0), kanalýnýzýn listelenmesini saðlayan,
+   anahtar kelimeleri belirlemenizi saðlar. Eðer hiçbir anahtar kelime belirtilmezse, mevcut
+   kelimeler silinir.
+
+     /msg x set <#kanal> keywords [yazý]
+
+   MODE - Yürürlükte olan kanal modlarýný kaydeder. X kanalýnýza girdiðinde, o anda konmamýþ
+   olan modlarý uygular.
+
+     /msg x set <#kanal> mode
+
+   URL - Bu komut ile kanalýnýzýn anasayfa adres(ler)ini belirtebilirsiniz (en fazla 75
+   karakter). Birden fazla adresin belirtilmesi için, boþluklara izin verilmiþtir. Bu gerçek
+   baþlýðý, AUTOTOPIC ON (seviye 450) olmadýkça etkilemez. Baþlýk ancak CHANINFO komutu
+   (seviye 0) ile ya da web sitesinde görüntülenir. Eðer hiçbir adres kullanýlmadý ise, mevcut
+   adres(ler) silinir.
+
+   /msg x set <#kanal> url [url url2 ... urlN]
+
+   USERFLAGS - Eriþim listesine yeni eklenen her kullanýcý için, otomatik mod (AUTOMODE)
+   ayarlarýndaki, otomatik olarak operatörlük (OP) ya da söz hakký (VOICE) verme özelliðini aktif
+   etmeye yarar. Standart deðer 0'dýr (sýfýrdýr).
+   NOT: Bir kullanýcý eriþim listesine eklendikten sonra, MODINFO AUTOMODE komutu ile (seviye
+   400), bireye özel olarak nitelendirilmesi mümkündür.
+
+   * Deðerler: 0 = Yeni eklenen her kullanýcý için otomatik mod konulmamýþ.
+   	1 = Yeni eklenen her kullanýcý için Otomatik operatörlük modu konulmuþ.
+   	2 = Yeni eklenen her kullanýcý için otomatik söz hakký modu konulmuþ.
+
+      /msg x set <#kanal> userflags <0-2>
+
+  JOIN - Kanalýnýza X'in katýlmasýný saðlar.
+
+    /msg x join <#kanal>
+
+--------------------------------------------------------------------------------
+SEVÝYE 400-449 : Eriþim Listesi Yöneticisi.
+--------------------------------------------------------------------------------
+
+  ADDUSER - Kanal eriþim listesine yeni bir kullanýcý ekler. Kendi eriþim seviyenize eþit ya da
+  büyük bir deðerle ekleme yapamazsýnýz.
+
+    /msg x adduser <#kanal> <kullanýcý_adý> <seviye>
+
+  CLEARMODE - Tüm kanal modlarýný temizler. Kanalýnýz kilitlendiði zaman kullanabilirsiniz
+  (bilginiz olmadan +i ya da +k konulmasý gibi).
+  NOT: Bu kanalýnýza giriþinizi kazanmanýz için, uygulanmasý gereken en iyi çözüm yöntemi
+  deðildir. Çünkü diðer kullanýcýlar ya da botlar, siz kodlarý sildikçe yeniliyor olabilirler.
+  Ýlgili bilgilendirmeler için, STATUS komutuna (seviye 200) baþvurunuz.
+
+    /msg x clearmode <#kanal>
+
+  MODINFO - Aþaðýdaki komutlar mevcut kanal eriþimlileri için deðiþiklikler yapmaya yarar.
+
+  * Modinfo için deðiþkenler:
+
+     ACCESS - Bir kullanýcýnýn eriþim seviyesini deðiþtirir. Eriþim seviyesi 1 ile sizden bir
+     deðer küçüðü arasýnda ayarlanabilir (Eðer 400'lük bir eriþim seviyeniz varsa, ancak 399'a
+     kadar belirleyebilirsiniz).
+
+       /msg x modinfo <#kanal> access <kullanýcý_adý> <yeni seviye>
+
+     AUTOMODE - Kullanýcýnýn otomatik modunu, belirtilen modlara çevirir: NONE, OP, ya da VOICE.
+     OP ya da VOICE tanýmlanmýþ kullanýcýya kanala girince otomatik operatörlük ya da söz hakký
+     verir. NONE deðerliði ise X'in hiçbirþey yapmamasýný saðlar.
+
+       /msg x modinfo <#kanal> automode <kullanýcý_adý> <none|op|voice>
+
+  REMUSER - Kanal veri tabanýnda bir kullanýcýyý siler. Silebilmek için kullanýcýdan daha fazla
+  eriþime sahip olmanýz gereklidir. Kanal sahibi (kanalda 500 eriþim seviyeli) olmadýðýnýz
+  sürece, kendinizi de silmeniz mümkündür. Kendilerini silmek isteyen kanal sahipleri için,
+  kanallarýný kapattýrmalarý gereklidir.
+
+    /msg x remuser <#kanal> <kullanýcý_adý>
+
+--------------------------------------------------------------------------------
+SEVÝYE 200 : Eriþim Listesi Operatörü.
+--------------------------------------------------------------------------------
+
+  KICK - Kullanýmý, kanala aþýrý yüklenmeleri ve kopya kullanýcýlarý (clone) önlemekle
+  sýnýrlandýrýlmalýdýr. Bu nadiren kullanýlan bir komuttur. Ayrýca, atýlanlarýn geri girememesi
+  için user@host üzerine yasaklama koymaya veya kanalý +i(davetlilere özel) yapmaya ihtiyaç
+  duyabilirsiniz.
+
+    /msg x kick <#kanal> <rumuz | *!*user@*.host> [sebep]
+
+  STATUS - Tüm özel X ayarlarýný, kanal modlarýný, kanaldaki kullanýcý ve operatör sayýsýný, ve
+  tanýmlanmýþ kanal eriþimlilerini; "kullanýcý_adý/rumuz (seviye)" þeklinde ve X'in kanalda olup
+  olmadýðýný listeler. Bir kiþi, eðer o an kanalda bulunuyorsa rumuzu listelenecektir, aksi
+  takdirde yalnýz kullanýcý adý ve seviyesi bildirilir. Kanal modlarýnýn görülebilmesi, anahtarý
+  (key) görebildiðiniz sürece, +k (kilitlenmiþ mod) için oldukça yararlýdýr. Bu bilgiler X'in
+  kanalda olup olmamasýna aldýrmayarak, her olasýlýkta listelenecektir.
+
+    /msg x status <#kanal>
+
+--------------------------------------------------------------------------------
+SEVÝYE 100-199 : Kanal Operatörü.
+--------------------------------------------------------------------------------
+
+  DEOP - Kanalýzdaki bir ya da daha fazla kiþinin operatörlüðünü alýr. Eðer hiçbir rumuz
+  belirtilmezse, ve siz kanalda operatör iseniz, X sizin operatörlüðünüzü alýr. NOT: MASSDEOPPRO
+  özelliðindeki limiti aþmamanýz konusunda dikkatli olun (bak. SET MASSDEOPPRO - seviye 500).
+
+    /msg x deop <#kanal> [rumuz] [rumuz2] ... [rumuzN]
+
+  OP - Kanalýnýzdaki bir veya daha fazla kiþiye operatörlük verir. Eðer hiçbir rumuz yazýlmaz ve
+  siz de kanalda operatör deðilseniz, X size operatörlük verir.
+
+     /msg x op <#kanal> [rumuz] [rumuz2] ... [rumuzN]
+
+  INVITE - X'in sizi kanalýnýza davet etmesini saðlar.
+
+    /msg x invite <#kanal>
+
+  SUSPEND - Belirtilen süre boyunca, kiþinin, kanalýnýzda X'e olan eriþimini askýya alýr. Kendi
+  eriþim seviyenizden daha düþük olan kiþilere uygulayabilirsiniz. Eðer hiçbir seviye
+  belirtilmezse, varsayýlan askýya alma süresi, iþlemi yapanýn seviyesi ile ayný olarak
+  belirlenir. En fazla zaman aralýðý 372 gündür (8928 saat, 535680 dakika).
+
+  * Zaman deðerleri: D = gün
+                     H = saat
+                     M = dakika
+
+    /msg x suspend <#kanal> <kullanýcý_adý> <zaman_aralýðý> [seviye]
+    * Zaman Aralýðý Örneði: "5 d" = 5 gün (týrnak iþareti olmadan kullanýnýz)
+
+  UNSUSPEND - Kanalýzda eriþim listesinde bulunan kiþinin, eriþiminin askýya alýnma durumunu
+  iptal eder. Kendinizden düþük eriþimdeki kimseye ve ancak uygulanmýþ olan askýya alma
+  seviyesinden fazla eriþim seviyeniz varsa uygulayabilirsiniz.
+
+    /msg x unsuspend <#kanal> <kullanýcý_adý>
+
+--------------------------------------------------------------------------------
+SEVÝYE 75-99 : Yeni Kanal Operatörü.
+--------------------------------------------------------------------------------
+
+  BAN - Kanalýnýzýn yasaklýlar listesine belirli bir *!*user@*.host ekler. Kiþi IRC'ye baðlýysa
+  rumuzunu, baðlý deðilse *!*user@*.host bilgisini yazmanýz gerekir. Yeni koyulan bir yasaklama
+  eski yasaklamalarý içeriyorsa, yenisiyle deðiþtirilirler. Yasaklama 75+ seviye ile koyulmuþsa,
+  yasaklamayla örtüþen kiþi kanaldan derhal atýlacaktýr. Zaman aralýðý birimi saattir ve maksimum
+  336 saat (2 hafta) olarak belirlenebilir. Yasaklama seviyesi 1'den kendi seviyenize kadar
+  deðiþebilir. Yasaklama sebebi en fazla 128 karakter olabilir. Eðer hiçbir deðerlik
+  belirtilmezse zaman 3 saat, seviye ise 75 olarak belirlenir.
+
+  * Yasaklama seviyeleri:  1-74 = kanalda operatör (+o) olmasýný engeller.
+                           75+ = Kiþinin kanalda bulunmasýný engeller.
+
+    /msg x ban <#kanal> <rumuz | *!*user@*.host> [zaman] [seviye] [sebep]
+
+  UNBAN - *!*user@*.host deðerliðini ve diðer benzer yasaklamalarý, kanal yasaklýlar listenizden
+  çýkarýr. Ancak kendi seviyenize eþit ya da daha düþük olan yasaklamalarý, X'in yasaklýlar
+  listesinden çýkarabilirsiniz. X'in yasaklýlar listesinde arama yapmak için, LBANLIST (seviye
+  0) komutuna baþvurunuz.
+
+    /msg x unban <#kanal> <rumuz | *!*user@*.host>
+
+--------------------------------------------------------------------------------
+SEVÝYE 50-74 : Güvenilir Düzenli Kanal Kullanýcýsý.
+--------------------------------------------------------------------------------
+
+  KICK - Kanalýnýzdan bir kiþiyi atmanýzý saðlar ve sebep kýsmý opsiyoneldir. Rumuzunuz sebep
+  içerisine eklenecektir.
+
+   /msg x kick <#kanal> <rumuz> [sebep]
+
+  TOPIC - Kanal baþlýðýný, baþlýk baþlangýcýna, parantez içinde kullanýcý adýnýzý
+  barýndýrarak deðiþtirecektir (en fazla 145 karakter). NOT: Eðer DESCRIPTION ya da URL
+  belirlenmiþ ve AUTOTOPIC ON ise, kanala giriþ çýkýþ olduðu sürece, 30 dakika içinde
+  deðiþecektir.
+
+    /msg x topic <#kanal> <baþlýk>
+
+--------------------------------------------------------------------------------
+SEVÝYE 25-49 : Düzenli Kanal Kullanýcýsý.
+--------------------------------------------------------------------------------
+
+  DEVOICE - Kanalýnýzda bir ya da daha fazla kiþiden söz hakkýný alýr.
+
+    /msg x devoice <#kanal> [rumuz] [rumuz2] ... [rumuzN]
+
+  VOICE - Kanalýnýzda bir ya da daha fazla kiþiye söz hakký verir.
+
+    /msg x voice <#kanal> [rumuz] [rumuz2] ... [rumuzN]
+
+--------------------------------------------------------------------------------
+SEVÝYE 1-24 : En Düþük Eriþim.
+--------------------------------------------------------------------------------
+
+
+  BANLIST - Kanal yasaklýlar listesini gösterir. Bu komut kanalda olsanýz da olmasanýz da
+  çalýþýr.
+
+    /msg x banlist <#kanal>
+
+  STATUS - Kanal modlarýnýn (+tn vb.) 200 eriþim altýndakilere bildirilmemesinin haricinde,
+  seviye 200'deki STATUS komutuyla ayný þeyi yapar.
+
+  /msg x status #kanal
+
+--------------------------------------------------------------------------------
+SEVÝYE 0 : Diðer herkes.
+--------------------------------------------------------------------------------
+
+  ACCESS - Belirli kullanýcý ya da dizgi için eriþime bakar. Buradaki bilgi; eriþim seviyesini,
+  eðer askýya alýnma varsa durumunu, ve kullanýcýnýn en son ne zaman görüldüðünü gösterir.
+  Tüm kullanýcýlar için:/msg x access <#kanal> * komutunu kullanýnýz.
+  Eðer 15'ten fazla giriþ yapýlmýþsa, http://cservice.undernet.org/live/ adresine giderek login
+  olun ve "Channel Information" baðlantýsýna týklayarak tüm listeyi görün. Ayrýca bu özellikleri
+  daha detaylý sonuçlarý almak için, kullanabilir ve birleþtirebilirsiniz.
+
+  * Eriþim özellikleri:
+
+    kullanýcý_adý - tek bir kullanýcýnýn eriþim seviyesini gösterir.
+       /msg x access <#kanal> <kullanýcý_adý>
+
+    -min <level> - sadece verilen seviyenin üzerindeki eriþimlileri listeler.
+       /msg x access <#kanal> -min <seviye>
+
+    -max <level> - sadece verilen seviyenin altýndaki eriþimlileri listeler.
+       /msg x access <#kanal> -max <seviye>
+
+    -op - sadece otomatik operatör modu belirlenmiþ eriþimlileri listeler.
+       /msg x access <#kanal> -op
+
+    -voice - sadece otomatik söz hakký modu belirlenmiþ eriþimlileri listeler.
+       /msg x access <#kanal> -voice
+
+    -none - sadece otomatik modu belirlenmemiþ eriþimlileri listeler.
+       /msg x access <#kanal> -none
+
+    -modif - eriþim listesinde en son deðiþiklik yapan kiþiyi listeler.
+       /msg x access <#kanal> -modif
+
+  CHANINFO - Bir kanalýn kayýtlý olup olmadýðýný, kayýtlý ise; kime ait olduðunu, eðer varsa;
+  mevcut DESCRIPTION ve URL deðerliklerini görüntüler.
+  Takma ad: INFO
+
+     /msg x chaninfo <#kanal>
+     ya da
+     /msg x info <#kanal>
+
+  HELP - Verilen komut için yardým bilgilerini görüntüler.
+
+     /msg x help [komut]
+
+  INFO - Kullanýcý adý için, eðer IRC'ye baðlý ise, rumuzunu ve user@host'unu, lisan seçeneðini,
+  son görülme bilgilerini, görünmezlik ayarlarýný ve bir CService Yöneticisi tarafýndan askýya
+  alýnýp alýnmadýklarýný bildirir. Eðer kendi üzerinizde uygularsanýz, kayýtlý e-posta
+  adresinizi, en son tanýmlandýðýnýzda kullandýðýnýz host adresinizi (nick!userid@host formunda)
+  ve hangi kanallarda eriþimli olduðunuzu -bu sadece siz ve CService yöneticilerince görülebilir-
+  da gösterir. Bu bilgilerin herkese açýk olmasýný istemiyorsanýz; SET INVISIBLE (seviye 0)
+  komutuna baþvurunuz.
+
+    /msg x info <kullanýcý_adý>
+
+  LBANLIST - Belirli dizin için X'in yasaklýlar listesini araþtýrýr. Tüm listeyi görmek için * 
+  iþaretini kullanabilir, ya da belirli bir yasaklýyý görmek için *!*user@*.host
+  kullanabilirsiniz. Listede 15'den fazla giriþ varsa, http://cservice.undernet.org/live/
+  adresine gidip kendinizi tanýmlayýn, "Channel Information" baðlantýsýna týklayýn ve istediðiniz
+  kanal adýný yollayýn.
+
+    /msg x lbanlist <#kanal> <* | *!*user@*.host>
+
+  LOGIN - Eriþimdeki listelenmenizi hafýzaya alýrken, eþzamanlý olarak, eriþimli olduðunuz tüm
+  kanallarda kendinizi tanýmlanmanýzý saðlar.
+
+    /msg x@channels.undernet.org login <kullanýcý_adý> <þifre>
+
+  MOTD - X'in günün mesajýný görüntüler.
+
+    /msg x motd
+
+  NEWPASS - Kullanýcý adýnýz için þifrenizi deðiþtirmenizi saðlar. Komutun þifrenizi
+  deðiþtirmede baþarýlý olmasý için, eski þifreniz ile tanýmlanmýþ olmanýz gereklidir.
+  NOT:  1. Þifreler durum hassasiyetli, yani büyük küçük karakter önemlidir. 
+           Örneðin: "CService", "cservice" deðildir.
+        2. Þifreler, keþfedilmelerinin zorlaþmasý açýsýndan, bir kelimeden uzun olabilirken, bir
+           cümle ya da deyim olmasý dahi mümkündür. Size bu özelliði kullanmanýzý öneriyoruz.
+           En fazla uzunluk 50 karakterdir.
+           Örneðin, bir þifre þu olabilir: "Undernet Kanal Servisi"
+
+    /msg x@channels.undernet.org newpass <yeni þifre>
+
+  REMUSER - Bu seviyede ve üzerinde, 500 eriþimli yani kanal sahibi olmadýðýnýz sürece kendinizi
+  herhangi bir kanaldan silebilirsiniz. Kendilerini silmek isteyen kanal sahipleri için,
+  kanallarýný kapattýrmalarý gereklidir.
+
+    /msg x remuser <#kanal> <sizin kullanýcý_adýnýz>
+
+  SEARCH - Eðer varsa, verdiðiniz ve bir kanal için nitelendirilmiþ arama parametrelerinin
+  bulunduðu kanallarý listeler.
+
+    /msg x search <arama parametresi>
+
+  SET - Kullanýcý adý için özel ayarlarý deðiþtirir.
+
+    /msg x set <deðiþken> <deðer>
+
+   * Deðiþkenler ve deðerler:
+
+  INVISIBLE - Kullanýcý adý bilgilerinizin, INFO komutunun kullanýlmasýyla,
+  görüntülenebilirliðini, saklý ya da görülür olarak ayarlamanýzý saðlar. Daha fazla bilgi almak
+  için INFO (seviye 0) komutuna baþvurunuz.
+
+    /msg x set invisible <on|off>
+
+
+  LANG - X'in cevaplarýnda kullandýðý lisaný deðiþtirir.
+
+    /msg x set lang <lisan kodu>
+
+     Kullanýlabilinir lisanlar:
+     Kod  - Lisan
+     · ar - Arapça
+     · ca - Katalanca
+     · de - Almanca
+     · dk - Danca
+     · en - Ýngilizce
+     · es - Ýspanyolca
+     · fr - Fransýzca
+     · hu - Macarca
+     · it - Ýtalyanca
+     · nl - Hollandaca	*
+     · no - Norveççe
+     · pt - Portekizce
+     · ro - Rumence
+     · tr - Türkçe
+
+     * = bu lisanlar henüz hazýr deðildir, fakat yakýnda onlarý da desteklemeyi düþünüyoruz.
+
+  SHOWCOMMANDS - Eriþim seviyenize göre, kanalda kullanabilceðiniz tüm komutlarý listeler. Eðer
+  hiçbir kanal belirtilmezse, sadece 0 eriþim komutlarý görüntülenir.
+
+    /msg x showcommands [#kanal]
+
+  SHOWIGNORE - X'in komutlarýna aldýrmadýðý kiþilerin listesini gösterir. X'in bu "komutlara 
+  aldýrmama iþlemi" bir kiþinin isteyerek ya da kaza ile X'e aþýrý komut gönderimi yapmasýyla
+  gerçekleþir. Aldýrmama süresi 60 dakikadýr.
+
+    /msg x showignore
+
+  SUPPORT - Destekleyici olarak listelendiðiniz bir kanalýn baþvurusunda, kanala verdiðiniz
+  desteði doðrulamak ya da reddetmek için alternatif bir yöntemdir. Tanýmlanmanýzla birlikte, X
+  sizi destekleyici olarak listelenmiþ olduðunuz kanal hakkýnda uyaracak ve ayrýca SUPPORT
+  komutunu kullanmanýzý isteyecektir. Alternatif olarak, kanal baþvurusu hakkýnda daha fazla
+  bilgi almak için siteye bakabilir, itiraz yollayabilir ve desteðinizi onaylayabilir ya da
+  reddedebilirsiniz. Eðer kanal için bir destekleyici olarak listelenmemiþseniz ya da kanalýn
+  beklemede olan bir baþvurusu yoksa komut etkili olmayacaktýr.
+  
+    /msg x support <#kanal> <yes|no>
+
+  VERIFY - Bir kiþinin, resmi bir CService yöneticisi ya da temsilcisi olup olmadýðýný veya IRC
+  operatörlük durumunu, eðer tanýmlanmýþsa, kullanýcý adýný bildirir.
+
+    /msg x verify <rumuz>
+
+--------------------------------------------------------------------------------
+Bu doküman en son 27 Temmuz 2003 tarihinde, 
+Cavalry Resmi Undernet CService Komitesi Yöneticisi - cavalry@undernet.org
+evilgreen - evilgreen@undernet.org tarafýndan güncellenmiþtir.
+Bu dosya Undernet CService Komitesi'nce saðlanmaktadýr.
+Tavsiye ve düþünceleriniz için cservice@undernet.org adresine yazýnýz.
+--------------------------------------------------------------------------------
+
+

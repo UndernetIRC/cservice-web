@@ -1,0 +1,575 @@
+*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*
+
+                             Undernet Channel Service Committee 
+                                   Lista de Comenzi la X 
+                               Reactualizat: 3 Februarie 2006
+
+*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*
+
+NOTA:
+* Parametrii dintre <> sunt obligatorii.
+* Parametrii dintre [] sunt optionali.
+* x|y inseamna x sau y.
+* <nick> se refera la nickname-ul unei persoane de pe IRC cu care este 
+conectat.
+* <username> se refera la username-ul unei persoane asa cum apare el in 
+lista de accese; a nu fi confundat cu <nick>. Pentru mai multe informatii despre 
+username-uri si cum sa se gaseasca username-ul unei persoane, vezi comenzile VERIFY si INFO.
+* Toate comenzile care folosesc <username> pot fi folosite de asemenea 
+folosind nickname-ul cu care sunt conectati precedat de semnul egal (=).
+  Sa consideram o persoana care are nickname-ul ^Test^ si username-ul Test2K3. 
+  Comanda ACCESS poate fi folosita in doua moduri:
+
+    1. /msg x access <#canal> Test2K3
+  sau:
+    2. /msg x access <#canal> =^Test^
+ 
+  - Prima metoda il intreaba direct pe X daca este sau nu username-ul Test2K3 in lista de accese.
+  - A doua metoda il face pe X sa caute username-ul lui ^Test^ daca este 
+    autentificat, si daca este,va recurge direct la cautartea accesului corespunzator username-ul Test2K3.
+  - Acest lucru poate fi folosit cu orice comanda care foloseste <username>, dar va functiona doar
+    daca user-ul este autentificat, altfel raspunsul lui X va fi "No Match" sau echivalentul comenzii.
+* <masca> se refera la cautarea prin utilizarea unei anumite masti (* si ?). Un *!*userid@host este un exemplu de o masca.
+  - De exemplu, ambele comenzi ACCESS si LBANLIST accepta <masca> :
+
+    /msg x access <#canal> ?irc*
+    /msg x lbanlist <#canal> *.users.undernet.org
+
+  - Comanda ACCESS va returna toate username-urile de pe canal care corespund mastii ?irc* . 
+  - Comanda LBANLIST va returna toate banurile setate pentru userii care au activat hostul virtual al Undernet (usermode +x). 
+ 
+    NOTA pentru PROGRAMATORI de SCRIPTURI pentru IRC:
+
+* Cei care fac scripturi pentru IRC intotdeauna trebuie sa foloseasca 
+/msg x@channels.undernet.org pentru toate comenzile, nu numai LOGIN, pentru a fi siguri ca optiunea este trimisa la X in
+eventualitatea schimbarii temporare a nickname-ului lui X sau in alte circumstate care ar transforma scriptul 
+intr-unul nefolosibil temporar.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+		Comenzi de NIVEL 500 (Manager de canal)
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  PART - X va iesi de pe canalul tau.
+
+    /msg X part <#canal>
+
+  SET - Schimba modurile speciale a lui X pentru canal. Modurile sunt 
+        setari speciale prin care X va actiona intr-un anumit fel in diferite situatii.
+
+    /msg X SET <#canal> <autojoin|massdeoppro|noop|strictop> <valoare>
+
+   * Variabile si Valori:
+
+  AUTOJOIN - Cand este setat ON, il face pe X sa intre intotdeauna pe 
+             canal. Cand este setat OFF, il va face pe X sa iasa de pe canal si sa nu reintre dupa un netsplit.
+
+     /msg X set <#canal> autojoin <on|off>
+
+  MASSDEOPPRO - Numarul maxim de deopari pe care X  le va accepta 
+                 intr-o perioada de 15 sec.
+               - Orice user care depaseste va primi kick, suspend (daca e in lista de accese) si un ban de 
+                 nivel 25 pentru a preveni reoparea. Perioada de suspendare este de 5 minute.
+               - Dupa ce suspendul expira acestia vor trebui sa isi scoata banul singuri, pentru a putea avea OP din nou.
+               - Optiunea poate fi folosita cu valori cuprinse intre 1 (care este cea mai sensibila valoare) si pana la 7 
+                 (care este cea mai putin sensibila) - Valoarea 0 (zero) anuleaza optiunea.
+   
+   NOTA: Versiunea curenta a MASSDEOPPRO se aplica doar in momentul 
+         cand userii efectueaza deopari cu ajutorul optiunii /mode #canal -oo nick1 nick2 , iar nu 
+         prin comanda DEOP la X.
+
+     /msg X set <#canal> massdeoppro <0-7>
+
+   NOOP - Cand aceasta optiunea este ON, X nu va da voie nici unui 
+          utilizator sa fie OP.
+        - Aceasta nu inseamna ca X nu poate fi controlat; Daca esti autentificat,
+          poti folosi comenzi precum kick, ban - doar ca nu poti fi tu insuti OP.
+
+     /msg X set <#canal> noop <on|off>
+
+   STRICTOP - Aceasta optiune va lasa doar user-ii autentificati de 
+              Nivel 100+ ca sa fie opati.
+
+     /msg X set <#canal> strictop <on|off>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+     Comenzi de NIVEL 450+ (Administrator de incredere al canalului)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+   SET - Schimba modurile speciale a lui X pentru canal.
+
+    /msg X SET <#canal> <variabile> <valoare>
+
+   * Variabiles si Valori:
+
+   AUTOTOPIC - X va schimba topicul canalului in URL-ul si 
+               DESCRIPTION-ul canalului odata la 30 de minute. 
+               Daca, canalul este idle, topicul nu va fi resetat.
+
+     /msg X set <#canal> autotopic <on|off>
+
+   DESCRIPTION - Seteaza topicul "default" al canalului (maxim 80 de 
+                 caractere). Acest lucru NU afecteaza topicul canalului, decat daca 
+                 AUTOTOPIC este ON. DESCRIPTION-ul poate fi vazut prin comanda CHANINFO (nivel 0).
+                        
+   Aliasul: DESC
+
+     /msg X set <#canal> description [text]
+     sau
+     /msg X set <#canal> desc [text]
+
+   FLOATLIM - Seteaza floating-limit on sau off. Daca aceasta setare este on, X va reseta limita
+              canalului in limita presetata in comanda FLOATMARGIN deasupra numarului de useri care se afla
+              pe canal, si intr-o perioada de timp presetata. Aceasta setare previne floodnet-urile de join
+              si flood-ul canalului. Din default, aceasta optiune este off. 
+            - Cand este setata ON, comandata STATUS va arata setarile.
+
+   Exemplu de reply STATUS:
+   "Flags set:" si va aparea linia: "FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)." 
+   In acest exemplu, FLOATLIM este ON, cu FLOATMARGIN 3, FLOATPERIOD la 20 secunde, FLOATGRACE 1 si FLOATMAX este OFF.
+    
+ * Consultati comenzile SET FLOATGRACE, SET FLOATMARGIN, SET FLOATMAX 
+   si SET FLOATPERIOD pentru mai multe informatii. 
+
+     /msg X set <#canal> floatlim <on|off>
+
+   FLOATGRACE - Seteaza valoarea floating-limit grace pentru a fi 
+                folosita in canal. In alte cuvinte,aceasta este valoarea care corespunde 
+                cu numarul minim de useri care intra sau ies de pe canal inainte ca X sa schimbe limita.  
+              - Ca rezultat, X nu va fi incarcat cu multe schimbari de moduri.
+              - Numarul poate fi intre 0-19. Valoarea initiala este 1.
+
+     /msg X set <#canal> floatgrace <0-19>
+
+   FLOATMARGIN - Seteaza floating-limit margin pentru a fi folisit in 
+                 canal. Acest numar poate fi intre 2-20. 
+               - Limita pe care X o reseteaza va fi: numarul de useri de pe canal + FLOATMARGIN.
+               - Valoarea din default este 3.
+
+     /msg X set <#canal> floatmargin <2-20>
+
+   FLOATMAX - Seteaza limita maxima pentru setarea floating-limit. 
+            - Cand este ON, X nu va reseta limita canalului cu una mai mare decat FLOATMAX. 
+            - Valoarea poate fi intr-e 0 - 65536. Va loarea initiala este 0.
+
+     /msg X set <#canal> floatmax <0-65536>
+
+   FLOATPERIOD - Seteaza perioada floating-limit, in secunde, pentru a 
+                 fi folosita inainte ca X sa reseteze limita canalului. 
+               - Acest numar trebuie sa fie intre 20-200. 
+               - Valoarea din initiala este de 20 de secunde.
+
+     /msg X set <#canal> floatperiod <20-200>
+
+   KEYWORDS - Seteaza cuvintele cheie ale canalului (maxim 80 de 
+              caractere). Cuvintele cheie trebuie separate printr-un spatiu.
+            - Daca nu e specificat nici un cuvant cheie, variabila keywords va fi resetata.
+            - Momentan, /msg X search keywords nu este functionala.
+
+     /msg X set <#canal> keywords [text]
+
+   MODE - Aceasta optiune va salva actualele moduri ale canalului ca 
+          default. Cand X  ca intra pe canal va reseta modurile daca vreun mod din cele 
+          salvate nu este setat in acel moment.
+       NOTA : Prin aceasta optiune, X nu seteaza un mod  salvat in cazul in care unul dintre useri il sterge.
+  
+   /msg X set <#canal> mode
+
+   URL - Poti face publica adresa (adresele) canalului cu aceasta 
+         optiune (maxim of 75 de caractere). 
+       - URL-ul poate fi vazut folosind comanda CHANINFO sau logandu-te la 
+         http://cservice.undernet.org/live/ apoi dand click pe 
+         "Channel Information" si scriind numele canalului. 
+       - Daca nu e specificat nici un URL, variabila URL va fi resetata.
+
+   /msg X set <#canal> url [url(s)]
+
+   USERFLAGS - Determina daca da sau nu, OP sau VOICE va fi setat 
+               automat AUTOMODE cand un nou user este adaugat la lista de accese.
+             - Valoarea initiala este 0. Valori: 0 = None; 1 = Op; 2 = Voice.
+       NOTA : aceasta comanda nu va modifica automode-ul pentru userii care sunt deja adaugati pe canal.
+
+      /msg X set <#canal> userflags <0-2>
+
+  Consultati comanda MODINFO AUTOMODE pentru mai multe informatii.
+
+   JOIN - Il face pe X sa intre pe canal.
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+		NIVEL 400+ (Administrator de lista de accese)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+   ADDUSER - Adauga un user la lista de accese a canalului. 
+
+   /msg X adduser <#canal> <username> <acces>
+
+   CLEARMODE - Sterge toate modurile canalului. Poate fi folosita cand 
+               canalul a fost inchis (moduri de canal +i, +l si/sau +k).
+ 
+   NOTA: Aceasta nu este neaparat cea mai buna metoda de a intra pe 
+         canal, deoarece alti useri sau boti care sunt operatori pe canal pot reseta modurile 
+         dupa ce le-ai sters. Vezi comanda STATUS pentru alte informatii.
+
+    /msg X clearmode <#canal>
+
+   MODINFO - Urmatoarele comezi pot fi folosite pentru a face 
+             modificari la useri existenti. Nu poti modifica pe cineva cu un acces egal sau mai mare. 
+
+      /msg X modinfo <#canal> <access|automode> <username> <variabila>  
+
+   ACCESS - Schimba nivelul accesului unui user. Accesul poate fi setat 
+            intre 1 si cu 1 mai putin decat accesul tau (daca ai access 400, poti aloca un nivel maxim de 399 la alti useri).
+          - Trebuie sa ai acces mai mare decat cel pe care vrei sa il modifici.
+
+       /msg X modinfo <#canal> access <username> <nivel nou>
+
+   AUTOMODE - Schimba valoarea "automode" a unui user in urmatoarele 
+              moduri: NONE, OP, VOICE. 
+            - OP si VOICE il vor face pe X sa dea automat op respectiv voice la userii autentificati
+              cand acestia intra pe canal. 
+            - Automode va avea efect daca un user este deja pe canal o data ce acesta se autentifica cu X.
+                            
+
+       /msg x modinfo <#canal> automode <username> <none|op|voice>
+ 
+   REMUSER - Sterge un user din baza de date a canalului. 
+           - Trebuie sa ai acces mai mare decat acel user. 
+           - Deasemenea te poti sterge singur, daca nu esti managerul de canal (nivel 500).
+           - Managerii care vor sa se stearga singuri vor trebui sa ceara "purge" la canal, 
+             sau sa transfere canalul lor la alt user.
+
+    /msg X remuser <#canal> <username>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+			NIVEL 200 (Operator de userlist)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  
+   KICK - Il face pe X sa dea kick la toti userii care se potrivesc 
+          unei masti *!*user@*.host specificata, dar nu da kick si la persoana care da comanda.
+        - Aceasta ar trebui sa fie o comanda putin folosita. Folosirea ar trebui limitata doar la flood pe canal sau clone.
+        - Ai putea sa setezi un ban pe masca, sau +i (invite mode) pe canal inainte de a da kick-ul pentru a preveni 
+          userii sa revina dupa ce au primit kick. 
+        - Username-ul tau va fi afisat in mesajul de kick, intre paranteze.
+
+    /msg X kick <#canal> <nick | *!*user@host> [motiv]
+ 
+   STATUS - Arata toate setarie lui X, modurile canalului, numarul de 
+            persoane si de operatori de pe canal, si useri autentificati, si daca se afla sau nu X pe canal. 
+          - Userii care sunt curent autentificati sunt aratati astfel (in format "username/nickname [nivel]"). 
+          - Nickname-ul unui user este aratat numai daca acel user se afla pe canal, altfel numai username-ul si nivelul
+            de acces sunt aratate. 
+
+  Posibilitatea de a vedea modurile canalului poate fi extrem de 
+  folositoare in cazul in care canalul este inchis (moduri de canale +i, +l, si/sau +k). 
+  Daca acel canal este invite-only (+i) sau  are limita de useri plina (+l) poti folosi comanda INVITE pentru a intra.
+  (Vezi optiuni de la nivelul 100). Daca acel canal are o parola (+k), X va afisa parola curenta a canalului. 
+
+
+    /msg X status <#canal>
+
+--------------------------------------------------------------------------------
+			NIVEL 100+ (Operator de canal)
+--------------------------------------------------------------------------------
+
+  DEOP - Deopeaza una sau mai multe persoane din canal. 
+       - Daca nu e specificat nici un nickname si esti operator pe canal, X te va deopa. 
+
+    /msg X deop <#canal> [nick] [nick2] ... [nickN]
+
+  OP - Da OP uneia sau mai multor persoane de pe canal. 
+     - Daca nu e specificat nici un nickname si nu esti op pe canal, X iti va da op.
+
+     /msg X op <#canal> [nick] [nick2] ... [nickN]
+
+  INVITE - X te va invita pe canal.
+
+    /msg X invite <#canal>
+
+  SUSPEND - Suspenda accesul unui user la X pe canalul respectiv, pe o 
+            perioada specificata si la un nivel specificat, daca acesta este dat. 
+          - Daca nu este specificat nivelul, el va fi din default accesul celui care a folosit comanda. 
+          - Poti SUSPENDA pe cineva doar cu acces mai mic decat al tau. 
+          - Durata maxima pentru SUSPEND este de 372 de zile (8928 ore, 535680 minute). :P
+
+  * D = zile; H = ore; M = minute
+
+    /msg X suspend <#canal> <username> <perioada> <D|H|M> [nivel] 
+
+  UNSUSPEND - Scoate suspendul unui user la X care are acces pe un canal. 
+            - Poti folosi comanda UNSUSPEND doar pe un user cu access mai mic 
+              ca al tau, si suspendat la un nivel fie mai mic, fie egal cu propriul tau acces.
+
+    /msg X unsuspend <#canal> <username>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+		NIVEL 75+ (Operator nou de canal)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  BAN - Adauga un ban pe un *!*user@*.host specificat la lista de banuri a lui X. 
+      - Poti pune un ban pe un nick, daca persoana este conectata, sau sa folosesti o masca daca nu e online.
+      - Banuri a caror masca acopera un ban dat anterior va inlocui primul ban. 
+      - Orice user de pe canal la care is se potriveste addresa banata va primi kick, daca nivelul pe care e dat banul e 75+.
+      - Perioada este in ore, cu valoarea maxima de 2400 de ore (100 zile). 
+      - Nivelul banului poate lua valori intre 1 si nivelul accesului tau pe canal. 
+      - Motivul de ban poate avea maxim 128  de caractere. 
+      - Daca nu este specificata durata sau motivul, durata defaul va fi de 3 ore, iar nivelul de ban este 75.
+
+  NOTA: Daca userul banat are "virtual hostmask" al Undernet (modul +x) 
+        activat, X poate sa filtreze acest host actual, asa ca banand username-ul lor prin *!*@username.* 
+        va bana deasemenea si hostul lor.
+
+       * Niveluri de Ban: 1-74 = Interzice unui user sa fie operator (+o) pe canal.
+                          75-500 = Interzice unui user sa fie pe canal.
+
+      /msg X ban <#canal> <nick!*@* | *!*user@*.host> [perioada] [nivel] [motiv]
+
+  UNBAN - Sterge o masca *!*user@*.host din lista de banuri a lui X si 
+          orice ban care se potriveste cu adresa. 
+        - Poti sterge banuri din lista lui X daca sunt egale sau mai mici ca nivel cu nivelul tau de pe canal. 
+        - Pentru a cauta in lista de banuri a lui X vezi comanda LBANLIST. 
+        - Pentru a vizualiza lista de banuri curenta a canalului, observa optiunea BANLIST.(nivel 1)
+
+    /msg X unban <#canal> <nick | *!*user@host>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+		NIVEL 50+ (User de incredere obisnuit, al canalului)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+   KICK - X va da kick cuiva din canal; motivul este optional. 
+        - Nickname-ul tau va fi trecut in mesajul de kick intre paranteze.
+
+   /msg X kick <#canal> <nick> [motiv]
+
+   TOPIC - X va schimba topicul (maxim 145 caractere) si va include username-ul tau intre paranteze, la inceputul topicului. 
+
+  NOTA: Daca DESCRIPTION sau URL-ul a fost setat si AUTOTOPIC este ON, 
+        topicul va fi resetat peste 30 de minute, daca acel canal este activ 
+        (adica in cazul in care exista useri care intra/ies de pe canal)
+
+    /msg x topic <#canal> <topic>
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+		NIVEL 25+ (User obisnuit al canalului)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  DEVOICE - Da devoice unuia sau mai multor useri de pe canal. 
+          - Daca nu e specificat nici un nickname si ai VOICE pe canal, X iti va da DEVOICE.
+
+    /msg X devoice <#canal> [nick] [nick2] ... [nickN]
+
+  VOICE - Da voice unuia sau mai multor useri de pe canal. 
+        - La fel ca si in cazul optiunii DEVOICE, daca nu e specificat nici un nickname, si nu ai VOICE pe canal, 
+          X iti va da +v.
+
+
+    /msg X voice <#canal> [nick] [nick2] ... [nickN]
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+			NIVEL 1+ (Acces Minim)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  BANLIST - Arata lista de banuri a canalului. 
+
+    /msg x banlist <#canal>
+
+  REMUSER - La acest nivel, sau mai mare, iti poti sterge accesul de pe orice canale, atat timp
+            cat nu esti managerul canalului (nivel access 500 pe canal). 
+          - Managerii care vor sa fie stersi vor fi nevoiti sa dea "purge" la canal, sau sa transfere canalul lor altui user.
+
+    /msg X remuser <#canal> <username-ul tau> 
+
+  STATUS - Afiseaza toate modurile si setarile, numarul de useri si de opi din canal,
+           userii care sunt autentificati in mod curent pe canal, chiar daca X este sau nu pe canal.
+         - Userii autentificati in mod curent pe canal sunt aratati in formatul "username/nickname [nivel]". 
+         - Nickname-ul unui user va fi afisat doar daca userul respectiv se afla pe canal, altfel va fi afisat 
+           doar username-ul lor si nivelul de acces. 
+         NOTA : Spre deosebire de optiunea 'status' de la nivelul 200, aici nu vei vedea modurile canalului.
+
+    /msg X status #canal
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+				NIVEL 0 (Restul)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  ACCESS - Se poate verifica accesul unei persoane sau a unei masti 
+           prin intermediul username-ului, al nickname-ului sau al mai multor usere prin folosirea mastilor.
+         - Informatia indica: nivelul, automode, suspendarea si nivelul acesteia (daca este cazul), si cand a 
+           fost vazut ultima oara userul.
+         - Daca sunt mai mult de 15 accese, du-te la http://cservice.undernet.org/live/ si logheaza-te,
+           ca sa vezi intreaga lista da click pe optiunea "Channel Information" si completeaza numele canalului.
+         - De asemenea poti folosi dedata optiunile in locul username-ului sau al  mastii pentru a afla un anume rezultat. 
+
+       /msg X access <*|masca|username|=nickname> [-min <level>]
+                     [-max <level> [-modif] [-none|-voice|-op]
+
+     * - arata intreaga lista de accese a canalului.
+	/msg X access <#canal> *
+
+    pattern - arata nivelul de acces al username-urilor care corespund mastii respective.
+       /msg X access <#canal> <masca>
+
+    username - arata accesul unui user anume.
+       /msg X access <#canal> <username>
+
+    =nickname - arata nivelul de acces a unui singur user folosind nickname.
+       /msg x access <#canal> <=nickname>
+
+    -min <nivel> - arata doar userii cu acces peste nivelul introdus.
+       /msg X access <#canal> -min <nivel>
+
+    -max <nivel> - arata doar userii cu acces sub nivelul introdus.
+       /msg X access <#canal> -max <nivel>
+
+    -op - arata doar userii cu setarea OP la AUTOMODE.
+       /msg X access <#canal> -op
+
+    -voice - arata doar userii cu setarea VOICE la AUTOMODE.
+       /msg X access <#canal> -voice
+
+    -none - arata userii fara setare AUTOMODE (None).
+       /msg X access <#canal> -none
+
+    -modif - arata cine a modificat ultima data accesul. 
+     (prin modificare se intelege adaugare in lista de accese, modificare a accesului sau suspend/unsuspend)
+       /msg X access <#canal> -modif
+
+   CHANINFO - Arata daca acel canal este sau nu inregistat, userul managerului, keywods (daca are), 
+              precum si DESCRIPTION si URL, daca exista.
+ 
+  Aliasul: INFO
+
+     /msg X chaninfo <#canal>
+     sau
+     /msg X info <#canal>
+
+   HELP - Arata informatia de ajutor pentru o anume comanda.
+
+     /msg x help [comanda]
+
+   INFO - Arata informatii despre un username cum ar fi nick-ul si user@host daca sunt
+          conectati, limba aleasa, cand a fost vazut ultima data si setarile de invisible, si daca
+          ai suspend de la un CService Administrator. 
+        - Daca este folosita pe userul personal, va arata deasemenea si e-mail-ul username-ului tau, ultimul 
+          hostmask in formatul (nick!userid@host) folosit cand username-ul a fost logat, va lista toate canalele pe care 
+          ai acces (doar tu si CService puteti vedea aceasta informatie, nu si alti useri). 
+        - Daca doresti sa ascunzi aceste informatii, vezi comanda SET INVISIBLE.
+
+    /msg X INFO <username>
+
+   ISREG - Verifica daca un canal este inregistrat sau nu. 
+         - Spre deosebire de CHANINFO, aceasta optiune arata DOAR daca acel canal este inregistrat sau nu.
+
+    /msg X isreg <#canal>
+
+   LBANLIST - Cauta in lista de banuri a lui X pentru o anumita masca. 
+            - Foloseste * pentru a vedea intreaga lista, sau specifica un *!*user@*.host pentru a gasi un ban anume. 
+            - Daca sunt mai mult de 15 banuri du-te la http://cservice.undernet.org/live/ si logheaza-te, ca sa vezi intreaga
+              lista da lick pe optiunea "Channel Information" si completeaza numele canalului. 
+
+    /msg X lbanlist <#canal> <* | *!*user@*.host>
+
+   LOGIN - Aceasta incarca accesele tale in memorie si te autentifica pe toate canalele pe care ai access. 
+                ***  Tine minte: Nimeni din CService *NU* iti va cere vreodata parola ta! 
+                     NU da parola ta cuiva care pretinde ca este de la CService. 
+
+    /msg X@channels.undernet.org login <username> <parola>
+       
+      NOTA : +x este un mod pentru useri care activeaza "Hostul Virtual" al Undernet-ului, ceea ce va ascunde adevaratul
+             tau host/IP cu <username-ul_tau>.users.undernet.org. 
+            - Ceilalti useri vor vedea acest host virtual in locul   hostu-ului/IP-ului real pe care il ai. 
+            - Adminii CService si IRC Operatorii pot vedea prin acest +x. 
+            - Intotdeauna, desigur vei putea sa iti vezi adevaratul host/IP. 
+            - Spre deosebire de alte retele de IRC care folosesc host-uri virtuale acest mode nu poate fi desetat, userul 
+              trebuie sa se deconecteze de pe Undernet pentru a-l dezactiva.
+            - Pentru a-l seta, foloseste /mode nickname-aici +x.
+  
+   MOTD - Arata mesajul zilei a lui X.
+
+    /msg X motd
+
+
+
+   SET - Schimba moduri speciala pentru username-ul tau.
+
+    /msg X SET <invisible|lang> <value>
+
+   INVISIBLE - Aceasta este o optiune personala care te va lasa sa hotarasti posibilitatea vizualizarii informatiilor 
+              username-ului tau de catre alti useri, ceruta prin comanda INFO. 
+            - Pentru a afla mai multe informatii vezi comanda INFO.
+
+    /msg x set invisible <on|off>
+
+  LANG - Schimba limba in care X iti raspunde.
+
+    /msg X set lang <cod de limba>
+
+     Limbi disponibile:
+     Cod  - Limba
+     · ar - Arabic 
+     · ca - Catalana
+     · ch - Craciun
+     · de - Germana	
+     · dk - Daneza
+     · ea - Paste
+     · en - Engleza
+     · es - Spaniola
+     · fr - Franceza
+     · gr - Greaca 
+     · ha - Halloween
+     · hu - Maghiara
+     · it - Italiana
+     · mk - Macedoneana
+     · nl - Olandeza	
+     · no - Norvegiana
+     · pt - Portugheza	
+     · ro - Romana
+     · sv - Slovaca
+     · tr - Turca
+
+  NOADDUSER - Aceasta optiune iti permite sa iti manifesti dorinta de a fi sau nu adaugat pe canale.
+            - Daca optiunea este setata ON, nimeni nu iti va putea da acces pe nici un canal, fara ca tu sa vrei asta.
+
+     /msg X set noadduser ON/OFF
+
+  SHOWCOMMANDS - Arata toate comenzile pe care le poti folosi pe canal, corespunzator cu accesul tau.
+               - Daca nu e specificat nici un canal, vor fi aratate doar comanzile de nivel 0.
+
+    /msg X showcommands [#canal]
+
+  SHOWIGNORE - Arata lista de ignore a lui X. X va da ignore unui user cand acesta il flood-eaza intentionat sau nu. 
+             - Durata ignore-ului este de 60 de minute. 
+             - Daca ai primit ignore la X NU poti vedea durata de timp pentru care esti ignorat si nu vei putea folosi 
+               nici o alta comanda la X.
+
+    /msg X showignore
+
+  SUPPORT - O metoda care iti permite sa confirmi ca esti de acord sau nu pentru o aplicatie a unui canal, 
+            daca te alfi in lista suporterilor. 
+          - Dupa autentificare, X iti va trimite o notificare despre orice aplicatie a unui canal in care esti trecut 
+            ca suporter si deasemenea iti va trimite o notificare referitor la comanda SUPPORT.
+          - Alternativ, poti sa vizualizezi aplicatia din pagina web pentru a vedea mai multe informatii despre acest lucru,
+            pentru a pune o obiectie, si a confirma sau nu suportul pentru acel canal de acolo. 
+          - Comanda nu va fi valabila daca nu esti trecut in lista celor care sunt suporteri a acelui canal, sau daca acel 
+            canal nu are o aplicatie pe web. 
+          - Daca ai tastat o data aceasta comanda, nu vei mai putea sa iti schimbi decizia.
+          - Numarul maxim de canale la care un user poate fi suporter simultan este de 2 (doua),
+            [timp in care el poate avea propria-i aplicatie]
+
+    /msg X support <#canal> <yes|no>
+
+  VERIFY - Arata daca persoana este sau nu logata, si daca este asa va 
+           arata username-ul lui,si de asemenea indica daca acesta este un Administrator sau 
+           Reprezentant Oficial de la CService si/sau este un IRCop.
+
+    /msg X verify <nick>
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Acest document a fost reactualizat in 3 Februarie 2006 de KoGiTo
+Acest fisier este intretinut de Undernet CService Committee
+E-mail cservice@undernet.org pentru sugetii si comentarii.
+Pagina WEB CService: http://cservice.undernet.org
+Pagina WEB Undernet: http://www.undernet.org
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

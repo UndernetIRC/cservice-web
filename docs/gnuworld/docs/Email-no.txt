@@ -1,0 +1,78 @@
+                          Undernet Kanal Tjeneste
+		Verifiserings Sp�rsm�l/Svar nullstilling, Email endrings skjema.
+			-----------------------------
+
+- V�R VENNLIG � LES DISSE INSTRUKSJONENE!
+- V�r vennlig � fyll ut hele dette dokumentet, ellers vil ditt skjema ikke bli tatt videre til vurdering.
+- BRUK dette dokumentet kun n�r du ikke kan logge inn p� websiden med ditt brukernavn eller du ikke lenger kan bruke-
+  din gamle email som du har registrert sammen med ditt brukernavn.
+- Dersom din gamle email fortsatt fungerer vil vi ikke ta denne s�knaden til f�lge.
+
+PASSORD NULLSTILLING SKJEMA
+- Dersom du trenger ditt passord nullstilt, v�r vennlig � fors�k � f� gjort det
+  gjennom websiden. http://cservice.undernet.org  Klikk p� Web Interface
+  og deretter p� Forgotten Password.KUN dersom din gamle email ikke er i bruk, kan du bruke dette Email Endrings Skjemaet.
+  Etter du har f�tt en ny email adresse p� ditt brukernavn, vil du ha mulighet til � nullstille ditt passord
+  fra websiden, slik vi fortalte deg forut.
+
+EMAIL ENDRINGS SKJEMA
+- Om du trenger � endre din email som vi har i arkivet for ditt brukernavn logg inn p� ditt brukernavn p� http://cservice.undernet.org/live og
+ klikk p� Forms / Email Change seksjonen.KUN dersom din gamle email ikke er i bruk,kan du bruke dette Email Endrings Skjemaet.
+ Og IKKE BRUK gratis email/domener som din nye email for ditt brukernavn.
+ Dersom du skal endre email adresser, Sett ett X ved siden av 1) og fullf�r de f�lgende seksjonene: a,b,c,d,g.
+
+VERIFISERINGS/SP�RSM�L SVAR SKJEMA:
+-Dersom du trenger � nullstille ditt verifiserings sp�rsm�l/svar bruk seksjonen Forgotten Password p� http://cservice.undernet.org/live .
+ Skriv inn ditt brukernavn der, og gj�r en feil p� ditt hemmelige verifiserings svar. Du vil da bli vist til Verifiserings sp�rsm�l/Svar Nullstillings Skjema.
+ Fyll ut det skjemaet og send det.KUN dersom din gamle email adresse ikke lenger er i bruk, bruk dette Verifiserings sp�rsm�l/Svar Nullstillings Skjemaet.
+ Om du skal nullstille ditt verifiserings sp�rsm�l/svar, sett ett X ved siden av 2) og fullf�r de f�lgende seksjonene: a,b,c,e,f,g.
+
+- KOPIER OG LIM INN HELE DETTE SKJEMAET til en email (den nye email adressen for brukernavnet) og send det til:
+        X@undernet.org
+
+- Tillat 3-5 dager for at denne endringen skal bli fullf�rt, f�r du eventuelt sender ett nytt
+  skjema.
+
+                  -------------------------------
+
+V�r vennlig � marker ett "X" p� en av de f�lgende:
+
+1) __ Email Endring
+
+2) __ Verifiserings sp�rsm�l/Svar nullstilling
+
+
+V�r vennlig og legg til f�lgende informasjon:
+
+a. Brukernavn (ikke kallenavn):
+
+b. Gammel Email Adresse:
+
+c. Ny Email Adresse:
+
+d. - Verifiserings sp�rsm�l svar:
+     (Dette er svaret til en av de sp�rsm�lene du valgte n�r
+      du fikk ditt brukernavn)
+
+   - V�r vennlig � indiker hvilket sp�rsm�l du valgte � svare p�.
+      a) Hva er din mor sitt pikenavn?
+      b) Hva er din hund (eller katt) sitt navn?
+      c) Hva er din fars f�dselsdag?
+
+e. Nytt verifiserings sp�rsm�l:
+   V�r vennlig � sett ett "X" ved siden av sp�rsm�let du �nsker:
+     a) Hva er din mor sitt pikenavn?
+     b) Hva er din hund (eller katt) sitt navn?
+     c) Hva er din fars f�dselsdag?
+
+
+f. Nytt Hemmelig svar:
+
+g. Kanaler der du har aksess med ditt brukernavn:
+
+Kommentarer (om n�dvendig):
+
+------------------------------
+Verifiserings Sp�rsm�l-Svar/Email Endrings Skjema (av ReD_IcE)
+Undernet Kanal Tjeneste
+versjon: 13042002
