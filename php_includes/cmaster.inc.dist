@@ -1621,9 +1621,9 @@ function show_fraud_list($username_or_id_array,$array_type) {
         if ($showlasthost==1) {
           if ($temp_lasthost[$x]!="") {
             if (($isOperFlag || $isAdmin) && $admin<SHOW_IP_LEVEL) {
-              echo "<br><font size=-2 color=#aaaaaa><i>" . remove_ip($temp_lasthost[$x]) . "</i></font>";
+              echo "<br><font size=-2 color=#000000><i>" . remove_ip($temp_lasthost[$x]) . "</i></font>";
             } else {
-              echo "<br><font size=-2 color=#aaaaaa><i>" . $temp_lasthost[$x] . "</i></font>";
+              echo "<br><font size=-2 color=#000000><i>" . $temp_lasthost[$x] . "</i></font>";
             }
           } else {
             echo "<br><font size=-2 color=#aa0000><i>no last_hostmask</i></font>";
