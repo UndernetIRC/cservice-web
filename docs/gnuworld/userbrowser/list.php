@@ -153,7 +153,7 @@ if ($mode==1) {
 		}
 	}
 	if ($st==2) {
-		$match = "/^[a-zA-Z0-9_.\*-]+@[a-zA-Z0-9_.\*-]+$/";
+		$match = "/^[a-zA-Z0-9_.\*-]+@[a-zA-Z0-9_.\*-:]+$/";
 		if (!preg_match($match,$sp)) {
 			echo "<br><br><b>ERROR</b> - Invalid Email pattern.<br>\n";
 			echo "<a href=\"javascript:history.go(-1);\">Back</a>\n";
@@ -162,9 +162,9 @@ if ($mode==1) {
 		}
 	}
 	if ($st==3) {
-		$match = "/^[0-9]{1,3}\.[0-9]{1,3}\.([0-9]{1,3}|\*)\.([0-9]{1,3}|\*)$/";
+		$match = "/^([0-9]{1,3}\.[0-9]{1,3}\.([0-9]{1,3}|\*)\.([0-9]{1,3}|\*)|[a-fA-F0-9]+:[a-fA-F0-9:]+([^:]|\*))$/";
 		if (!preg_match($match,$sp)) {
-			echo "<br><br><b>ERROR</b> - Invalid IP mask.<br>Valid ones: 192.168.*.*, 10.1.2.3.*, 127.0.0.1<br>\n";
+			echo "<br><br><b>ERROR</b> - Invalid IP mask.<br>Valid ones: <br>192.168.*.*, 10.1.2.3.*, 127.0.0.1<br>2001:2002:aaaa:bbbb:cccc:dddd:eeee:ffff, 2001:2002:aaaa:bbbb:cccc:dddd:eeee:*, 2001:2002:aaaa:bbbb:cccc:dddd:*, 2001:2002:aaaa:bbbb:cccc:*, 2001:2002:aaaa:bbbb:*, 2001:2002:aaaa:*, 2001:2002:*, 2001:*<br>\n";
 			echo "<a href=\"javascript:history.go(-1);\">Back</a>\n";
 			echo "</body></html>\n\n";
 			die;
@@ -409,5 +409,3 @@ echo "<br><br>\n";
 ?>
 </body>
 </html>
-
-
