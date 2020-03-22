@@ -161,7 +161,7 @@ switch ((int)$curr_step) {
 		}
 		break;
 	case 3:
-		$err.= check_username_similarity($_POST["username"]);
+		$err.= !ip_check_white($user_ip) ? check_username_similarity($_POST["username"]) : "";
 		if (strlen($_POST["username"])<2 || strlen($_POST["username"])>12) { $err .= "<li> Your username must be 2 to 12 chars long.\n"; }
 		if (!preg_match("/^[A-Za-z0-9]+$/",$_POST["username"])) { $err .= "<li> Your username must be made of letters (A-Z, a-z) and numbers (0-9).\n"; }
 		$ru = pg_safe_exec("SELECT id FROM users WHERE lower(user_name)='" . strtolower($_POST["username"]) . "'");
@@ -181,7 +181,7 @@ switch ((int)$curr_step) {
 			$jsf .= "\tif (f.email.value == '') { all_ok = false; }\n";
 			$jsf .= "\tvar msg = 'Please type in your e-mail address !';\n";
 		}
-		
+
 		break;
 	case 4:
 	  if (md5( CRC_SALT_0008 . $_POST["username"] . "UCHECK" )!=$_POST["username_crc"]) { $err .= "<li> <b>Attempt to hack page content !</b> (username)\n"; $hackpc = 1; }
@@ -278,14 +278,14 @@ switch ((int)$curr_step) {
 			echo "<input type=text size=35 maxlength=" . $code_length . " name=gfxcode_val value=\"\">\n";
 			$jsf .= "\tif (f.gfxcode_val.value == '') { all_ok = false; }\n";
 			$jsf .= "\tvar msg = 'Please fill in the CODE !';\n";
-		
+
 
 		}
 		break;
 	case 7:
 		if (SHOW_GFXUSRCHK && NEWUSERS_GFXCHECK) {
-			
-		
+
+
 
 
 			// check GFX code
@@ -359,7 +359,7 @@ switch ((int)$curr_step) {
                 if (is_locked_username($_POST["username"])) { $err .= "<li> Username is LOCKED : Usernames matching <b>" . $ulockinfo->user_name . "</b> are disallowed for the following reason : <b>" . $ulockinfo->reason . "</b>.\n"; }
                 $res = pg_safe_exec("SELECT * FROM noreg WHERE lower(user_name)='" . post2db(strtolower($_POST["username"])) . "'");
                 if (pg_numrows($res)>0) { $err .= "<li> That username (" . $_POST["username"] . ") is in NOREG mode, please choose another.\n"; }
-                
+
 
 
 		if ($err == "") {
