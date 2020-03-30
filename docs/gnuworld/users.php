@@ -52,7 +52,7 @@ if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_
         die;
     }
     $user = pg_safe_exec("SELECT * " . $raw_q . " ORDER BY id DESC LIMIT $maxuserlisted");
-    if ($rcount > 1) {
+    if ($rcount >= 1) {
         std_theme_styles(1);
         std_theme_body();
         echo "<h1>User Lookup (user_name)</h1>\n";
@@ -99,7 +99,7 @@ if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_
             die;
         }
         $user = pg_safe_exec("SELECT * " . $raw_q . " ORDER BY lower(user_name) LIMIT $maxuserlisted");
-        if ($rcount > 1) {
+        if ($rcount >= 1) {
             std_theme_styles(1);
             std_theme_body();
             echo "<h1>User Lookup (last_hostmask)</h1>\n";
