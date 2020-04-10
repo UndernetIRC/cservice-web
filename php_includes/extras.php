@@ -395,6 +395,7 @@ function ip6_check_glined($ip) {
                     similar_text($final_list[$i], strtolower($username), $percent);
 //		echo "similarity is ".$percent." <br>";
                     if (($dist < USRNREG_DIST) && ($percent > USRNREG_SIMILAR))
+			local_seclog("Likeness match for username " . $username . " against: " . $final_list[$i] ."");
                         $error = USRNREG_ERR_MSG;
                 }
             }

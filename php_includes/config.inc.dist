@@ -243,7 +243,7 @@ define("USRNREG_EUSERS", '');		//define list of usernames not added to channels 
 define("USRNREG_WARN_ENABLE", 1);			//enable (1) or disable (0) similarity check for new usernames registration
 define("USRNREG_DIST", 4);	// how many letters need to be changed/added/removed to get from username1 to username2
 define("USRNREG_SIMILAR", 75);	// How simmilar username1 needs to be to username2 to trigger response
-define("USRNREG_ERR_MSG", "<li>Sorry, that username is unavailable [likeness]\n"); // Error message when username is too similar
+define("USRNREG_ERR_MSG", "<li>Sorry, that username is unavailable [likeness]. Please contact cservice-abuse@undernet.org for more information.\n"); // Error message when username is too similar
 define("WARN_EXPIRE_SESSION", 1); // warn *'s when web session is about to expire due to inactivity
 define("WARN_EXP_SESS_GRACE", 300); // warn with xx seconds before websession becomes invalid
 $default_sess_timeout= array (900,1800,3600,5400,7200);
