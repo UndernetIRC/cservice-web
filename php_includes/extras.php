@@ -394,9 +394,10 @@ function ip6_check_glined($ip) {
 //		echo "Distance is ".$dist." input user: ".strtolower($username)." matched against <font color=\"#FF0000\">".$final_list[$i]."</font><br>";
                     similar_text($final_list[$i], strtolower($username), $percent);
 //		echo "similarity is ".$percent." <br>";
-                    if (($dist < USRNREG_DIST) && ($percent > USRNREG_SIMILAR))
+                    if (($dist < USRNREG_DIST) && ($percent > USRNREG_SIMILAR)) {
 			local_seclog("Likeness match for username " . $username . " against: " . $final_list[$i] ."");
                         $error = USRNREG_ERR_MSG;
+                    }
                 }
             }
             return $error;
