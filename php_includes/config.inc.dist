@@ -258,11 +258,10 @@ define("SMTP_PASS", '');
 define("MAIL_TYPE", 'sendmail');	// set to smtp or sendmail
 define("DEBUG_MAIL", false);
 define("ALLOW_SELF_MAXLOGINS", 1);	// 0 - disallow regulars to change own maxlogins, 1- allow
-
-
-
-$allow_maxlogins[2]=172800; // minimum user age in seconds to allow self maxlogins 2
-$allow_maxlogins[3]=259200; // minimum user age in seconds to allow self maxlogins 3
+define("ALLOW_MAXLOGINS", array(
+	"2" => 172800, // minimum user age in seconds to allow self maxlogins 2
+	"3" => 259200  // minimum user age in seconds to allow self maxlogins 3
+));
 
 $allow_multi_chans[1]=86400;  // first channel after 1 day
 $allow_multi_chans[2]=172800; // minimum time since added as 500 in 1-st channel, to allow second reg

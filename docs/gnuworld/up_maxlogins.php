@@ -11,7 +11,6 @@ $cTheme = get_theme_info();
 /* $Id: right.php,v 1.15 2005/03/07 04:48:03 nighty Exp $ */
 
 function not_valid_va ($user_id) {
-global $allow_maxlogins;
 global $temp_msg;
 $r = pg_safe_exec("SELECT * FROM users WHERE id='".(int)$user_id."'");
 				if ($o = pg_fetch_object($r))
@@ -45,11 +44,11 @@ $r = pg_safe_exec("SELECT * FROM users WHERE id='".(int)$user_id."'");
 							{
 							$user_age=time()-$o->signup_ts;
 							$temp_maxlogins=1;
-							if ($user_age > $allow_maxlogins[2])
+							if ($user_age > ALLOW_MAXLOGINS[2])
 								{
 								$temp_maxlogins=2;
 								}
-							if ($user_age > $allow_maxlogins[3])
+							if ($user_age > ALLOW_MAXLOGINS[3])
 								{
 								$temp_maxlogins=3;
 								}

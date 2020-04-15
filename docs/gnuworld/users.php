@@ -762,9 +762,9 @@ if ($admin > 0) {
         if ((ALLOW_SELF_MAXLOGINS == 1) && ($user_id == $user->id)) {
             $can_set_maxlogins = time_till_maxlogins($user->signup_ts);
             $user_age = time() - $user->signup_ts;
-            if ($user_age > $allow_maxlogins[0]) {
+            if ($user_age > ALLOW_MAXLOGINS[2]) {
                 $temp_maxlogins = 2;
-                if ($user_age > $allow_maxlogins[1])
+                if ($user_age > ALLOW_MAXLOGINS[3])
                     $temp_maxlogins = "3";
                 echo "</form><tr><td><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
                 echo "<select name=\"maxlogins\" id=\"maxlogins\">";
@@ -912,9 +912,9 @@ if (!$edit || $admin < 800) {
     if ((ALLOW_SELF_MAXLOGINS == 1) && ($admin == 0) && ($user_id == $user->id)) {
         $can_set_maxlogins = time_till_maxlogins($user->signup_ts);
         $user_age = time() - $user->signup_ts;
-        if ($user_age > $allow_maxlogins[2]) {
+        if ($user_age > ALLOW_MAXLOGINS[2]) {
             $temp_maxlogins = 2;
-            if ($user_age > $allow_maxlogins[3])
+            if ($user_age > ALLOW_MAXLOGINS[3])
                 $temp_maxlogins = "3";
             echo "<tr><td valign=\"top\"><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
             echo "<select name=\"maxlogins\" id=\"maxlogins\">";

@@ -637,11 +637,11 @@ function popUpClosed() {
 
     function time_till_maxlogins($creation_date) {
         $time_since = time() - $creation_date;
-        global $allow_maxlogins;
-        if ($time_since < $allow_maxlogins[2]) {  // less than a year
-            $msg = "You need to wait " . seconds2human($allow_maxlogins[2] - $time_since) . " before you can set MAXLOGINS 2.";
-        } elseif ($time_since < $allow_maxlogins[3]) {
-            $msg = "You need to wait " . seconds2human($allow_maxlogins[3] - $time_since) . " before you can set MAXLOGINS 3.";
+
+        if ($time_since < ALLOW_MAXLOGINS[2]) {  // less than a year
+            $msg = "You need to wait " . seconds2human(ALLOW_MAXLOGINS[2] - $time_since) . " before you can set MAXLOGINS 2.";
+        } elseif ($time_since < ALLOW_MAXLOGINS[3]) {
+            $msg = "You need to wait " . seconds2human(ALLOW_MAXLOGINS[3] - $time_since) . " before you can set MAXLOGINS 3.";
         } else
             $msg = '';
 
