@@ -1,5 +1,4 @@
 <?php
-$min_lvl=800;
 require('../../../php_includes/cmaster.inc');
 
 std_init();
@@ -7,6 +6,8 @@ $cTheme = get_theme_info();
 
 std_theme_styles(1);
 std_theme_body("../");
+
+$min_lvl=800;
 
 if ($admin<$min_lvl) {
 	echo "You dont have access.";

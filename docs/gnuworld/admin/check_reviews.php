@@ -1,11 +1,12 @@
 <?
-	unset($min_lvl);
-	$min_lvl=800;
 	require("../../../php_includes/cmaster.inc");
 	std_init();
 	$cTheme = get_theme_info();
 	std_theme_styles(1);
 	std_theme_body("../");
+
+	$min_lvl=800;
+
 	if ($admin<$min_lvl && $user_id!=292083 && $user_id!=3303 && $user_id!=308) { // 292083 == zep, 3303 == DaveB, 308 == Hodari
 		echo("Oi! What are you doing here eh?");
 		exit;

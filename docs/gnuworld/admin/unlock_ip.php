@@ -1,6 +1,5 @@
 <?
 /* <!-- $Id: unlock_ip.php,v 1.3 2002/05/20 23:58:04 nighty Exp $ //--> */
-	$min_lvl=800;
 	require("../../../php_includes/cmaster.inc");
 	std_init();
 	$cTheme = get_theme_info();

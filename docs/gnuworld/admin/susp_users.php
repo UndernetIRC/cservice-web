@@ -1,5 +1,4 @@
 <?
-	$min_lvl=800;
 	require("../../../php_includes/cmaster.inc");
 	std_init();
 	$cTheme = get_theme_info();

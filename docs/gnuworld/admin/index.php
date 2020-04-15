@@ -1,10 +1,10 @@
 <?
-	$min_lvl=800;
 	require("../../../php_includes/cmaster.inc");
 	std_init();
 	$cTheme = get_theme_info();
 	std_theme_styles(1);
 	std_theme_body("../");
+
 	if ($admin<1 && !acl(XWEBSESS)) {
 		echo("Oi! What are you doing here eh?");
 		exit;
