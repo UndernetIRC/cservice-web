@@ -224,14 +224,14 @@ This requires to login with a user with an admin access of 901 or above (coder l
 
 
 define("RBL_CHECKS", 1);		// enable RBL and glines check for new user registration.
-define("TOTP_USR_FLAG",1024);	
+define("TOTP_USR_FLAG",1024);
 define("TOTP_ADMIN_IPR_FLAG", 2048);
 define("NON_BOGUS_TOTP",'/^[0-9\=]+$/');
-define("TOTP_ON",0);		// enable TOTP checks on login. 
+define("TOTP_ON",0);		// enable TOTP checks on login.
 // define(TOTP_VIEW,1);            // define if TOTP key is viewabled by CSA's
 // define(TOTP_VIEW_LVL,800);	// define minimum access level to view TOTP key
 define("TOTP_RESET_LVL",800);	// define minimum access level to reset TOTP key
-define("TOTP_SALT", '0123456789');	// salt for TOTP cookie md5hash 
+define("TOTP_SALT", '0123456789');	// salt for TOTP cookie md5hash
 define("TOTP_CONFIRM_INT", 21600);// seconds for confirmation link validity
 define("TOTP_PATH", 'totp/');	// path to totp help, activation and confirmation files relative to /live pages
 define("SHOW_TOTP_PUBLIC", 0);	// Allow regulars to see if OTHER user has TOTP on/off

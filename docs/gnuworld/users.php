@@ -565,7 +565,7 @@ if (!$edit) {
         echo "<td>" . $language->name;
     }
     echo "</td></tr>\n";
-    // edit TOTP 
+    // edit TOTP
     if (TOTP_ON) {
         if (($admin >= TOTP_RESET_LVL) || ((acl(XIPR_VIEW_OWN)) && (!$isAdmin)) || ((acl(XTOTP_DISABLE_OTHERS) && (!$isAdmin)))) {
             echo "<tr><td> <b>Two-step verification:</b></td><td> ";
@@ -966,8 +966,8 @@ if (!$edit || $admin < 800) {
                     echo "</big></font>";
                 }
                 if ($admin >= 750) { // same level as for searching on VA on Admin reports ...
-                    echo "<br><a href=\"admin/verifdatacheck.php?posted=1&vanswer=" . str_replace(" 
-", "%20", $user->verificationdata) . "&rid=" . $id . "\"><font color=#808080 size=-1><b>&gt;&gt; List all users using this verification answer</b> 
+                    echo "<br><a href=\"admin/verifdatacheck.php?posted=1&vanswer=" . str_replace("
+", "%20", $user->verificationdata) . "&rid=" . $id . "\"><font color=#808080 size=-1><b>&gt;&gt; List all users using this verification answer</b>
 (*750+)</font></a>.";
                 }
                 echo "\n";
@@ -1017,7 +1017,7 @@ if (( ($admin >= $edit_lvl || acl(XAT_CAN_EDIT) || acl(XTOTP_DISABLE_OTHERS)) &&
     // 3) user has higher admin access than you.
     // TODO: Allow editing and saving changes.. fair bit of stuff to do
     if (!$edit) {
-        
+
     } else {
         echo "<input type=submit value=\" SAVE CHANGES \">\n";
     }

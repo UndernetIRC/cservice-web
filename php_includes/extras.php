@@ -171,12 +171,12 @@ function ip_check_glined($ip){
     if (filter_var($ip, FILTER_VALIDATE_IP,FILTER_FLAG_IPV4))
     {
         return ip4_check_glined($ip);
-        
+
     }
     if (filter_var($ip, FILTER_VALIDATE_IP,FILTER_FLAG_IPV6))
     {
         return ip6_check_glined($ip);
-        
+
     }
 }
 
@@ -228,7 +228,7 @@ function ip6_check_glined($ip) {
                 $rows = pg_num_rows($res);
                 if ($rows > 0) {
                     $hosts = pg_fetch_all($res);
-                   
+
                     for ($k = 0; $k < count($hosts); $k++) {
                         $net=str_replace('*@', '', $hosts[$k]['host']);
                         $net=str_replace('~', '', $net);
@@ -242,7 +242,7 @@ function ip6_check_glined($ip) {
     if ($glines == 0)
             return false; // not glined
         else
-            return true; // glined    
+            return true; // glined
     }
         return false;
     }
@@ -464,7 +464,7 @@ function secondstotime(secs)
     	s = Math.floor((t - Date.parse("1/1/70")) / 3600000) + s.substr(2);
     return s;
 }
-document.getElementById("timer").innerHTML=secondstotime(count) + " secs" ; 
+document.getElementById("timer").innerHTML=secondstotime(count) + " secs" ;
 
 }
 function popUpClosed() {
