@@ -262,10 +262,12 @@ define("ALLOW_MAXLOGINS", array(
 	"2" => 172800, // minimum user age in seconds to allow self maxlogins 2
 	"3" => 259200  // minimum user age in seconds to allow self maxlogins 3
 ));
+define("ALLOW_MULTI_CHANS", array(
+	"1" => 86400,  // first channel after 1 day
+	"2" => 172800, // minimum time since added as 500 in 1-st channel, to allow second reg
+	"3" => 259200  // minimum time since added as 500 in 2-nd channel, to allow third reg
+));
 
-$allow_multi_chans[1]=86400;  // first channel after 1 day
-$allow_multi_chans[2]=172800; // minimum time since added as 500 in 1-st channel, to allow second reg
-$allow_multi_chans[3]=259200; // minimum time since added as 500 in 2-nd channel, to allow third reg
 $ipr_expiry = array (3600, 10800, 21600, 86400, 259200, 518400, 1296000, 2592000, 7776000, 15552000, 31536000, 0);
 
 /* To show you read this whole file, please comment or remove the next line. */

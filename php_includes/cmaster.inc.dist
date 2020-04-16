@@ -935,12 +935,11 @@ function is_xat_admin() {
 }
 
 function user_channel_limit($user_id) {
-    global $allow_multi_chans;
-
     $user = pg_safe_exec("SELECT id, signup_ts FROM users WHERE id={$user_id}");
     $user = pg_fetch_object($user, 0);
     $user_age = time() - $user->signup_ts;
 
+    $allow_multi_chans = ALLOW_MULTI_CHANS;
     arsort($allow_multi_chans);
 
     $max_channels = 0;
