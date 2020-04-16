@@ -246,8 +246,8 @@ define("USRNREG_SIMILAR", 75);	// How simmilar username1 needs to be to username
 define("USRNREG_ERR_MSG", "<li>Sorry, that username is unavailable [likeness]. Please contact cservice-abuse@undernet.org for more information.\n"); // Error message when username is too similar
 define("WARN_EXPIRE_SESSION", 1); // warn *'s when web session is about to expire due to inactivity
 define("WARN_EXP_SESS_GRACE", 300); // warn with xx seconds before websession becomes invalid
-$default_sess_timeout= array (900,1800,3600,5400,7200);
-define("WARN_SESS_DEFAULTS", $default_sess_timeout);
+define("DEFAULT_SESS_TIMEOUT", array(900, 1800, 3600, 5400, 7200));
+define("WARN_SESS_DEFAULTS", DEFAULT_SESS_TIMEOUT);
 define("WARN_EXP_SESS_HOME", "http://testnet.yournetwork.org/live/"); // location when logging out from warning popup
 define("BIND_OUT_IP", '10.0.0.1');
 
@@ -267,8 +267,7 @@ define("ALLOW_MULTI_CHANS", array(
 	"2" => 172800, // minimum time since added as 500 in 1-st channel, to allow second reg
 	"3" => 259200  // minimum time since added as 500 in 2-nd channel, to allow third reg
 ));
-
-$ipr_expiry = array (3600, 10800, 21600, 86400, 259200, 518400, 1296000, 2592000, 7776000, 15552000, 31536000, 0);
+define("IPR_EXPIRY", array(3600, 10800, 21600, 86400, 259200, 518400, 1296000, 2592000, 7776000, 15552000, 31536000, 0));
 
 /* To show you read this whole file, please comment or remove the next line. */
 die("<h2><b>Error</b>: Edit website/php_includes/config.inc file !</h2>");

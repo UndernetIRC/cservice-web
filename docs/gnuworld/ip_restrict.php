@@ -1,9 +1,9 @@
 <?
-/* $Id: ip_restrict.php,v 1.6 2005/11/18 10:08:08 nighty Exp $ */
-$min_lvl=800;
 header("Pragma: no-cache");
 require("../../php_includes/cmaster.inc");
 std_init();
+
+$min_lvl=800;
 
 unset($axslock); unset($da_u_adm);
 $axslock = 1; $da_u_adm = 0;
@@ -35,10 +35,10 @@ if (check_secure_form("addrestrict" . $_POST["user_id"])) {
         str_replace(':', ':', $new_ip, $count6);
         str_replace('.', '.', $new_ip, $count4);
         $ip_parts=explode("/", $new_ip);
-        
+
         if ($count6>0)
         {
-         $isValid = filter_var($ip_parts[0], FILTER_VALIDATE_IP,FILTER_FLAG_IPV6);   
+         $isValid = filter_var($ip_parts[0], FILTER_VALIDATE_IP,FILTER_FLAG_IPV6);
          $go_ahead=false;
          if ($isValid)
          {
@@ -49,19 +49,19 @@ if (check_secure_form("addrestrict" . $_POST["user_id"])) {
                             {
                                  $go_ahead=true;
                             }
-                            
+
              }
              else
              {
                  if (count($ip_parts)===1)
                              $go_ahead=true;
              }
-      
+
 	}
         }
         if ($count4>0)
         {
-         $isValid = filter_var($ip_parts[0], FILTER_VALIDATE_IP,FILTER_FLAG_IPV4);   
+         $isValid = filter_var($ip_parts[0], FILTER_VALIDATE_IP,FILTER_FLAG_IPV4);
          $go_ahead=false;
          if ($isValid)
          {
@@ -72,14 +72,14 @@ if (check_secure_form("addrestrict" . $_POST["user_id"])) {
                             {
                                  $go_ahead=true;
                             }
-                            
+
              }
              else
              {
                  if (count($ip_parts)===1)
                              $go_ahead=true;
              }
-      
+
 	}
         }
         if ($_POST['descr'] == '') {
@@ -94,11 +94,11 @@ if (check_secure_form("addrestrict" . $_POST["user_id"])) {
       if ($_POST['ipr_exp']>0)
       $nexp=time()+$_POST['ipr_exp'];
       else
-         $nexp=0;  
+         $nexp=0;
   $q = "INSERT INTO ip_restrict (user_id, value, last_updated, last_used, expiry, description, added, added_by, type) VALUES (";
   $q .= (int)$_GET["user_id"] . ", ";
   $q .= "'" . $new_ip . "', ";
-  $q .= time() . ", '0', '". $nexp."', '".$_POST['descr']."', ".time().", " . (int)$user_id . ", '".$ntype."') ";    
+  $q .= time() . ", '0', '". $nexp."', '".$_POST['descr']."', ".time().", " . (int)$user_id . ", '".$ntype."') ";
  //die($q);
   pg_safe_exec($q);
 header("Location: ip_restrict.php?user_id=" . (int)$_GET["user_id"]);
@@ -171,9 +171,9 @@ if ($ipq) {
 	echo "</td>\n";
         echo "<td><b>Expires in: </b><br>";
         echo "<select name=\"ipr_exp\" id=\"ipr_exp\">";
-        
-        for ($i=0;$i<count($ipr_expiry)-1; $i++)
-        echo '<option value="'.$ipr_expiry[$i].'">'. secs_to_h($ipr_expiry[$i]).'</option>
+
+        for ($i=0;$i<count(IPR_EXPIRY)-1; $i++)
+        echo '<option value="' . IPR_EXPIRY[$i] . '">'. secs_to_h(IPR_EXPIRY[$i]).'</option>
             ';
         echo '<option value="0" selected="selected">Never</option>';
         echo '</select>';
@@ -185,11 +185,11 @@ if ($ipq) {
         echo '<input type="checkbox" name="totp_only" value="1">';
         echo "</td>\n";
 	echo "</tr>";
-        
+
 	echo "<tr><td colspan=3 align=right><input id=\"ip_add\" type=\"submit\" value=\"Add\"></td></tr>\n";
 	echo "</table>\n";
-        
-        
+
+
 
 
 	echo "<br><br>";
@@ -204,15 +204,15 @@ if ($ipq) {
                     <td><b>TOTP only?</b></td><td><b>Action</b></td></tr>";
 	while ($ip = pg_fetch_object($ipq)) {
 		$amask++;
-		
+
                         echo "<tr>";
 			echo "<td valign=\"top\"><b>";
                         if ($ip->type==0)
                             echo "<font color=#" . $cTheme->main_no . "><b>";
-                        else 
-                           echo "<font color=#" . $cTheme->main_yes . "><b>"; 
+                        else
+                           echo "<font color=#" . $cTheme->main_yes . "><b>";
                         echo $ip->value."</b></font></td>\n";
-		
+
 		echo "</b></td>\n";
 		$ruu = pg_safe_exec("SELECT user_name FROM users WHERE id='" . $ip->added_by . "'");
 		$ouu = pg_fetch_object($ruu);
@@ -227,7 +227,7 @@ if ($ipq) {
                         echo "-- expired --</td>\n";
                 }
                 else {
-                echo "-- never --</td>\n";    
+                echo "-- never --</td>\n";
                 }
 		echo "<td width=\"200px\" valign=\"top\">";
                 if ($ip->description == '')
@@ -237,7 +237,7 @@ if ($ipq) {
                 if ($ip->type == 2)
 		echo "<font color=#" . $cTheme->main_yes . "><b>YES</b></font></td>\n";
                 else
-                echo "<font color=#" . $cTheme->main_no . "><b>NO</b></font></td>\n";    
+                echo "<font color=#" . $cTheme->main_no . "><b>NO</b></font></td>\n";
                 echo "<td valign=\"top\"><a href=\"#\" onclick=\"window.open('edit_ipr.php?ipr_id=".(int)$ip->id . "&user_id=".(int)$_GET["user_id"]."', 'THEME','width=900,height=220')\");\"><input type=button value=\"Edit\"/></a> ";
 		echo "<input type=button value=\"Delete\" onClick=\"del_id( " . (int)$ip->id . ")\"></td>\n";
 		echo "</tr>\n";

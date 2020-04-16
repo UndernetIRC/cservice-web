@@ -526,11 +526,11 @@ if (!$edit) {
             $user_sess_timeout = get_custom_session($id);
             echo ("<tr><td><b>Websession timout:</b></td><td><select id=\"sess_timout\" name=\"sess_timout\">");
             //.get_custom_session($id)."</td></tr>");  check_selected()
-            for ($sc = 0; $sc < count($default_sess_timout); $sc++) {
+            for ($sc = 0; $sc < count(DEFAULT_SESS_TIMEOUT); $sc++) {
                 echo "<option ";
-                if ($user_sess_timeout == $default_sess_timout[$sc])
+                if ($user_sess_timeout == DEFAULT_SESS_TIMEOUT[$sc])
                     echo "selected ";
-                echo "value=\"" . $default_sess_timout[$sc] . "\" > " . formatSeconds($default_sess_timout[$sc]) . " </option>
+                echo "value=\"" . DEFAULT_SESS_TIMEOUT[$sc] . "\" > " . formatSeconds(DEFAULT_SESS_TIMEOUT[$sc]) . " </option>
                 		";
             }
             echo ("</select></td></tr>");

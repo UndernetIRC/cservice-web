@@ -1,13 +1,11 @@
 <?php
-
-/* $Id: ip_restrict.php,v 1.6 2005/11/18 10:08:08 nighty Exp $ */
-$min_lvl = 800;
 header("Pragma: no-cache");
 require("../../php_includes/cmaster.inc");
 std_init();
 
 unset($axslock);
 unset($da_u_adm);
+$min_lvl = 800;
 $axslock = 1;
 $da_u_adm = 0;
 
@@ -94,7 +92,7 @@ if (isset($_POST['save'])) {
         //header("Location: ip_restrict.php?user_id=" . (int) $_GET["user_id"]);
         echo "<h2>IP Restriction Saved</h2>\n";
         echo "<hr width=100% size=1 noshade>\n";
-        
+
         echo "</body>\n";
         echo "</html>\n\n";
         die;
@@ -139,8 +137,8 @@ if ($ipq) {
     echo "<td><b>Set new expire in: </b><br>";
     echo "<select name=\"ipr_exp\" id=\"ipr_exp\">";
 
-    for ($i = 0; $i < count($ipr_expiry) - 1; $i++)
-        echo '<option value="' . $ipr_expiry[$i] . '">' . secs_to_h($ipr_expiry[$i]) . '</option>
+    for ($i = 0; $i < count(IPR_EXPIRY) - 1; $i++)
+        echo '<option value="' . IPR_EXPIRY[$i] . '">' . secs_to_h(IPR_EXPIRY[$i]) . '</option>
             ';
     echo '<option value="0">Never</option>';
     echo '</select>';
