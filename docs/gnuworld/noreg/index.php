@@ -1,8 +1,7 @@
 <?
-/* $Id: index.php,v 1.10 2004/07/25 03:31:52 nighty Exp $ */
-	$min_lvl=800;
 	require("../../../php_includes/cmaster.inc");
 	std_connect();
+	$min_lvl=800;
         $user_id = std_security_chk($auth);
         $admin = std_admin();
 	$cTheme = get_theme_info();
@@ -136,5 +135,3 @@ For CService Admins use <b>ONLY</b>.
 ?>
 </body>
 </html>
-
-

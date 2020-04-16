@@ -38,6 +38,9 @@ if (file_exists("../../vendor/autoload.php")) {
     die;
 }
 
+define("REGISTER_GLOBALS_BLACKLIST", array("min_lvl", "edit_lvl"));
+define("REGISTER_GLOBALS_COOKIE_WHITELIST", array("auth", "sauth", "totp", "csess", "rlogin", "sepoch", "cstheme"));
+
 // Ugly hack, but this code will never be fixed not to require register_globals which was
 // deprecated in PHP 5.4.
 function register_global_array( $sg ) {
@@ -54,9 +57,17 @@ function register_global_array( $sg ) {
   Global ${$superGlobals[$sg]};
 
   foreach( ${$superGlobals[$sg]} as $key => $val ) {
+    if (in_array(strtolower($key), REGISTER_GLOBALS_BLACKLIST)) {
+      continue;
+    }
     if ($superGlobals[$sg] == "_GET" || $superGlobals[$sg] == "_POST") {
       $val = pg_escape_string($val);
+    } elseif ($superGlobals[$sg] == "__COOKIE") {
+      if (!in_array(strtolower($key), REGISTER_GLOBALS_COOKIE_WHITELIST)) {
+        continue;
+      }
     }
+
     $GLOBALS[$key]  = $val;
   }
 }
