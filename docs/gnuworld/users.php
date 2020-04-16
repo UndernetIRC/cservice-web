@@ -1,13 +1,14 @@
 <?php
-$min_lvl = 800;
-$edit_lvl = 600;
-$maxuserlisted = 500;
 require("../../php_includes/cmaster.inc");
 std_init();
 $cTheme = get_theme_info();
 $theuser = trim($theuser);
 
+$min_lvl = 800;
+$edit_lvl = 600;
+$maxuserlisted = 500;
 $nrw_lvl = 0;
+
 if (acl(XWEBAXS_2)) {
     $nrw_lvl = 1;
 }

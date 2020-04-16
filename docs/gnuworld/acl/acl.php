@@ -1,8 +1,4 @@
 <?
-	$min_lvl=800;
-
-/* $Id: acl.php,v 1.16 2004/08/10 11:05:40 nighty Exp $ */
-
 	require("../../../php_includes/cmaster.inc");
 	std_connect();
         $user_id = std_security_chk($auth);
@@ -126,7 +122,7 @@
 				die;
 			}
 		}
-		
+
 		if ($userid==0) {
 				echo "<html><head><title>Access Control List Manager</title>";
 				std_theme_styles();
@@ -458,18 +454,18 @@ if ($admin>=800) {
 		echo $spc . "<input type=checkbox name=CAN_ADD value=1" . $c3 . "> Can ADD commands to the HELP set<br>";
 		echo $spc . "<input type=checkbox name=CAN_EDIT value=1" . $c4 . "> Can EDIT HELP text replies (recommended)<br>";
 		echo "<br>\n";
-		
+
 		echo "<li> <b>" . BOT_NAME . "@ TOTP disable for others</b>:&nbsp;&nbsp;&nbsp;(<a href=\"javascript:get_help('XHELP');\">help</a>)<br>";
 		$xtop1= "checked";
-		if ((int)$row->acl_flags & XTOTP_DISABLE_OTHERS) { 
+		if ((int)$row->acl_flags & XTOTP_DISABLE_OTHERS) {
 		$xtop1=''; $xtop2= " checked"; }
 echo $spc . "<input type=radio name=XTOTP value=0 ". $xtop1."> Disabled<br>";
 echo $spc . "<input type=radio name=XTOTP value=1 ". $xtop2."> Enabled<br>";
-		
-		
+
+
 		echo "<li> <b>MIA system</b>:&nbsp;&nbsp;&nbsp;(<a href=\"javascript:get_help('MIA');\">help</a>)<br>";
 		$mi1= "checked";
-		if ((int)$row->acl_flags & MIA_VIEW) { 
+		if ((int)$row->acl_flags & MIA_VIEW) {
 		$mi1=''; $mi2= " checked"; }
 echo $spc . "<input type=radio name=MIA_W value=0 ". $mi1."> Disabled<br>";
 echo $spc . "<input type=radio name=MIA_W value=1 ". $mi2."> Enabled<br>";
@@ -803,13 +799,13 @@ if ($mode=="getlist") {
 				echo "<i>NO ACCESS</i>";
 			}
 			echo "</td>";
-			
+
 			if ((int)$row->acl_flags & MIA_VIEW) {
 			echo "<td><font color=#" . $cTheme->main_yes . "><b>ENABLED</b></Font></td>";
 			} else {
 				echo "<td><i>NO ACCESS</i></td>";
 			}
-			
+
 			echo "<td>";
 			if ((int)$row->acl_flags & XWEBAXS_3) {
 				echo "<font color=#" . $cTheme->main_no . "><b>Admin</b> (level&nbsp;3)</font>";
@@ -934,5 +930,3 @@ if ($mode=="getlist") {
 ?>
 </body>
 </html>
-
-

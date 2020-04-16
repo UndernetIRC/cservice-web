@@ -1,8 +1,7 @@
 <?
-	$min_lvl=901;
-
 	require("../../../php_includes/cmaster.inc");
 	std_connect();
+ 	$min_lvl=901;
         $user_id = std_security_chk($auth);
         $admin = std_admin();
 	$cTheme = get_theme_info();

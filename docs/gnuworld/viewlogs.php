@@ -1,5 +1,4 @@
-<?
-$min_lvl=800;
+<?php
 require('../../php_includes/cmaster.inc');
 
 

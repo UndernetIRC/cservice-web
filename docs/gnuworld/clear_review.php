@@ -1,5 +1,4 @@
 <?
-$min_lvl=800;
 include("../../php_includes/cmaster.inc");
 /* $Id: clear_review.php,v 1.8 2004/04/24 23:52:05 nighty Exp $ */
 std_connect();
@@ -32,7 +31,7 @@ if ($do_it==0) {
 
 	echo "You can't clear applications' reviews from that 'status' (". ($status+0) .").";
 	die;
-	
+
 }
 
 $q = "UPDATE pending SET reviewed='N',reviewed_by_id=1,last_updated=now()::abstime::int4 WHERE channel_id='$channel_id' AND created_ts='$created_ts'";

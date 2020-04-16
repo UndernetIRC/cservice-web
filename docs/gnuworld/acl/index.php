@@ -1,8 +1,4 @@
 <?
-	$min_lvl=800;
-
-/* $Id: index.php,v 1.18 2005/11/17 03:28:05 nighty Exp $ */
-
 	require("../../../php_includes/cmaster.inc");
 	std_connect();
         $user_id = std_security_chk($auth);
@@ -401,5 +397,3 @@ echo "</table>\n";
 ?><br>
 </body>
 </html>
-
-

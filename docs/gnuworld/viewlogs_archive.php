@@ -1,5 +1,4 @@
 <?
-$min_lvl=800;
 require('../../php_includes/cmaster.inc');
 
 unset($page_name);unset($udbname);unset($cdbname);

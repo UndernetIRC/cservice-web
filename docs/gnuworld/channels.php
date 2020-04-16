@@ -1,5 +1,4 @@
 <?
-$min_lvl=800;
 require('../../php_includes/cmaster.inc');
 
 /* $Id: channels.php,v 1.19 2005/11/25 11:14:14 nighty Exp $ */

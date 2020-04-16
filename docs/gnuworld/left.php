@@ -1,10 +1,10 @@
 <?
-	$min_lvl=800; // for WEBACCESS TEAM admin.
 	$noregwrite_lvl=1;
 
         require("../../php_includes/cmaster.inc");
         header("Pragma: no-cache");
         std_connect();
+		$min_lvl=800; // for WEBACCESS TEAM admin.
         $current_page="left.php";
         $user_id = std_security_chk($auth);
         $admin = std_admin();
@@ -88,7 +88,7 @@ $sec_id = md5( $user_id . CRC_SALT_0019 . $authcsc );
 ?>
 	<? if ($admin>0) { ?>
 		<b>Admin Tools:<br>
-		
+
 	<? } else { ?>
 		<b>ACL Tools:<br>
 		<? if (acl(XAT_CAN_VIEW) || acl(XAT_CAN_EDIT)) { ?>
@@ -152,7 +152,7 @@ $sec_id = md5( $user_id . CRC_SALT_0019 . $authcsc );
 	<? } else { echo "<br>"; } ?>
 <?
 		if ($is_alumni) {
-			echo "uid:$user_id<br>admlvl:(none)<br>";	
+			echo "uid:$user_id<br>admlvl:(none)<br>";
 		}
 		if ($admin>0) {
 	        	echo("uid:$user_id<br>admlvl:$admin<br>"); // Admin only!
