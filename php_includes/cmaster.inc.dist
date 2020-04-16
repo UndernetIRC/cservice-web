@@ -61,7 +61,11 @@ function register_global_array( $sg ) {
       continue;
     }
     if ($superGlobals[$sg] == "_GET" || $superGlobals[$sg] == "_POST") {
-      $val = pg_escape_string($val);
+      if (is_array($val)) {
+        $val = array_map(function($v) { return pg_escape_string($v); }, $val);
+      } else {
+        $val = pg_escape_string($val);
+      }
     } elseif ($superGlobals[$sg] == "__COOKIE") {
       if (!in_array(strtolower($key), REGISTER_GLOBALS_COOKIE_WHITELIST)) {
         continue;
