@@ -4,69 +4,82 @@ std_connect();
 $user_id = std_security_chk($auth);
 $cTheme = get_theme_info();
 ?>
-<html><head><title>REGISTRATION PROCESS</title>
+<html><head><title>Registration Process</title>
+<style type=text/css>
+<!--
+a:link { font-family: arial,helvetica; color: #004400;  }
+a:visited { font-family: arial,helvetica; color: #004400; }
+a:hover { font-family: arial,helvetica; color: #80809A; }
+th, td { padding: 15px; }
+ .tab { margin-left: 40px; }
+//-->
+
+</style>
 <? std_theme_styles(); ?>
 </head>
 <? std_theme_body("../"); ?>
-<b>CHANNEL SERVICE REGISTRATION - ACCEPTABLE USE POLICY</b><br><hr noshade size=2>
-<a href="javascript:history.go(-1);">&lt;&lt;&nbsp;Go Back</a>
+</head>
+<body bgcolor=#f0f0f0 text=#000000 link=#004400 vlink=#004400 alink=#80809A>
+<font face="arial,helvetica" size=-1>
+<center><hr noshade size=2>
+<a href="javascript:history.go(-1);">&lt;&lt;&nbsp;Go back</a>
 <br><br>
-<table border=1 width=450 bgcolor=#<?=$cTheme->table_bgcolor?>>
+<center><table border=1 width=800 bgcolor=#ffffff>
 <tr><td>
-<center><h2><b>CHANNEL SERVICE<br><u>A</u>cceptable <u>U</u>se <u>P</u>olicy</b></h2></center>
+<center><h2><u>A</u>cceptable <u>U</u>se <u>P</u>olicy</h2></center>
 <br>
 <? if (REQUIRED_SUPPORTERS>0) { ?>
-Channel registration is not meant as a means to start a new channel. It is meant for previously established channels to have an opportunity to have some stability. If you are first starting a new channel, then just start using your channel and give it time to see if a reasonable userbase develops to justify registration. Your channel must be open and active for a reasonable amount of time BEFORE you apply.<br>
-<br>
+The purpose of channel registration is not to start a new channel, but rather for previously <b>established channels</b> to have an opportunity to ensure stability. If you are first starting a new channel then simply start using your channel and give it time to see if a reasonable user base develops to justify registration. Your channel must be open and active for a reasonable amount of time <b>before</b> you apply. It is important that you gather C scores too. ChanFix is a service that tracks the activity of channel operators.<br>
 <? } ?>
-As a channel manager you are responsible for the channel and seeing that your channel users and ops follow all Channel Service guidelines, so READ BEFORE YOU APPLY.<br>
 <br>
-Channel registration application is not a right, but a privilege granted subject to conditions.<br>
+Channel registration application is not a right, but a privilege granted subject to conditions. First of all, you need to check that the channel is not already registered. This may be done through the use of the following <? echo BOT_NAME ?> command:<br>
 <br>
-<? if (REGPROC_ALLOWMULTIPLE==0) { ?>
-The Channel Service Guidelines approved by <? echo NETWORK_NAME ?> admins require that <b>"The Channel Service Committee will only register 1 channel per USER (this means user, not account or e-mail address)."</b> Consequently, you can only register one channel on <? echo NETWORK_NAME ?>. Translated into language more appropriate to new services terminology, this means one channel per person, NOT username.<br>
+	<p class="tab"><b>/msg <? echo BOT_NAME ?> chaninfo #channel</b><br></p>
 <br>
-<? } ?>
-Channel Services (<? echo BOT_NAME ?>) will not be provided for any channel involved in child pornography, the trading of warez or any copywritten material including mp3's and dvd's or the illegal trading of credit cards, passwords etc.  <b>We will no longer register any bot lending, shell or bnc (vhosts) channels.</b>  If we find these activities are predominant in your channel after registration, we will permanently remove <? echo BOT_NAME ?> from the channel.<br>
- <br>
-While we do not disqualify use of free email services, if we find that certain email domains are being used to abuse our guidelines we will not allow that domain to be used again.<br>
+Your username must be at least <b><? echo MIN_DAYS_BEFORE_REG ?> days old</b> in order to apply for channel registration. Supporters’ usernames must be <b><? echo MIN_DAYS_BEFORE_SUPPORT ?> days old</b> in order to qualify as a supporter and their usernames must not have a history of abuse, otherwise they cannot support your application.<br>
 <br>
-The CSC admins do reserve the right to reject any channel registration for any reason that they deem valid.<br>
+In 2016, the maximum number of channels you were able to register increased to a maximum of <b>three</b>, however there are conditions that need to be met before being able to do so. These are as follows:<br>
+ <ul>
+ <li>1 year or newer        – you can register <b>one</b> channel</li>
+ <li>1-2 years old          – you can register up to <b>two</b> channels</li> 
+ <li>3 years old and above  – you can register up to <b>three</b> channels</li>
+</ul>
+Channel Services (<? echo BOT_NAME ?>) will not be provided for any channel:<br>
+ <ul>
+ <li>involved in child pornography or trade of illegal content</li>
+ <li>provide a bot lending service</li>
+ <li>filled with a considerable number of compromised machines</li>
+</ul>
+If CService finds these activities are predominant in your channel following registration, <? echo BOT_NAME ?> may end up being permanently removed.<br>
 <br>
-Channel Services regularly monitors all registered channels for activity.  If a registered channel is not active, <? echo BOT_NAME ?> will be removed from the channel.  Channel managers are expected to be active in the channel.  If you are gone for more than 21 days, <? echo BOT_NAME ?> can be removed from the channel or in very active channels, a new channel manager can be elected by the high level ops.  If you know you are going to be gone for more than 3 weeks, appoint a temporary manager and have Channel Services set them up.  Forms are available on the web page and <? echo SERVICE_CHANNEL ?> is there to help you.<br>
-<br><br><br>
-<? if (REQUIRED_SUPPORTERS>0) { ?>
-<center><h2><b>SUPPORTERS</b></h2></center>
+CService administrators reserve the right to reject any channel registration for any reason that they deem valid.<br>
 <br>
-<? if (REQUIRED_SUPPORTERS>1) { ?>
-You need to have <? echo REQUIRED_SUPPORTERS ?> DIFFERENT supporters (people, not just <? echo REQUIRED_SUPPORTERS ?> different usernames) to register a channel.  Make sure all your supporters are active members of your channel and that they all agree to support you as manager.  If any of the people who you list as a supporter indicates they do not support your channel, you will lose the right to register any channel for 3 days.<br>
-<br>
-Your supporters must go to the web page and indicate whether they support your application or not or /msg <? echo BOT_NAME ?> support #channelname (YES or NO).  If all of your supporters do not respond within 3 days, your application will be rejected.  <br>
-<br>
-<? } else { ?>
-You need to have <? echo REQUIRED_SUPPORTERS ?> supporter (<? echo REQUIRED_SUPPORTERS ?> username) to register a channel.  Make sure he/she is an active member of your channel and that he/she agrees to support you as manager.  If he/she indicates he/she does'nt support your channel, you will lose the right to register any channel for 3 days.<br>
-<br>
-Your supporter must go to the web page and indicate whether he/she supports your application or not or /msg <? echo BOT_NAME ?> support #channelname (YES or NO).  If he/she does not respond within 3 days, your application will be rejected.  <br>
-<br>
-<? } ?>
-During the registration period, Channel Service will be checking to insure all your supporters are really users of the channel and are actually joining it.  They need to be logged into <? echo BOT_NAME ?> before they join so that they will be counted.  Repeat: PLEASE BE SURE YOUR SUPPORTERS LOG INTO <? echo BOT_NAME ?> BEFORE THEY JOIN THE CHANNEL OTHERWISE THEY WILL NOT BE COUNTED.<br>
-<br>
-<? } else { ?>
-You dont need any supporters for your channel, it is called :<br><b>INSTANT REGISTRATION</b>, enjoy !<br>
-<br>
-<? } ?>
-You are responsible for your Channel Ops whether you are online or not.  Please be careful who you give access to.  Abuse by your channel ops, whether you are there or not, can result in <? echo BOT_NAME ?> being removed from the channel.<br>
-<br>
-If you feel your channel qualifies for registration go to <? echo IFACE_URL ?> and FOLLOW all instructions.<br>
+Usernames expire after <b>180 days of inactivity</b>. If a username expires and they are the manager of a registered channel, a vote to find a replacement manager may be called. If no suitable candidate is found as a replacement manager, the channel will be purged at that time. If you expect to be absent for months you are encouraged to appoint a temporary channel manager to avoid a channel purge. Please inquire on the website or in <b><? echo SERVICE_CHANNEL ?></b> for more information.<br>
 <br>
 <? if (REQUIRED_SUPPORTERS>0) { ?>
-NOTE: Filling out this application does NOT constitute registering your channel.  It is only applying to register.The entire registration process takes about 10 days.  Should your application be rejected for any reason, it cannot be altered by CService. You must reapply using this form. You may wish to print the completed form before submitting to retain the data.  <br>
+<center><h2>Supporters</h2></center>
 <br>
-You should track the progress of your application every few days. Go to the registration page at <? echo IFACE_URL ?> and select Check application.  Enter your channel name and enter or click on go baby.<br>
+You need to have <b><? echo REQUIRED_SUPPORTERS ?> different</b> supporters in order to register a channel. These must represent unique people, not just different usernames. Make sure all your supporters are active members of your channel and that they all agree to support you as manager. If any of the people who you list as a supporter indicates they do not support your channel, you will lose the right to register any channel for <b>3 days</b>.<br>
+<br>
+Your supporters must visit the CService web page and indicate whether they support your application or not, or send the following command on IRC:<br>
+<br>
+	<p class="tab"><b>/msg <? echo BOT_NAME ?> support #channel yes|no</b><br></p>
+<br>
+If after <b>3 days</b> all of your supporters have not confirmed their support, your application will be rejected. In such a situation you may submit a new application (using the same supporters or a different list).<br>
+<br>
 <? } ?>
+If you feel like your channel qualifies for registration go to <a href="<? echo IFACE_URL ?>"><? echo IFACE_URL ?></a> and follow all instructions.<br>
 <br>
-October 6, 2002<br>
-<? echo NETWORK_NAME ?> Channel Service Committee<br>
+<b>Note</b>: The registration period can take <b>3-5 days</b> and depends on channel activity. Those listed as supporters should be active and state that support as soon as possible to speed up the process! Should your application be rejected for any reason and you wish to reapply, please correct errors and submit a new application.<br>
+<br>
+You can track the status of your application at any time by visiting <a href="<? echo IFACE_URL ?>"><? echo IFACE_URL ?></a> and selecting "<b>Check App</b>".<br>
+<br>
+If there is anything you are unsure of or would like clarify about the registration process, please don't hesitate to drop by <b><? echo SERVICE_CHANNEL ?></b> and ask our friendly team.<br>
+<br>
+Best of luck!<br>
+<br>
+<b><? echo NETWORK_NAME ?> Channel Services Committee</b><br>
+May 1st, 2020<br>
 <br>
 </td></tr></table>
 <br>
@@ -78,6 +91,7 @@ October 6, 2002<br>
 <input type=button value="I REFUSE THE ABOVE" onClick="location.href='../right.php'">
 </form>
 <? } ?>
+</center>
 
 </body>
 </html>
