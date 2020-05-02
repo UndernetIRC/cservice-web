@@ -40,14 +40,14 @@ Your username must be at least <b><? echo MIN_DAYS_BEFORE_REG ?> days old</b> in
 <br>
 In 2016, the maximum number of channels you were able to register increased to a maximum of <b>three</b>, however there are conditions that need to be met before being able to do so. These are as follows:<br>
  <ul>
- <li>1 year or newer        – you can register <b>one</b> channel</li>
- <li>1-2 years old          – you can register up to <b>two</b> channels</li> 
- <li>3 years old and above  – you can register up to <b>three</b> channels</li>
+ <li><1 year old        – allows <b>one</b> channel</li>
+ <li>1 year old         - allows up to <b>two</b> channels</li> 
+ <li>2 years old        – allows up to <b>three</b> channels</li>
 </ul>
 Channel Services (<? echo BOT_NAME ?>) will not be provided for any channel:<br>
  <ul>
  <li>involved in child pornography or trade of illegal content</li>
- <li>provide a bot lending service</li>
+ <li>providing a bot lending service</li>
  <li>filled with a considerable number of compromised machines</li>
 </ul>
 If CService finds these activities are predominant in your channel following registration, <? echo BOT_NAME ?> may end up being permanently removed.<br>
