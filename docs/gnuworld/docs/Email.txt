@@ -13,7 +13,7 @@ this request.
 PASSWORD RESET REQUEST
 - If you need to have your password reset, please attempt to have it 
 done
-  via the web page. http://cservice.undernet.org/live -> Forgotten 
+  via the web page. https://cservice.undernet.org/live -> Forgotten 
 Password. 
   Use this form ONLY when you cannot login on website with your 
 username or you cannot use your username's old e-mail address anymore
@@ -23,7 +23,7 @@ able to recover the password from
 
 E-MAIL CHANGE REQUEST
 - If you need to change your email we have on record for your username 
-login with your username at http://cservice.undernet.org/live and 
+login with your username at https://cservice.undernet.org/live and 
  click on Forms / Email Change Section .
  Use this form ONLY when you cannot login on website with your username 
 or you cannot use your username's old e-mail address anymore
@@ -32,7 +32,7 @@ of the username.
  
 VERIFICATION/QUESTION ANSWER REQUEST:
 - If you need to reset your verification answer/question use the 
-Forgotten Password section of http://cservice.undernet.org/live .
+Forgotten Password section of https://cservice.undernet.org/live .
  Type the username there and make a mistake in your secret answer. You 
 will be redirected to the Verification Question/Answer Reset Form.
  Fill that form and submit it. If your old email cannot be used anymore 
@@ -86,5 +86,5 @@ CService@undernet.org
   This document was last updated on May, 28 2005 - by Etherfast
   This file is maintained by Undernet CService Committee
   E-mail cservice@undernet.org with any suggestions or comments
-  CService URL: http://cservice.undernet.org
-  Undernet URL: http://www.undernet.org
+  CService URL: https://cservice.undernet.org
+  Undernet URL: https://www.undernet.org
