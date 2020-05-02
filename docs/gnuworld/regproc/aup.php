@@ -29,7 +29,7 @@ th, td { padding: 15px; }
 <center><h2><u>A</u>cceptable <u>U</u>se <u>P</u>olicy</h2></center>
 <br>
 <? if (REQUIRED_SUPPORTERS>0) { ?>
-The purpose of channel registration is not to start a new channel, but rather for previously <b>established channels</b> to have an opportunity to ensure stability. If you are first starting a new channel then simply start using your channel and give it time to see if a reasonable user base develops to justify registration. Your channel must be open and active for a reasonable amount of time <b>before</b> you apply. It is important that you gather C scores too. ChanFix is a service that tracks the activity of channel operators.<br>
+The purpose of channel registration is not to start a new channel, but rather for previously <b>established channels</b> to have an opportunity to ensure stability. If you are first starting a new channel then simply start using your channel and give it time to see if a reasonable user base develops to justify registration. Your channel must be open and active for a reasonable amount of time <b>before</b> you apply. It is important that you gather C scores too. ChanFix is a service that tracks the activity of channel operators (you can learn more about it <a href="http://www.undernet.org/chanfix/">here</a>.<br>
 <? } ?>
 <br>
 Channel registration application is not a right, but a privilege granted subject to conditions. First of all, you need to check that the channel is not already registered. This may be done through the use of the following <? echo BOT_NAME ?> command:<br>
@@ -47,7 +47,7 @@ In 2016, the maximum number of channels you were able to register increased to a
 Channel Services (<? echo BOT_NAME ?>) will not be provided for any channel:<br>
  <ul>
  <li>involved in child pornography or trade of illegal content</li>
- <li>provide a bot lending service</li>
+ <li>providing a bot lending service</li>
  <li>filled with a considerable number of compromised machines</li>
 </ul>
 If CService finds these activities are predominant in your channel following registration, <? echo BOT_NAME ?> may end up being permanently removed.<br>
