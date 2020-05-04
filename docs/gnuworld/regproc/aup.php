@@ -29,8 +29,7 @@ th, td { padding: 15px; }
 <center><h2><u>A</u>cceptable <u>U</u>se <u>P</u>olicy</h2></center>
 <br>
 <? if (REQUIRED_SUPPORTERS>0) { ?>
-The purpose of channel registration is not to start a new channel, but rather for previously <b>established channels</b> to have an opportunity to ensure stability. If you are first starting a new channel then simply start using your channel and give it time to see if a reasonable user base develops to justify registration. Your channel must be open and active for a reasonable amount of time <b>before</b> you apply. It is important that you gather C scores too. ChanFix is a service that tracks the activity of channel operators.<br>
-<? } ?>
+The purpose of channel registration is not to start a new channel, but rather for previously <b>established channels</b> to have an opportunity to ensure stability. If you are first starting a new channel then simply start using your channel and give it time to see if a reasonable user base develops to justify registration. Your channel must be open and active for a reasonable amount of time <b>before</b> you apply. It is important that you gather C scores too. <a href="http://www.undernet.org/chanfix/">ChanFix</a> is a service that tracks the activity of channel operators in unregistered channels.<br>
 <br>
 Channel registration application is not a right, but a privilege granted subject to conditions. First of all, you need to check that the channel is not already registered. This may be done through the use of the following <? echo BOT_NAME ?> command:<br>
 <br>
