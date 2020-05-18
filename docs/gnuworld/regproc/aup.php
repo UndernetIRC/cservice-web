@@ -32,11 +32,12 @@ th, td { padding: 15px; }
 The purpose of channel registration is not to start a new channel, but rather for previously <b>established channels</b> to have an opportunity to ensure stability. If you are first starting a new channel then simply start using your channel and give it time to see if a reasonable user base develops to justify registration. Your channel must be open and active for a reasonable amount of time <b>before</b> you apply. It is important that you gather C scores too. <a href="http://www.undernet.org/chanfix/">ChanFix</a> is a service that tracks the activity of channel operators in unregistered channels.<br>
 <br>
 Channel registration application is not a right, but a privilege granted subject to conditions. First of all, you need to check that the channel is not already registered. This may be done through the use of the following <? echo BOT_NAME ?> command:<br>
-<br>
+
 	<p class="tab"><b>/msg <? echo BOT_NAME ?> chaninfo #channel</b><br></p>
-<br>
+
 Your username must be at least <b><? echo MIN_DAYS_BEFORE_REG ?> days old</b> in order to apply for channel registration. Supporters’ usernames must be <b><? echo MIN_DAYS_BEFORE_SUPPORT ?> days old</b> in order to qualify as a supporter and their usernames must not have a history of abuse, otherwise they cannot support your application.<br>
 <br>
+<? } ?>
 In 2016, the maximum number of channels you were able to register increased to a maximum of <b>three</b>, however there are conditions that need to be met before being able to do so. These are as follows:<br>
  <ul>
  <li><1 year old        – allows <b>one</b> channel</li>
