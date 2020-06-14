@@ -1,79 +1,81 @@
-	                Undernet Channel Service
-                       Formulario Del Cambio Del Email
-		 --------------------------------------
+Undernet Channel Service Committee 
+
+
+Formulario de cambio de correo electrónico 
+
+----------------------------------- 
+
+- ¡POR FAVOR LEA ESTAS INSTRUCCIONES! 
+
  
-
-- LEA POR FAVOR ESTAS INSTRUCCIONES!
-- Por favor complete el formulario en su totalidad, o su petici�n no ser� procesada. 
-- UTILICE este formulario solamente cuando usted no puede conectarse a la p�gina de 
-  CService con su username o usted no puede utilizar el viejo email que CService tiene en 
-  su database para su username. 
-- Si su viejo email a�n funciona nosotros no tomaremos en consideraci�n esta petici�n.   
+SOLICITUD DE CAMBIO DE CORREO ELECTRÓNICO 
  
-PETICI�N DE LA RESTAURACI�N DE LA CONTRASE�A
-- Si usted necesita restaurar su contrase�a, procure por favor hacerla entrando a la 
-  p�gina http://cservice.undernet.org y hacer clic en "Web Interface" y despu�s en 
-  "Forgotten Password".
-  SOLAMENTE use este Formulario del Cambio de Email que aqu� le exponemos si su viejo 
-  email no puede ser m�s utilizado.  
-  Despu�s de que usted tenga un nuevo email (correo electr�nico) en su username, 
-  usted podr� recuperar su contrase�a desde la p�gina de CService como le dijimos antes.
+- Rellene el formulario completamente y cuidadosamente, o su solicitud no será procesada. 
 
-PETICI�N POR CAMBIAR EL EMAIL
-- Si usted necesita cambiar su email que tenemos en record de su username, usted 
-  necesita crear primero un email v�lido para CService, despu�s de creado entre en 
-  la p�gina http://cservice.undernet.org/live logu�ase y haga clic en la secci�n 
-  FORMS y luego en Email Change.
-  SOLAMENTE use este Formulario del Cambio de Email que aqu� le exponemos si su viejo 
-  email no puede ser m�s utilizado. 
-  Tambi�n Por Favor no utilize los dominios de email gratis para su nuevo correo 
-  electr�nico del username. 
+- Utilize este formulario para solicitar un cambio manual de correo electrónico para su nombre de usuario, en casos como: 
+
+a. Su dirección de correo electrónico registrada con el nombre de usuario ha caducado / ha sido eliminada. Se enviará un mensaje de correo electrónico de prueba a la dirección existente para verificar este aspecto. 
+
+b. Su dirección de correo electrónico registrada con el nombre de usuario no recibe correos de nuestro servidor de correo (enlaces de confirmación, nuevas contraseñas ... etc.); 
+
+c. Su correo electrónico registrado con el nombre del servidor  ha sido comprometido / robado: solo si sus intentos de recuperarlo, contactando al proveedor de correo electrónico o utilizando sus procedimientos de recuperación de contraseña no tuvieron éxito. 
+
+1) Cree una nueva dirección de correo electrónico válida: le recomendamos que utilice su proveedor de servicios de Internet (ISP) o una dirección de correo electrónico confiable. Asegúrese de que su dirección de correo electrónico sea funcional y segura. Será la modalidad de comunicación con nuestros departamentos y también la mejor manera de recuperar su nombre de usuario. 
+
+2) Redacte un correo electrónico con el destino X@undernet.org y agregue como asunto: "Solicitud de cambio de correo electrónico". 
+
+3) Simplemente haga copiar / pegar  todo este formulario en el cuerpo del correo electrónico (asegúrese de no adjuntarlo como un archivo .txt / .doc o lo ignoraremos), luego proporcione la siguiente información: 
+
+----------------------------------- 
+
+a. Nombre de usuario (no el nickname): 
+
+b. Antigua dirección de correo electrónico: 
+
+Nota: Si ha olvidado su correo electrónico registrado con el nombre de usuario, siga estas instrucciones: 
+
+- Vaya a https://cservice.undernet.org/live, luego inicie sesión con su nombre de usuario y contraseña; 
+
+- En la sección "My information", junto al correo electrónico, haga clic en Abrir ventana emergente; 
+
+- Aparecerá un cuadro emergente pidiéndole que indique la respuesta a la pregunta de verificación de su nombre de usuario; 
+
+- Complete la respuesta de verificación, haga clic en enviar y se mostrará su correo electrónico registrado con el nombre de usuario. 
+
+c. Nueva dirección de correo electrónico: 
+
+d. Respuesta de la pregunta de verificación: 
+
+(Esta es la respuesta a una de las preguntas a continuación) 
+
+- Indique qué pregunta seleccionó anteriormente, escribiendo la respuesta al lado: 
+
+a) ¿Cuál es el apellido de soltera de tu madre? 
+
+b) ¿Cuál es el nombre de tu perro (o gato)? 
+
+c) ¿Cuál es la fecha de nacimiento de tu padre? 
+
+NOTA: Si ha olvidado su pregunta / respuesta de verificación, proporcione 2-3 posibilidades de las respuestas que haya seleccionado. 
+
+e. Canales donde esta agregado a la lista de accesos: 
+
+f. Comentarios (si hay): 
+
+* Espere 24-48 horas para una respuesta a su solicitud de cambio de correo electrónico. 
+
+* Entre en #usernames si tiene alguna pregunta sobre la solicitud de cambio de correo electrónico 
+
+------------------------------------------------------------------- 
+
+Formulario de cambio de correo electrónico 
+
+Undernet Channel Service Committee X@undernet.org 
  
-PETICI�N PARA VERIFICACI�N/PREGUNTA CONTESTACI�N
-- Si usted necesita restaurar su verificaci�n a la respuesta de su pregunta secreta, 
-  entre a la p�gina http://cservice.undernet.org y luego hacer clic en "Forgotten Password". 
-  Escriba su username y algo err�neo en la "respuesta de verificaci�n". 
-  Cuando la p�gina cargue de clic en:
- "If you forgot your verification answer then go to the Verification Question/Answer Reset Form". 
-  Usted ser� redirigido otro formulario para contestar y completar su pregunta/respuesta secreta. 
-  Llene este formulario y envielo. 
-  Si su viejo email no puede ser m�s usado use el Email Change Form desde aqu� para cambiarlo. 
-  Entonces, despu�s que el cambio sea efectivo, obtenga una verificaci�n de su pregunta/respuesta 
-  secreta desde la p�gina de CService. 
+------------------------------------------------------------------- 
 
-- COPIA Y PEGA ESTE FORMULARIO COMPLETA en un email (nuevo email del username) y la env�a a: 
-        X@undernet.org 
-
-- Permitanos de 3-5 d�as para que este cambio sea terminado antes de volver a enviar otra petici�n.   
- 
-					--------------------------------------------
-
-
-Provea por favor la informaci�n siguiente:
-
-a. Username (no el nickname):
-
-b. Viejo direcci�n del Email:
-
-c. Nuevo direcci�n del Email:
-
-d. -  Escriba aqu� la Verificaci�n de su pregunta secreta: 
-     (�sta es la respuesta a una de las preguntas abajo que usted seleccion� cuando usted registr� el username)
-
-   - Indique por favor qu� pregunta usted seleccion� previamente para contestar. 
-          a) What's your mother's maiden name?
-          b) What's your dog's (or cat's) name?
-          c) What's your father's birthdate?
-
-
-e. Los canales que usted tiene acceso con su username:
-
-Comentarios (si es necesario):
-
-
-------------------------------------------
-Formulario Del Cambio De Email
-Undernet Channel Service
-version 10042002  
- 
-Este documento fue actualizado el 28 de Noviembre del 2005 por veroushka.
+El document has sido actualizado - junio, 2020  
+Este fichero esta mantenido por el Comite Undernet Channel Service 
+Contacto cservice@undernet.org con cualquier sugerencia o comentario. 
+CService URL: https://cservice.undernet.org 
+Undernet URL: https://www.undernet.org 
