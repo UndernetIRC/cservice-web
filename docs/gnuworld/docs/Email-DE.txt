@@ -18,7 +18,6 @@ E-MAIL-ÄNDERUNGSANFRAGE
 
 - Verwenden Sie dieses Formular, um eine manuelle E-Mail-Änderung für Ihren Benutzernamen anzufordern, z. B.: 
 
- 
 a. Ihre registrierte E-Mail-Adresse ist abgelaufen / gelöscht. Ein Test-E-Mail-Nachricht wird an die vorhandene Adresse gesendet, um diesen Aspekt zu überprüfen.  
 
 b. Ihre Username aufgezeichnete E-Mail-Adresse erhält keine E-Mails von unserem Mailserver (Bestätigungslinks, neue Passwörter ... usw.) 
@@ -27,7 +26,7 @@ c. Ihre Username aufgezeichnete E-Mail wurde kompromittiert / gestohlen: Nur wen
 
 1) Erstellen Sie eine neue gültige E-Mail-Adresse - Wir empfehlen dringend die Verwendung von E-Mails von Ihrem Internetdienstanbieter (ISP) oder einer zuverlässigen E-Mail-Adresse. Stellen Sie sicher, dass Ihre E-Mail-Adresse funktionsfähig und sicher ist. Dies ist Ihr Kommunikation Modalitat mit unseren Abteilungen und der beste Weg, um Ihren Benutzernamen wiederherzustellen. 
 
-2) Verfassen Sie eine E-Mail mit dem Ziel X@undernet.org und fügen Sie als Betreff hinzu: „E-Mail-Änderungsanforderung”. 
+2) Verfassen Sie eine E-Mail mit dem Ziel X@undernet.org und fügen Sie als Betreff hinzu: 'E-Mail-Änderungsanforderung'
 
 3) Kopieren Sie einfach das gesamte Formular und fügen Sie es in den E-Mail-Text ein (stellen Sie sicher, dass Sie es nicht als TXT- / DOC-Datei anhängen, da wir es sonst ignorieren), und geben Sie dann die folgenden Informationen ein: 
 
@@ -37,11 +36,11 @@ a. Username (kein Spitzname-nickname):
 
 b. Alte E-Mail-Adresse: 
 
-Hinweis: Wenn Sie Ihre E-Mail-Adresse mit dem Username vergessen haben, befolgen Sie diese Anweisungen: 
+HINWEIS: Wenn Sie Ihre E-Mail-Adresse mit dem Username vergessen haben, befolgen Sie diese Anweisungen: 
 
 - Gehen Sie zu https://cservice.undernet.org/live und melden Sie sich mit Ihrem Username und Passwort an. 
 
-- Klicken Sie im Abschnitt „My Information” neben E-Mail auf Popup öffnen. 
+- Klicken Sie im Abschnitt 'My Information' neben E-Mail auf Popup öffnen. 
 
 - Ein Popup-Fenster wird angezeigt, in dem Sie aufgefordert werden, die Antwort auf die zu geben 
 
