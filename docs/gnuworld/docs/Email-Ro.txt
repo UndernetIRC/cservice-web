@@ -9,17 +9,15 @@ Formular pentru schimbarea Emailului
 CERERE SCHIMBARE EMAIL 
  
 - Va rugam sa completati acest formular complet si cu atentie, daca nu cererea dvs. nu va fi procesata. 
-- Folositi acest formular pentru a cere o schimbare manuala a adresei de e-mail a userului, in cazuri precum: 
+- Folositi acest formular pentru a cere o schimbare manuala a adresei de email a userului, in cazuri precum adresa de email cu care userul dvs. a fost inregistrat: 
 
-a. Adresa de email cu care userul dvs. a fost inregistrat a expirat/a fost stearsa. Un mesaj de test va fi trimis catre acea adresa de email pentru a verifica acest aspect. 
-
-b. Adresa de email cu care userul dvs. a fost inregistrat nu mai primeste mesaje din partea noastra (link-uri de confirmare, parole noi...etc.); 
+a. A expirat, a fost stearsa, nu mai primeste mesaje din partea noastra (link-uri de confirmare, parole noi, etc.). Un mesaj de test va fi trimis catre acea adresa de email pentru a verifica acest aspect. 
  
-c. Adresa de email cu care userul dvs. a fost inregistrat este compromisa/furata. Doar daca incercarile de a o recupera, prin contactarea providerului de email sau procedurile de recuperare a parolei au fost fara succes. 
+b. Este compromisa/furata. Doar daca incercarile de a o recupera, prin contactarea providerului de email sau procedurile de recuperare a parolei au fost fara succes. 
  
 1) Creati o noua adresa de email care sa fie valid - Recomandam sa fie email-ul care va este furnizat de serviciul dvs de internet (ISP) sau o adresa de email de incredere. Sa va asigurati ca aceasta adresa de email este functionala si securizata. Prin ea veti putea comunica cu departamentele noastre si va fi cea mai buna cale de a va recupera userul. 
  
-2) Compuneti un email care sa aiba ca destinatar X@undernet.org si ca subiect: "Email Change Request". 
+2) Compuneti un email care sa aiba ca destinatar X@undernet.org si ca subiect: 'Email change request'
  
 3) Copiati (Copy/Paste) formularul de mai jos in email (asigurati-va ca nu atasati nici un fisier .txt/.doc sau mesajul va fi ignorat), dupa care completati urmatoarele informatii: 
  
@@ -29,19 +27,11 @@ a. User (nu Nick):
  
 b. Vechea adresa de email:  
 
-Nota: Daca ati uitat adresa de email cu care a fost inregistrat userul dvs., urmati instructiunile: 
-
-- Mergeti la https://cservice.undernet.org/live - dupa care logati-va la user utilizand parola; 
-
-- In sectiunea „My Information”, langa Email, apasati click pe Open Popup;  
-
-- Un popup va aparea intrebandu-va sa completati raspunsul la intrebarea de verificare a userului; 
-
-- Completati cu raspunsul de verificare, apoi dupa procesare adresa de email va fi afisata. 
+NOTA: Daca ati uitat adresa de email cu care a fost inregistrat userul dvs., mergeti la https://cservice.undernet.org/live - dupa care logati-va la user utilizand parola, apoi, langa Email (sectiunea 'My Information), apasati click pe 'Open Popup'; un popup va aparea intrebandu-va sa completati raspunsul la intrebarea de verificare a userului, completati cu raspunsul de verificare, iar dupa procesare adresa de email va fi afisata.
  
 c. Noua adresa de email: 
  
-d. Raspunsul intrebarii de verifiacre:  
+d. Raspunsul intrebarii de verificare
  
 (Acesta este raspunsul pentru una din intrebarile de mai jos) 
  
