@@ -2,43 +2,30 @@ Undernet Channel Service Committee
  
 Email change form 
 
------------------------------------ 
+------------------------------- 
  
-- PLEASE READ THESE INSTRUCTIONS! 
+PLEASE READ THESE INSTRUCTIONS! 
  
 EMAIL CHANGE REQUEST 
  
 - Please fill out the form completely and carefully, or your request will not be processed. 
-- Use this form to request a manual email change for your username, in cases such as: 
+- Use this form to request a manual email change for your username, in cases such as where your email address associated with your username: 
  
-a. Your email address on record with the username is expired/deleted. A test email message will be sent to the existing address in order to verify this aspect. 
-
-b. Your email address on record with the username does not receive mails from our mail server (confirmation links, new passwords...etc.); 
+a. Expired, deleted, and/or does not receive mails (confirmation links, new passwords, etc.) from our mail server. A test email message will be sent to the existing address in order to verify this aspect. 
+  
+c. Has been compromised/stolen (if your attempts to recover it were unsuccessful, by contacting the email provider or use their password recovery procedures). 
  
-c. Your email on record with the username has been compromised/stolen: Only if your attempts to recover it, by contacting the email provider or use their password recovery procedures were unsuccessful. 
+1) Create a new valid email address - We strongly recommend the usage of email from your Internet Service Provider (ISP), or a reliable email address. Make sure your email address is functional and secure. It will be your gateway of communication with our departments and also the best way to recover your username. 
  
-1) Create a new valid email address - We strongly recommend the usage of email from your Internet Service Provider (ISP) or a reliable email address. Make sure your email address is functional and secure. It will be your gateway of communication with our departments and also the best way to recover your username. 
- 
-2) Compose an email with the destination X@undernet.org and add as subject: „Email change request”. 
+2) Compose an email with the destination X@undernet.org and add as subject: 'Email change request'
  
 3) Simply copy/paste this entire form into the email body (make sure you do not attach it as a .txt/.doc file or we shall ignore it), then supply the following information: 
- 
------------------------------------ 
- 
+  
 a. Username (not nickname): 
  
 b. Old email address:  
 
-Note: If you have forgotten your email on record with the username, follow these instructions: 
-
-- Go to https://cservice.undernet.org/live - login with your username and password; 
-
-- In „My Information” section, next to email, click on Open Popup;  
-
-- A popup box will appear asking you to supply the answer to the 
-verification question of your username; 
-
-- Fill in the verification answer, click on submit and your email on record with the username will be shown. 
+NOTE: If you have forgotten your email on record with the username, go to https://cservice.undernet.org/live - login with your username and password, click on 'Open Popup' (in 'My Information' section, next to email), a popup box will appear asking you to supply the answer to the verification question of your username, fill in the verification answer, click on submit and your email on record with the username will be shown.
  
 c. New email address: 
  
