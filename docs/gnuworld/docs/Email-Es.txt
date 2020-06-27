@@ -22,7 +22,7 @@ c. Su correo electrónico registrado con el nombre del servidor  ha sido comprom
 
 1) Cree una nueva dirección de correo electrónico válida: le recomendamos que utilice su proveedor de servicios de Internet (ISP) o una dirección de correo electrónico confiable. Asegúrese de que su dirección de correo electrónico sea funcional y segura. Será la modalidad de comunicación con nuestros departamentos y también la mejor manera de recuperar su nombre de usuario. 
 
-2) Redacte un correo electrónico con el destino X@undernet.org y agregue como asunto: "Solicitud de cambio de correo electrónico". 
+2) Redacte un correo electrónico con el destino X@undernet.org y agregue como asunto: 'Solicitud de cambio de correo electrónico'
 
 3) Simplemente haga copiar / pegar  todo este formulario en el cuerpo del correo electrónico (asegúrese de no adjuntarlo como un archivo .txt / .doc o lo ignoraremos), luego proporcione la siguiente información: 
 
@@ -32,11 +32,11 @@ a. Nombre de usuario (no el nickname):
 
 b. Antigua dirección de correo electrónico: 
 
-Nota: Si ha olvidado su correo electrónico registrado con el nombre de usuario, siga estas instrucciones: 
+NOTA: Si ha olvidado su correo electrónico registrado con el nombre de usuario, siga estas instrucciones: 
 
 - Vaya a https://cservice.undernet.org/live, luego inicie sesión con su nombre de usuario y contraseña; 
 
-- En la sección "My information", junto al correo electrónico, haga clic en Abrir ventana emergente; 
+- En la sección 'My information', junto al correo electrónico, haga clic en Abrir ventana emergente; 
 
 - Aparecerá un cuadro emergente pidiéndole que indique la respuesta a la pregunta de verificación de su nombre de usuario; 
 
