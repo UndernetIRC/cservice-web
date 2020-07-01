@@ -5,4 +5,4 @@ Disallow: /confirm.php
 Disallow: /live/cfp.php
 Disallow: /cfp.php
 Disallow: /live/dfp.php
-Dissalow: /dfp.php
+Disallow: /dfp.php
