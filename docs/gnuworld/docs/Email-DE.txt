@@ -1,0 +1,86 @@
+Undernet Channel Service Committee 
+ 
+Email change form 
+
+----------------------------------- 
+ 
+E-Mail-Änderungsformular 
+
+----------------------------------- 
+
+- BITTE LESEN SIE DIESE ANWEISUNGEN! 
+
+
+E-MAIL-ÄNDERUNGSANFRAGE 
+
+
+- Bitte füllen Sie das Formular vollständig und sorgfältig aus, sonst wird Ihre Anfrage nicht bearbeitet. 
+
+- Verwenden Sie dieses Formular, um eine manuelle E-Mail-Änderung für Ihren Benutzernamen anzufordern, z. B.: 
+
+a. Ihre registrierte E-Mail-Adresse ist abgelaufen / gelöscht. Ein Test-E-Mail-Nachricht wird an die vorhandene Adresse gesendet, um diesen Aspekt zu überprüfen.  
+
+b. Ihre Username aufgezeichnete E-Mail-Adresse erhält keine E-Mails von unserem Mailserver (Bestätigungslinks, neue Passwörter ... usw.) 
+
+c. Ihre Username aufgezeichnete E-Mail wurde kompromittiert / gestohlen: Nur wenn Ihre Versuche, sie wiederherzustellen, indem Sie sich an den E-Mail-Anbieter wenden oder dessen Kennwortwiederherstellungsverfahren verwenden, erfolglos sind. 
+
+1) Erstellen Sie eine neue gültige E-Mail-Adresse - Wir empfehlen dringend die Verwendung von E-Mails von Ihrem Internetdienstanbieter (ISP) oder einer zuverlässigen E-Mail-Adresse. Stellen Sie sicher, dass Ihre E-Mail-Adresse funktionsfähig und sicher ist. Dies ist Ihr Kommunikation Modalitat mit unseren Abteilungen und der beste Weg, um Ihren Benutzernamen wiederherzustellen. 
+
+2) Verfassen Sie eine E-Mail mit dem Ziel X@undernet.org und fügen Sie als Betreff hinzu: 'E-Mail-Änderungsanforderung'
+
+3) Kopieren Sie einfach das gesamte Formular und fügen Sie es in den E-Mail-Text ein (stellen Sie sicher, dass Sie es nicht als TXT- / DOC-Datei anhängen, da wir es sonst ignorieren), und geben Sie dann die folgenden Informationen ein: 
+
+----------------------------------- 
+
+a. Username (kein Spitzname-nickname): 
+
+b. Alte E-Mail-Adresse: 
+
+HINWEIS: Wenn Sie Ihre E-Mail-Adresse mit dem Username vergessen haben, befolgen Sie diese Anweisungen: 
+
+- Gehen Sie zu https://cservice.undernet.org/live und melden Sie sich mit Ihrem Username und Passwort an. 
+
+- Klicken Sie im Abschnitt 'My Information' neben E-Mail auf Popup öffnen. 
+
+- Ein Popup-Fenster wird angezeigt, in dem Sie aufgefordert werden, die Antwort auf die zu geben 
+
+Bestätigungsfrage Ihres Usernames; 
+
+- Geben Sie die Bestätigungsantwort ein, klicken Sie auf Senden und Ihre E-Mail-Adresse mit dem Username wird angezeigt. 
+
+c. Neue Email Adresse: 
+
+d. Antwort der Überprüfungsfrage: 
+
+(Dies ist die Antwort auf eine der folgenden Fragen) 
+
+- Bitte geben Sie an, welche Frage Sie zuvor ausgewählt haben, indem Sie die Antwort daneben schreiben: 
+
+a) Wie lautet der Mädchenname Ihrer Mutter? 
+
+b) Wie heißt Ihr Hund (oder Ihre Katze)? 
+
+c) Wie lautet das Geburtsdatum Ihres Vaters? 
+
+HINWEIS: Wenn Sie Ihre Bestätigungsfrage / -antwort vergessen haben, geben Sie bitte 2-3 Vermutungen der Antworten an, die Sie möglicherweise ausgewählt haben. 
+
+e. Kanäle, in denen Sie zur Zugriffsliste hinzugefügt werden: 
+
+f. Kommentare (falls vorhanden): 
+
+* Warten Sie 24 bis 48 Stunden, bis Sie eine Antwort auf Ihre E-Mail-Änderungsanforderung erhalten. 
+
+* Besuchen Sie uns online in #usernames, wenn Sie Fragen zur E-Mail-Änderungsanforderung haben. 
+ 
+------------------------------------------------------------------- 
+
+E-Mail-Änderungsanforderung Formular 
+Undernet Channel Service Committee X@undernet.org 
+
+------------------------------------------------------------------- 
+
+Dieses Dokument wurde zuletzt aktualisiert - Juni, 2020  
+Dieses Dokument wird wervalted bei Undernet Channel Service Committee 
+Kontakt: cservice@undernet.org mit Ihre Anregungen oder Kommentare. 
+CService URL: https://cservice.undernet.org 
+Undernet URL: https://www.undernet.org 

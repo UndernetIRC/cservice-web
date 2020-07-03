@@ -1,90 +1,65 @@
-Undernet Channel Service
-				   Email Change Form
-			      -----------------------------
-
-- PLEASE READ THESE INSTRUCTIONS!
-- Please fill out the form completely, or your request will not be 
-processed.
-- Use this form ONLY when you cannot login on website with your 
-username or you cannot use your username's old e-mail address anymore
-- If your old e-mail still works we will not take into consideration 
-this request.
-
-PASSWORD RESET REQUEST
-- If you need to have your password reset, please attempt to have it 
-done
-  via the web page. https://cservice.undernet.org/live -> Forgotten 
-Password. 
-  Use this form ONLY when you cannot login on website with your 
-username or you cannot use your username's old e-mail address anymore
-  After you will have a new e-mail address on the username, you will be 
-able to recover the password from 
-  the website like we told you before. 
-
-E-MAIL CHANGE REQUEST
-- If you need to change your email we have on record for your username 
-login with your username at https://cservice.undernet.org/live and 
- click on Forms / Email Change Section .
- Use this form ONLY when you cannot login on website with your username 
-or you cannot use your username's old e-mail address anymore
- Also PLEASE DO NOT use free e-mail domains for the new e-mail address 
-of the username.
+Undernet Channel Service Committee 
  
-VERIFICATION/QUESTION ANSWER REQUEST:
-- If you need to reset your verification answer/question use the 
-Forgotten Password section of https://cservice.undernet.org/live .
- Type the username there and make a mistake in your secret answer. You 
-will be redirected to the Verification Question/Answer Reset Form.
- Fill that form and submit it. If your old email cannot be used anymore 
-use the Email Change Form from here to change it.
- Then, after the change is done, obtain a verification question/answer 
-reset from website. 
- In case you can't remember the answer to the secret question, you can 
-still use this form, by leaving the answer to the secret question 
-blank, and by explaining into the Comments section the reason why you can't 
-remember the right answer. Please note that there is a special way of 
-solving this type of requests, and they're not solved in your favour 
-every time.
+Email change form 
 
-- COPY AND PASTE THIS ENTIRE FORM into an e-mail (new e-mail address of 
-the username) and send it to: 
-        X@undernet.org 
-        
-- Allow 3-5 days for this change to be completed.
+------------------------------- 
+ 
+PLEASE READ THESE INSTRUCTIONS! 
+ 
+EMAIL CHANGE REQUEST 
+ 
+- Please fill out the form completely and carefully, or your request will not be processed. 
+- Use this form to request a manual email change for your username, in cases such as where your email address associated with your username: 
+ 
+a. Expired, deleted, and/or does not receive mails (confirmation links, new passwords, etc.) from our mail server. A test email message will be sent to the existing address in order to verify this aspect. 
+  
+c. Has been compromised/stolen (if your attempts to recover it were unsuccessful, by contacting the email provider or use their password recovery procedures). 
+ 
+1) Create a new valid email address - We strongly recommend the usage of email from your Internet Service Provider (ISP), or a reliable email address. Make sure your email address is functional and secure. It will be your gateway of communication with our departments and also the best way to recover your username. 
+ 
+2) Compose an email with the destination X@undernet.org and add as subject: 'Email change request'
+ 
+3) Simply copy/paste this entire form into the email body (make sure you do not attach it as a .txt/.doc file or we shall ignore it), then supply the following information: 
+  
+a. Username (not nickname): 
+ 
+b. Old email address:  
 
-                  -------------------------------
+NOTE: If you have forgotten your email on record with the username, go to https://cservice.undernet.org/live - login with your username and password, click on 'Open Popup' (in 'My Information' section, next to email), a popup box will appear asking you to supply the answer to the verification question of your username, fill in the verification answer, click on submit and your email on record with the username will be shown.
+ 
+c. New email address: 
+ 
+d. Verification question's answer:  
+ 
+(This is the answer to one of the questions below) 
+ 
+- Please indicate which question you previously selected, by writing the answer next to it: 
+ 
+a) What's your mother's maiden name?  
 
-Please supply the following information:
+b) What's your dog's (or cat's) name? 
 
-a. Username (not Nickname):
+c) What's your father's birthdate? 
+ 
+NOTE: If you have forgotten your verification question/answer, please provide 2-3 guesses of answers you might have selected. 
+ 
+e. Channels where you are added to the access list: 
+ 
+f. Comments (if any):  
 
-b. Old Email Address:
+* Allow 24-48 hours for a reply to your email change request. 
+ 
+* Join #usernames if you have any questions about the email change request. 
+ 
+------------------------------------------------------------------- 
 
-c. New Email Address:
-      
-d. - Verification Question answer: 
-     (This is the answer to one of the questions below that you 
-selected when
-      you registered the username)
-   
-   - Please indicate which question you previously selected to answer. 
-      a) What's your mother's maiden name?
-      b) What's your dog's (or cat's) name?
-      c) What's your father's birthdate?
-       
+Email change form 
+Undernet Channel Service Committee X@undernet.org 
+ 
+------------------------------------------------------------------- 
 
-e. Channels you have access on with the username:
-
-Comments (if any):
-
-------------------------------
-E-mail Change Form
-Undernet Channel Service
-CService@undernet.org
-
-*-------------------------------------------------------------------------*
-  This document was last updated on May, 28 2005 - by Etherfast
-  This file is maintained by Undernet CService Committee
-  E-mail cservice@undernet.org with any suggestions or comments
-  CService URL: https://cservice.undernet.org
-  Undernet URL: https://www.undernet.org
+This document was last updated - June, 2020  
+This file is maintained by the Undernet Channel Service Committee 
+Contact cservice@undernet.org with any suggestions or comments. 
+CService URL: https://cservice.undernet.org 
+Undernet URL: https://www.undernet.org 

@@ -1,91 +1,67 @@
-Undernet Channel Service
-					 Formular pentru Schimbarea e-mail-ului
-					----------------------------------------
+Undernet Channel Service Committee 
+ 
+Formular pentru schimbarea Emailului 
 
-- VA RUGAM SA CITITI CU ATENTIE INSTRUCTIUNILE!
-- Va rugam sa completati in intregime formularul, sau cererea nu va fi 
-procesata.
-- Folositi aceast formular DOAR daca nu va mai puteti loga cu 
-username-ul pe website, sau nu mai puteti accesa vechea adresa de email a 
-username-ului.
-- Daca vechea adresa de email inca mai functioneaza nu vom lua in 
-considerare aceasta cerere.
+----------------------------------- 
+ 
+- VA RUGAM SA CITITI ACESTE INSTRUCTIUNI CU ATENTIE! 
+ 
+CERERE SCHIMBARE EMAIL 
+ 
+- Va rugam sa completati acest formular complet si cu atentie, daca nu cererea dvs. nu va fi procesata. 
+- Folositi acest formular pentru a cere o schimbare manuala a adresei de email a userului, in cazuri precum adresa de email cu care userul dvs. a fost inregistrat: 
 
-CERERE DE RESETARE A PAROLEI
-- Daca doriti resetarea parolei ,faceti asta prin intermediul paginii 
-de web http://cservice.undernet.org/live -> Forgotten Password.
-  DOAR daca vechiul e-mail nu mai functioneaza, folositi acest formular 
-pentru a schimba e-mailul.
-  Dupa ce veti avea setata o noua adresa de e-mail pentru username, 
-veti putea sa va resetati parola asa cum v-am aratat mai sus cu ajutorul 
-site-ului nostru.
+a. A expirat, a fost stearsa, nu mai primeste mesaje din partea noastra (link-uri de confirmare, parole noi, etc.). Un mesaj de test va fi trimis catre acea adresa de email pentru a verifica acest aspect. 
+ 
+b. Este compromisa/furata. Doar daca incercarile de a o recupera, prin contactarea providerului de email sau procedurile de recuperare a parolei au fost fara succes. 
+ 
+1) Creati o noua adresa de email care sa fie valid - Recomandam sa fie email-ul care va este furnizat de serviciul dvs de internet (ISP) sau o adresa de email de incredere. Sa va asigurati ca aceasta adresa de email este functionala si securizata. Prin ea veti putea comunica cu departamentele noastre si va fi cea mai buna cale de a va recupera userul. 
+ 
+2) Compuneti un email care sa aiba ca destinatar X@undernet.org si ca subiect: 'Email change request'
+ 
+3) Copiati (Copy/Paste) formularul de mai jos in email (asigurati-va ca nu atasati nici un fisier .txt/.doc sau mesajul va fi ignorat), dupa care completati urmatoarele informatii: 
+ 
+----------------------------------- 
+ 
+a. User (nu Nick): 
+ 
+b. Vechea adresa de email:  
 
-CERERE PENTRU SCHIMBARE DE E-MAIL
-- Daca aveti nevoie sa va schimbati e-mailul cu care v-ati inregistrat 
-username-ul, logati-va la http://cservice.undernet.org/live -> Login -> 
-Forms -> E-mail Change Form
-  DOAR daca vechiul e-mail nu mai functioneaza, folositi acest formular 
-pentru a schimba e-mailul.
-  Deasemenea NU folositi adrese de e-mail gratuite pentru noul e-mail 
-pe care il doriti pentru username.
+NOTA: Daca ati uitat adresa de email cu care a fost inregistrat userul dvs., mergeti la https://cservice.undernet.org/live - dupa care logati-va la user utilizand parola, apoi, langa Email (sectiunea 'My Information), apasati click pe 'Open Popup'; un popup va aparea intrebandu-va sa completati raspunsul la intrebarea de verificare a userului, completati cu raspunsul de verificare, iar dupa procesare adresa de email va fi afisata.
+ 
+c. Noua adresa de email: 
+ 
+d. Raspunsul intrebarii de verificare
+ 
+(Acesta este raspunsul pentru una din intrebarile de mai jos) 
+ 
+- Va rugam indicati intrebarea in prealabil selectata, scriind raspunsul alaturi: 
+ 
+a) What's your mother's maiden name?  
 
-CERERE DE RESETARE A RASPUNSULUI/INTREBARII DE VERIFICARE
-- Daca doriti resetarea resetarea raspunsului/intrebarii de verificare 
-folositi sectiunea Forgotten password a 
-http://cservice.undernet.org/live .
-  Scrieti username-ul acolo si cind veti fi rugat sa raspundeti la 
-intrebarea secreta, introduceti un raspuns gresit, si in urmatorul ecran 
-faceti click pe Secret Question/Answer Reset Form
-  Daca vechiul email nu mai poate fi folosit procedati atunci la 
-schimbarea emailului folosind acest formular, dupa care resetati 
-raspunsul/intrebarea de verificare folosind website-ul nostru. 
-  In cazul in care nu va mai amintiti raspunsul la intrebarea secreta, 
-inca mai puteti folosi acest formular, lasand liber in locul 
-raspunsului la intrebare, si explicand la sectiunea Comentarii motivul pentru 
-care nu vi-l mai amintiti. Aveti in vedere ca exista o modalitate speciala 
-de a rezolva astfel de cereri, iar ele nu sunt de fiecare data 
-solutionate favorabil.
+b) What's your dog's (or cat's) name? 
 
-- COPIATI SI APOI DATI PASTE INTREGULUI FORMULAR intr-un email (noua 
-adresa de email a username-ului) si trimite-ti-o la:
-  		X@undernet.org
+c) What's your father's birthdate? 
+ 
+NOTA: In cazul in care ati uitat intrebarea/raspunsul, va rugam sa oferiti 2-3 incercari ale raspunsurilor care le-ati fi putut selecta. 
+ 
+e. Canalele unde ati fost adaugat in lista de accese: 
+ 
+f. Comentarii (daca e cazul/exista):  
+ 
+* Asteptati 24-48 ore pentru un raspuns a cererii de schimbare a adresei de email. 
+ 
+* Intrati pe #usernames daca aveti intrebari legate de cererea de schimbare a adresei de email. 
+ 
+------------------------------------------------------------------- 
 
-- Permiteti 3-5 zile pentru ca cererea dumneavoastra sa fie rezolvata.
+Formular schimbarea Emailului 
+Undernet Channel Service Committee X@undernet.org 
+ 
+------------------------------------------------------------------- 
 
-					------------------------------------------
-
-Va rugam sa specificati urmatoarele informatii:
-
-a. Username (nu nickname):
-
-b. Vechiul Email:
-
-c. Noul Email:
-
-d. - Raspunsul la intrebarea de verificare:
-     (Acesta este raspunsul la una din intrebarile de mai jos pe care 
-ati ales-o atunci cind v-ati inregistrat username-ul)
-   
-   - Indicati intrebarea pt raspunsul de mai sus:   
-      a) What's your mother's maiden name?
-      b) What's your dog's (or cat's) name?
-      c) What's your father's birthdate?)
-
-e. Canalele pe care aveti acces cu acest username:
-
-Comentarii (daca exista):
-
-
---------------------------------------
-Formular pentru schimbarea E-mail-ului
-Undernet Channel Service
-CService@undernet.org
-
-
-*-------------------------------------------------------------------------*
-  This document was last updated on May, 28 2005 - by Etherfast
-  This file is maintained by Undernet CService Committee
-  E-mail cservice@undernet.org with any suggestions or comments
-  CService URL: http://cservice.undernet.org
-  Undernet URL: http://www.undernet.org
-
+Acest document a fost reactualizat - iunie, 2020  
+Acest fisier este intretinut de catre Undernet Channel Service Committee 
+Contactati cservice@undernet.org pentru orice sugestii sau comentarii. 
+CService URL: https://cservice.undernet.org 
+Undernet URL: https://www.undernet.org 

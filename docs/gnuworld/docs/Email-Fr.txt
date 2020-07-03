@@ -1,52 +1,77 @@
-				Undernet Channel Service
-				       Forme De Changement D'Email
-				  -------------------------------------
-
-
-- SVP LIRE CES INSTRUCTIONS!
-- Veuillez compl�ter la forme compl�tement, ou votre demande ne sera pas trait�e. 
-- UTILISEZ cette forme seulement quand vous ne pouvez pas proc�dure de connexion sur le website avec votre username ou vous ne pouvez pas utiliser l'email plus vieil que vous prenez pour le username.
-- Si votre vieux email travaux nous ne prendront toujours pas en compte cette demande.  
-
-DEMANDE DE REMISE DE MOT DE PASSE
-- Si vous devez avoir votre remise de mot de passe, essayez s'il vous pla�t de la faire par l'interm�diaire de la page http://cservice.undernet.org de Web pour cliqueter en fonction l'interface de Web et le Forgotten Password .
-  ONLY alors oubli� si votre vieil email ne peut pas �tre plus utilis�e utilisation cette forme de changement d'email. 
-  Apr�s que vous ayez un nouveau email address sur le username vous pourrez r�cup�rer le mot de passe du website comme nous vous disions avant.
-
-DEMANDE DE CHANGEMENT D'EMAIL
-- Si vous devez changer votre email nous avons sur l'enregistrement pour votre proc�dure de connexion de username avec votre username � http://cservice.undernet.org/live et cliqueter en fonction de section de changement des formes / demande de changement d'email.
-  Si votre vieil email ne peut pas �tre plus utilis�e utilisation cette forme de changement d'email. 
-  VEUILLEZ �galement n'utilisent pas des domaines libres d'email pour le nouveau email address du username.
-
-- COPIE ET COLLENT CETTE FORME ENTI�RE dans un email (nouveau email address du username) et l'envoient �: X@undernet.org .
-
-- Accordez 3-5 jours pour que ce changement soit termin� avant de renvoyer la demande.   
+Comité de Service de Canaux Undernet 
  
-				----------------------------------------
+Formulaire de Changement d’Email 
 
-Veuillez fournir l'information suivante:
+----------------------------------- 
 
-a. Username (non nickname):
-
-b. Vieux email:
-
-c. Nouveau email:
-
-d. - R�ponse de question de v�rification: 
-     (c'est la r�ponse � un des questions au-dessous de celle que vous avez choisi quand vous avez obtenu le username) 
-    
-   - Veuillez indiquer quelle question vous avez pr�c�demment choisie pour r�pondre. 
-        a) What's your mother's maiden name?
-        b) What's your dog's (or cat's) name?
-        c) What's your father's birthdate?
-
-e. Les canaux vous avez acc�s avec cette username:
-
-Commente (si n�cessaire):
+- MERCI DE LIRE CES INSTRUCTIONS! 
 
 
--------------------------------
-Forme De Changement D`Email
-Undernet Channel Service
-version 10042002 
+DEMANDE DE CHANGEMENT D’EMAIL 
+
+- Veuillez remplir ce formulaire attentivement, au risque de ne pas donner suite à votre demande dans le cas échéant.  
+
+- Ce formulaire peux être utilisé pour demander un changement d’Email manuel, dans les cas où: 
+
+    L’adresse Email utilisée lors de votre inscription a expirée/compte supprimé. Un message de test est envoyé à cette adresse afin de vérifier cela. 
+
+    Votre serveur Email ne reçoit pas les emails de notre part avec vos liens de confirmations, nouveaux mots de passe...etc. 
+
+    Votre boite Email a été hacké, vos identifiants volés, et que vous échouez à la récupérer via la procédure de récupération de votre fournisseur Email. 
  
+    Créez une adresse Email valide – Nous recommandons fortement l’utilisation d’une boite Email de votre Fournisseur d’accès Internet, ou bien d’un autre fournisseur fiable. 
+     
+    Assurez-vous que votre boite Email est fonctionnelle et bien sécurisée. Elle sera votre canal de communication avec nos services ainsi que le seul moyen de control de vos identifiants et demandes...etc. 
+
+    Composez un nouveau message avec comme destinataire: X@undernet.org, mettez dans le sujet: *Demande de changement d’Email*  
+
+    Copiez/Collez le formulaire suivant en entier dans la zone d’écriture de votre Message, puis procédez au remplissage de ces informations: 
+
+a. Nom d’utilisateur (et non pas votre nickname): 
+
+b. Adresse Email actuelle: 
+
+NB: Si vous avez oublié votre adresse Email actuelle, identifiez-vous sur https://cservice.undernet.org/live, dans la section *Mes Informations*, à côté de *Adresse Email*, cliquez sur *Ouvrir Popup*. 
+
+    Une fenêtre apparaîtera, saisissez la réponse à votre question secrète. 
+
+    Si la réponse saisie est correcte, votre adresse Email enregistrée s’affichera. 
+
+c. Nouvelle adresse Email: 
+
+d. Réponse à la question secrète: 
+ 
+(C’est la réponse à l’une des questions suivantes)  
+ 
+- Veuillez indiquer votre réponse secrète à côté de la question choisie lors de votre inscription. 
+
+        a) Le nom de jeune fille de votre mère? 
+
+        b) Le nom de votre animal de compagnie? 
+
+        c) La date de naissance de votre père? 
+
+NB: Dans le cas ou vous aurez oublié la question/réponse, nous vous invitons à indiquer plusieurs choix de questions avec plusieurs réponses possibles. 
+
+e. Les canaux dont vous avez accès: 
+
+f. Commentaire (si vous avez plus de détails à fournir): 
+
+* Une première réponse est à prévoir dans un délai de 24 à 48 heures. 
+
+* Vous êtes invités à joindre notre canal #usernames si vous avez besoin d’aide avec l’envoi de ce formulaire. 
+
+------------------------------------------------------------------- 
+
+Formulaire de Changement d’Email 
+Comité de Service de Canaux Undernet 
+
+X@undernet.org 
+ 
+------------------------------------------------------------------- 
+
+Dernière mise à jour - juin, 2020  
+Ce fichier est conservé par le Comité de Service de Canaux Undernet 
+Contactez cservice@undernet.org avec vos suggestions et commentaires. 
+Lien Cservice: https://cservice.undernet.org 
+Lien Undernet: http://www.undernet.org 
