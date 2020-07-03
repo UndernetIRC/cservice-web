@@ -506,26 +506,26 @@ intr-unul nefolosibil temporar.
 
      Limbi disponibile:
      Cod  - Limba
-     · ar - Arabic 
-     · ca - Catalana
-     · ch - Craciun
-     · de - Germana	
-     · dk - Daneza
-     · ea - Paste
-     · en - Engleza
-     · es - Spaniola
-     · fr - Franceza
-     · gr - Greaca 
-     · ha - Halloween
-     · hu - Maghiara
-     · it - Italiana
-     · mk - Macedoneana
-     · nl - Olandeza	
-     · no - Norvegiana
-     · pt - Portugheza	
-     · ro - Romana
-     · sv - Slovaca
-     · tr - Turca
+     Â· ar - Arabic 
+     Â· ca - Catalana
+     Â· ch - Craciun
+     Â· de - Germana	
+     Â· dk - Daneza
+     Â· ea - Paste
+     Â· en - Engleza
+     Â· es - Spaniola
+     Â· fr - Franceza
+     Â· gr - Greaca 
+     Â· ha - Halloween
+     Â· hu - Maghiara
+     Â· it - Italiana
+     Â· mk - Macedoneana
+     Â· nl - Olandeza	
+     Â· no - Norvegiana
+     Â· pt - Portugheza	
+     Â· ro - Romana
+     Â· sv - Slovaca
+     Â· tr - Turca
 
   NOADDUSER - Aceasta optiune iti permite sa iti manifesti dorinta de a fi sau nu adaugat pe canale.
             - Daca optiunea este setata ON, nimeni nu iti va putea da acces pe nici un canal, fara ca tu sa vrei asta.

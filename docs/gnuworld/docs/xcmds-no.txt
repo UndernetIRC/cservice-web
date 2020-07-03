@@ -1,6 +1,6 @@
 *-------------------------------------------------------------------------*
 
-                     Undernet Kanal Service Komité
+                     Undernet Kanal Service KomitÃ©
                         CMaster Kommando Skjema
                      Oppdatert: 28 september, 2003
 
@@ -8,7 +8,7 @@
 
 FORKLARINGER
 
-* De ord som er omgitt av <> er nødvendig
+* De ord som er omgitt av <> er nÃ¸dvendig
 * De ord som er omgitt av [] er valgfritt
 * x|y betyr x eller y.
 * <kallenavn> viser til en bruker sitt kallenavn
@@ -16,32 +16,32 @@ FORKLARINGER
   CService, skal ikke bli forvekslet med <kallenavn>. 
   For mer informasjon om brukernavn kontoer og hvordan finne ut noen sitt brukernavn, 
   viser vi til INFO og VERIFY kommandoene.
-* Alle kommandoer som er omgitt av <brukernavn> feltet kan også fungere med
-  <kallenavn> ved å benytte ett er likhets (=) tegn.
+* Alle kommandoer som er omgitt av <brukernavn> feltet kan ogsÃ¥ fungere med
+  <kallenavn> ved Ã¥ benytte ett er likhets (=) tegn.
    For eksempel, se for deg en person med kallenavnet ^Test^ og brukernavnet
-   Test2K3. ACCESS kommandoen kan bli utført på denne personen ved
+   Test2K3. ACCESS kommandoen kan bli utfÃ¸rt pÃ¥ denne personen ved
    bruk av en av disse metodene: 
 
      /msg x access <#kanal> Test2K3
     /msg x access <#kanal> =^Test^
 
-  Den første metoden ber X direkte sjekke informasjonen på brukernavnet Test2K3
+  Den fÃ¸rste metoden ber X direkte sjekke informasjonen pÃ¥ brukernavnet Test2K3
   uavhengig om brukernavnet finnes i kanal listen.
-  Den andre metoden gjør at X verifiserer om ^Test^ er innlogget, og dersom det er tilfellet,
-  utfører den ACCESS sjekk på denne brukernavn kontoen, Test2K3.
-  Dette kan bli utført med en hvilken som helst kommando som krever ett <brukernavn>, men
+  Den andre metoden gjÃ¸r at X verifiserer om ^Test^ er innlogget, og dersom det er tilfellet,
+  utfÃ¸rer den ACCESS sjekk pÃ¥ denne brukernavn kontoen, Test2K3.
+  Dette kan bli utfÃ¸rt med en hvilken som helst kommando som krever ett <brukernavn>, men
   vil kun fungere dersom brukeren er logget inn, ellers vil X svare med
   "Ingen treff!"
-* <søkeord> viser til en hvem som helst søke-string med bruk av søkenode (* and ?).  
-  En *!*ident@host string er en av eksemplene på en søkenode. 
-  For eksempel, både ACCESS og LBANLIST kommandoene aksepterer <søkeord>:
+* <sÃ¸keord> viser til en hvem som helst sÃ¸ke-string med bruk av sÃ¸kenode (* and ?).  
+  En *!*ident@host string er en av eksemplene pÃ¥ en sÃ¸kenode. 
+  For eksempel, bÃ¥de ACCESS og LBANLIST kommandoene aksepterer <sÃ¸keord>:
 
 
     /msg x access   <#kanal> ?irc*
     /msg x lbanlist <#kanal> *.users.undernet.org
 
-  ACCESS kommandoen vil returnere de brukernavn som måtte matche
-  ?irc* søkenoden.
+  ACCESS kommandoen vil returnere de brukernavn som mÃ¥tte matche
+  ?irc* sÃ¸kenoden.
   LBANLIST kommandoen vil returnere alle bans som er satt for brukere som har aktivert
   Undernet sin virituelle hostmaske (brukerinnstilling +x).
 
@@ -50,83 +50,83 @@ NOTAT om spesielle kanal og brukerinstillinger:
 * Undernet har implementert to nye modes (en kanal innstilling, og en bruker
   innstilling) som er direkte relatert til CService sitt brukernavn system.
 
-  +r er en kanal innstilling som begrenser kanalen til kun å ta imot "Registrerte
+  +r er en kanal innstilling som begrenser kanalen til kun Ã¥ ta imot "Registrerte
   Brukere", dette betyr at bare brukere som har ett brukernavn hos
   CService og er logget inn i X kan komme inn i den kanalen.
 
   +x er en bruker innstilling som aktiverer Undernets "Virituelle Hostmaske", som vil
   skjule din ekte host/IP adresse med <ditt_brukernavn>.users.undernet.org.
   Andre brukere vil se denne virituelle hostmasken istedenfor din virkelige host/IP
-  adresse.  CService Administratorer og IRC Operatører kan 'se' igjennom +x, noe X og kan.
-  Uansett vil du alltid kunne se din virkelige host/IP, selvfølgelig.
-  Ulikt den virituelle hostmask instillingen som andre IRC nettverk bruker, så kan ikke
-  Undernets hostmaske bli deaktivert; Brukeren må da logge av Undernet fullstendig for å
+  adresse.  CService Administratorer og IRC OperatÃ¸rer kan 'se' igjennom +x, noe X og kan.
+  Uansett vil du alltid kunne se din virkelige host/IP, selvfÃ¸lgelig.
+  Ulikt den virituelle hostmask instillingen som andre IRC nettverk bruker, sÃ¥ kan ikke
+  Undernets hostmaske bli deaktivert; Brukeren mÃ¥ da logge av Undernet fullstendig for Ã¥
   deaktivere den. (/quit)
 
-PÅMINNELSE for SCRIPTERE:
+PÃ…MINNELSE for SCRIPTERE:
 
 * IRC scripts burde alltid bruke /msg x@channels.undernet.org for alle 
-  kommandoer, ikke bare LOGIN, dette for å forsikre at kommandoen virkelig blir sendt til X i  
+  kommandoer, ikke bare LOGIN, dette for Ã¥ forsikre at kommandoen virkelig blir sendt til X i  
   tilfelle av en midlertidig kallenavn endring for X eller andre uforutsette omstendigheter
-  som kan gjøre ditt script midlertidig ubrukelig.
+  som kan gjÃ¸re ditt script midlertidig ubrukelig.
 
 ---------------------------------------------------------------------------
-                       AKSESSNIVÅ 500 (Kanalsjef)
+                       AKSESSNIVÃ… 500 (Kanalsjef)
 ---------------------------------------------------------------------------
 
-  PART - Ber X om å forlate din kanal. For å få X til å holde seg ute av kanalen,
+  PART - Ber X om Ã¥ forlate din kanal. For Ã¥ fÃ¥ X til Ã¥ holde seg ute av kanalen,
   vises det til SET AUTOJOIN.
 
        /msg x part <#kanal>
 
   SET - Setter bestemmelser for din kanal. Dette er spesielle innstillinger som forteller X
-  hvordan den skal oppføre seg i gitte tilfeller.
+  hvordan den skal oppfÃ¸re seg i gitte tilfeller.
 
        /msg x set <#kanal> <autojoin|massdeoppro|noop|strictop> <verdi>
 
-     AUTOJOIN - Når denne er AKTIVERT, vil X alltid huske å komme inn i kanalen når
+     AUTOJOIN - NÃ¥r denne er AKTIVERT, vil X alltid huske Ã¥ komme inn i kanalen nÃ¥r
      den er tilbake online (f.eks. etter vedlikehold eller en nettsplitt).
 
        /msg x set <#kanal> autojoin <on|off>
 
-     MASSDEOPPRO - Maksimalt antall fjerning av OP X vil tillate en bruker (se notat) å utføre
-     innen 15 sekunder. De brukere som overstiger dette vil få fjernet sin OP og, dersom brukeren
-     finnes i kanalen sin aksessliste, suspendert for 5 minutter. De vil og få en aksessnivå
-     25 ban satt på seg og må derfor fjerne sin ban som ble satt på seg selv etter at
-     suspensjonen utgår.
+     MASSDEOPPRO - Maksimalt antall fjerning av OP X vil tillate en bruker (se notat) Ã¥ utfÃ¸re
+     innen 15 sekunder. De brukere som overstiger dette vil fÃ¥ fjernet sin OP og, dersom brukeren
+     finnes i kanalen sin aksessliste, suspendert for 5 minutter. De vil og fÃ¥ en aksessnivÃ¥
+     25 ban satt pÃ¥ seg og mÃ¥ derfor fjerne sin ban som ble satt pÃ¥ seg selv etter at
+     suspensjonen utgÃ¥r.
 
-     NOTAT: Nåværende versjon av MASSDEOPPRO sjekker kun når brukere utfører
+     NOTAT: NÃ¥vÃ¦rende versjon av MASSDEOPPRO sjekker kun nÃ¥r brukere utfÃ¸rer
      fjerning av OP med /mode kommandoen, ikke ved bruk av X sin DEOP kommando.
 
        /msg x set <#kanal> massdeoppro <0-7>
 
-     NOOP - Da denne instillingen er aktivert, vil ikke X tillate noen andre brukere å være
+     NOOP - Da denne instillingen er aktivert, vil ikke X tillate noen andre brukere Ã¥ vÃ¦re
      OP i kanalen.  
 
        /msg x set <#kanal> noop <on|off>
 
-     STRICTOP - Når denne innstillingen er aktivert, vil X kun tillate innloggede
-     aksessnivå 100+ brukere å få sin OP.
+     STRICTOP - NÃ¥r denne innstillingen er aktivert, vil X kun tillate innloggede
+     aksessnivÃ¥ 100+ brukere Ã¥ fÃ¥ sin OP.
 
        /msg x set <#kanal> strictop <on|off>
 
 ---------------------------------------------------------------------------
-                  AKSESSNIVÅ 450+ (Senior Kanal Administrator)
+                  AKSESSNIVÃ… 450+ (Senior Kanal Administrator)
 ---------------------------------------------------------------------------
 
-  JOIN - Ber X om å komme til denne kanalen. For at X alltid skal returnere til kanalen
+  JOIN - Ber X om Ã¥ komme til denne kanalen. For at X alltid skal returnere til kanalen
   automatisk, vises det til SET AUTOJOIN.
    
        /msg x join <#kanal>
 
   SET - Setter instillingene for kanalen. Disse instillingene forteller X om
-  hvordan den skal oppføre seg i en gitt situasjon.
+  hvordan den skal oppfÃ¸re seg i en gitt situasjon.
 
        /msg x set <#kanal> <instilling> <verdi>
 
      * Innstillinger og Verdier:
 
-     AUTOTOPIC - Denne instillingen gjør det slik at X nullstiller kanaloverskriften samt
+     AUTOTOPIC - Denne instillingen gjÃ¸r det slik at X nullstiller kanaloverskriften samt
      BESKRIVELSEN og URL hvert 30 minutt. NB! Hvis kanalen er
      uten aktivitet, vil kanaloverskriften ikke nullstilles i denne perioden.
 
@@ -134,24 +134,24 @@ PÅMINNELSE for SCRIPTERE:
 
      DESCRIPTION - Denne instillingen setter kanalens beskrivelse (80 tegn maks), som
      kan bli sett ved bruk av informasjonen fra CHANINFO kommandoen. Dersom ingen beskrivelse er
-     spesifisert, vil den være tom.
+     spesifisert, vil den vÃ¦re tom.
      Alias: DESC
 
        /msg x set <#kanal> description [tekst_her]
        /msg x set <#kanal> desc [tekst_her]
 
-     FLOATLIM - Setter kanalens "floating limit" mulighet av eller på.      
+     FLOATLIM - Setter kanalens "floating limit" mulighet av eller pÃ¥.      
      Dersom den er aktivert, vil X nullstille kanal begrensningen (kanal innstilling +l)           
-     innenfor en forhåndsinnstilt margin over totale brukere i kanalen, og innenfor en
-     gitt tidsperiode. Dette kan forhindre større botnett fra å 
-     komme inn i kanalen og floode den. Som en grunninnstilling, er denne instillingen slått av.
+     innenfor en forhÃ¥ndsinnstilt margin over totale brukere i kanalen, og innenfor en
+     gitt tidsperiode. Dette kan forhindre stÃ¸rre botnett fra Ã¥ 
+     komme inn i kanalen og floode den. Som en grunninnstilling, er denne instillingen slÃ¥tt av.
      Da den er aktivert, Vil FLOATLIM instillingene bli vist ved bruk av STATUS
      kommandoen.
 
-     Eksempel på STATUS informasjon:
+     Eksempel pÃ¥ STATUS informasjon:
      "Instillinger: FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)"
-     I dette eksemplet er FLOATLIM på,med en FLOATMARGIN på 3, og en
-     FLOATPERIOD på 20 sekunder, en FLOATGRACE på 1, og FLOATMAX er av. 
+     I dette eksemplet er FLOATLIM pÃ¥,med en FLOATMARGIN pÃ¥ 3, og en
+     FLOATPERIOD pÃ¥ 20 sekunder, en FLOATGRACE pÃ¥ 1, og FLOATMAX er av. 
     
      Viser til SET FLOATGRACE, SET FLOATMARGIN, SET FLOATMAX, og SET 
      FLOATPERIOD for mer informasjon.
@@ -159,48 +159,48 @@ PÅMINNELSE for SCRIPTERE:
        /msg x set <#kanal> floatlim <on|off>
 
      FLOATGRACE - Setter en verdi for "floating limit" instillingen. Dersom
-     forskjellen mellom then nåværende limit og hva den nye limiten
+     forskjellen mellom then nÃ¥vÃ¦rende limit og hva den nye limiten
      vil bli er mindre enn verdien, vil ikke X nullstille limiten,
-     da vil ikke rolige kanaler bli berørt av mode endringer. 
-     Denne verdien kan være mellom 0-19. Ved standar er verdien satt til 1.
+     da vil ikke rolige kanaler bli berÃ¸rt av mode endringer. 
+     Denne verdien kan vÃ¦re mellom 0-19. Ved standar er verdien satt til 1.
 
        /msg x set <#kanal> floatgrace <0-19>
 
      FLOATMARGIN - Setter en margin for "floating limit". Limiten
-     som X nullstiller vil være: FLOATMARGIN + daværende brukerantall i
-     kanalen. Denne verdien kan være mellom 2-20. Ved standar er verdien satt til 3.
+     som X nullstiller vil vÃ¦re: FLOATMARGIN + davÃ¦rende brukerantall i
+     kanalen. Denne verdien kan vÃ¦re mellom 2-20. Ved standar er verdien satt til 3.
 
        /msg x set <#kanal> floatmargin <2-20>
 
      FLOATMAX - Setter en maksimums limit for "floating limit" innstillingen. 
-     Dersom aktivert, vil ikke X nullstille kanal limiten høyere enn FLOATMAX.
-     Denne verdien kan være mellom 0-65536. Som standar er denne verdien 0 (av).
+     Dersom aktivert, vil ikke X nullstille kanal limiten hÃ¸yere enn FLOATMAX.
+     Denne verdien kan vÃ¦re mellom 0-65536. Som standar er denne verdien 0 (av).
 
        /msg x set <#kanal> floatmax <0-65536>
 
-     FLOATPERIOD - Angir tidsperioden i sekunder, før X skal nullstille
-     kanal limiten. Verdien kan være fra 20-200.Som en standar er verdien satt til 20
+     FLOATPERIOD - Angir tidsperioden i sekunder, fÃ¸r X skal nullstille
+     kanal limiten. Verdien kan vÃ¦re fra 20-200.Som en standar er verdien satt til 20
      sekunder.
 
        /msg x set <#kanal> floatperiod <20-200>
 
-     KEYWORDS - Setter nøkkelordene for en kanal (80 tegn er max).
-     Nøkkelord burde bli separert ved bruk av mellomrom. X brukere disse nøkkelordene når
-     en bruker utfører SEARCH kommandoen. Dersom ingen nøkkelord er spesifisert, vil
-     kanalens nøkkelord stå tomt.
+     KEYWORDS - Setter nÃ¸kkelordene for en kanal (80 tegn er max).
+     NÃ¸kkelord burde bli separert ved bruk av mellomrom. X brukere disse nÃ¸kkelordene nÃ¥r
+     en bruker utfÃ¸rer SEARCH kommandoen. Dersom ingen nÃ¸kkelord er spesifisert, vil
+     kanalens nÃ¸kkelord stÃ¥ tomt.
 
-       /msg x set <#kanal> keywords [nøkkelord]
+       /msg x set <#kanal> keywords [nÃ¸kkelord]
 
-     MODE - Dette vil lagre de daværende kanal innstillingene som en standar. Når X da
-     kommer inn i kanalen, vil den sette på disse kanalinnstillingene dersom den er alene i
+     MODE - Dette vil lagre de davÃ¦rende kanal innstillingene som en standar. NÃ¥r X da
+     kommer inn i kanalen, vil den sette pÃ¥ disse kanalinnstillingene dersom den er alene i
      kanalen.
 
        /msg x set <#kanal> mode
 
      URL - Du kan spesifisere Kanalens webside URL(s) med denne
-     innstillingen (75 tegn er max). Webadressen vil bli å se ved bruk av CHANINFO
-     kommandoen eller ved å logge inn på http://cservice.undernet.org/live/ for deretter og           klikke på "Channel Information" og skrive inn kanalnavnet.
-     Hvis ingen websideadresse er spesifisert, vil denne stå tom.
+     innstillingen (75 tegn er max). Webadressen vil bli Ã¥ se ved bruk av CHANINFO
+     kommandoen eller ved Ã¥ logge inn pÃ¥ http://cservice.undernet.org/live/ for deretter og           klikke pÃ¥ "Channel Information" og skrive inn kanalnavnet.
+     Hvis ingen websideadresse er spesifisert, vil denne stÃ¥ tom.
 
        /msg x set <#kanal> url [webadresse]
 
@@ -213,84 +213,84 @@ PÅMINNELSE for SCRIPTERE:
      Viser til MODINFO og AUTOMODE for mer informasjon.
 
 ---------------------------------------------------------------------------
-                      AKSESSNIVÅ 400+ (Kanal Administrator)
+                      AKSESSNIVÃ… 400+ (Kanal Administrator)
 ---------------------------------------------------------------------------
 
   ADDUSER - Legger til en person til kanalens aksessliste. Du kan ikke legge til en person
-  med lik eller høyere aksessnivå enn du selv har.
+  med lik eller hÃ¸yere aksessnivÃ¥ enn du selv har.
 
        /msg x adduser <#kanal> <brukernavn> <aksess>
 
   CLEARMODE - Fjerner alle kanal innstillinger.Denne kommandoen kan bli brukt dersom kanalen har
   blitt avstengt (kanal innstilling +i, +l, og/eller +k).
 
-  NB! Dette er ikke nødvendigvis den beste metoden for å komme inn i din
-  kanal igjen, dette fordi andre personer eller botter kan være OP i kanalen som
+  NB! Dette er ikke nÃ¸dvendigvis den beste metoden for Ã¥ komme inn i din
+  kanal igjen, dette fordi andre personer eller botter kan vÃ¦re OP i kanalen som
   kan tilbakestille de instillingene som du nettopp fjernet. Viser til STATUS kommandoen
   for relatert informasjon.
 
        /msg x clearmode <#kanal>
 
-  MODINFO - Følgende kommandoer kan bli brukt for å utføre endringer på eksisterende
-  brukere i kanalens aksessliste. Du kan ikke modifisere noen som har ett høyere
-  eller likt aksessnivå som deg.
+  MODINFO - FÃ¸lgende kommandoer kan bli brukt for Ã¥ utfÃ¸re endringer pÃ¥ eksisterende
+  brukere i kanalens aksessliste. Du kan ikke modifisere noen som har ett hÃ¸yere
+  eller likt aksessnivÃ¥ som deg.
 
        /msg x modinfo <#kanal> <access|automode> <brukernavn> <verdi>
 
-     ACCESS - Endrer aksess nivået til en person. Aksess nivået kan være mellom
-     1 og -1 fra ditt eget aksessnivå (f.eks. Dersom du har aksessnivå på 400
-     kan du dedikerer et aksessnivå opp mot 399 for andre brukere).
+     ACCESS - Endrer aksess nivÃ¥et til en person. Aksess nivÃ¥et kan vÃ¦re mellom
+     1 og -1 fra ditt eget aksessnivÃ¥ (f.eks. Dersom du har aksessnivÃ¥ pÃ¥ 400
+     kan du dedikerer et aksessnivÃ¥ opp mot 399 for andre brukere).
 
-       /msg x modinfo <#kanal> access <brukernavn> <nytt_aksess_nivå_her>
+       /msg x modinfo <#kanal> access <brukernavn> <nytt_aksess_nivÃ¥_her>
 
      AUTOMODE - Endrer autoinstillingen for en person til en av disse spesifiserte
-     innstillingene: NONE, OP, eller VOICE. Basert på disse instillingene kan en bruker bli
-     gitt voice eller bli gitt OP når han/hun kommer inn i kanalen. 
+     innstillingene: NONE, OP, eller VOICE. Basert pÃ¥ disse instillingene kan en bruker bli
+     gitt voice eller bli gitt OP nÃ¥r han/hun kommer inn i kanalen. 
      Dersom brukeren allerede er i kanalen, vil autoinstillingen fungere fra det sekund 
      brukeren logger inn i X.
 
        /msg x modinfo <#kanal> automode <brukernavn> <none|op|voice>
 
-  REMUSER - Fjerner ett brukernavn fra kanalens aksessliste. Du må ha høyere
-  aksess enn det brukernavnet du ønsker å fjerne. Du kan også fjerne deg selv
+  REMUSER - Fjerner ett brukernavn fra kanalens aksessliste. Du mÃ¥ ha hÃ¸yere
+  aksess enn det brukernavnet du Ã¸nsker Ã¥ fjerne. Du kan ogsÃ¥ fjerne deg selv
   fra enn hvilken som helst kanal, med forbehold om at du ikke er kanalsjef.
-  (Har 500 i aksess på denne kanalen). Kanalsjefer som ønskerå fjerne seg selv må
-  sende inn en søknad for å få fjernet X fra kanalen eller, gi kanalen bort til en annen.
+  (Har 500 i aksess pÃ¥ denne kanalen). Kanalsjefer som Ã¸nskerÃ¥ fjerne seg selv mÃ¥
+  sende inn en sÃ¸knad for Ã¥ fÃ¥ fjernet X fra kanalen eller, gi kanalen bort til en annen.
 
        /msg x remuser <#kanal> <brukernavn>
 
 ---------------------------------------------------------------------------
-                        AKSESSNIVÅ 200 (Senior kanal operatør)
+                        AKSESSNIVÃ… 200 (Senior kanal operatÃ¸r)
 ---------------------------------------------------------------------------
 
-  KICK - Vil få X til å sparke ut alle brukere som matcher den spesifiserte *!*ident@host
-  masken, men den vil ikke sparke ut vedkommende som utfører kommandoen dersom han/henne matcher
-  også. Bruken burde være begrenset til ekstrem kanalflooding eller kloner. Du
-  ønsker da kanskje å sette en ban på denne masken, eller +i (Kun inviterte) på kanalen
-  før du utfører denne kommandoen for å forhindre brukere fra å komme tilbake rett etter å
+  KICK - Vil fÃ¥ X til Ã¥ sparke ut alle brukere som matcher den spesifiserte *!*ident@host
+  masken, men den vil ikke sparke ut vedkommende som utfÃ¸rer kommandoen dersom han/henne matcher
+  ogsÃ¥. Bruken burde vÃ¦re begrenset til ekstrem kanalflooding eller kloner. Du
+  Ã¸nsker da kanskje Ã¥ sette en ban pÃ¥ denne masken, eller +i (Kun inviterte) pÃ¥ kanalen
+  fÃ¸r du utfÃ¸rer denne kommandoen for Ã¥ forhindre brukere fra Ã¥ komme tilbake rett etter Ã¥
   ha blitt sparket ut. Ditt brukernavn vil bli synlig i meldingen, omgitt
   av paranteser.
 
        /msg x kick <#kanal> <kallenavn | *!*ident@host> [grunn]
 
   STATUS - Viser alle kanal instillinger som +lmnistkr, hvor mange brukere 
-  det er i kanalen, hvor mange operatører, daværende innloggede brukere i kanalen
-  uavhengig om X er i kanalen på dette tidspunkt eller ikke. Daværende
-  innloggede brukere er vist som følger "brukernavn/kallenavn [aksessnivå]".
+  det er i kanalen, hvor mange operatÃ¸rer, davÃ¦rende innloggede brukere i kanalen
+  uavhengig om X er i kanalen pÃ¥ dette tidspunkt eller ikke. DavÃ¦rende
+  innloggede brukere er vist som fÃ¸lger "brukernavn/kallenavn [aksessnivÃ¥]".
   En bruker sitt kallenavn vil kun bli vist dersom denne personen er i kanalen,
-  ellers vil den kun vise deres brukernavn og aksessnivå.
+  ellers vil den kun vise deres brukernavn og aksessnivÃ¥.
 
-  Det å ha muligheten til å se kanalinstillinger er utrolig hjelpsomt i en situasjon der kanalen
-  er blitt stengt (Kanalinnstilling +i, +l, og/eller +k).  Hvis kanalen har en nøkkelord
-  (+k), vil X vise dette nøkkelordet. Du kan og bruke INVITE
-  kommandoen for å få X til å invitere deg til kanalen, den vil overskrive alle 
-  kanalinnstillingerchan, eller alternativt, du kan bruke CLEARMODE kommandoen til å
+  Det Ã¥ ha muligheten til Ã¥ se kanalinstillinger er utrolig hjelpsomt i en situasjon der kanalen
+  er blitt stengt (Kanalinnstilling +i, +l, og/eller +k).  Hvis kanalen har en nÃ¸kkelord
+  (+k), vil X vise dette nÃ¸kkelordet. Du kan og bruke INVITE
+  kommandoen for Ã¥ fÃ¥ X til Ã¥ invitere deg til kanalen, den vil overskrive alle 
+  kanalinnstillingerchan, eller alternativt, du kan bruke CLEARMODE kommandoen til Ã¥
   fjerne alle kanalinnstillinger, og deretter komme inn i kanalen.
 
        /msg x status <#kanal>
 
 ---------------------------------------------------------------------------
-                      AKSESSNIVÅ 100+ (Kanal Operatør)
+                      AKSESSNIVÃ… 100+ (Kanal OperatÃ¸r)
 ---------------------------------------------------------------------------
 
   DEOP - Fjerner OP fra en eller flere personer i kanalen. Dersom det ikke er spesifisert 
@@ -303,80 +303,80 @@ PÅMINNELSE for SCRIPTERE:
 
        /msg x op <#kanal> [kallenavn1] [kallenavn2] ...
 
-  INVITE - Vil få X til å invitere deg til kanalen, og lar deg komme inn 
+  INVITE - Vil fÃ¥ X til Ã¥ invitere deg til kanalen, og lar deg komme inn 
   uavhengig av hvilke kanalinnstillinger som er satt.
 
        /msg x invite <#kanal>
 
-  SUSPEND - Suspenderer en bruker sin aksess i X på en kanal for
-  en spesifisert tidsperiode, og på ett gitt aksessnivå, om det blir nevnt. Dersom
-  aksessnivået ikke blir spesifisert, vil X benytte ditt aksessnivå. Du kan kun 
-  suspendere en person som har lavere aksessnivå enn det du selv har. Maksimal tidsperiode
+  SUSPEND - Suspenderer en bruker sin aksess i X pÃ¥ en kanal for
+  en spesifisert tidsperiode, og pÃ¥ ett gitt aksessnivÃ¥, om det blir nevnt. Dersom
+  aksessnivÃ¥et ikke blir spesifisert, vil X benytte ditt aksessnivÃ¥. Du kan kun 
+  suspendere en person som har lavere aksessnivÃ¥ enn det du selv har. Maksimal tidsperiode
   er 372 dager (8928 timer eller 535680 minutter).
 
        * M = minutter, H = timer, D = dager
 
-       /msg x suspend <#kanal> <brukernavn> <tidsperiode> <M|H|D> [aksessnivå]
+       /msg x suspend <#kanal> <brukernavn> <tidsperiode> <M|H|D> [aksessnivÃ¥]
 
-  UNSUSPEND - Fjerner suspensjonen på en person sin aksess i X på aksesslisten.
-  Du kan kun fjerne suspensjonen for en person som har lavere aksessnivå enn det du selv har og
-  hvor suspensasjonsnivået også er lavere eller lik ditt aksessnivå.
+  UNSUSPEND - Fjerner suspensjonen pÃ¥ en person sin aksess i X pÃ¥ aksesslisten.
+  Du kan kun fjerne suspensjonen for en person som har lavere aksessnivÃ¥ enn det du selv har og
+  hvor suspensasjonsnivÃ¥et ogsÃ¥ er lavere eller lik ditt aksessnivÃ¥.
 
        /msg x unsuspend <#kanal> <brukernavn>
 
 ---------------------------------------------------------------------------
-                    AKSESSNIVÅ 75+ (Ny Kanal Operatør)
+                    AKSESSNIVÃ… 75+ (Ny Kanal OperatÃ¸r)
 ---------------------------------------------------------------------------
 
   BAN - Legger til en spesifisert *!*ident@host til X sin kanal-banliste.
   Dersom vedkommende er online, kan du spesifisere vedkommendes kallenavn, og X vil da
   automatisk sette en ban for *!*ident@host for vedkommende.
 
-  Bans kan være aktive for ett større område enn det tidligere ban som er satt kan være,
-  dette vil medføre at tidligere bans som er satt vil bli overskrevet. 
-  En hvilken somhelst bruker som matcher bannen vil også bli
-  sparket ut dersom ban nivået er 75+. Tidsperioden er i timer, hvor maksimum tidsperiode
-  er 336 timer (2 uker). Ban nivået kan være fra 1 til ditt eget aksessnivå.
+  Bans kan vÃ¦re aktive for ett stÃ¸rre omrÃ¥de enn det tidligere ban som er satt kan vÃ¦re,
+  dette vil medfÃ¸re at tidligere bans som er satt vil bli overskrevet. 
+  En hvilken somhelst bruker som matcher bannen vil ogsÃ¥ bli
+  sparket ut dersom ban nivÃ¥et er 75+. Tidsperioden er i timer, hvor maksimum tidsperiode
+  er 336 timer (2 uker). Ban nivÃ¥et kan vÃ¦re fra 1 til ditt eget aksessnivÃ¥.
   Grunnlaget for bannen kan maksimalt inneholde 128 tegn. 
-  Dersom ingen tidsperiode og/eller aksessnivå blir spesifisert, vil det som en standar 
-  tidsperiode på 3 timer og en aksessnivå på 75 bli satt.
+  Dersom ingen tidsperiode og/eller aksessnivÃ¥ blir spesifisert, vil det som en standar 
+  tidsperiode pÃ¥ 3 timer og en aksessnivÃ¥ pÃ¥ 75 bli satt.
 
-  NB! Dersom den uønsket bruker benytter Undernets "virituelle hostmaske" (Brukerinnstilling +x), 
-  vil X være i stand til å se igjennom til deres virkelige host, derfor vil og banning 
+  NB! Dersom den uÃ¸nsket bruker benytter Undernets "virituelle hostmaske" (Brukerinnstilling +x), 
+  vil X vÃ¦re i stand til Ã¥ se igjennom til deres virkelige host, derfor vil og banning 
   av deres brukernavn som *!*@brukernavn.* og banne deres virkelige host.
 
-       * Ban Nivåer:   1-74 = Forhindrer vedkommende fra å få OP (+o) på                                                           kanalen.
-                     75-500 = Forhindrer vedkommende fra å komme inn i kanalen.
+       * Ban NivÃ¥er:   1-74 = Forhindrer vedkommende fra Ã¥ fÃ¥ OP (+o) pÃ¥                                                           kanalen.
+                     75-500 = Forhindrer vedkommende fra Ã¥ komme inn i kanalen.
 
-       /msg x ban <#kanal> <kallenavn | *!*ident@host> [tidsperiode] [aksessnivå] [grunn]
+       /msg x ban <#kanal> <kallenavn | *!*ident@host> [tidsperiode] [aksessnivÃ¥] [grunn]
 
   UNBAN - Fjerner en ban fra X sin kanal banliste, inkludert alle som matcher
-  denne bannen på kanalens banliste. Du kan kun fjerne bans fra X sin
-  ban-liste som er lik eller lavere enn ditt eget aksessnivå. For å søke i X sin
-  ban-liste, vises det til LBANLIST kommandoen. For å se igjennom den nåværende kanal 
+  denne bannen pÃ¥ kanalens banliste. Du kan kun fjerne bans fra X sin
+  ban-liste som er lik eller lavere enn ditt eget aksessnivÃ¥. For Ã¥ sÃ¸ke i X sin
+  ban-liste, vises det til LBANLIST kommandoen. For Ã¥ se igjennom den nÃ¥vÃ¦rende kanal 
   ban-listen, vises det til BANLIST kommandoen.
 
        /msg x unban <#kanal> <kallenavn | *!*ident@host>
 
 ---------------------------------------------------------------------------
-                    AKSESSNIVÅ 50+ (Fast bruker)
+                    AKSESSNIVÃ… 50+ (Fast bruker)
 ---------------------------------------------------------------------------
 
-  KICK - Får X til å sparke ut noen fra kanalen. Ditt brukernavn vil bli nevnt
+  KICK - FÃ¥r X til Ã¥ sparke ut noen fra kanalen. Ditt brukernavn vil bli nevnt
   i selve meldingen for sparket, omgitten av parantes.
 
        /msg x kick <#kanal> <kallenavn> [grunn]
 
-  TOPIC - Får X til å endre overskriften for kanalen (145 tegn er maks) og
+  TOPIC - FÃ¥r X til Ã¥ endre overskriften for kanalen (145 tegn er maks) og
   den vil inkludere ditt brukernavn, omgitt av parantes, i begynnelsen av overskriften.
   
   NB! Dersom en beskrivelse (DESC, DESCRIPTION) eller en websideadresse har blitt satt og
-  AUTOTOPIC er på, vil kanal overskriften bli nullstilt hvert 30 minutt, med mindre kanalen er    inaktiv.
+  AUTOTOPIC er pÃ¥, vil kanal overskriften bli nullstilt hvert 30 minutt, med mindre kanalen er    inaktiv.
 
        /msg x topic <#kanal> <overskrift>
 
 ---------------------------------------------------------------------------
-                       AKSESSNIVÅ 25+ (Kanalgjenganger)
+                       AKSESSNIVÃ… 25+ (Kanalgjenganger)
 ---------------------------------------------------------------------------
 
   DEVOICE - Fjerner voice fra en eller flere personer i kanalen.
@@ -388,61 +388,61 @@ PÅMINNELSE for SCRIPTERE:
        /msg x voice <#kanal> [kallenavn1] [kallenavn2] ...
 
 ---------------------------------------------------------------------------
-                       AKSESSNIVÅ 1+ (Minste aksessnivå)
+                       AKSESSNIVÃ… 1+ (Minste aksessnivÃ¥)
 ---------------------------------------------------------------------------
 
   BANLIST - Viser kanalen sin banliste.
 
        /msg x banlist <#kanal>
   
-  REMUSER - Du har mulighet til å fjerne deg selv fra en hvilken som helst kanal, 
+  REMUSER - Du har mulighet til Ã¥ fjerne deg selv fra en hvilken som helst kanal, 
   med forbehold om at du ikke er kanalsjef for den kanalen du vil fjerne deg fra.
-  (Har 500 i aksess på denne kanalen). Kanalsjefer som ønskerå fjerne seg selv må
-  sende inn en søknad for å få fjernet X fra kanalen eller, gi kanalen bort til en annen.
+  (Har 500 i aksess pÃ¥ denne kanalen). Kanalsjefer som Ã¸nskerÃ¥ fjerne seg selv mÃ¥
+  sende inn en sÃ¸knad for Ã¥ fÃ¥ fjernet X fra kanalen eller, gi kanalen bort til en annen.
        
   STATUS - Viser alle kanalinnstillingene, hvor mange brukere
-  og operatører det er i kanalen, hvilke brukere som er logget inn i X på kanalen,
+  og operatÃ¸rer det er i kanalen, hvilke brukere som er logget inn i X pÃ¥ kanalen,
   og om X er i kanalen eller ikke. De brukere som er logget inn
-  vil bli femvist som følger "brukernavn/kallenavn [aksessnivå]". En person sitt kallenavn vil
+  vil bli femvist som fÃ¸lger "brukernavn/kallenavn [aksessnivÃ¥]". En person sitt kallenavn vil
   bare bli vist dersom denne brukeren er tilstedet i kanalen, dersom ikke vil bare
-  personens brukernavn og aksessnivå vises.
+  personens brukernavn og aksessnivÃ¥ vises.
 
        /msg x status <#kanal>
 
 ---------------------------------------------------------------------------
-                           AKSESSNIVÅ 0 (Alle)
+                           AKSESSNIVÃ… 0 (Alle)
 ---------------------------------------------------------------------------
 
   ACCESS - Sjekker opp aksess informasjon for en spesifisert person via kallenavnet eller
-  brukernavnet, eller flere personer ved bruk av en spesifikk søke metode. Informasjonen 
-  viser følgende: aksessnivå, automode, suspensasjons status og
-  nivået dersom suspendert, og når brukeren sist ble sett. Dersom det er flere enn
-  15 resultater, logg deg inn på http://cservice.undernet.org/live/ for da å kunne se
-  hele listen ved å klikke på "Channel Information" linken og skrive inn
-  kanalnavnet.  Du kan også kombinere disse valgmulighetene for å oppnå spesifiserte
+  brukernavnet, eller flere personer ved bruk av en spesifikk sÃ¸ke metode. Informasjonen 
+  viser fÃ¸lgende: aksessnivÃ¥, automode, suspensasjons status og
+  nivÃ¥et dersom suspendert, og nÃ¥r brukeren sist ble sett. Dersom det er flere enn
+  15 resultater, logg deg inn pÃ¥ http://cservice.undernet.org/live/ for da Ã¥ kunne se
+  hele listen ved Ã¥ klikke pÃ¥ "Channel Information" linken og skrive inn
+  kanalnavnet.  Du kan ogsÃ¥ kombinere disse valgmulighetene for Ã¥ oppnÃ¥ spesifiserte
   resultater.
 
-       /msg x access <#kanal> <*|villkår|brukernavn|=kallenavn> [-min <aksessnivå>] 
-                     [-max <aksessnivå>] [-modif] [-none|-voice|-op]
+       /msg x access <#kanal> <*|villkÃ¥r|brukernavn|=kallenavn> [-min <aksessnivÃ¥>] 
+                     [-max <aksessnivÃ¥>] [-modif] [-none|-voice|-op]
 
      * - Viser hele kanalens aksessliste.
        /msg x access <#kanal> *
 
-     Villkår - Viser til aksessnivået hos alle de brukernavn som matcher søke 
-               villkårene.
-       /msg x access <#kanal> <villkår>
+     VillkÃ¥r - Viser til aksessnivÃ¥et hos alle de brukernavn som matcher sÃ¸ke 
+               villkÃ¥rene.
+       /msg x access <#kanal> <villkÃ¥r>
 
-     brukernavn - Viser aksessnivået til en enkelt person.
+     brukernavn - Viser aksessnivÃ¥et til en enkelt person.
        /msg x access <#kanal> <brukernavn>
 
-     =kallenavn - Viser aksessnivået til en enkelt person ved bruk av kallenavnet.
+     =kallenavn - Viser aksessnivÃ¥et til en enkelt person ved bruk av kallenavnet.
        /msg x access <#kanal> <=kallenavn>
 
-     -min <aksessnivå> - Viser kun personer som er over ett gitt aksessnivå.
-       /msg x access <#kanal> -min <aksessnivå>
+     -min <aksessnivÃ¥> - Viser kun personer som er over ett gitt aksessnivÃ¥.
+       /msg x access <#kanal> -min <aksessnivÃ¥>
 
-     -max <aksessnivå> - Viser kun personer som er under ett gitt aksessnivå.
-       /msg x access <#kanal> -max <aksessnivå>
+     -max <aksessnivÃ¥> - Viser kun personer som er under ett gitt aksessnivÃ¥.
+       /msg x access <#kanal> -max <aksessnivÃ¥>
 
      -op - Viser kun personer som har AUTOMODE innstillingen satt som OP
        /msg x access <#kanal> -op
@@ -453,11 +453,11 @@ PÅMINNELSE for SCRIPTERE:
      -none - Viser kun personer som ikke har noe AUTOMODE innstilling satt. (None).
        /msg x access <#kanal> -none
 
-     -modif - Viser personer som sist modifiserte noens aksessnivå.
+     -modif - Viser personer som sist modifiserte noens aksessnivÃ¥.
        /msg x access <#kanal> -modif
 
-  CHANINFO - Viser til om kanalen er registrert eller ikke, til hvem den isåfall er registrert,
-  og den daværende DESCRIPTION og websideadressen(e) (URL), dersom det er noen.
+  CHANINFO - Viser til om kanalen er registrert eller ikke, til hvem den isÃ¥fall er registrert,
+  og den davÃ¦rende DESCRIPTION og websideadressen(e) (URL), dersom det er noen.
   Alias: INFO
 
        /msg x chaninfo <#kanal>
@@ -468,13 +468,13 @@ PÅMINNELSE for SCRIPTERE:
        /msg x help <kommando>
 
   INFO - Viser informasjon om ett gitt brukernavn som personens kallenavn og
-  ident@host dersom de da er online, deres standarspråk i X og usynlighets
-  instillinger, når personen sist ble sett, og om personen eventuelt har blitt suspendert
-  av en CService Administrator. Dersom du bruker denne kommandoen på deg selv,vil den også vise din
+  ident@host dersom de da er online, deres standarsprÃ¥k i X og usynlighets
+  instillinger, nÃ¥r personen sist ble sett, og om personen eventuelt har blitt suspendert
+  av en CService Administrator. Dersom du bruker denne kommandoen pÃ¥ deg selv,vil den ogsÃ¥ vise din
   registrerte e-mail adresse, sist benyttede hostmaske (kallenavn!ident@host)
-  når brukernavnet ble logget inn på, din maxlogins innstilling, og
-  vise alle kanaler hvor du måtte ha aksess. (Kun CService og deg selv kan
-  se denne informasjonen, ingen andre personer). Dersom du ønsker å gjøre denne
+  nÃ¥r brukernavnet ble logget inn pÃ¥, din maxlogins innstilling, og
+  vise alle kanaler hvor du mÃ¥tte ha aksess. (Kun CService og deg selv kan
+  se denne informasjonen, ingen andre personer). Dersom du Ã¸nsker Ã¥ gjÃ¸re denne
   informasjonen utilgjengelig for alle og enhver, vises det til SET INVISIBLE kommandoen.
 
        /msg x info <brukernavn>
@@ -483,18 +483,18 @@ PÅMINNELSE for SCRIPTERE:
 
        /msg x isreg <#kanal>
 
-  LBANLIST - Søker i X sin banliste etter ett spessielt søke villkår. Benytt * for å se
-  hele listen, eller spesifiser et søkeord for å finne en enkelt ban. Dersom
-  det er flere enn 15 resultater, logg deg inn på 
-  http://cservice.undernet.org/live/ for deretter å klikke på
-  "Channel Information" linken og skrive inn kanal navnet for å se hele resultatet.
+  LBANLIST - SÃ¸ker i X sin banliste etter ett spessielt sÃ¸ke villkÃ¥r. Benytt * for Ã¥ se
+  hele listen, eller spesifiser et sÃ¸keord for Ã¥ finne en enkelt ban. Dersom
+  det er flere enn 15 resultater, logg deg inn pÃ¥ 
+  http://cservice.undernet.org/live/ for deretter Ã¥ klikke pÃ¥
+  "Channel Information" linken og skrive inn kanal navnet for Ã¥ se hele resultatet.
 
-       /msg x lbanlist <#channel> <søkeord>
+       /msg x lbanlist <#channel> <sÃ¸keord>
 
-  LOGIN - Dette vil logge på din aksess informasjon i minnet og logge deg inn
-  på alle registrerte kanaler du måtte ha aksess på.
-  Husk: INGEN fra CService vil NOEN GANG spørre deg etter ditt passord! IKKE
-  gi ut ditt passord til noen som prøver å imitere CService!
+  LOGIN - Dette vil logge pÃ¥ din aksess informasjon i minnet og logge deg inn
+  pÃ¥ alle registrerte kanaler du mÃ¥tte ha aksess pÃ¥.
+  Husk: INGEN fra CService vil NOEN GANG spÃ¸rre deg etter ditt passord! IKKE
+  gi ut ditt passord til noen som prÃ¸ver Ã¥ imitere CService!
 
        /msg x@channels.undernet.org login <brukernavn> <passord>
 
@@ -503,84 +503,84 @@ PÅMINNELSE for SCRIPTERE:
        /msg x motd
 
   SEARCH - X vil liste opp en hvilken somhelst registrert kanal som har de spesifiserte 
-  nøkkelord(ene) på plass. Bruk av * er ikke nødvendig. Ett maksimums resultat vil være 10
+  nÃ¸kkelord(ene) pÃ¥ plass. Bruk av * er ikke nÃ¸dvendig. Ett maksimums resultat vil vÃ¦re 10
   kanaler som blir vist.
 
-       /msg x search <nøkkelord(ene)>
+       /msg x search <nÃ¸kkelord(ene)>
 
   SET - Endrer spesielle innstillinger for ditt brukernavn.
 
        /msg x set <invisible|lang> <verdi>
 
-     INVISIBLE - Ved bruk av denne kommandoen kan du avgjøre om du vil vise noe eller skjerme
+     INVISIBLE - Ved bruk av denne kommandoen kan du avgjÃ¸re om du vil vise noe eller skjerme
      all informasjon om ditt brukernavn. Dersom denne er aktivert, kan ikke en annen person se
-     om du er online eller se noen annen informasjon om ditt brukernavn ved å bruke INFO kommandoen.
+     om du er online eller se noen annen informasjon om ditt brukernavn ved Ã¥ bruke INFO kommandoen.
      
        /msg x set invisible <on|off>
 
-     LANG - Lar deg velge hvilket språk du ønsker at X skal svare til deg på.
+     LANG - Lar deg velge hvilket sprÃ¥k du Ã¸nsker at X skal svare til deg pÃ¥.
 
-       /msg x set lang <språk kode>
+       /msg x set lang <sprÃ¥k kode>
 
-          Språk som er aktuelle:
-          Kode - Språk
-          · ar - Arabisk
-          · ca - Catalan
-          · ch - Julespråk
-          · de - Tysk
-          · dk - Dansk
-          · ea - Påskespråk
-          · en - Engelsk
-          · es - Spansk
-          · fr - Fransk
+          SprÃ¥k som er aktuelle:
+          Kode - SprÃ¥k
+          Â· ar - Arabisk
+          Â· ca - Catalan
+          Â· ch - JulesprÃ¥k
+          Â· de - Tysk
+          Â· dk - Dansk
+          Â· ea - PÃ¥skesprÃ¥k
+          Â· en - Engelsk
+          Â· es - Spansk
+          Â· fr - Fransk
           . gr - Gresk
-          · ha - Heksespråk
-          · hu - Ungarsk
-          · it - Italiensk
-          · mk - Makedonsk
-          · nl - Nederlandsk
-          · no - Norsk
-          · pt - Portoguisisk
-          · ro - Romensk
-          · sv - Svensk
-          · tr - Tyrkisk
+          Â· ha - HeksesprÃ¥k
+          Â· hu - Ungarsk
+          Â· it - Italiensk
+          Â· mk - Makedonsk
+          Â· nl - Nederlandsk
+          Â· no - Norsk
+          Â· pt - Portoguisisk
+          Â· ro - Romensk
+          Â· sv - Svensk
+          Â· tr - Tyrkisk
 
-  SHOWCOMMANDS - Viser alle kommandoer du kan bruke på en kanal, som følge 
-  av ditt eget aksessnivå. Dersom ingen kanal er spesifisert, vil kun aksessnivå 0 kommandoer
+  SHOWCOMMANDS - Viser alle kommandoer du kan bruke pÃ¥ en kanal, som fÃ¸lge 
+  av ditt eget aksessnivÃ¥. Dersom ingen kanal er spesifisert, vil kun aksessnivÃ¥ 0 kommandoer
   vises.
   
        /msg x showcommands [#kanal]
 
   SHOWIGNORE - Viser X sin ignoreringsliste. X vil automatisk ignorere en person
-  som ved en feiltagelse eller ved hensikt forsøker å floode X. 
+  som ved en feiltagelse eller ved hensikt forsÃ¸ker Ã¥ floode X. 
 
   NB! X vil ikke svare deg dersom du er blitt ignorert. Dersom du ikke
-  får noe respons fra kommandoer gitt til X, spør en kamerat om han/henne kan sjekke
+  fÃ¥r noe respons fra kommandoer gitt til X, spÃ¸r en kamerat om han/henne kan sjekke
   ignorelisten for deg.
        
         /msg x showignore
 
-  SUPPORT - Dette er en alternativ metode for å avgi din stemme
-  for en kanalsøknad som du har blitt satt som supporter på. Da du
-  logger inn, vil X informere deg dersom du er satt på noen kanalsøknader som 
-  supporter og X vil også da informere deg om denne SUPPORT kommandoen. 
-  Som ett annet alternativ kan du heller, velge å se igjennom kanalsøknaden på vår webside
-  der vil du og få tilgang til mer informasjon og eventuelt sende inn en klage, eller kun avgi
-  positive eller negative stemme. Denne kommandoen vil ikke være tilgjengelig dersom du ikke er
-  satt på kanalsøknaden som en supporter, eller dersom kanalen ikke har en kanalsøknad på websiden.
+  SUPPORT - Dette er en alternativ metode for Ã¥ avgi din stemme
+  for en kanalsÃ¸knad som du har blitt satt som supporter pÃ¥. Da du
+  logger inn, vil X informere deg dersom du er satt pÃ¥ noen kanalsÃ¸knader som 
+  supporter og X vil ogsÃ¥ da informere deg om denne SUPPORT kommandoen. 
+  Som ett annet alternativ kan du heller, velge Ã¥ se igjennom kanalsÃ¸knaden pÃ¥ vÃ¥r webside
+  der vil du og fÃ¥ tilgang til mer informasjon og eventuelt sende inn en klage, eller kun avgi
+  positive eller negative stemme. Denne kommandoen vil ikke vÃ¦re tilgjengelig dersom du ikke er
+  satt pÃ¥ kanalsÃ¸knaden som en supporter, eller dersom kanalen ikke har en kanalsÃ¸knad pÃ¥ websiden.
 
        /msg x support <#kanal> <yes|no>
 
   VERIFY - Viser om en person er logget inn eller ikke, dersom personen er det
-  vil den vise vedkommende sitt brukernavn, samt også indikere hvorvidt vedkommende er eller ikke er
+  vil den vise vedkommende sitt brukernavn, samt ogsÃ¥ indikere hvorvidt vedkommende er eller ikke er
   en Offisiell CService Administrator, Utgiver, eller Representant,
-  og/eller en IRC Operatør.
+  og/eller en IRC OperatÃ¸r.
 
        /msg x verify <kallenavn>
 
 *-------------------------------------------------------------------------*
   Dette dokumentet ble sist oppdatert 28 september 2003 av ReD_IcE
-  Denne filen er vedlikeholdt av Undernet Kanal Service Komité
+  Denne filen er vedlikeholdt av Undernet Kanal Service KomitÃ©
   E-mail cservice@undernet.org med eventuelle forslag eller kommentarer
   CService URL: http://cservice.undernet.org
   Undernet URL: http://www.undernet.org

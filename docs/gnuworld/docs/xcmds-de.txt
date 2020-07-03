@@ -435,7 +435,7 @@ LEVEL 0 : Everyone else
 
     /msg x@channels.undernet.org login <Nutzername> <Passwort>
 
-  MOTD - Gibt X´s Tagesnachricht aus. (Message of the day)
+  MOTD - Gibt XÂ´s Tagesnachricht aus. (Message of the day)
 
     /msg x motd
 
@@ -487,21 +487,21 @@ LEVEL 0 : Everyone else
 
      verfuegbare Sprachen:
      Code - Sprache
-     · ar - Arabisch
-     · ca - Catalanisch
-     · de - Deutsch	
-     · dk - Daenisch
-     · en - Englisch
-     · es - Spanisch
-     · fr - Franzoesisch
-     · hu - Ungarisch
-     · it - Italienisch
-     · nl - Niederlaendisch	*
-     · no - Norwegisch
-     · pt - Portugiesisch	
-     · ro - Rumaenisch
-     · tr - Tuerkisch
-     · il - Hebraeisch
+     Â· ar - Arabisch
+     Â· ca - Catalanisch
+     Â· de - Deutsch	
+     Â· dk - Daenisch
+     Â· en - Englisch
+     Â· es - Spanisch
+     Â· fr - Franzoesisch
+     Â· hu - Ungarisch
+     Â· it - Italienisch
+     Â· nl - Niederlaendisch	*
+     Â· no - Norwegisch
+     Â· pt - Portugiesisch	
+     Â· ro - Rumaenisch
+     Â· tr - Tuerkisch
+     Â· il - Hebraeisch
 
      * = Die so gekennzeichneten Sprachen sind noch nicht verfuegbar, wir planen diese jedoch bald zu unterstuetzen.
 
@@ -519,7 +519,7 @@ LEVEL 0 : Everyone else
 
     /msg x showcommands [#channel]
 
-  SHOWIGNORE - Gibt X´s Liste der ignorierten Nutzer aus. X ignoriert Nutzer dann, wenn absichtlich oder versehentlich
+  SHOWIGNORE - Gibt XÂ´s Liste der ignorierten Nutzer aus. X ignoriert Nutzer dann, wenn absichtlich oder versehentlich
   ein flood auf X ausgeuebt wurde. Die Dauer betraegt 60 Minuten.
 
     /msg x showignore

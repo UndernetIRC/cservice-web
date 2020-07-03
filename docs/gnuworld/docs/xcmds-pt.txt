@@ -7,15 +7,15 @@
 ------------------------------------------------------------------------------------------
 
 NOTA (ao longo deste documento):
-* Par‚metros entre <> s„o obrigatÛrios.
-* Par‚metros entre [] s„o opcionais.
+* Par√¢metros entre <> s√£o obrigat√≥rios.
+* Par√¢metros entre [] s√£o opcionais.
 * | representa OU, por  exemplo, x|y quer dizer x ou y.
 * 0-2 indica que se pode usar o  valor de 0 a 2.
-* <nick>  È o cognome com que uma pessoa se encontra ligada no IRC.
-* <username>   È  o  username de uma pessoa como  se  encontra na lista  de  utilizadores,
-    exactamente como o registou em http://cservice.undernet.org/live/;  n„o fazer confus„o
-    com  <nick>.  Para mais informaÁ„o sobre usernames  e  como determinar  o  username de
-    uma pessoa, verificar os comandos VERIFY e INFO (nÌvel 0).
+* <nick>  √© o cognome com que uma pessoa se encontra ligada no IRC.
+* <username>   √©  o  username de uma pessoa como  se  encontra na lista  de  utilizadores,
+    exactamente como o registou em http://cservice.undernet.org/live/;  n√£o fazer confus√£o
+    com  <nick>.  Para mais informa√ß√£o sobre usernames  e  como determinar  o  username de
+    uma pessoa, verificar os comandos VERIFY e INFO (n√≠vel 0).
 * Todos os comandos com o item <username> funcionam igualmente se for especificado o  nick
     com que o utilizador se encontra ligado no IRC, precedendo o seu nick com um sinal  de
     igual (=). Por exemplo, consideremos uma pessoa com o nick ^[Teste]^  e cujo  username
@@ -24,22 +24,22 @@ NOTA (ao longo deste documento):
     1. /msg x access <#canal> Testa
     ou
     2. /msg x access <#canal> =^[Teste]^
-    O primeiro mÈtodo faz com que X verifique se o username  "Testa"  se encontra na lista
-    de utilizadores (userlist) do canal. O segundo mÈtodo faz com que X procure o username
+    O primeiro m√©todo faz com que X verifique se o username  "Testa"  se encontra na lista
+    de utilizadores (userlist) do canal. O segundo m√©todo faz com que X procure o username
     do nick ^[Teste]^ na lista de utilizadores e, caso a pessoa  se  encontre autenticada,
-    X responde com a informaÁ„o do respectivo username  (ter atenÁ„o no sinal  =  antes do
+    X responde com a informa√ß√£o do respectivo username  (ter aten√ß√£o no sinal  =  antes do
     nick).  Isto  pode  ser  executado com qualquer comando que requeira  <username>,  mas
-    apenas funciona caso o utilizador se encontre autenticado, de contr·rio,  X responder·
+    apenas funciona caso o utilizador se encontre autenticado, de contr√°rio,  X responder√°
     com uma  mensagem  "No Match!" ou equivalente.
-* Neste texto  de  ajuda,  frente aos comandos,  surge uma breve explicaÁ„o ou traduÁ„o do 
-    comando  para  portuguÍs  entre  parÍntesis.   Tal n„o  È  sen„o uma forma de ajudar a
-    memorizar o comando.  (N√O usar a traduÁ„o)
-* Entenda-se neste documento, por uma quest„o tÈcnica, que a qualidade de Gerente de Canal
-    poder· coincidir com a de Fundador do mesmo.
+* Neste texto  de  ajuda,  frente aos comandos,  surge uma breve explica√ß√£o ou tradu√ß√£o do 
+    comando  para  portugu√™s  entre  par√™ntesis.   Tal n√£o  √©  sen√£o uma forma de ajudar a
+    memorizar o comando.  (N√ÉO usar a tradu√ß√£o)
+* Entenda-se neste documento, por uma quest√£o t√©cnica, que a qualidade de Gerente de Canal
+    poder√° coincidir com a de Fundador do mesmo.
 
 
 ------------------------------------------------------------------------------------------
-NÕVEL 500: Gerente de Canal (Channel Manager)
+N√çVEL 500: Gerente de Canal (Channel Manager)
 ------------------------------------------------------------------------------------------
 
 PART -  (partir, sair) Faz com  que X saia do canal.
@@ -50,108 +50,108 @@ PART -  (partir, sair) Faz com  que X saia do canal.
 SET - (fixar) Muda alguns modos especiais de X para o canal
 	especificado.				
 
-		/msg x set <#canal> <vari·vel> <valor>
+		/msg x set <#canal> <vari√°vel> <valor>
 
-	* Vari·veis e Valores:
-	AUTOJOIN - (entrada autom·tica) Quando o <valor on|off> È colocado em ON, faz  com
+	* Vari√°veis e Valores:
+	AUTOJOIN - (entrada autom√°tica) Quando o <valor on|off> √© colocado em ON, faz  com
 	que X entre sempre no canal. Quando colocado em OFF,  faz com que X saia do canal,
-	caso nele se encontre, e n„o reentre apÛs um netsplit.
+	caso nele se encontre, e n√£o reentre ap√≥s um netsplit.
 
 		/msg x set <#canal> autojoin <on|off>
 
-	MASSDEOPPRO - (protecÁ„o de deop massivo) M·ximo n˙mero de deops que X permite num
-	perÌodo de 15 segundos. A qualquer utilizador que exceda este limite ser· aplicado
-	um kick,  suspenso  (caso se encontre na lista de utilizadores (userlist)  e È-lhe
-	colocado um ban de nÌvel  25  de forma  a  n„o  lhe  permitir ter op.   O tempo de
-	suspens„o  e  ban  È  de 5 minutos.   Os valores em MASSDEOPPRO v„o de 1,  (o mais 
-      sensÌvel), a 7, ( menos sensÌvel). O valor de 0 desliga a funÁ„o.
+	MASSDEOPPRO - (protec√ß√£o de deop massivo) M√°ximo n√∫mero de deops que X permite num
+	per√≠odo de 15 segundos. A qualquer utilizador que exceda este limite ser√° aplicado
+	um kick,  suspenso  (caso se encontre na lista de utilizadores (userlist)  e √©-lhe
+	colocado um ban de n√≠vel  25  de forma  a  n√£o  lhe  permitir ter op.   O tempo de
+	suspens√£o  e  ban  √©  de 5 minutos.   Os valores em MASSDEOPPRO v√£o de 1,  (o mais 
+      sens√≠vel), a 7, ( menos sens√≠vel). O valor de 0 desliga a fun√ß√£o.
 
 		/msg x set <#canal> massdeoppro <0-7>
 
-	NOOP - (n„o op) Faz com que ninguÈm excepto X tenha op no canal.  Isto n„o implica
-	que o Gerente de Canal (nÌvel 500)  e todos os nele registados n„o tenham controlo
-	de X.  Quando se encontre autenticados poder„o executar comandos (KICK, BAN, etc.)
-	atravÈs de X, apenas n„o se pode ter op no canal em causa.
+	NOOP - (n√£o op) Faz com que ningu√©m excepto X tenha op no canal.  Isto n√£o implica
+	que o Gerente de Canal (n√≠vel 500)  e todos os nele registados n√£o tenham controlo
+	de X.  Quando se encontre autenticados poder√£o executar comandos (KICK, BAN, etc.)
+	atrav√©s de X, apenas n√£o se pode ter op no canal em causa.
 
 		/msg x set <#canal> noop <on|off>
 
-	STRICTOP - (op estrito)  Faz com que apenas utilizadores de nÌvel de acesso 100+ e
+	STRICTOP - (op estrito)  Faz com que apenas utilizadores de n√≠vel de acesso 100+ e
 	autenticados tenham op.
 
 		/msg x set <#canal> strictop <on|off>
 
 
 ------------------------------------------------------------------------------------------
-NÕVEIS 450-499 : AdministraÁ„o de Canal (Trusted Channel Admin)
+N√çVEIS 450-499 : Administra√ß√£o de Canal (Trusted Channel Admin)
 ------------------------------------------------------------------------------------------
 
 SET - (fixar) Muda modos especiais de X para o canal.
 
-		/msg x set <#canal> <vari·vel> <valor>
+		/msg x set <#canal> <vari√°vel> <valor>
 
-	* Vari·veis e Valores:
+	* Vari√°veis e Valores:
 
-	AUTOTOPIC - (tÛpico autom·tico)  Faz com que X retome de 30 em 30 minutos o tÛpico
+	AUTOTOPIC - (t√≥pico autom√°tico)  Faz com que X retome de 30 em 30 minutos o t√≥pico
 	do canal ao estipulado em  DESCRIPTION  e URL. De notar que se o canal se encontra
-	inactivo (idle) o tÛpico n„o ser· mudado durante esse perÌodo.
+	inactivo (idle) o t√≥pico n√£o ser√° mudado durante esse per√≠odo.
 
 		/msg x set <#canal> autotopic <on|off>
 
-	DESCRIPTION - (descriÁ„o) Regista o tÛpico base do canal, 80 caracteres no m·ximo.
-	Isto N√O afecta os tÛpicos colocados no canal a menos que AUTOTOPIC se encontre ON
-	O  tÛpico registado por meio de  DESCRIPTION  pode ser visto apenas com  o comando
-	CHANINFO (nÌvel 0).  N„o especificando qualquer texto a DESCRIPTION  torna-se nula.
+	DESCRIPTION - (descri√ß√£o) Regista o t√≥pico base do canal, 80 caracteres no m√°ximo.
+	Isto N√ÉO afecta os t√≥picos colocados no canal a menos que AUTOTOPIC se encontre ON
+	O  t√≥pico registado por meio de  DESCRIPTION  pode ser visto apenas com  o comando
+	CHANINFO (n√≠vel 0).  N√£o especificando qualquer texto a DESCRIPTION  torna-se nula.
 	Alias: DESC
 
 		/msg x set <#canal> description [text]
 		 ou
 		/msg x set <#canal> desc [text]
 
-	FLOATLIM - (como que em oscilar, flutuar) -  Liga ou desliga a funÁ„o que controla
-	a "flutuaÁ„o" do n˙mero de utilizadores no canal. Quando activa, X coloca o limite
-	de utilizadores acima do total existente no canal e  dentro de um perÌodo de tempo 	determinado. Isto evita grandes grupos de bots (botnets) de entrar simultaneamente
-	e sobrecarregar o canal. Por configuraÁ„o b·sica esta funÁ„o encontra-se desligada.
-	Quando ligada,  o comando STATUS mostra a configuraÁ„o em uso na linha "Flags set"
+	FLOATLIM - (como que em oscilar, flutuar) -  Liga ou desliga a fun√ß√£o que controla
+	a "flutua√ß√£o" do n√∫mero de utilizadores no canal. Quando activa, X coloca o limite
+	de utilizadores acima do total existente no canal e  dentro de um per√≠odo de tempo 	determinado. Isto evita grandes grupos de bots (botnets) de entrar simultaneamente
+	e sobrecarregar o canal. Por configura√ß√£o b√°sica esta fun√ß√£o encontra-se desligada.
+	Quando ligada,  o comando STATUS mostra a configura√ß√£o em uso na linha "Flags set"
 	da seguinte forma.  "FLOATLIM (MGN:3, PRD:20, GRC:1, MAX:0)."  Quer isto dizer que
-	FLOATLIM est· activo,  com a FLOATMARGIN (MGN) de 3,  um FLOATPERIOD (PRD)  de  20
+	FLOATLIM est√° activo,  com a FLOATMARGIN (MGN) de 3,  um FLOATPERIOD (PRD)  de  20
 	segundos,  um FLOATGRACE (GRC) de  1  e  sem  FLOATMAX (MAX).  Ver os comandos SET
-	FLOATGRACE, SET FLOATMARGIN, SET FLOATMAX, e SET FLOATPERIOD para mais informaÁ„o.                                                                                                                                                                  
+	FLOATGRACE, SET FLOATMARGIN, SET FLOATMAX, e SET FLOATPERIOD para mais informa√ß√£o.                                                                                                                                                                  
                                                                                                                                                                                                               
 		/msg x set <#canal> floatlim <on|off>                                                     
 
 	FLOATGRACE  -  Estabelece um valor limite  de  utilizadores  a ser usado no canal.
-	Este n˙mero pode ser entre 0-19.  Isto faz com que  X  evite mudar  o  limite caso
+	Este n√∫mero pode ser entre 0-19.  Isto faz com que  X  evite mudar  o  limite caso
 	esse valor seja inferior  ao  aqui configurado.   Por outras palavras,  este valor
-	corresponder· ao n˙mero de utilizadores  que entrem ou saiam do canal antes que  X
-	actualize o limite. Como resultado X n„o despeja em canais calmos muita informaÁ„o
-	de mudanÁa de modos. O valor configurado de origem È 1.
+	corresponder√° ao n√∫mero de utilizadores  que entrem ou saiam do canal antes que  X
+	actualize o limite. Como resultado X n√£o despeja em canais calmos muita informa√ß√£o
+	de mudan√ßa de modos. O valor configurado de origem √© 1.
 
 		/msg x set <#canal> floatgrace <0-19>                                                                                                                                                                   
 
-	FLOATMARGIN  -  Configura a margen limite de flutuaÁ„o a ser usada no canal.  Este
-	n˙mero pode ser entre 2-20. O valor que X ir· colocar ser·: n˙mero de utilizadores
-	no canal + FLOATMARGIN. O valor configurado de origem È 3.
+	FLOATMARGIN  -  Configura a margen limite de flutua√ß√£o a ser usada no canal.  Este
+	n√∫mero pode ser entre 2-20. O valor que X ir√° colocar ser√°: n√∫mero de utilizadores
+	no canal + FLOATMARGIN. O valor configurado de origem √© 3.
 
 		/msg x set <#canal> floatmargin <2-20>                                                                                                                                                                  
                                                                                                                                                                                                               
-	FLOATMAX  -  Configura  o  limite m·ximo de flutuaÁ„o.  Pode ser empregue qualquer
-	n˙mero  e  evita com que  X  mude  o limite de utilizadores no canal para um valor
-	superior ao aqui configurado.  Como tal,  È possÌvel limitar em qualquer altura  o
-	n˙mero  de  utilizadores que  se  pretenda ter num canal.  O valor configurado  de
-	origem È 0, o qual desliga a funÁ„o.
+	FLOATMAX  -  Configura  o  limite m√°ximo de flutua√ß√£o.  Pode ser empregue qualquer
+	n√∫mero  e  evita com que  X  mude  o limite de utilizadores no canal para um valor
+	superior ao aqui configurado.  Como tal,  √© poss√≠vel limitar em qualquer altura  o
+	n√∫mero  de  utilizadores que  se  pretenda ter num canal.  O valor configurado  de
+	origem √© 0, o qual desliga a fun√ß√£o.
                                                                                                                                                                                                               
 		/msg x set <#canal> floatmax <0 | max limit desired>                                                                                                                                                    
                                                                                                                                                                                                               
-	FLOATPERIOD - Configura o perÌodo limite de flutuaÁ„o, em segundos, para ser usado
+	FLOATPERIOD - Configura o per√≠odo limite de flutua√ß√£o, em segundos, para ser usado
 	antes de  X  retomar o limite do canal.  Este valor pode ser entre 20-200. O valor
-	configurado de origem È de 20 segundos.                                                                                                                                                 
+	configurado de origem √© de 20 segundos.                                                                                                                                                 
                                                                                                                                                                                                               
 		/msg x set <#canal> floatperiod <20-200>                                                                                                                                                                
 
-	KEYWORDS  -  (palavras-chave)  Regista palavras-chave para o canal que poder„o ser
-	usadas na execuÁ„o do comando de busca de canais  SEARCH  (nÌvel 0).  Caso nenhuma
-	palavra-chave seja especificada o valor de KEYWORDS torna-se nulo. O limite m·ximo
-	de caracteres no conjunto de palavras-chave n„o pode exceder 80.
+	KEYWORDS  -  (palavras-chave)  Regista palavras-chave para o canal que poder√£o ser
+	usadas na execu√ß√£o do comando de busca de canais  SEARCH  (n√≠vel 0).  Caso nenhuma
+	palavra-chave seja especificada o valor de KEYWORDS torna-se nulo. O limite m√°ximo
+	de caracteres no conjunto de palavras-chave n√£o pode exceder 80.
 
 		/msg x set <#canal> keywords [text]
 
@@ -161,27 +161,27 @@ SET - (fixar) Muda modos especiais de X para o canal.
 
 		/msg x set <#canal> mode
 
-	URL  - (Uniform Resource Locator - endereÁo na web) Regista o(s) endereÁo(s) da(s)
-	p·gina(s) oficiais  do  canal (75 caracteres no m·ximo).  S„o  permitidos espaÁos,
-	possibilitando par‚metros de  URL  m˙ltiplos.  Isto N√O afecta o tÛpico do canal a
-	menos que AUTOTOPIC se encontre ON (nÌvel 450).  A descriÁ„o de DESCRIPTION  e URL
-	pode ser vista usando o comando CHANINFO (nÌvel 0).
-	Se o URL n„o definido o seu valor torna-se nulo.
+	URL  - (Uniform Resource Locator - endere√ßo na web) Regista o(s) endere√ßo(s) da(s)
+	p√°gina(s) oficiais  do  canal (75 caracteres no m√°ximo).  S√£o  permitidos espa√ßos,
+	possibilitando par√¢metros de  URL  m√∫ltiplos.  Isto N√ÉO afecta o t√≥pico do canal a
+	menos que AUTOTOPIC se encontre ON (n√≠vel 450).  A descri√ß√£o de DESCRIPTION  e URL
+	pode ser vista usando o comando CHANINFO (n√≠vel 0).
+	Se o URL n√£o definido o seu valor torna-se nulo.
 
 		/msg x set <#canal> url [url url2 ... urlN]
 
 
-	USERFLAGS   -  (indicadores do utilizador)   Determina  quando  X  deva ou n„o dar
+	USERFLAGS   -  (indicadores do utilizador)   Determina  quando  X  deva ou n√£o dar
 	automaticamente OP  ou  VOICE  a  todos os novos utilizadores registados no canal.
-	NOTA:  esta opÁ„o pode ser alterada para cada utilizador  e  apÛs  se encontrar na
-	lista de utilizadores com o comando  MODINFO AUTOMODE (nÌvel 400). O valor inicial
-	de USERFLAGS È 0
+	NOTA:  esta op√ß√£o pode ser alterada para cada utilizador  e  ap√≥s  se encontrar na
+	lista de utilizadores com o comando  MODINFO AUTOMODE (n√≠vel 400). O valor inicial
+	de USERFLAGS √© 0
 	
 
 	* Valores:
-		0 = N„o È activado AutoMode para nenhum utilizador adicionado.
-		1 = AutoMode de Op È activado para todos os utilizadores adicionados.
-		2 = AutoMode de Voice È activado para todos os utilizadores adicionados.
+		0 = N√£o √© activado AutoMode para nenhum utilizador adicionado.
+		1 = AutoMode de Op √© activado para todos os utilizadores adicionados.
+		2 = AutoMode de Voice √© activado para todos os utilizadores adicionados.
 
 		/msg x set <#canal> userflags <0-2>
 
@@ -192,11 +192,11 @@ JOIN (entrar) - Faz com que X entre no canal especificado.
 
 
 ------------------------------------------------------------------------------------------
-NÕVEIS 400-449 : AdministraÁ„o de Utilizadores (Userlist Admin)
+N√çVEIS 400-449 : Administra√ß√£o de Utilizadores (Userlist Admin)
 ------------------------------------------------------------------------------------------
 
-ADDUSER - (adicionar utilizador) Adiciona um utilizador · lista de utilizadores (userlist)
-	do canal.  N„o pode ser usado  ADDUSER para alguÈm com um nÌvel de acesso igual ou
+ADDUSER - (adicionar utilizador) Adiciona um utilizador √° lista de utilizadores (userlist)
+	do canal.  N√£o pode ser usado  ADDUSER para algu√©m com um n√≠vel de acesso igual ou
 	superior a quem executa o comando.
 
 		/msg x adduser <#canal> <username> <access>
@@ -204,90 +204,90 @@ ADDUSER - (adicionar utilizador) Adiciona um utilizador · lista de utilizadores 
 
 CLEARMODE  -  (limpar modos) Remove todos os modos de canal. Pode ser usado quando o canal
 	se encontra bloqueado (+i ou +k sem o seu conhecimento). NOTA:  o uso de CLEARMODE
-	n„o È necessariamente o melhor mÈtodo de reentrar no canal,  porque outras pessoas
-	ou bots poder„o aproveitar  o  momento de execuÁ„o do comando para obter OP. Ver o
-	comando STATUS (nÌvel 200) para informaÁ„o adicional.
+	n√£o √© necessariamente o melhor m√©todo de reentrar no canal,  porque outras pessoas
+	ou bots poder√£o aproveitar  o  momento de execu√ß√£o do comando para obter OP. Ver o
+	comando STATUS (n√≠vel 200) para informa√ß√£o adicional.
 
 		/msg x clearmode <#canal>
 
 
-MODINFO  -  (modificar informaÁ„o)  Executa alteraÁıes em utilizadores que se encontrem na
+MODINFO  -  (modificar informa√ß√£o)  Executa altera√ß√µes em utilizadores que se encontrem na
 	userlist.
 
-		/msg x modinfo <#canal> <vari·vel> <username> <valor>
+		/msg x modinfo <#canal> <vari√°vel> <username> <valor>
 
-	S„o possÌveis os seguintes comandos:
-	* vari·veis para MODINFO
+	S√£o poss√≠veis os seguintes comandos:
+	* vari√°veis para MODINFO
 
-	ACCESS  -  (acesso) Muda o nÌvel de acesso do utilizador. O nÌvel de acesso poder·
-	ser de 1 a 499. Quem execute o comando apenas pode dar um nÌvel de acesso inferior
-	ao seu, ou seja, se tem um nÌvel de acesso de 400 apenas poder· dar acesso a outro
-	utilizador entre/inclusivÈ 1 e 399.
+	ACCESS  -  (acesso) Muda o n√≠vel de acesso do utilizador. O n√≠vel de acesso poder√°
+	ser de 1 a 499. Quem execute o comando apenas pode dar um n√≠vel de acesso inferior
+	ao seu, ou seja, se tem um n√≠vel de acesso de 400 apenas poder√° dar acesso a outro
+	utilizador entre/inclusiv√© 1 e 399.
 
-		/msg x modinfo <#canal> access <username> <novo nÌvel>
+		/msg x modinfo <#canal> access <username> <novo n√≠vel>
 
-	AUTOMODE - (modo autom·tico)  Muda os modos autom·ticos do utilizador para o canal
-	especificado, fazendo com que X dÍ ou n„o OP ou VOICE ao utilizador logo que entre
+	AUTOMODE - (modo autom√°tico)  Muda os modos autom√°ticos do utilizador para o canal
+	especificado, fazendo com que X d√™ ou n√£o OP ou VOICE ao utilizador logo que entre
 	no canal, desde que se encontre autenticado.  <NONE>  anula o comando, ou seja,  X
-	n„o altera os modos de OP e VOICE quando o utilizador entra no canal. Este comando
-	altera o definido na configuraÁ„o base para todos os utilizadores em SET USERFLAGS
-	(nÌveis 450-499).
+	n√£o altera os modos de OP e VOICE quando o utilizador entra no canal. Este comando
+	altera o definido na configura√ß√£o base para todos os utilizadores em SET USERFLAGS
+	(n√≠veis 450-499).
 
 		/msg x modinfo <#canal> automode <username> <none|op|voice>
 
 
-REMUSER  -  (remoÁ„o de utilizador)  Remove um utilizador da base de dados do canal.  Quem
-	execute o comando ter· que possuir um nÌvel de acesso superior ao do utilizador  a
-	ser removido.  Um utilizador autenticado poder· remover-se a si prÛprio  com  este
-	comando. Gerentes de canal  (nÌvel 500)  que pretendam remover-se ter„o que purgar
+REMUSER  -  (remo√ß√£o de utilizador)  Remove um utilizador da base de dados do canal.  Quem
+	execute o comando ter√° que possuir um n√≠vel de acesso superior ao do utilizador  a
+	ser removido.  Um utilizador autenticado poder√° remover-se a si pr√≥prio  com  este
+	comando. Gerentes de canal  (n√≠vel 500)  que pretendam remover-se ter√£o que purgar
 	o canal.
   
 		/msg x remuser <#canal> <username>
 
 
 ------------------------------------------------------------------------------------------
-NÕVEL 200 : Operador de Utilizadores (Userlist Op)
+N√çVEL 200 : Operador de Utilizadores (Userlist Op)
 ------------------------------------------------------------------------------------------
 
-KICK - (repelir, pontapÈ) Faz com que X expulse momentaneamente os utilizadores abrangidos
-	pelo *!*user@*.host especificado. O comando n„o afecta a pessoa que o executa caso
-	o *!*user@*.host  abranja a sua m·scara.  Quando aplicado de forma a abranger mais
-	que um utilizador,  o  comando deve ser executado com prudÍncia, como exemplo,  em
-	em situaÁıes de 'flood' extremo ou 'clones'. Para prevenir que os  utilizadores  a
-	quem se deu o  KICK  voltem ao canal dever· ser· aplicado um ban  ·s  m·scaras (ou
-	colocar o canal em 'invite' (+i) em situaÁıes extremas)  antes de executar o KICK.
+KICK - (repelir, pontap√©) Faz com que X expulse momentaneamente os utilizadores abrangidos
+	pelo *!*user@*.host especificado. O comando n√£o afecta a pessoa que o executa caso
+	o *!*user@*.host  abranja a sua m√°scara.  Quando aplicado de forma a abranger mais
+	que um utilizador,  o  comando deve ser executado com prud√™ncia, como exemplo,  em
+	em situa√ß√µes de 'flood' extremo ou 'clones'. Para prevenir que os  utilizadores  a
+	quem se deu o  KICK  voltem ao canal dever√° ser√° aplicado um ban  √°s  m√°scaras (ou
+	colocar o canal em 'invite' (+i) em situa√ß√µes extremas)  antes de executar o KICK.
 
-		/msg x kick <#canal> <nick | *!*user@*.host> [raz„o]
+		/msg x kick <#canal> <nick | *!*user@*.host> [raz√£o]
 
 
-STATUS  - (estatuto) Mostra a configuraÁ„o de X para o canal especificado, modos do canal,
-	n˙mero de utilizadores e ops,  quem se encontra autenticado e se X se encontra  ou
-	n„o no canal. A informaÁ„o respeitante aos utilizadores autenticados È mostrada no
-	formato "username/nickname [nÌvel]".  O nick È tambÈm visÌvel caso esse utilizador
-	se encontre no canal, de contr·rio, apenas È mostrado o username e o seu nÌvel  de
-	acesso. A possibilidade de ver os modos de canal È extremamente ˙til em  situaÁıes
+STATUS  - (estatuto) Mostra a configura√ß√£o de X para o canal especificado, modos do canal,
+	n√∫mero de utilizadores e ops,  quem se encontra autenticado e se X se encontra  ou
+	n√£o no canal. A informa√ß√£o respeitante aos utilizadores autenticados √© mostrada no
+	formato "username/nickname [n√≠vel]".  O nick √© tamb√©m vis√≠vel caso esse utilizador
+	se encontre no canal, de contr√°rio, apenas √© mostrado o username e o seu n√≠vel  de
+	acesso. A possibilidade de ver os modos de canal √© extremamente √∫til em  situa√ß√µes
 	em que o canal se encontra +k, (fechado com palavra-chave (keyed mode))  visto ser
-	possÌvel verificar qual a chave em uso.  O  STATUS funciona estando  ou  n„o o bot
+	poss√≠vel verificar qual a chave em uso.  O  STATUS funciona estando  ou  n√£o o bot
 	X no canal. STATUS produz os mesmos resultados que o comando com  o  mesmo nome no
-	nÌvel de  acesso  1-24,  · excepÁ„o dos modos  de  canal   (+nt etc.)  que n„o s„o
-	visÌveis. 
+	n√≠vel de  acesso  1-24,  √° excep√ß√£o dos modos  de  canal   (+nt etc.)  que n√£o s√£o
+	vis√≠veis. 
 
 		/msg x status <#canal>
 
 
 ------------------------------------------------------------------------------------------
-NÕVEIS 100-399 : Operador de Canal (Channel Operator)
+N√çVEIS 100-399 : Operador de Canal (Channel Operator)
 ------------------------------------------------------------------------------------------
 
 DEOP  - ("desOPar", retirar OPerador) Faz DEOP a uma ou mais pessoas no canal. Se nenhum
-	nick È especificado, X faz DEOP a quem executa o comando (caso se encontre em OP).
-	NOTA: ter em atenÁ„o o limite estipulado em SET MASSDEOPPRO (nÌvel 500).
+	nick √© especificado, X faz DEOP a quem executa o comando (caso se encontre em OP).
+	NOTA: ter em aten√ß√£o o limite estipulado em SET MASSDEOPPRO (n√≠vel 500).
 
 		/msg x deop <#canal> [nick] [nick2] ... [nickN]
 
 
-OP  -   (OPerador)  D· OP a uma ou mais pessoas no canal.  Se nenhum nick  È  especificado
-	X d· OP a quem executa o comando. 
+OP  -   (OPerador)  D√° OP a uma ou mais pessoas no canal.  Se nenhum nick  √©  especificado
+	X d√° OP a quem executa o comando. 
 
 		/msg x op <#canal> [nick] [nick2] ... [nickN]
 
@@ -298,89 +298,89 @@ INVITE - (convite) Faz com que X convide para o canal  quem execute o comando.
 
 
 SUSPEND  -  (suspender)  Faz com que seja suspenso  o  acesso  a X ao utilizador registado
-	pelo perÌodo de tempo especificado.  O perÌodo m·ximo de suspens„o  È  de 372 dias
-	(8928 horas, 535680 minutos).  N„o sendo especificado um  [nÌvel]  na suspens„o, È
-	automaticamente aplicado  o  nÌvel de acesso de quem execute o comando.  Apenas  È
-	possÌvel aplicar SUSPEND a alguÈm com um nÌvel de acesso inferior  a quem  execute
+	pelo per√≠odo de tempo especificado.  O per√≠odo m√°ximo de suspens√£o  √©  de 372 dias
+	(8928 horas, 535680 minutos).  N√£o sendo especificado um  [n√≠vel]  na suspens√£o, √©
+	automaticamente aplicado  o  n√≠vel de acesso de quem execute o comando.  Apenas  √©
+	poss√≠vel aplicar SUSPEND a algu√©m com um n√≠vel de acesso inferior  a quem  execute
 	o comando
   
 	* Valores de Tempo: D = dias
                 H = horas
                 M = minutos
 
-		/msg x suspend <#canal> <username> <duraÁ„o> [nÌvel]
-	* Exemplo de duraÁ„o: "5 d" = 5 dias (escrever sem as aspas)
+		/msg x suspend <#canal> <username> <dura√ß√£o> [n√≠vel]
+	* Exemplo de dura√ß√£o: "5 d" = 5 dias (escrever sem as aspas)
 
 
-UNSUSPEND - (retirar suspens„o)  Retira a suspens„o de acesso a X aplicada a um utilizador
-	que esteja na lista de utilizadores do canal. Apenas  È possÌvel aplicar UNSUSPEND
-	a alguÈm com um nÌvel de acesso inferior a quem  execute o comando
+UNSUSPEND - (retirar suspens√£o)  Retira a suspens√£o de acesso a X aplicada a um utilizador
+	que esteja na lista de utilizadores do canal. Apenas  √© poss√≠vel aplicar UNSUSPEND
+	a algu√©m com um n√≠vel de acesso inferior a quem  execute o comando
    
 		/msg x unsuspend <#canal> <username>
 
 
 ------------------------------------------------------------------------------------------
-NÕVEIS 75-99 : Novo OPerador de Canal (New Channel Operator)
+N√çVEIS 75-99 : Novo OPerador de Canal (New Channel Operator)
 ------------------------------------------------------------------------------------------
 
-BAN  -  (banir) Adiciona o *!*user@*.host especificado · lista de bans do canal.  Pode ser
+BAN  -  (banir) Adiciona o *!*user@*.host especificado √° lista de bans do canal.  Pode ser
 	feito o BAN a um nick caso a pessoa se encontra ligada no IRC  (X  automaticamente
-	determina o *!*user@*.host) ou usando a m·scara (*!*user@*.host) caso a pessoa n„o
-	se encontre ligada.  Qualquer BAN anteriormente aplicado È substituÌdo  por  outro
+	determina o *!*user@*.host) ou usando a m√°scara (*!*user@*.host) caso a pessoa n√£o
+	se encontre ligada.  Qualquer BAN anteriormente aplicado √© substitu√≠do  por  outro
 	que seja feito a abranger o *!*user@*.host  de uma forma mais global (por exemplo,
 	um ban a  *!*@*.123 substitui todos os existentes dados a *!*user@*.123 ou, um ban
 	a *!*@*.123 substitui todos os existentes dados a *!*ABC@*.123).
 	X aplica automaticamente um  KICK  a qualquer utilizador no canal abrangido por um
-	BAN de [nÌvel]  igual ou superior a 75.
-	A [duraÁ„o] deve ser especificada em horas, sendo o m·ximo possÌvel de  336  horas
-	(2 semanas); quando n„o especificado, o perÌodo de [duraÁ„o] È de 3 horas.
-	O [nÌvel] de BAN vai de 1 ao nÌvel (n˙mero) de acesso imediatamente abaixo de quem
-	execute o comando;  quando n„o especificado È aplicado ao BAN um [nÌvel] de 75.  A
-	[raz„o] poder· ter no m·ximo 128 caracteres;  quando n„o especificada È aplicada a
+	BAN de [n√≠vel]  igual ou superior a 75.
+	A [dura√ß√£o] deve ser especificada em horas, sendo o m√°ximo poss√≠vel de  336  horas
+	(2 semanas); quando n√£o especificado, o per√≠odo de [dura√ß√£o] √© de 3 horas.
+	O [n√≠vel] de BAN vai de 1 ao n√≠vel (n√∫mero) de acesso imediatamente abaixo de quem
+	execute o comando;  quando n√£o especificado √© aplicado ao BAN um [n√≠vel] de 75.  A
+	[raz√£o] poder√° ter no m√°ximo 128 caracteres;  quando n√£o especificada √© aplicada a
 	mensagem de "No Reason".
 
-	* NÌveis de BAN: 1-74 = Impede o utilizador de ter OP (+o) no canal.
+	* N√≠veis de BAN: 1-74 = Impede o utilizador de ter OP (+o) no canal.
                75+ = Impede o utilizador de permanecer ou entrar no canal.
 
-		/msg x ban <#canal> <nick | *!*user@*.host> [duraÁ„o] [nÌvel] [raz„o]
+		/msg x ban <#canal> <nick | *!*user@*.host> [dura√ß√£o] [n√≠vel] [raz√£o]
 
 
 UNBAN - (retirar ban)  Remove um  BAN  da lista de bans de X e da lista de bans activos no
-	canal  especificado.  Apenas podem ser removidos bans de nÌvel de acesso igual  ou
+	canal  especificado.  Apenas podem ser removidos bans de n√≠vel de acesso igual  ou
 	inferior ao de quem executa o comando.  Pode ser feito UNBAN a um nick se a pessoa
-	se encontra ligada com a m·scara que tinha aquando do BAN  (X automaticamente  faz
+	se encontra ligada com a m√°scara que tinha aquando do BAN  (X automaticamente  faz
 	uma busca (lookup) ao *!*user@*.host desse nick na lista de bans). Pode igualmente
 	ser feito o UNBAN usando  o  *!*user@*.host  exactamente igual  ao que se encontra
-	registado na lista de bans caso a pessoa n„o se encontre ligada.
-	Para procurar bans na lista de bans de X ver o comando LBANLIST (nÌvel 0).
+	registado na lista de bans caso a pessoa n√£o se encontre ligada.
+	Para procurar bans na lista de bans de X ver o comando LBANLIST (n√≠vel 0).
 
 		/msg x unban <#canal> <nick | *!*user@*.host>
 
 
 ------------------------------------------------------------------------------------------
-NÕVEIS 50-74 :  Utilizador de ConfianÁa no Canal (Trusted Channel Regular)
+N√çVEIS 50-74 :  Utilizador de Confian√ßa no Canal (Trusted Channel Regular)
 ------------------------------------------------------------------------------------------
 
-KICK  - (repelir,  pontapÈ)  Faz com que  X  aplique no canal um KICK a alguÈm.  A raz„o È
-	facultativa. O nick de	quem executa o comando È colocado na mensagem de KICK.
+KICK  - (repelir,  pontap√©)  Faz com que  X  aplique no canal um KICK a algu√©m.  A raz√£o √©
+	facultativa. O nick de	quem executa o comando √© colocado na mensagem de KICK.
 
-		/msg x kick <#canal> <nick> [raz„o]
+		/msg x kick <#canal> <nick> [raz√£o]
 
 
-TOPIC - (tÛpico) Faz com que  X  mude o tÛpico no canal. Na descriÁ„o do tÛpico È incluÌdo
-	entre parÍntesis  o  username de quem  o  fez. O TOPIC tem um limite m·ximo de 145
+TOPIC - (t√≥pico) Faz com que  X  mude o t√≥pico no canal. Na descri√ß√£o do t√≥pico √© inclu√≠do
+	entre par√™ntesis  o  username de quem  o  fez. O TOPIC tem um limite m√°ximo de 145
 	caracteres. NOTA: se  DESCRIPTION  ou  URL  se encontram accionados e AUTOTOPIC se
-	encontra  ON,  o tÛpico do canal ser· mudado de 30  em  30 minutos para os valores
+	encontra  ON,  o t√≥pico do canal ser√° mudado de 30  em  30 minutos para os valores
 	nesses comandos descritos, a menos que o canal se encontre inactivo (idle).
 
 		/msg x topic <#canal> <topic>
 
 
 ------------------------------------------------------------------------------------------
-NÕVEIS 25-49 : Utilizador Activo no Canal (Channel Regular)
+N√çVEIS 25-49 : Utilizador Activo no Canal (Channel Regular)
 ------------------------------------------------------------------------------------------
 
-VOICE - (voz) D· VOICE  a um ou mais utilizadores no canal.
+VOICE - (voz) D√° VOICE  a um ou mais utilizadores no canal.
 
 		/msg x voice <#canal> [nick] [nick2] ... [nickN]
 
@@ -391,7 +391,7 @@ DEVOICE - Retira VOICE a um ou mais utilizadores no canal.
 
 
 ------------------------------------------------------------------------------------------
-NÕVEIS 1-24 : Acesso mÌnimo (Minimum Access)
+N√çVEIS 1-24 : Acesso m√≠nimo (Minimum Access)
 ------------------------------------------------------------------------------------------
 
 BANLIST - (lista de bans) Mostra a lista de bans do canal. O comando funciona estando quem
@@ -400,60 +400,60 @@ BANLIST - (lista de bans) Mostra a lista de bans do canal. O comando funciona es
 		/msg x banlist <#canal>
 
 
-STATUS - (estatuto)  Mostra  a  configuraÁ„o de  X  para  o  canal especificado, n˙mero de
+STATUS - (estatuto)  Mostra  a  configura√ß√£o de  X  para  o  canal especificado, n√∫mero de
 	utilizadores e ops, quem se encontre autenticado e se  X  se encontra no canal.  A
-	informaÁ„o  respeitante  aos  utilizadores  autenticados  È  mostrada  no  formato
-	"username/nickname [nÌvel]".  O nick È igualmente visÌvel caso esse utilizador  se
-	encontre no canal, de contr·rio, apenas o username e nÌvel de acesso s„o visÌveis.
+	informa√ß√£o  respeitante  aos  utilizadores  autenticados  √©  mostrada  no  formato
+	"username/nickname [n√≠vel]".  O nick √© igualmente vis√≠vel caso esse utilizador  se
+	encontre no canal, de contr√°rio, apenas o username e n√≠vel de acesso s√£o vis√≠veis.
 	Este comando funciona tanto com  X  no canal ou fora dele. STATUS produz os mesmos
-	resultados  que  o  comando com  o  mesmo nome para o nÌvel de acesso  200,  com a
-	excepÁ„o dos modos de canal (+nt etc.) que n„o s„o a este nÌvel visÌveis.
+	resultados  que  o  comando com  o  mesmo nome para o n√≠vel de acesso  200,  com a
+	excep√ß√£o dos modos de canal (+nt etc.) que n√£o s√£o a este n√≠vel vis√≠veis.
    
 		/msg x status <#canal>
 
 
 ------------------------------------------------------------------------------------------
-NÕVEL 0 : Todos os Utilizadores (Everyone else)
+N√çVEL 0 : Todos os Utilizadores (Everyone else)
 ------------------------------------------------------------------------------------------
 
 ACCESS - (acesso) Possibilita ver o registo/acesso de um utilizador ou dos dados colocados
-	nos par‚metros de busca.  No resultado do comando È incluÌdo o nÌvel de acesso  da
-	pessoa,  estatuto  de suspens„o  e  respectivo nÌvel caso  a  pessoa  se  encontre
-	suspensa, bem como a ˙ltima vez que o utilizador foi visto.  Para ver uma lista de
+	nos par√¢metros de busca.  No resultado do comando √© inclu√≠do o n√≠vel de acesso  da
+	pessoa,  estatuto  de suspens√£o  e  respectivo n√≠vel caso  a  pessoa  se  encontre
+	suspensa, bem como a √∫ltima vez que o utilizador foi visto.  Para ver uma lista de
 	todos os utilizadores registados no canal fazer:   /msg x access <#canal> *   Caso
 	haja mais que 15 itens, ir a   http://cservice.undernet.org/live/  fazer o login e
-	ver a lista completa em "Channel Information" apÛs se colocar o nome do canal. Nos
-	par‚metros  de  busca podem  ser  misturadas opÁıes  (abaixo descritas)  no  mesmo
-	comando, de forma a se obter resultados mais especÌficos.
+	ver a lista completa em "Channel Information" ap√≥s se colocar o nome do canal. Nos
+	par√¢metros  de  busca podem  ser  misturadas op√ß√µes  (abaixo descritas)  no  mesmo
+	comando, de forma a se obter resultados mais espec√≠ficos.
   
-	* OpÁıes de ACCESS:
+	* Op√ß√µes de ACCESS:
 
-	username - mostra o nÌvel de acesso de um utilizador.
+	username - mostra o n√≠vel de acesso de um utilizador.
 		/msg x access <#canal> <username>
 
-	-min <nÌvel>  -  mostra apenas utilizadores com um  nÌvel  de  acesso superior  ao
-		mencionado em <nÌvel>
+	-min <n√≠vel>  -  mostra apenas utilizadores com um  n√≠vel  de  acesso superior  ao
+		mencionado em <n√≠vel>
 		ao mencionado.
-		/msg x access <#canal> -min <nÌvel>
+		/msg x access <#canal> -min <n√≠vel>
 
-	-max <nÌvel>  -  mostra apenas utilizadores com um  nÌvel  de  acesso inferior  ao
-		ao mencionado em <nÌvel>.
-		/msg x access <#canal> -max <nÌvel>
+	-max <n√≠vel>  -  mostra apenas utilizadores com um  n√≠vel  de  acesso inferior  ao
+		ao mencionado em <n√≠vel>.
+		/msg x access <#canal> -max <n√≠vel>
 
-	-op - mostra apenas utilizadores com a opÁ„o de OP em AUTOMODE.
+	-op - mostra apenas utilizadores com a op√ß√£o de OP em AUTOMODE.
 		/msg x access <#canal> -op
 
-	-voice - mostra apenas utilizadores com a opÁ„o de VOICE em AUTOMODE.
+	-voice - mostra apenas utilizadores com a op√ß√£o de VOICE em AUTOMODE.
 		/msg x access <#canal> -voice
 
-	-none - mostra apenas utilizadores sem opÁ„o mencionada (NONE) em AUTOMODE.
+	-none - mostra apenas utilizadores sem op√ß√£o mencionada (NONE) em AUTOMODE.
 		/msg x access <#canal> -none
 
-	-modif - mostra quem alterou a ˙ltima vez a lista de acesso.
+	-modif - mostra quem alterou a √∫ltima vez a lista de acesso.
 		/msg x access <#canal> -modif
 
 
-CHANINFO - (informaÁ„o de canal) Mostra se um canal se encontra registado, o  seu  Gerente
+CHANINFO - (informa√ß√£o de canal) Mostra se um canal se encontra registado, o  seu  Gerente
 	e o que eventualmente se encontre mencionado em DESCRIPTION e URL.
 	Alias: INFO
 
@@ -462,35 +462,35 @@ CHANINFO - (informaÁ„o de canal) Mostra se um canal se encontra registado, o  se
 		/msg x info <#canal>
 
 
-HELP - (ajuda) Mostra informaÁ„o sobre o comando dado.
+HELP - (ajuda) Mostra informa√ß√£o sobre o comando dado.
 
 		/msg x help [comando]
 
 
-INFO - (informaÁ„o)  Mostra a informaÁ„o de um username, nomeadamente o respectivo nick  e
-	user@host, caso se encontre ligado no IRC, a lÌngua (LANG -nÌvel 0),  configuraÁ„o
-	do  modo INVISIBLE (invisÌvel), quando foi pela ˙ltima vez visto e se est· suspenso
+INFO - (informa√ß√£o)  Mostra a informa√ß√£o de um username, nomeadamente o respectivo nick  e
+	user@host, caso se encontre ligado no IRC, a l√≠ngua (LANG -n√≠vel 0),  configura√ß√£o
+	do  modo INVISIBLE (invis√≠vel), quando foi pela √∫ltima vez visto e se est√° suspenso
 	por um Administrador do CService.   Quando dirigido a quem executa o comando mostra
-	tambÈm o endereÁo de email registado,  o  ˙ltimo hostmask (formato nick!userid@host) 	usado com que o username se encontrava ligado e mostra a lista de canais a que tenha 	acesso (apenas o CService  e  quem execute o comando pode ver essa informaÁ„o,  n„o
-	outros utilizadores).  Quem pretenda que a sua informaÁ„o n„o seja visÌvel a outros
-	ver o comando  SET INVISIBLE (nÌvel 0).
+	tamb√©m o endere√ßo de email registado,  o  √∫ltimo hostmask (formato nick!userid@host) 	usado com que o username se encontrava ligado e mostra a lista de canais a que tenha 	acesso (apenas o CService  e  quem execute o comando pode ver essa informa√ß√£o,  n√£o
+	outros utilizadores).  Quem pretenda que a sua informa√ß√£o n√£o seja vis√≠vel a outros
+	ver o comando  SET INVISIBLE (n√≠vel 0).
 
 		/msg x info <username>
 
 
 LBANLIST - (listar bans)  Procura bans na lista de bans de X para o canal mencionado. Usar
 	um asterisco  (*)  paraver  a  lista completa ou especificar  *!*user@*.host  para
-	encontrar um ban especÌfico.
+	encontrar um ban espec√≠fico.
 	Caso haja mais que 15 itens ir a  http://cservice.undernet.org/live/ fazer o login
-	e ver uma lista completa dos bans carregando em "Channel Information" apÛs colocar
+	e ver uma lista completa dos bans carregando em "Channel Information" ap√≥s colocar
 	o respectivo canal.
 
 		/msg x lbanlist <#canal> <* | *!*user@*.host>
 
 
 LOGIN - (ligar)  Autentica quem  executa  o  comando em todos os canais que possua acesso,
-	simultaneamente, sendo colocada  a  sua informaÁ„o registada  na  base de dados do
-	CService em memÛria.
+	simultaneamente, sendo colocada  a  sua informa√ß√£o registada  na  base de dados do
+	CService em mem√≥ria.
  
 		/msg x@channels.undernet.org login <username> <senha>
 
@@ -501,106 +501,106 @@ MOTD - (Message Of  The Day - mensagem do dia) Mostra a mensagem do dia de X.
 
 
 NEWPASS - (nova password - senha) Possibilita ao utilizador mudar a senha ao seu username.
-	Dever· estar autenticado com a senha antiga para executar este comando. NOTA: 1-As
-	senhas s„o sensÌveis ao formato do que se escreve; por exemplo:	"CService" n„o È o
+	Dever√° estar autenticado com a senha antiga para executar este comando. NOTA: 1-As
+	senhas s√£o sens√≠veis ao formato do que se escreve; por exemplo:	"CService" n√£o √© o
 	mesmo que "cservice" 2-As senhas podem conter mais que uma palavra, possibilitando
 	assim escrever uma frase ou grupo de palavras, aumentando  a  dificuldade em serem
-	decifr·veis. Por exemplo, uma senha pode ser: "Undernet Channel Service".
-	Aconselhamos que se faÁa uso desta faculdade.
-	As senhas n„o devem exceder 50 caracteres.
+	decifr√°veis. Por exemplo, uma senha pode ser: "Undernet Channel Service".
+	Aconselhamos que se fa√ßa uso desta faculdade.
+	As senhas n√£o devem exceder 50 caracteres.
 
 		/msg x@channels.undernet.org newpass <nova senha>
 
 
-REMUSER - (remover utilizador) Executa a remoÁ„o do utilizador da lista de utilizadores no
-	canal especificado.  O comando executado neste nÌvel de acesso apenas  possibilita
-	a remoÁ„o do prÛprio utilizador que  o  executa, desde que n„o seja  o  Gerente de
-	Canal (nÌvel 500). Este, caso se queira remover, ter· que purgar o canal.
+REMUSER - (remover utilizador) Executa a remo√ß√£o do utilizador da lista de utilizadores no
+	canal especificado.  O comando executado neste n√≠vel de acesso apenas  possibilita
+	a remo√ß√£o do pr√≥prio utilizador que  o  executa, desde que n√£o seja  o  Gerente de
+	Canal (n√≠vel 500). Este, caso se queira remover, ter√° que purgar o canal.
 
 		/msg x remuser <#canal> <seu username>
 
 
-SEARCH  -  (procurar)   Faz com que X procure  e  liste canais cujos par‚metros  de  busca
-	abranjam o grupo de palavras-chave no canal, caso existam. N„o È necess·rio o  uso
-	de indicadores genÈricos de busca (wildcards - *, ?, etc).
+SEARCH  -  (procurar)   Faz com que X procure  e  liste canais cujos par√¢metros  de  busca
+	abranjam o grupo de palavras-chave no canal, caso existam. N√£o √© necess√°rio o  uso
+	de indicadores gen√©ricos de busca (wildcards - *, ?, etc).
 
-		/msg x search <par‚metro de busca>
+		/msg x search <par√¢metro de busca>
 
 
 SET - (fixar) Muda modos especiais para o seu username.
 
-		/msg x set <vari·vel> <valor>
+		/msg x set <vari√°vel> <valor>
 
-	* Vari·veis e Valores:
+	* Vari√°veis e Valores:
 
-	INVISIBLE - (invisÌvel)  Comando pessoal que permite tornar visÌvel ou invisÌvel a
-	informaÁ„o do username a outros utilizadores, obtida com o comando INFO.
-	Para pormenores sobre a informaÁ„o disponÌvel ver o comando INFO (nÌvel 0).
+	INVISIBLE - (invis√≠vel)  Comando pessoal que permite tornar vis√≠vel ou invis√≠vel a
+	informa√ß√£o do username a outros utilizadores, obtida com o comando INFO.
+	Para pormenores sobre a informa√ß√£o dispon√≠vel ver o comando INFO (n√≠vel 0).
 
 		/msg x set invisible <on|off>
 
-	LANG - (lÌngua) Muda a lÌngua em que X lhe responde.
+	LANG - (l√≠ngua) Muda a l√≠ngua em que X lhe responde.
 
 		/msg x set lang <language code>
 
-	LÌnguas disponÌveis:
-	.CÛdigo - LÌngua
-	∑ ar - Arabic
-	∑ ca - Catalan
-	∑ de - German	*
-	∑ dk - Danish
-	∑ en - English
-	∑ es - Spanish
-	∑ fr - French
-	∑ hu - Hungarian
-	∑ it - Italian
-	∑ nl - Dutch	*
-	∑ no - Norwegian
-	∑ pt - PortuguÍs *
-	∑ ro - Romanian
-	∑ tr - Turkish
-	  * = estas lÌnguas n„o se encontram disponÌveis mas contamos incluÌ-las em breve.
+	L√≠nguas dispon√≠veis:
+	.C√≥digo - L√≠ngua
+	¬∑ ar - Arabic
+	¬∑ ca - Catalan
+	¬∑ de - German	*
+	¬∑ dk - Danish
+	¬∑ en - English
+	¬∑ es - Spanish
+	¬∑ fr - French
+	¬∑ hu - Hungarian
+	¬∑ it - Italian
+	¬∑ nl - Dutch	*
+	¬∑ no - Norwegian
+	¬∑ pt - Portugu√™s *
+	¬∑ ro - Romanian
+	¬∑ tr - Turkish
+	  * = estas l√≠nguas n√£o se encontram dispon√≠veis mas contamos inclu√≠-las em breve.
 
 
 SHOWCOMMANDS  -  (mostrar comandos)  Mostra todos os comandos que se pode usar  num  canal
-	consoante o nÌvel de acesso  de  quem  execute o comando.  Caso nenhum canal  seja
-	especificado ser„o mostrados apenas os comandos de nÌvel de acesso 0.
+	consoante o n√≠vel de acesso  de  quem  execute o comando.  Caso nenhum canal  seja
+	especificado ser√£o mostrados apenas os comandos de n√≠vel de acesso 0.
 
 		/msg x showcommands [#canal]
 
 
 SHOWIGNORE - (mostrar ignorados) Mostra a lista de utilizadores ignorados por X. 'Ignores'
-	s„o accionados quando alguÈm, intencionalmente ou n„o, faÁa um 'flood' a X.
-	Tem uma duraÁ„o limite de 60 minutos.
+	s√£o accionados quando algu√©m, intencionalmente ou n√£o, fa√ßa um 'flood' a X.
+	Tem uma dura√ß√£o limite de 60 minutos.
 
 		/msg x showignore
 
 
-SUPPORT  -  (apoio)  Um mÈtodo alternativo que permite  a  um  utilizador mencionado  como
+SUPPORT  -  (apoio)  Um m√©todo alternativo que permite  a  um  utilizador mencionado  como
 	apoiante num registo de canal poder enquanto ligado no IRC confirmar ou recusar  o
-	seu apoio a esse registo. ApÛs autenticaÁ„o (ver LOGIN - nÌvel 0), X envia-lhe uma
-	notificaÁ„o com  a  informaÁ„o do eventual registo  de  canal no qual  se encontra
+	seu apoio a esse registo. Ap√≥s autentica√ß√£o (ver LOGIN - n√≠vel 0), X envia-lhe uma
+	notifica√ß√£o com  a  informa√ß√£o do eventual registo  de  canal no qual  se encontra
 	mencionado como apoiante, bem como  o  informa do sintaxe deste comando (SUPPORT).
-	O comando n„o funciona caso o utilizador que o execute n„o se encontre  mencionado
-	num pedido de registo como apoiante ou o canal n„o possua registo pendente.
-	Alternativamente, poder· ver mais informaÁ„o sobre esse pedido de registo na  web,
+	O comando n√£o funciona caso o utilizador que o execute n√£o se encontre  mencionado
+	num pedido de registo como apoiante ou o canal n√£o possua registo pendente.
+	Alternativamente, poder√° ver mais informa√ß√£o sobre esse pedido de registo na  web,
 	em   http://cservice.undernet.org/live/  (fazer o login e em "Check App" colocar o
-	nome do canal em causa).  Poder· tambÈm  a  partir daÌ colocar  alguma  objecÁ„o ·
-	formaÁ„o do canal com o registo pendente.
+	nome do canal em causa).  Poder√° tamb√©m  a  partir da√≠ colocar  alguma  objec√ß√£o √°
+	forma√ß√£o do canal com o registo pendente.
 
 		/msg x support <#canal> <yes|no>
 
 
 VERIFY - (verificar) Mostra se uma pessoa se encontra autenticada e, caso positivo, mostra
-	o  username  e  indica se  È  ou n„o um Administrador ou Representante Oficial  do
+	o  username  e  indica se  √©  ou n√£o um Administrador ou Representante Oficial  do
 	CService e/ou Operador de IRC.
 
 		/msg x verify <nick>
 
 ------------------------------------------------------------------------------------------
 Este documento foi elaborado e actualizado a 10 de Janeiro de 2001 por LuizCB aka Pincel
-Alguma falha ou incorrecÁ„o escrever e-mail a Pincel@pincel.net
-Este ficheiro È mantido pelo Comitee do CService da Undernet
-Para sugestıes ou coment·rios enviar e-mail a cservice@undernet.org
+Alguma falha ou incorrec√ß√£o escrever e-mail a Pincel@pincel.net
+Este ficheiro √© mantido pelo Comitee do CService da Undernet
+Para sugest√µes ou coment√°rios enviar e-mail a cservice@undernet.org
 ------------------------------------------------------------------------------------------
 

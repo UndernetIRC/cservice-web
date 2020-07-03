@@ -456,20 +456,20 @@ MEGJEGYZESEK:
 
      Jelenlegi nyelvek:
      Kod - Nyelv
-     · ar - Arab
-     · ca - Katalan
-     · de - Nemet	*
-     · dk - Dan
-     · en - Angol
-     · es - Spanyol
-     · fr - Francia
-     · hu - Magyar
-     · it - Olasz
-     · nl - Flamand	*
-     · no - Norveg
-     · pt - Portugal	*
-     · ro - Roman
-     · tr - Torok
+     Â· ar - Arab
+     Â· ca - Katalan
+     Â· de - Nemet	*
+     Â· dk - Dan
+     Â· en - Angol
+     Â· es - Spanyol
+     Â· fr - Francia
+     Â· hu - Magyar
+     Â· it - Olasz
+     Â· nl - Flamand	*
+     Â· no - Norveg
+     Â· pt - Portugal	*
+     Â· ro - Roman
+     Â· tr - Torok
 
      * = Ezek a nyelvek meg nem hasznalhatok, de tervunkben all hogy tamogassuk oket.
 

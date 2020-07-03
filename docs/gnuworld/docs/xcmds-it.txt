@@ -12,31 +12,31 @@ COMANDI DI LIVELLO 500 : Channel Manager
 
    * Variabili e Valori:
 
-   AUTOJOIN - Quando Ë impostato su ON, fa in modo che X entri sempre 
-nel canale. Quando Ë impostato
-                          su OFF, X abbandoner‡ il canale e non entrer‡ 
+   AUTOJOIN - Quando √® impostato su ON, fa in modo che X entri sempre 
+nel canale. Quando √® impostato
+                          su OFF, X abbandoner√† il canale e non entrer√† 
 dopo un netsplit.
 
     /msg X set <#canale> autojoin <on|off>
 
    MASSDEOPPRO - Il numero massimo di KICK, TOPIC e MODE che possono 
 essere settati in un periodo di 15
-                                  secondi. Ogni utente che superer‡ 
-questo limite verr‡ kikkato, sospeso (se fa parte della userlist)
-                                  e un ban di livello 25 gli verr‡ 
+                                  secondi. Ogni utente che superer√† 
+questo limite verr√† kikkato, sospeso (se fa parte della userlist)
+                                  e un ban di livello 25 gli verr√† 
 settato per evitare di essere oppato. La sospensione e il ban
                                   settati, dureranno 5 minuti. Quando 
 si setta il MASSDEOPPRO il valore impostato puo' essere da 0
                                   (piu' sensibile) e 7 (meno 
-sensibile). Il valore 0 disabilita l'intera funzionalit‡ del comando.
+sensibile). Il valore 0 disabilita l'intera funzionalit√† del comando.
 
     /msg X set <#canale> massdeoppro <0-7>
 
    NOOP - Questo comando fa in modo che nessuno possa essere un 
 operatore tranne X. Questo non significa
-                  che non si avr‡ il controllo di X nel canale. Se si Ë 
-autenticati, Ë possibile inviare ad X qualsiasi
-                  comando, ma non ci si potr‡ oppare.
+                  che non si avr√† il controllo di X nel canale. Se si √® 
+autenticati, √® possibile inviare ad X qualsiasi
+                  comando, ma non ci si potr√† oppare.
 
     /msg X set <#canale> noop <on|off>
 
@@ -57,10 +57,10 @@ LIVELLO 450-499 : Amministratore fidato del canale.
    * Variabili e Valori:
 
    AUTOTOPIC - Questo comando fa in modo che X resetti il topic 
-scrivendo cio' che Ë stato impostato
+scrivendo cio' che √® stato impostato
    con il comando DESCRIPTION e URL ogni 30 minuti. Nota che se il 
-canale Ë inattivo, il topic non
-   sar‡ resettato durante questo periodo.
+canale √® inattivo, il topic non
+   sar√† resettato durante questo periodo.
 
     /msg X set <#canale> autotopic <on|off>
 
@@ -68,9 +68,9 @@ canale Ë inattivo, il topic non
 caratteri). Questo comando non va
                                 ad influire sull'attuale topic del 
 canale, a meno che l'opzione AUTOTOPIC sia impostata su ON. Il
-                                topic puÚ essere visto tramite il 
-comando CHANINFO (livello 0). Se non Ë specificato alcun testo,
-                                l'attuale descrizione sar‡ resettata.
+                                topic pu√≤ essere visto tramite il 
+comando CHANINFO (livello 0). Se non √® specificato alcun testo,
+                                l'attuale descrizione sar√† resettata.
    Alias: DESC
 
     /msg x set <#canale> description [testo]
@@ -78,16 +78,16 @@ comando CHANINFO (livello 0). Se non Ë specificato alcun testo,
     /msg x set <#canale> desc [testo]
 
    KEYWORDS - Imposta le parole chiave riguardanti il canale.
-                             Se nessuna parola chiave sar‡ specificata, 
-l'attuale parola chiave impostata sar‡
+                             Se nessuna parola chiave sar√† specificata, 
+l'attuale parola chiave impostata sar√†
                               resettata. La lunghezza massima per 
-impostare le parole chiave Ë di 80 caratteri.
+impostare le parole chiave √® di 80 caratteri.
 
     /msg X set <#canale> keywords [testo]
 
-   MODE - Questo comando salver‡ gli attuali modes (+ntl etc etc) del 
+   MODE - Questo comando salver√† gli attuali modes (+ntl etc etc) del 
 canale come predefiniti. Ogni
-                   volta che X entra nel canale, ripristiner‡ tali 
+                   volta che X entra nel canale, ripristiner√† tali 
 modes se non erano settati in quel momento.
 
     /msg X set <#channel> mode
@@ -95,13 +95,13 @@ modes se non erano settati in quel momento.
    URL - E' possibile indicare l'indirizzo dell'homepage del canale con 
 questa opzione 
               (massimo 75 caratteri). Gli spazi sono permessi in modo 
-da permettere l'inserimento di pi˘ indirizzi.
+da permettere l'inserimento di pi√π indirizzi.
              Questo settaggio non influisce il topic del canale, a meno 
 che AUTOTOPIC sia impostato su ON 
              (livello 450). DESCRIPTION e URL possono essere visto 
 usando il comando CHANINFO (livello 0).
              Se nessun indirizzo (url) viene specificato, quello 
-corrente sar‡ resettato.
+corrente sar√† resettato.
 
     /msg X set <#canale> url [indirizzo indirizzo2 ...etc ]      
    
@@ -109,7 +109,7 @@ corrente sar‡ resettato.
 dall'AUTOMODE o meno, quando un
                              nuovo utente viene aggiunto alla userlist 
 del canale. Il valore predefinito e 0 (nessuno). Nota: una
-                             volta che l'utente Ë nella userlist, il 
+                             volta che l'utente √® nella userlist, il 
 comando MODINFO AUTOMODE (livello 400) puo' essere usato per
                              cambiare il valore dei settaggi 
 riguardanti quel dato utente.
@@ -135,11 +135,11 @@ LIVELLO 400-449 : Amministratore della userlist
 
     /msg x adduser <#canale> <username> <livello>
 
-  CLEARMODE - Resetta tutti i modes (+ntl etc) del canale. PuÚ essere 
+  CLEARMODE - Resetta tutti i modes (+ntl etc) del canale. Pu√≤ essere 
 utilizzato quando il canale viene
                              reso inaccessibile (modes +i o +k settati) 
-NOTA: Questo non Ë necessariamente il miglior metodo per 
-                             rientrare nel tuo canale, perchË altre 
+NOTA: Questo non √® necessariamente il miglior metodo per 
+                             rientrare nel tuo canale, perch√® altre 
 persone o bot possono essere oppati nel canale e ripristinare 
                              i precedenti modes. Fai riferimento al 
 comando STATUS (livello 200) per ulteriori informazioni.
@@ -155,15 +155,15 @@ modifiche a users esistenti nella
   * Variabili per il comando MODINFO:
 
      ACCESS - Cambia il livello di accesso di un utente. I livello che 
-Ë possibile settare, Ë compreso
+√® possibile settare, √® compreso
                         tra 1 e un punto in meno del tuo stesso livello 
-( se il tuo livello Ë 400, puoi assegnare un 
+( se il tuo livello √® 400, puoi assegnare un 
                         livello compreso tra 1 e 399).
 
        /msg X modinfo <#canale> access <username> <nuovo livello>
 
-     AUTOMODE - cambia la modalit‡ automatica di un utente, tra una 
-delle specifiche modalit‡: NONE, OP,
+     AUTOMODE - cambia la modalit√† automatica di un utente, tra una 
+delle specifiche modalit√†: NONE, OP,
                              o VOICE. OP o VOICE consentono ad X di 
 oppare o dare il voice (+v) ad un utente autenticato quando
                              entra nel canale. NONE fa in modo che x 
@@ -198,15 +198,15 @@ ban sulla mask, o settare il canale +i (invito) per
   STATUS - Visualizza tutti i settaggi speciali di X, i mode del 
 canale, il numero di utenti e di op nel 
                     canale, gli utenti correntemente autenticati e se X 
-Ë o meno presente nel canale. Gli utenti correntemente
+√® o meno presente nel canale. Gli utenti correntemente
                     autenticati sono visualizzati nel formato 
-"username/nickname [livello]". Il nickname di un utente sar‡
-                    visualizzato soltanto se l'utente Ë presente in 
-quel canale, in caso contrario sar‡ visualizzato soltanto
-                    lo username. Questo comando sar‡ molto utile per 
+"username/nickname [livello]". Il nickname di un utente sar√†
+                    visualizzato soltanto se l'utente √® presente in 
+quel canale, in caso contrario sar√† visualizzato soltanto
+                    lo username. Questo comando sar√† molto utile per 
 visualizzare i modes del canale nel caso in cui sia
                     presente una chiave (+k), dal momento che in questo 
-modo Ë possibile leggerla. Il comando funziona
+modo √® possibile leggerla. Il comando funziona
                     sia con X nel canale e sia non.
 
     /msg X status <#canale>
@@ -215,9 +215,9 @@ modo Ë possibile leggerla. Il comando funziona
 LIVELLO 100-399 : Operatore del canale
 --------------------------------------------------------------------------------
 
-  DEOP - Deoppa uno o piu persone nel canale. Se non Ë specificato 
+  DEOP - Deoppa uno o piu persone nel canale. Se non √® specificato 
 alcun nick, e sei oppato nel canale,
-               deopper‡te.
+               deopper√†te.
 
     /msg X deop <#canale> [nick] [nick2] ... [nickN]
 
@@ -229,11 +229,11 @@ canale.
   SUSPEND - Sospende l'accesso di un utente ad X nel tuo canale per il 
 periodo di tempo che hai specificato,
                       e al livello specificato (se specificato). Se il 
-livello non Ë specificato, verr‡ automaticamente impostato
+livello non √® specificato, verr√† automaticamente impostato
                       il livello d'accesso di chi esegue il comando. E' 
 possibile sospendere soltanto utenti con livello
                       di accesso inferiori al tuo. La durata massima di 
-una sospensione Ë di 372 giorni (8928 ore, 535680 minuti).
+una sospensione √® di 372 giorni (8928 ore, 535680 minuti).
 
   * Valori del tempo: D = giorni
                       H = ore
@@ -257,19 +257,19 @@ LIVELLO 75-99 : Nuovo operatore del canale
 
   BAN - Aggiunge uno specifico *!*user@*.host alla ban list del tuo 
 canale. Puoi impostare un ban sul 
-              nick di un utente se Ë online, oppure bannare il suo 
-*!*user@*.host se l'utente non Ë online.
+              nick di un utente se √® online, oppure bannare il suo 
+*!*user@*.host se l'utente non √® online.
               Ban che coprono un range piu ampio di quelli impostati in 
 precedenza, rimuovono il precedente ban.
-              Ogni utente che Ë bannato verr‡ kikkato dal canale se il 
-livello del ban Ë maggiore o uguale a 75.
-              La durata del ban viene espressa in ore ed Ë di 336 (2 
+              Ogni utente che √® bannato verr√† kikkato dal canale se il 
+livello del ban √® maggiore o uguale a 75.
+              La durata del ban viene espressa in ore ed √® di 336 (2 
 settimane). E' possibile bannare utenti 
               impostando un livello con range compreso tra 1 e il tuo 
 stesso livello di accesso. Il motivo del ban
              puo' essere espresso con una frase di massimo 128 
-caratteri. Se non Ë specificato nessun livello o durata,
-              il livello predefinito Ë 75 e la durata 3 ore. 
+caratteri. Se non √® specificato nessun livello o durata,
+              il livello predefinito √® 75 e la durata 3 ore. 
 
    * Ban con livello: 1-74 = Impedisce che l'utente sia oppato sul 
 canale.
@@ -282,18 +282,18 @@ canale.
 LIVELLO 50-74 : Utende Fidato 
 --------------------------------------------------------------------------------
 
-   KICK - X kikker‡ qualcuno dal tuo canale con questo comando; il 
-motivo Ë facoltativo nel comando. Il 
-                tuo nick sar‡ visualizzato nel messaggio di kick.
+   KICK - X kikker√† qualcuno dal tuo canale con questo comando; il 
+motivo √® facoltativo nel comando. Il 
+                tuo nick sar√† visualizzato nel messaggio di kick.
 
     /msg X kick <#canale> <nick> [motivo]
 
-   TOPIC - Con questo comando X cambier‡ il topic del canale (massimo 
-145 caratteri) e includer‡ il tuo
+   TOPIC - Con questo comando X cambier√† il topic del canale (massimo 
+145 caratteri) e includer√† il tuo
                   username, racchiuso tra parentesi, all'inizio del 
 topic. NOTA: se i settaggi DESCRIPTION o URL sono
-                  stati impostati e l'AUTOTOPIC Ë impostato su ON, il 
-topic del canale sar‡ sovrascritto dopo 30 minuti,
+                  stati impostati e l'AUTOTOPIC √® impostato su ON, il 
+topic del canale sar√† sovrascritto dopo 30 minuti,
                   a meno che il canale non sia idle.
 
     /msg X topic <#channel> <topic>
@@ -302,11 +302,11 @@ topic del canale sar‡ sovrascritto dopo 30 minuti,
 LIVELLO 25-49 : Utente normale
 --------------------------------------------------------------------------------
 
-   DEVOICE - Toglie la modalit‡ voice ad uno o piu utenti del canale.
+   DEVOICE - Toglie la modalit√† voice ad uno o piu utenti del canale.
 
     /msg X devoice <#canale> [nick] [nick2] ... [nickN]
 
-   VOICE - Imposta la modalit‡ voice ad uno i piu utenti del canale.
+   VOICE - Imposta la modalit√† voice ad uno i piu utenti del canale.
 
     /msg X voice <#canale> [nick] [nick2] ... [nickN]
 
@@ -331,10 +331,10 @@ livello di accesso inferiore a 200.
 informazioni ottenute
                       comprendono livello, stato di una eventuale 
 sospensione, e periodo di tempo trascorso
-                     dall'ultima volta che l'utente Ë stato online. Per 
+                     dall'ultima volta che l'utente √® stato online. Per 
 visualizzare tutti gli utente digitare
                      /msg x access <#canale> *
-                      Se ci sono pi˘ di 15 utenti nella userlist, 
+                      Se ci sono pi√π di 15 utenti nella userlist, 
 visitare il sito http://cservice.undernet.org/live/
                       effettuare il login per visualizzare l'intera 
 userlist cliccando su "Channel information" ed
@@ -370,7 +370,7 @@ impostato.
        /msg x access <#canale> -modif
 
       
-   CHANINFO - Indica se un canale Ë o no registrato, visualizzando lo 
+   CHANINFO - Indica se un canale √® o no registrato, visualizzando lo 
 username del manager e
                            le impostazioni correnti relative alla 
 DESCRIPTION e URL se settate in precedenza.
@@ -383,8 +383,8 @@ DESCRIPTION e URL se settate in precedenza.
    INFO - Visualizza informazioni relative ad uno username come il nick 
 e lo *!*user@*.host se
                 online al momento, il linguaggio e settaggi nascosti, 
-l'ultima volta che Ë stato online, e
-                se lo username Ë stato o meno sospeso da un Cservice 
+l'ultima volta che √® stato online, e
+                se lo username √® stato o meno sospeso da un Cservice 
 Amministratore.
                 Se usato su te stesso, visualizza anche tutti i canali 
 in cui hai accesso (solo CService puo'
@@ -401,7 +401,7 @@ per vedere l'intera banlist, o
 ban specifico. Se ci sono piu di 15 ban impostati,
                          recarsi su http://cservice.undernet.org/live/ 
 effettuare il login e cliccare su "Channel information"
-                         ed eseguire da lÏ la ricerca.
+                         ed eseguire da l√¨ la ricerca.
 
        /msg X lbanlist <#canale> <* | *!*user@*.host>
 ------------------------------------------------------------------------------------------------------------------------
@@ -440,15 +440,15 @@ rimuovere se stessi, devono fare richiesta di purge.
 
        /msg X remuser <#canale> <tuo username>
 
-   SET - Cambia specifiche modalit‡ relative al tuo username
+   SET - Cambia specifiche modalit√† relative al tuo username
 
        /msg x set <variabile> <valore>
 
       * Variabili e Valori:
 
-      INVISIBLE - Questo Ë un settaggio personale che permette agli 
+      INVISIBLE - Questo √® un settaggio personale che permette agli 
 altri utenti di non visualizzare le tue
-                            informazioni relative allo username che Ë 
+                            informazioni relative allo username che √® 
 possibile ricavare con il comando INFO. Per maggiori
                             informazioni fate riverimento al comando 
 INFO (livello 0).
@@ -462,26 +462,26 @@ INFO (livello 0).
 
      Languaggi disponibili:
      
-     ∑ ca - Catalano
-     ∑ de - Tedesco	
-     ∑ dk - Danese
-     ∑ en - Inglese
-     ∑ es - Spagnolo
-     ∑ fr - Francese
-     ∑ hu - Ungherese
-     ∑ it - Italiano
-     ∑ nl - Olandese	
-     ∑ no - Norvegese
-     ∑ pt - Portoghese	
-     ∑ ro - Rumeno
-     ∑ tr - Turco
+     ¬∑ ca - Catalano
+     ¬∑ de - Tedesco	
+     ¬∑ dk - Danese
+     ¬∑ en - Inglese
+     ¬∑ es - Spagnolo
+     ¬∑ fr - Francese
+     ¬∑ hu - Ungherese
+     ¬∑ it - Italiano
+     ¬∑ nl - Olandese	
+     ¬∑ no - Norvegese
+     ¬∑ pt - Portoghese	
+     ¬∑ ro - Rumeno
+     ¬∑ tr - Turco
 
 
    SHOWCOMMANDS - Visualizza tutti i comandi che puoi usare in un dato 
 canale, in
                                           relazione al tuo livello di 
-accesso. Se non Ë specificato alcun canale, vedrai
-                                          soltanto i comandi che Ë 
+accesso. Se non √® specificato alcun canale, vedrai
+                                          soltanto i comandi che √® 
 possibile impartire con livello 0.
 
       /msg X showcommands [#canale]
@@ -489,7 +489,7 @@ possibile impartire con livello 0.
    SHOWIGNORE - Visualizza gli utenti ignorati da X. Un utente viene 
 ignorato da X
    quando intenzionalmente o accidentalmente flodda X. Il periodo di 
-ignore Ë di circa
+ignore √® di circa
    60 minuti.
 
       /msg X showignore
@@ -497,8 +497,8 @@ ignore Ë di circa
    SUPPORT - Un metodo alternativo per confermare o negare il supporto 
 per un'applicazione
                        di un canale in cui tu sei supporter. Non appena 
-effettui il login, X ti mostrer‡ se tu
-                       sei supporter di un canale e visualizzer‡ anche 
+effettui il login, X ti mostrer√† se tu
+                       sei supporter di un canale e visualizzer√† anche 
 questo comando. Potrai anche confermare
                        o negare il supporto ad una applicazione anche 
 tramite web. Il comando non ha effetto se
@@ -506,14 +506,14 @@ tramite web. Il comando non ha effetto se
 
       /msg X support <#canale> <yes|no>
 
-   VERIFY - Visualizza se una persona Ë autenticata o meno, e in caso 
+   VERIFY - Visualizza se una persona √® autenticata o meno, e in caso 
 affermativo visualizza
-                     il suo username e se Ë o meno un Amministratore di 
+                     il suo username e se √® o meno un Amministratore di 
 Cservice, un rappresentante o un IRCop.
 
       /msg X verify <nick>
 
 ------------------------------------------------------------------------------------
-Questo documento Ë stato aggiornato il 28 di Maggio 2005 da KoGiTo
-Questo file Ë mantenuto dall'Undernet Cservice Committee
+Questo documento √® stato aggiornato il 28 di Maggio 2005 da KoGiTo
+Questo file √® mantenuto dall'Undernet Cservice Committee
 ------------------------------------------------------------------------------------
