@@ -425,21 +425,15 @@ if (($access >= $level_status) || ($admin > 0)) {
 		} else {
 			echo "<b>Channel Homepage: </b><input type=text size=50 name=url maxlength=75 value=\"" . $channel->url . "\"><br>\n";
 		}
-	} else {
-		if ($channel->url!="" && !preg_match("/^https?:\/\//",$channel->url)) {
-			echo "<b>Channel Homepage: </b><a href=\"http://" . $channel->url . "\" target=\"_blank\">http://" . htmlspecialchars($channel->url) . "</a><br>\n";
-		} else {
-			echo "<b>Channel Homepage: </b><a href=\"" . $channel->url . "\" target=\"_blank\">" . htmlspecialchars($channel->url) . "</a><br>\n";
-		}
+	} elseif ($channel->url != "") {
+		$chan_url = (!preg_match("/^https?:\/\//", $channel->url) ? 'http://' : '') . htmlspecialchars($channel->url);
+		echo "<b>Channel Homepage: </b><a href=\"" . $chan_url . "\" target=\"_blank\">" . $chan_url . "</a><br>\n";
 	}
+
 	if ($edit && $access>=$level_set_desc) {
 		echo "<b>Description: </b><input type=text name=desc size=50 maxlength=80 value=\"" . $channel->description . "\"><br>\n";
 	} else {
-		if (preg_match("/</",$channel->description) || preg_match("/>/",$channel->description)) {
-			echo "<b>Description: </b>" . htmlspecialchars($channel->description) . "<br>\n";
-		} else {
-			echo "<b>Description: </b>" . $channel->description . "<br>\n";
-		}
+		echo "<b>Description: </b>" . htmlspecialchars($channel->description) . "<br>\n";
 	}
 // nighty - BUG062
 //	text($edit && $access>=$level_set_url,$channel->url,"Channel Homepage","url");
