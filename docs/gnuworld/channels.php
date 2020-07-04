@@ -602,7 +602,7 @@ echo(" <br><br>
 
 	for ($row=0;$row<pg_numrows($bans);$row++) {
 		$ban = pg_fetch_object($bans,$row);
-		echo(" <tr><td>". $ban->banmask . "</td><td>". $ban->set_by ."</td>");
+		echo(" <tr><td>". htmlspecialchars($ban->banmask) . "</td><td>". htmlspecialchars($ban->set_by) ."</td>");
         echo("<td>" . cs_time($ban->set_ts) . " [". $ban->set_ts . "]</td>");
         if ($ban->expires == 0) {
             echo("<td>permanent</td>");
