@@ -2500,7 +2500,7 @@ function gen_server_url() {
 
   if ($port == "80") {
         return "http://" . $_SERVER["SERVER_NAME"];
-    } else if ($port == "443" || $port = "4443") {
+    } else if ($port == "443" || $port == "4443") {
     return "https://" . $_SERVER["SERVER_NAME"];
   } else {
     return "http://" . $_SERVER["SERVER_NAME"] . ":" . $port;

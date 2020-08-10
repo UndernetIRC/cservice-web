@@ -237,7 +237,14 @@ if ($username != "" && $password != "") {
 			}
 		}
 		if ($redir) {
-			header("Location: " . urldecode($redir));
+			$redir = urldecode($redir);
+			# Allow relative URLs and absolute URLs starting with the server host
+			if (!preg_match("/:\/\//", $redir) || preg_match("/^https?:\/\/" . $_SERVER["HTTP_HOST"] . "/", $redir)) {
+				$redir_url = $redir;
+			} else {
+				$redir_url = gen_server_url() . LIVE_LOCATION;
+			}
+			header("Location: $redir_url");
 		} else {
 			if (TOTP_ON == 1) {
 				$totp_key = has_totp($user_id);
