@@ -3,12 +3,10 @@ error_reporting(E_ALL);
 $default_gopage = "login.php";
 require("../../php_includes/cmaster.inc");
 std_init();
-//std_connect();
-//$user_id = std_security_chk($auth);
+
 $cTheme = get_theme_info();
 std_theme_styles(1);
 std_theme_body();
-/* $Id: right.php,v 1.15 2005/03/07 04:48:03 nighty Exp $ */
 
 function not_valid_va($user_id)
 {
@@ -45,17 +43,20 @@ function not_valid_va($user_id)
 				if ($user_age > ALLOW_MAXLOGINS[3]) {
 					$temp_maxlogins = 3;
 				}
-				if ($_POST["maxlogins"] > $temp_maxlogins) {
-					echo "Chosen value is invalid. No changes were done!";
+
+				$user_max_login = filter_var($_POST["maxlogins"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => $temp_maxlogins)));
+
+				if (!$user_max_login) {
+					echo "Max login value is invalid. Valid range is 1 - $temp_maxlogins. <br />";
 					echo '<a href ="users.php">Click here</a> to go back to your info page.';
 					die;
 				} else {
-					$sql = pg_safe_exec("update users set maxlogins=" . $_POST["maxlogins"] . ", last_updated=now()::abstime::int4, last_updated_by='Web Interface (" . $o->user_name . "(" . $o->id . "))'  where id =" . $o->id . "");
+					$sql = pg_safe_exec("update users set maxlogins=" . $user_max_login . ", last_updated=now()::abstime::int4, last_updated_by='Web Interface (" . $o->user_name . "(" . $o->id . "))'  where id =" . $o->id . "");
 
-					echo "You've succesfully set maxlogins to <strong>" . $_POST["maxlogins"] . "</strong> !<br>";
+					echo "You've succesfully set maxlogins to <strong>" . $user_max_login . "</strong> !<br>";
 					echo '<a href ="users.php?id=' . $o->id . '">Click here</a> to go back to your info page.';
 					$fmm = "DELETE from ips where ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($o->user_name) . "'";
-					log_user($o->id, 15, "Changed from " . $o->maxlogins . " to " . $_POST["maxlogins"] . ".");
+					log_user($o->id, 15, "Changed from " . $o->maxlogins . " to " . $user_max_login . ".");
 					die;
 				}
 				$fmm = "DELETE from ips where ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($o->user_name) . "'";
