@@ -52,7 +52,7 @@ if ($username != "" && $password != "") {
 	}
 	$user_id = chk_password($username,$password,-1);
 	if ( $user_id > 0 ) {
-		
+
     		$res = pg_safe_exec("select users.id,users.flags,levels.access from users,levels where users.id=" . (int)$user_id . " and users.id=levels.user_id and levels.channel_id=1 and levels.access>0");
     		if (pg_numrows($res)==0) {
 			if (ADMINONLY_MIRROR) {
@@ -104,7 +104,7 @@ if ($username != "" && $password != "") {
 		$ENABLE_COOKIE_TABLE = 0;
 
 		unset($is_alumni); $is_alumni = 0;
-		if (($ouu->flags & 128) && $is_admin>0) { $is_alumni = 1; }
+		if ($ouu->flags & 128) { $is_alumni = 1; }
 
 		// check IP restrictions . . . (only for * persons or persons with an ACL set, excepted ALUMNIs (as X on IRC))
 		if (($is_alumni==0 && ($is_admin>0 || acl())) || has_ipr($user_id)) {
@@ -210,7 +210,7 @@ if ($username != "" && $password != "") {
 		pg_safe_exec("DELETE FROM ips WHERE ipnum='".cl_ip()."' AND lower(user_name)='".strtolower($username)."'");
 
 		$ENABLE_COOKIE_TABLE = 0;
-		
+
 		$cook2 = md5( $dynts . CRC_SALT_EXT1 . $cookie );
 		if (COOKIE_DOMAIN!="") {
 			SetCookie("auth",$username . ":" . (int)$user_id . ":" . (int)$time . ":" . $cookie . ":" . (int)$dynts . ":" . $cook2,$expire,"/",COOKIE_DOMAIN);
@@ -224,7 +224,7 @@ if ($username != "" && $password != "") {
 			if (REMEMBER_LOGIN || PREFILL_NOTICE) { SetCookie("rlogin",$username,2147483645,"/"); } else { SetCookie("rlogin","",0,"/"); }
 		}
 		$admin = (int)$is_admin;
-		
+
 		if (($is_admin && BOFH_PASS_ADMIN) || (BOFH_PASS_USER)) {
 			// check password complexity BOFH stylee (excepted for ALUMNIs)
 			if ($is_alumni==0) {
@@ -267,9 +267,10 @@ echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
 //echo "<META HTTP-EQUIV=\"Expires\" CONTENT=\"0\">\n";
 ?>
 <html>
+
 <head>
-<title>CService Login</title>
-<? std_theme_styles(); ?>
+	<title>CService Login</title>
+	<? std_theme_styles(); ?>
 </head>
 <?
 if (($username!="" || $_COOKIE['rlogin']!="") && !preg_match(NON_BOGUS,$username)) {
@@ -340,7 +341,8 @@ if (PREFILL_NOTICE && ($_COOKIE['rlogin'] != "") && ($username == $_COOKIE['rlog
 }
 echo "</form>";
 ?>
-</td></tr>
+</td>
+</tr>
 </table>
 </td>
 </tr>
@@ -348,4 +350,5 @@ echo "</form>";
 If you do not have an account, <a href="newuser.php">create one</a> now!
 </center>
 </body>
+
 </html>
