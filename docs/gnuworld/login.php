@@ -1,45 +1,49 @@
-<?
+<?php
 require("../../php_includes/cmaster.inc");
-/* $Id: login.php,v 1.29 2005/12/13 11:49:32 nighty Exp $ */
-if($loadavg1 >= CRIT_LOADAVG) {
-  	header("Location: highload.php");
-  	exit;
+
+if ($loadavg1 >= CRIT_LOADAVG) {
+	header("Location: highload.php");
+	exit;
 }
 $cTheme = get_theme_info();
 header("Pragma: no-cache");
-unset($failed); unset($is_admin); unset($user_id);
-$failed = 0; $is_admin = 0; $user_id = 0;
+unset($failed);
+unset($is_admin);
+unset($user_id);
+$failed = 0;
+$is_admin = 0;
+$user_id = 0;
+
 // For efficiency, don't load the db unless we have to.
-if (RBL_CHECKS==1)
-{
-$msg=ip_check_rbl(cl_ip());
-if ($msg !='clean')
-	{
-	echo "<html><head><title>SECURITY WARNING</title>";
-	std_theme_styles();
-	echo "</head>\n";
-	std_theme_body();
-	echo "<center>\n";
-	echo "<h2>";
-	echo "Sorry, you're not allowed to login from this IP address. ".$msg;
-	echo "</h2>";
-	echo "</center>\n";
-	echo "</body></html>\n\n";
-	die;
+if (RBL_CHECKS == 1) {
+	$msg = ip_check_rbl(cl_ip());
+	if ($msg != 'clean') {
+		echo "<html><head><title>SECURITY WARNING</title>";
+		std_theme_styles();
+		echo "</head>\n";
+		std_theme_body();
+		echo "<center>\n";
+		echo "<h2>";
+		echo "Sorry, you're not allowed to login from this IP address. " . $msg;
+		echo "</h2>";
+		echo "</center>\n";
+		echo "</body></html>\n\n";
+		die;
 	}
 }
 if ($username != "" && $password != "") {
-	if (!ip_check($username,0)) {
+	if (!ip_check($username, 0)) {
 		echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
-		std_theme_styles(1); std_theme_body();
-        	echo "<h1>Error<br>\n";
-        	echo "Too many failed login attempts for this username.</h1><br>\n";
+		std_theme_styles(1);
+		std_theme_body();
+		echo "<h1>Error<br>\n";
+		echo "Too many failed login attempts for this username.</h1><br>\n";
 		echo "</body>\n";
 		echo "</html>\n\n";
 		die;
-        }
+	}
 	std_connect();
-	if ($username!="" && !preg_match(NON_BOGUS,$username)) {
+	if ($username != "" && !preg_match(NON_BOGUS, $username)) {
 		echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
 		echo "<html><head><title>ERROR</title>";
 		std_theme_styles();
@@ -50,26 +54,26 @@ if ($username != "" && $password != "") {
 		echo "Bogus username</h2><br><a href=\"login.php\">Try again</a></center></body></html>\n\n";
 		die;
 	}
-	$user_id = chk_password($username,$password,-1);
-	if ( $user_id > 0 ) {
-		
-    		$res = pg_safe_exec("select users.id,users.flags,levels.access from users,levels where users.id=" . (int)$user_id . " and users.id=levels.user_id and levels.channel_id=1 and levels.access>0");
-    		if (pg_numrows($res)==0) {
+	$user_id = chk_password($username, $password, -1);
+	if ($user_id > 0) {
+
+		$res = pg_safe_exec("select users.id,users.flags,levels.access from users,levels where users.id=" . (int)$user_id . " and users.id=levels.user_id and levels.channel_id=1 and levels.access>0");
+		if (pg_numrows($res) == 0) {
 			if (ADMINONLY_MIRROR) {
-	                       	echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
-                        	echo "<html><head><title>This mirror is reserved for CService officials</title>";
+				echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
+				echo "<html><head><title>This mirror is reserved for CService officials</title>";
 				std_theme_styles();
 				echo "</head>";
 				std_theme_body();
-                        	echo "<center>\n";
-                        	echo "<h2>";
-                        	echo "Sorry, You can't login on that website.";
-                        	echo "</h2>";
+				echo "<center>\n";
+				echo "<h2>";
+				echo "Sorry, You can't login on that website.";
+				echo "</h2>";
 				echo "<h3>It's currently reserved for CService officials only,<br>";
 				echo "You can access a client mirror at : <a href=\"" . CLIENT_MIRROR_URL . "\" target=_top>" . CLIENT_MIRROR_URL . "</a>, thanks.</h3>\n";
-                        	echo "</center>\n";
-                        	echo "</body></html>\n\n";
-                        	die;
+				echo "</center>\n";
+				echo "</body></html>\n\n";
+				die;
 			}
 			if (site_off()) {
 				echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
@@ -88,26 +92,29 @@ if ($username != "" && $password != "") {
 				die;
 			}
 			$is_admin = 0;
-     		} else {
-     			$ouu = pg_fetch_object($res,0);
-     			$is_admin = $ouu->access;
-     		}
+		} else {
+			$ouu = pg_fetch_object($res, 0);
+			$is_admin = $ouu->access;
+		}
 		$val = microtime();
-		$daval = explode(" ",$val);
-		$microtime = $daval[0]*1000000000;
+		$daval = explode(" ", $val);
+		$microtime = $daval[0] * 1000000000;
 		$time = $daval[1];
-		$cookie=md5(CRC_SALT_0007 . $time . $microtime . $username . $password . $user_id . CRC_SALT_0009);
+		$cookie = md5(CRC_SALT_0007 . $time . $microtime . $username . $password . $user_id . CRC_SALT_0009);
 		// Remove any previous login.
 		$ENABLE_COOKIE_TABLE = 1;
 		//pg_safe_exec(CLEAR_COOKIES_QUERY);
 		pg_safe_exec("delete from webcookies where user_id = " . (int)$user_id);
 		$ENABLE_COOKIE_TABLE = 0;
 
-		unset($is_alumni); $is_alumni = 0;
-		if (($ouu->flags & 128) && $is_admin>0) { $is_alumni = 1; }
+		unset($is_alumni);
+		$is_alumni = 0;
+		if ($ouu->flags & 128) {
+			$is_alumni = 1;
+		}
 
 		// check IP restrictions . . . (only for * persons or persons with an ACL set, excepted ALUMNIs (as X on IRC))
-		if (($is_alumni==0 && ($is_admin>0 || acl())) || has_ipr($user_id)) {
+		if (($is_alumni == 0 && ($is_admin > 0 || acl())) || has_ipr($user_id)) {
 			if (is_ip_restrict()) {
 				$admin = $is_admin;
 				local_seclog("Failed login (no IPR match)");
@@ -141,7 +148,7 @@ if ($username != "" && $password != "") {
 			die;
 		}
 
-		if (is_suspended($user_id,"")==1) {
+		if (is_suspended($user_id, "") == 1) {
 			header("Pragma: no-cache");
 			echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
 			echo "<html>\n";
@@ -158,11 +165,11 @@ if ($username != "" && $password != "") {
 		}
 
 		$ress = pg_safe_exec("SELECT tz_setting,email FROM users WHERE id='$user_id'");
-		$rooo = pg_fetch_object($ress,0);
-		if (is_email_locked($LOCK_LOGIN,$rooo->email)) {
+		$rooo = pg_fetch_object($ress, 0);
+		if (is_email_locked($LOCK_LOGIN, $rooo->email)) {
 			header("Pragma: no-cache");
 			echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
-	               	echo "<html><head><title>REGISTRATION PROCESS</title>\n";
+			echo "<html><head><title>REGISTRATION PROCESS</title>\n";
 			std_theme_styles();
 			echo "</head>";
 			std_theme_body();
@@ -174,102 +181,105 @@ if ($username != "" && $password != "") {
 		}
 		$tz_setting = trim($rooo->tz_setting);
 
-	/*
-		unset($ress);
-		$ress = pg_safe_exec("SELECT * FROM noreg WHERE lower(user_name)='" . strtolower($username) . "' AND type=4");
-		if (pg_numrows($ress)>0) {
-			header("Pragma: no-cache");
-			echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
-	               	echo "<html><head><title>ERROR</title>";
-			std_theme_styles();
-			echo "</head>";
-			std_theme_body();
-			echo "Sorry, your account is fraudulous and thus cannot be used (FRAUD USERNAME).<br>\n";
-			echo "You will need to <b>/join " . SERVICE_CHANNEL . "</b> in order to deal with this problem.";
-			echo "</body></html>\n\n";
-			die;
-		}
-	*/
-
-
-		$expire=time()+get_custom_session($user_id); //COOKIE_EXPIRE; // Login expiration.
+		$expire = time() + get_custom_session($user_id); //COOKIE_EXPIRE; // Login expiration.
 
 		if (($is_admin && BOFH_PASS_ADMIN) || (BOFH_PASS_USER)) {
 			// prevent escaping password security (excepted for ALUMNIs)
-			if ($is_alumni==0) {
+			if ($is_alumni == 0) {
 				if (!pw_check($password)) {
-					$is_admin=-1;
+					$is_admin = -1;
 				}
 			}
 		}
 		$dynts = time();
 		$ENABLE_COOKIE_TABLE = 1;
-		pg_safe_exec("INSERT INTO webcookies (user_id,cookie,expire,is_admin,tz_setting,totp_cookie) VALUES (" . (int)$user_id . ",'" . $cookie . "'," . (int)$expire . "," . (int)$is_admin . ",'" . $tz_setting . "', '".$dynts."')");
+		pg_safe_exec("INSERT INTO webcookies (user_id,cookie,expire,is_admin,tz_setting,totp_cookie) VALUES (" . (int)$user_id . ",'" . $cookie . "'," . (int)$expire . "," . (int)$is_admin . ",'" . $tz_setting . "', '" . $dynts . "')");
 
 		// clear ip lockout if login is success
-		pg_safe_exec("DELETE FROM ips WHERE ipnum='".cl_ip()."' AND lower(user_name)='".strtolower($username)."'");
+		pg_safe_exec("DELETE FROM ips WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($username) . "'");
 
 		$ENABLE_COOKIE_TABLE = 0;
-		
-		$cook2 = md5( $dynts . CRC_SALT_EXT1 . $cookie );
-		if (COOKIE_DOMAIN!="") {
-			SetCookie("auth",$username . ":" . (int)$user_id . ":" . (int)$time . ":" . $cookie . ":" . (int)$dynts . ":" . $cook2,$expire,"/",COOKIE_DOMAIN);
-			SetCookie("sauth", $expire."", $expire, "/", COOKIE_DOMAIN) or die ("Can not set cookie");
-			SetCookie("sepoch",time(),$expire,"/",COOKIE_DOMAIN);
-			if (REMEMBER_LOGIN || PREFILL_NOTICE) { SetCookie("rlogin",$username,2147483645,"/",COOKIE_DOMAIN); } else { SetCookie("rlogin","",0,"/",COOKIE_DOMAIN); }
+
+		$cook2 = md5($dynts . CRC_SALT_EXT1 . $cookie);
+		if (COOKIE_DOMAIN != "") {
+			SetCookie("auth", $username . ":" . (int)$user_id . ":" . (int)$time . ":" . $cookie . ":" . (int)$dynts . ":" . $cook2, $expire, "/", COOKIE_DOMAIN);
+			SetCookie("sauth", $expire . "", $expire, "/", COOKIE_DOMAIN) or die("Can not set cookie");
+			SetCookie("sepoch", time(), $expire, "/", COOKIE_DOMAIN);
+			if (REMEMBER_LOGIN || PREFILL_NOTICE) {
+				SetCookie("rlogin", $username, 2147483645, "/", COOKIE_DOMAIN);
+			} else {
+				SetCookie("rlogin", "", 0, "/", COOKIE_DOMAIN);
+			}
 		} else {
-			SetCookie("auth",$username . ":" . (int)$user_id . ":" . (int)$time . ":" . $cookie . ":" . (int)$dynts . ":" . $cook2,$expire,"/");
-			SetCookie("sauth", $expire."", $expire, "/") or die ("Can not set cookie");
-			SetCookie("sepoch",time(),$expire,"/");
-			if (REMEMBER_LOGIN || PREFILL_NOTICE) { SetCookie("rlogin",$username,2147483645,"/"); } else { SetCookie("rlogin","",0,"/"); }
+			SetCookie("auth", $username . ":" . (int)$user_id . ":" . (int)$time . ":" . $cookie . ":" . (int)$dynts . ":" . $cook2, $expire, "/");
+			SetCookie("sauth", $expire . "", $expire, "/") or die("Can not set cookie");
+			SetCookie("sepoch", time(), $expire, "/");
+			if (REMEMBER_LOGIN || PREFILL_NOTICE) {
+				SetCookie("rlogin", $username, 2147483645, "/");
+			} else {
+				SetCookie("rlogin", "", 0, "/");
+			}
 		}
 		$admin = (int)$is_admin;
-		
+
 		if (($is_admin && BOFH_PASS_ADMIN) || (BOFH_PASS_USER)) {
 			// check password complexity BOFH stylee (excepted for ALUMNIs)
-			if ($is_alumni==0) {
+			if ($is_alumni == 0) {
 				if (!pw_check($password)) {
-				if ($admin>0) { local_seclog("Login"); log_webrelay("authenticated at level " . $admin); }
-					$unsecure_pw_url = "main.php?sba=1&SECURE_ID=" . md5( $user_id . CRC_SALT_0013 . $cookie );
+					if ($admin > 0) {
+						local_seclog("Login");
+						log_webrelay("authenticated at level " . $admin);
+					}
+					$unsecure_pw_url = "main.php?sba=1&SECURE_ID=" . md5($user_id . CRC_SALT_0013 . $cookie);
 					header("Location: " . $unsecure_pw_url . "\n\n");
 					die;
 				}
 			}
 		}
 		if ($redir) {
-			header("Location: " . urldecode($redir));
+			$redir = urldecode($redir);
+			# Allow relative URLs and absolute URLs starting with the server host
+			if (!preg_match("/:\/\//", $redir) || preg_match("/^https?:\/\/" . $_SERVER["HTTP_HOST"] . "/", $redir)) {
+				$redir_url = $redir;
+			} else {
+				$redir_url = gen_server_url() . LIVE_LOCATION;
+			}
+			header("Location: $redir_url");
 		} else {
-			if (TOTP_ON==1)
-			{
-			$totp_key=has_totp($user_id);
-			if ($totp_key)
-			header ("Location: v_totp.php");
-			else
-			{
-			if ($admin>0) { local_seclog("Login"); log_webrelay("authenticated at level " . $admin); }
-			header("Location: main.php?sba=1");
+			if (TOTP_ON == 1) {
+				$totp_key = has_totp($user_id);
+				if ($totp_key)
+					header("Location: v_totp.php");
+				else {
+					if ($admin > 0) {
+						local_seclog("Login");
+						log_webrelay("authenticated at level " . $admin);
+					}
+					header("Location: main.php?sba=1");
+				}
+				//echo "$cookie";
+			} else {
+				if ($admin > 0) {
+					local_seclog("Login");
+					log_webrelay("authenticated at level " . $admin);
+				}
+				header("Location: main.php?sba=1");
 			}
-			//echo "$cookie";
-			}
-			else
-			{
-			if ($admin>0) { local_seclog("Login"); log_webrelay("authenticated at level " . $admin); }
-			header("Location: main.php?sba=1");
-			}
-	        }
-	        exit;
-   	} else { // user_id <= 0
-		$failed=1;
+		}
+		exit;
+	} else { // user_id <= 0
+		$failed = 1;
 		local_seclog("Failed login (WRONG PASSWORD for `" . N_get_pure_string($username) . "`)");
-  	}
+	}
 }
 echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
 //echo "<META HTTP-EQUIV=\"Expires\" CONTENT=\"0\">\n";
 ?>
 <html>
+
 <head>
-<title>CService Login</title>
-<? std_theme_styles(); ?>
+	<title>CService Login</title>
+	<? std_theme_styles(); ?>
 </head>
 <?
 if (($username!="" || $_COOKIE['rlogin']!="") && !preg_match(NON_BOGUS,$username)) {
@@ -340,7 +350,8 @@ if (PREFILL_NOTICE && ($_COOKIE['rlogin'] != "") && ($username == $_COOKIE['rlog
 }
 echo "</form>";
 ?>
-</td></tr>
+</td>
+</tr>
 </table>
 </td>
 </tr>
@@ -348,4 +359,5 @@ echo "</form>";
 If you do not have an account, <a href="newuser.php">create one</a> now!
 </center>
 </body>
+
 </html>
