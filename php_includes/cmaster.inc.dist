@@ -780,17 +780,12 @@ function pg_safe_exec($query) {
     $query = trim($query);
     $safe_query2 = $query;
     $safe_query = urldecode($query);
-    $query_ok=1;$warning=0;
+    $query_ok=1;
 
-    if (!preg_match("/^insert/",strtolower($safe_query)) &&
-        !preg_match("/^delete/",strtolower($safe_query)) &&
-        !preg_match("/^update/",strtolower($safe_query)) &&
-        !preg_match("/^begin/",strtolower($safe_query)) &&
-        !preg_match("/^rollback/",strtolower($safe_query)) &&
-        !preg_match("/^abort/",strtolower($safe_query)) &&
-        !preg_match("/^end/",strtolower($safe_query)) &&
-        !preg_match("/^commit/",strtolower($safe_query)) &&
-        !preg_match("/^select/",strtolower($safe_query))) { $query_ok = 0; }
+    if (!preg_match("/^(insert|delete|update|begin|rollback|abort|end|commit|select)/", strtolower($safe_query))) {
+        $query_ok = 0;
+    }
+
     if (preg_match("/;/",$safe_query) && $query_ok) {
         // check if there's a ";" not between ' (quotes) or " (double-quotes)
         $long = strlen($safe_query);
@@ -808,10 +803,7 @@ function pg_safe_exec($query) {
                 $query_ok = 0;
             }
         }
-        $warning = 1;
     }
-
-    // (*)
 
     $logger->debug('SQL Query: ' . $safe_query2);
 
