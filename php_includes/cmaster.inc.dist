@@ -2767,37 +2767,18 @@ function isinarray($array,$value) {
   return $is_in;
 }
 
-/*  Old function pre inet type
-function is_ip_restrict() { // assumes user_id is defined or returns TRUE.
-  global $user_id;
-  if ((int)$user_id<=0) { return 1; }
-  $ipmatch = 0;
-  $rrip = @pg_safe_exec("SELECT * FROM ip_restrict2 WHERE user_id=" . (int)$user_id . "");
-  if ($rrip) {
-    if (pg_numrows($rrip)>0) {
-      while ($rripo = pg_fetch_object($rrip)) {
-        if (matches_ip_restrict($rripo)) { $ipmatch = 1; break; }
-      }
-      if ($ipmatch == 0) { return 1; } else { return 0; }
-    }
-  }
-  if (IPR_REQUIRED) { return 1; } else { return 0; }
-}
-
-*/
-
 function is_ip_restrict() { // assumes user_id is defined or returns TRUE.
     global $user_id;
     if ((int)$user_id <= 0) { return 1; }
     $curr_IP = cl_ip();
-    $invalid = 1;
+    $invalid = TRUE;
     $now = time();
 
     $res = @pg_safe_exec("SELECT id, flags from users WHERE id ='" . (int)$user_id . "'");
     if (pg_numrows($res)) { // Check if totp is set and ipr check is disabled, then return FALSE.
         $user = pg_fetch_object($res, 0);
         if (($user->flags & TOTP_USR_FLAG) && ($user->flags & TOTP_ADMIN_IPR_FLAG) == 0) {
-            return 0;
+            return FALSE;
         }
     } else {
         return $invalid;
@@ -2808,10 +2789,9 @@ function is_ip_restrict() { // assumes user_id is defined or returns TRUE.
     if ($res && pg_num_rows($res) > 0) {
         while ($row=pg_fetch_object($res)) {
             if ($row->type == 2 && has_totp($user_id)) {
-                print_r($row->id);
-                $invalid = 0;
+                $invalid = FALSE;
             } else if ($row->type == 1) {
-                $invalid = 0;
+                $invalid = FALSE;
             }
 
             // Return immediately if a match is found, and update last_used
@@ -2820,7 +2800,10 @@ function is_ip_restrict() { // assumes user_id is defined or returns TRUE.
                 return $invalid;
             }
         }
+    } elseif (!IPR_REQUIRED && !has_ipr($user_id)) {
+        $invalid = FALSE;
     }
+
     return $invalid;
 }
 
