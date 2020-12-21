@@ -6,3 +6,5 @@ Disallow: /live/cfp.php
 Disallow: /cfp.php
 Disallow: /live/dfp.php
 Disallow: /dfp.php
+Disallow: /live/forms/confirm_pwreset.php
+Disallow: /forms/confirm_pwreset.php
