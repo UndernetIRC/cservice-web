@@ -128,9 +128,9 @@ if ($cookie!="") {
 	$crypt=$salt . md5($salt . $password);
 	$verificationdata = prepare_dbtext_db( $user->verificationdata );
 
-	$q = "insert into users (user_name,password,flags,email,last_updated,last_updated_by,language_id,question_id,verificationdata,post_forms,signup_ts,signup_ip) " . " values " . " ('" . $user->user_name . "','$crypt',4,'" . $user->email . "'," . "  now()::abstime::int4,'Web Page New User'," . $user->language . "," . $user->question_id . ",'" . $verificationdata . "',(now()::abstime::int4+432000),now()::abstime::int4,'" . cl_ip() . "')";
-	
-	//echo $q;
+	$q = "INSERT INTO users (user_name, password, flags, email, last_updated, last_updated_by, language_id, question_id, verificationdata, post_forms, signup_ts, signup_ip, maxlogins)";
+	$q .= sprintf(" VALUES ('%s', '%s', %d, '%s', %s, '%s', %d, %d, '%s', %s, %s, '%s', %d)", $user->user_name, $crypt, 4, $user->email, "now()::abstime::int4", "Web Page New User", $user->language, $user->question_id, $verificationdata, "(now()::abstime::int4+432000)", "now()::abstime::int4", cl_ip(), DEFAULT_MAX_LOGINS);
+
 	$res=pg_safe_exec($q);
 	local_seclog("New user confirmation for `" . $user->user_name . "`");
 

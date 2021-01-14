@@ -635,16 +635,38 @@ function popUpClosed() {
         return $string;
     }
 
-    function time_till_maxlogins($creation_date) {
-        $time_since = time() - $creation_date;
+    function sorted_max_logins(): array {
+        $max_logins = ALLOW_MAX_LOGINS;
 
-        if ($time_since < ALLOW_MAXLOGINS[2]) {  // less than a year
-            $msg = "You need to wait " . seconds2human(ALLOW_MAXLOGINS[2] - $time_since) . " before you can set MAXLOGINS 2.";
-        } elseif ($time_since < ALLOW_MAXLOGINS[3]) {
-            $msg = "You need to wait " . seconds2human(ALLOW_MAXLOGINS[3] - $time_since) . " before you can set MAXLOGINS 3.";
-        } else
-            $msg = '';
+        usort($max_logins, function($a, $b) {
+            return $b['account_age'] <=> $a['account_age'];
+        });
 
+        return $max_logins;
+    }
+
+    function  user_max_logins(int $user_signup_timestamp): array {
+        $account_age = time() - $user_signup_timestamp;
+
+        foreach (sorted_max_logins() as $item) {
+            if ($account_age >= $item['account_age']) {
+                return $item;
+            }
+        }
+
+        return array("max_logins" => DEFAULT_MAX_LOGINS, "account_age" => 0);
+    }
+
+    function time_to_next_max_logins(int $user_signup_timestamp): string {
+        $account_age = time() - $user_signup_timestamp;
+        $msg = '';
+
+        foreach (sorted_max_logins() as $item) {
+            if ($account_age <= $item['account_age']) {
+                $msg = "You need to wait " . seconds2human($item['account_age'] - $account_age) . " before you can set MAXLOGINS " . $item['max_logins'];
+                break;
+            }
+        }
 
         return $msg;
     }

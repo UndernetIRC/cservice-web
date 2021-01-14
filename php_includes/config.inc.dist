@@ -223,7 +223,7 @@ This requires to login with a user with an admin access of 901 or above (coder l
 
 
 
-define("RBL_CHECKS", 1);		// enable RBL and glines check for new user registration.
+define("RBL_CHECKS", 0);		// enable RBL and glines check for new user registration.
 define("TOTP_USR_FLAG",1024);
 define("TOTP_ADMIN_IPR_FLAG", 2048);
 define("NON_BOGUS_TOTP",'/^[0-9\=]+$/');
@@ -258,9 +258,10 @@ define("SMTP_PASS", '');
 define("MAIL_TYPE", 'sendmail');	// set to smtp or sendmail
 define("DEBUG_MAIL", false);
 define("ALLOW_SELF_MAXLOGINS", 1);	// 0 - disallow regulars to change own maxlogins, 1- allow
-define("ALLOW_MAXLOGINS", array(
-	"2" => 172800, // minimum user age in seconds to allow self maxlogins 2
-	"3" => 259200  // minimum user age in seconds to allow self maxlogins 3
+define("DEFAULT_MAX_LOGINS", 1); // Set the number of default max logins allowed for a newly registered user
+define("ALLOW_MAX_LOGINS", array(
+	['max_logins' => 2, 'account_age' => 172800],
+	['max_logins' => 3, 'account_age' => 259200],
 ));
 define("ALLOW_MULTI_CHANS", array(
 	"1" => 86400,  // first channel after 1 day

@@ -35,36 +35,23 @@ function not_valid_va($user_id)
 					$good = true;
 			}
 			if ($good) {
-				$user_age = time() - $o->signup_ts;
-				$temp_maxlogins = 1;
-				if ($user_age > ALLOW_MAXLOGINS[2]) {
-					$temp_maxlogins = 2;
-				}
-				if ($user_age > ALLOW_MAXLOGINS[3]) {
-					$temp_maxlogins = 3;
-				}
-
-				$user_max_login = filter_var($_POST["maxlogins"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => $temp_maxlogins)));
+				$temp_maxlogins = user_max_logins($o->signup_ts);
+				$user_max_login = filter_var($_POST["maxlogins"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => $temp_maxlogins['max_logins'])));
 
 				if (!$user_max_login) {
-					echo "Max login value is invalid. Valid range is 1 - $temp_maxlogins. <br />";
+					echo "Max login value is invalid. Valid range is 1 - " . $temp_maxlogins['max_logins'] . "<br />";
 					echo '<a href ="users.php">Click here</a> to go back to your info page.';
 					die;
 				} else {
-					$sql = pg_safe_exec("update users set maxlogins=" . $user_max_login . ", last_updated=now()::abstime::int4, last_updated_by='Web Interface (" . $o->user_name . "(" . $o->id . "))'  where id =" . $o->id . "");
+				  $sql = sprintf("UPDATE users SET maxlogins=%d, last_updated=now()::abstime::int4, last_updated_by='Web Interface (%s (%d))' WHERE id=%d", $user_max_login, $o->user_name, $o->id, $o->id);
+				  pg_safe_exec($sql);
 
 					echo "You've succesfully set maxlogins to <strong>" . $user_max_login . "</strong> !<br>";
 					echo '<a href ="users.php?id=' . $o->id . '">Click here</a> to go back to your info page.';
-					$fmm = "DELETE from ips where ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($o->user_name) . "'";
 					log_user($o->id, 15, "Changed from " . $o->maxlogins . " to " . $user_max_login . ".");
 					die;
 				}
-				$fmm = "DELETE from ips where ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($o->user_name) . "'";
-
-				pg_exec($fmm);
-				return false;
 			} else {
-
 				echo "Wrong verification answer" . $temp_msg . "!";
 				ip_check($o->user_name, 1);
 				return true;

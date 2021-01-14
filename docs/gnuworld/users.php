@@ -759,28 +759,24 @@ if ($admin > 0) {
             echo "<tr><td><b>User's Max Logins</b></td><td>" . ($user->maxlogins + 0) . "&nbsp;</td></tr>\n";
         }
     } else {
-
         if ((ALLOW_SELF_MAXLOGINS == 1) && ($user_id == $user->id)) {
-            $can_set_maxlogins = time_till_maxlogins($user->signup_ts);
-            $user_age = time() - $user->signup_ts;
-            if ($user_age > ALLOW_MAXLOGINS[2]) {
-                $temp_maxlogins = 2;
-                if ($user_age > ALLOW_MAXLOGINS[3])
-                    $temp_maxlogins = "3";
-                echo "</form><tr><td><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
-                echo "<select name=\"maxlogins\" id=\"maxlogins\">";
-                for ($ml = 1; $ml <= $temp_maxlogins; $ml++) {
-                    echo "<option ";
-                    if ($ml == ($user->maxlogins + 0)) {
-                        echo "selected ";
-                    }
-                    echo "value=" . $ml . ">" . $ml . "</option>\n";
+            $can_set_max_logins = time_to_next_max_logins($user->signup_ts);
+            $current_max_logins = user_max_logins($user->signup_ts);
+
+            echo "</form><tr><td><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
+            echo "<select name=\"maxlogins\" id=\"maxlogins\">";
+            for ($ml = 1; $ml <= $current_max_logins['max_logins']; $ml++) {
+                echo "<option ";
+                if ($ml == ($user->maxlogins + 0)) {
+                    echo "selected ";
                 }
-                echo "</select>";
-                echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_maxlogins . "</td></tr>\n";
+                echo "value=" . $ml . ">" . $ml . "</option>\n";
             }
-        } else
+            echo "</select>";
+            echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_max_logins . "</td></tr>\n";
+        } else {
             echo "<tr><td><b>User's Max Logins</b></td><td>" . ($user->maxlogins + 0) . "&nbsp;</td></tr>\n";
+        }
     }
 
     $ENABLE_COOKIE_TABLE = 1;
@@ -911,25 +907,23 @@ if (!$edit || $admin < 800) {
         echo "<tr><td><b>Verification question</b></td><td>" . $question_text[$user->question_id] . "</td></tr>";
     }
     if ((ALLOW_SELF_MAXLOGINS == 1) && ($admin == 0) && ($user_id == $user->id)) {
-        $can_set_maxlogins = time_till_maxlogins($user->signup_ts);
-        $user_age = time() - $user->signup_ts;
-        if ($user_age > ALLOW_MAXLOGINS[2]) {
-            $temp_maxlogins = 2;
-            if ($user_age > ALLOW_MAXLOGINS[3])
-                $temp_maxlogins = "3";
-            echo "<tr><td valign=\"top\"><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
-            echo "<select name=\"maxlogins\" id=\"maxlogins\">";
-            for ($ml = 1; $ml <= $temp_maxlogins; $ml++) {
-                echo "<option ";
-                if ($ml == ($user->maxlogins + 0)) {
-                    echo "selected ";
-                }
-                echo "value=" . $ml . ">" . $ml . "</option>\n";
+        $can_set_max_logins = time_to_next_max_logins($user->signup_ts);
+        $current_max_logins = user_max_logins($user->signup_ts);
+
+        echo "<tr><td valign=\"top\"><b>User's Max Logins</b></td><td><form method=\"post\" action=\"up_maxlogins.php\"><strong>" . ($user->maxlogins + 0) . "</strong>. Change to ";
+        echo "<select name=\"maxlogins\" id=\"maxlogins\">";
+
+        for ($ml = 1; $ml <= $current_max_logins['max_logins']; $ml++) {
+            echo "<option ";
+            if ($ml == ($user->maxlogins + 0)) {
+                echo "selected ";
             }
-            echo "</select>";
-            echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_maxlogins . "</td></tr>\n";
-        } else
-            echo "<tr><td><b>User's Max Logins</b></td><td><span style=\"font-style: italic; padding-left: 50px;\">&nbsp;&nbsp;" . $can_set_maxlogins . "</span></td></tr>\n";
+            echo "value=" . $ml . ">" . $ml . "</option>\n";
+        }
+        echo "</select>";
+        echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_max_logins . "</td></tr>\n";
+    } else {
+        echo "<tr><td><b>User's Max Logins</b></td><td><span style=\"font-style: italic; padding-left: 50px;\">&nbsp;&nbsp;" . $can_set_max_logins . "</span></td></tr>\n";
     }
 
     if (!REGPROC_ALLOWMULTIPLE) {
