@@ -56,8 +56,8 @@ if ($username != "" && $password != "") {
 	}
 	$user_id = chk_password($username, $password, -1);
 	if ($user_id > 0) {
+        $res = pg_safe_exec("select users.id,users.flags,levels.access from users left join levels on users.id=levels.user_id and levels.channel_id=1 where users.id=" . (int)$user_id);
 
-		$res = pg_safe_exec("select users.id,users.flags,levels.access from users,levels where users.id=" . (int)$user_id . " and users.id=levels.user_id and levels.channel_id=1 and levels.access>0");
 		if (pg_numrows($res) == 0) {
 			if (ADMINONLY_MIRROR) {
 				echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
@@ -114,6 +114,8 @@ if ($username != "" && $password != "") {
 		}
 
 		// check IP restrictions . . . (only for * persons or persons with an ACL set, excepted ALUMNIs (as X on IRC))
+        $logger->debug($user_id . " -> is_alumni=" . $is_alumni . " is_admin=" . $is_admin . " has_ipr=" . has_ipr($user_id) . " flags=" . $ouu->flags);
+
 		if (($is_alumni == 0 && ($is_admin > 0 || acl())) || has_ipr($user_id)) {
 			if (is_ip_restrict()) {
 				$admin = $is_admin;
