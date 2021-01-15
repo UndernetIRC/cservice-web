@@ -341,7 +341,10 @@ switch ((int)$curr_step) {
 			echo "While you need not use channel services to have a username, be aware that attempts to register multiple usernames to ";
 			echo "the same person will result in a suspension of all the offending names. ";
 			echo "Don't jeopardize your access to channel services by trying to register multiple usernames on our system.<br>\n";
-			echo "Applying for a username while connected from a compromised computer is not allowed.</p>\n";
+			echo "<br>Applying for a username while connected from a compromised computer is not allowed.</p>\n";
+			if (DEFAULT_MAX_LOGINS > 1) {
+				printf("<p>Please, be aware that MAX LOGINS is set to %d by default. You can always decrease it to 1, or increase it to %d after a period of time, the time period to wait is visible on your profile page.</p>\n", DEFAULT_MAX_LOGINS, sorted_max_logins()[0]['max_logins']);
+			}
 			echo "<p>Now click 'Submit' to finish your application.</p>\n";
 		}
 		break;
