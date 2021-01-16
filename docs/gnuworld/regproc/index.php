@@ -73,21 +73,20 @@ std_theme_body("../");
 	$rsts = pg_safe_exec("SELECT signup_ts FROM users WHERE id=" . (int)$user_id);
 	$rsto = pg_fetch_object($rsts);
 	if ((int)$rsto->signup_ts>0) {
-        $user_age = time() - $rsto->signup_ts;
-        if ($user_age < $allow_multi_chans[1]) {
+	    $next_channel = time_next_channel($rsto->signup_ts);
+        if (has_a_channel($user_id) && sizeof($next_channel) > 0) {
             echo "<html><head><title>REGISTRATION PROCESS</title>";
 			std_theme_styles();
 			echo "</head>\n";
 			std_theme_body("../");
 			echo "<b>CHANNEL SERVICE REGISTRATION PROCESS</b><br><hr noshade size=2><br>\n";
-            echo "<h2>You need to wait " . seconds2human($allow_multi_chans[1] - $user_age) . " before you can register a channel.</h2>";
+            echo "<h2>You need to wait " . seconds2human($next_channel['seconds_next_channel']) . " before you can register a channel.</h2>";
             echo "<br>\n";
             echo "<a href=\"javascript:history.go(-1);\">Go back</a><br>\n";
             echo "</body></html>\n\n";
             die;
         }
 	}
-
 
 	if (!REGPROC_ALLOWMULTIPLE) {
         if (has_a_channel($user_id)) {

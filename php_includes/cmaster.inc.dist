@@ -961,7 +961,7 @@ function user_channel_limit($user_id) {
 }
 
 function has_a_channel($user_id) {
-    global $admin,$allow_multi_chans;
+    global $admin;
 
     if (REGPROC_ALLOWMULTIPLE==1 || $admin > 0) { return false; }
 

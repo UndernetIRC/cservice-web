@@ -927,17 +927,11 @@ if (!$edit || $admin < 800) {
     }
 
     if (!REGPROC_ALLOWMULTIPLE) {
-        $user_age = time() - $user->signup_ts;
-
+        $next_channel = time_next_channel($user->signup_ts);
         echo "<tr><td valign=\"top\"><b>Channel manager max limit</b></td><td>" . user_channel_limit($user->id);
 
-        asort($allow_multi_chans);
-
-        foreach ($allow_multi_chans as $key => $val) {
-            if ($user_age < $val) {
-                echo "<span style=\"font-style: italic; padding-left: 50px;\">You need to wait " . seconds2human($val - $user_age) . " before you can register {$key} channel(s).</span>";
-                break;
-            }
+        if ($next_channel) {
+            echo "<span style=\"font-style: italic; padding-left: 50px;\">You need to wait " . seconds2human($next_channel['seconds_next_channel']) . " before you can register {$next_channel['max_channels']} channel(s).</span>";
         }
         echo "</td></tr>";
     }
