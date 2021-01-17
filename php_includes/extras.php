@@ -645,43 +645,51 @@ function popUpClosed() {
         return $max_logins;
     }
 
-    function user_max_logins(int $user_signup_timestamp): array {
-        $account_age = time() - $user_signup_timestamp;
+    function user_max_logins($user_signup_timestamp): array {
+        if ($user_signup_timestamp > 0) {
+            $account_age = time() - $user_signup_timestamp;
 
-        foreach (sorted_max_logins() as $item) {
-            if ($account_age >= $item['account_age']) {
-                return $item;
+            foreach (sorted_max_logins() as $item) {
+                if ($account_age >= $item['account_age']) {
+                    return $item;
+                }
             }
         }
 
         return array("max_logins" => DEFAULT_MAX_LOGINS, "account_age" => 0);
     }
 
-    function time_to_next_max_logins(int $user_signup_timestamp): string {
-        $account_age = time() - $user_signup_timestamp;
+    function time_to_next_max_logins($user_signup_timestamp): string {
         $msg = '';
 
-        foreach (sorted_max_logins() as $item) {
-            if ($account_age <= $item['account_age']) {
-                $msg = "You need to wait " . seconds2human($item['account_age'] - $account_age) . " before you can set MAXLOGINS " . $item['max_logins'];
-                break;
+        if ($user_signup_timestamp > 0) {
+            $account_age = time() - $user_signup_timestamp;
+
+            foreach (sorted_max_logins() as $item) {
+                if ($account_age <= $item['account_age']) {
+                    $msg = "You need to wait " . seconds2human($item['account_age'] - $account_age) . " before you can set MAXLOGINS " . $item['max_logins'];
+                    break;
+                }
             }
         }
 
         return $msg;
     }
 
-    function time_next_channel(int $user_signup_timestamp): array {
-        $allow_multi_chans = ALLOW_MULTI_CHANS;
-        $account_age = time() - $user_signup_timestamp;
+    function time_next_channel($user_signup_timestamp): array {
+        if ($user_signup_timestamp > 0) {
+            $allow_multi_chans = ALLOW_MULTI_CHANS;
+            $account_age = time() - $user_signup_timestamp;
 
-        asort($allow_multi_chans);
+            asort($allow_multi_chans);
 
-        foreach ($allow_multi_chans as $key => $val) {
-            if ($account_age < $val) {
-                return ['max_channels' => $key, 'seconds_next_channel' => $val - $account_age];
+            foreach ($allow_multi_chans as $key => $val) {
+                if ($account_age < $val) {
+                    return ['max_channels' => $key, 'seconds_next_channel' => $val - $account_age];
+                }
             }
         }
+
         return [];
     }
 

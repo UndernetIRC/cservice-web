@@ -923,7 +923,7 @@ if (!$edit || $admin < 800) {
         echo "</select>";
         echo "&nbsp;<input type=\"submit\" value=\"Confirm and set\"/></form>" . $can_set_max_logins . "</td></tr>\n";
     } else {
-        echo "<tr><td><b>User's Max Logins</b></td><td><span style=\"font-style: italic; padding-left: 50px;\">&nbsp;&nbsp;" . $can_set_max_logins . "</span></td></tr>\n";
+        echo "<tr><td><b>User's Max Logins</b></td><td>" . ($user->maxlogins + 0) . "</td></tr>\n";
     }
 
     if (!REGPROC_ALLOWMULTIPLE) {
