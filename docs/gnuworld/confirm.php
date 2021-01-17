@@ -1,11 +1,10 @@
-<?
-
-/* <!-- $Id: confirm.php,v 1.15 2004/05/20 21:05:31 nighty Exp $ //--> */
+<?php
+require("../../php_includes/cmaster.inc");
 
 if (!check_admin_crc()) {
-        require("../../php_includes/blackhole.inc");
+	require("../../php_includes/blackhole.inc");
 }
-require("../../php_includes/cmaster.inc");
+
 $test_rbl=1;
 if($loadavg5 >= CRIT_LOADAVG)
 {
