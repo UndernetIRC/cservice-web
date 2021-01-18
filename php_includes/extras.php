@@ -646,15 +646,18 @@ function popUpClosed() {
     }
 
     function user_max_logins($user_signup_timestamp): array {
-        if ($user_signup_timestamp > 0) {
-            $account_age = time() - $user_signup_timestamp;
+        if ($user_signup_timestamp == NULL) {
+            $user_signup_timestamp = 0;
+        }
 
-            foreach (sorted_max_logins() as $item) {
-                if ($account_age >= $item['account_age']) {
-                    return $item;
-                }
+        $account_age = time() - $user_signup_timestamp;
+
+        foreach (sorted_max_logins() as $item) {
+            if ($account_age >= $item['account_age']) {
+                return $item;
             }
         }
+
 
         return array("max_logins" => DEFAULT_MAX_LOGINS, "account_age" => 0);
     }
@@ -677,16 +680,18 @@ function popUpClosed() {
     }
 
     function time_next_channel($user_signup_timestamp): array {
-        if ($user_signup_timestamp > 0) {
-            $allow_multi_chans = ALLOW_MULTI_CHANS;
-            $account_age = time() - $user_signup_timestamp;
+        if ($user_signup_timestamp == NULL) {
+            $user_signup_timestamp = 0;
+        }
 
-            asort($allow_multi_chans);
+        $allow_multi_chans = ALLOW_MULTI_CHANS;
+        $account_age = time() - $user_signup_timestamp;
 
-            foreach ($allow_multi_chans as $key => $val) {
-                if ($account_age < $val) {
-                    return ['max_channels' => $key, 'seconds_next_channel' => $val - $account_age];
-                }
+        asort($allow_multi_chans);
+
+        foreach ($allow_multi_chans as $key => $val) {
+            if ($account_age < $val) {
+                return ['max_channels' => $key, 'seconds_next_channel' => $val - $account_age];
             }
         }
 
