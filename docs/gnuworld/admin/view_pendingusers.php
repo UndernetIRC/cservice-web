@@ -25,7 +25,7 @@
  echo "<b>" . $s1->count . "</b> total user(s) pending.";
  echo "<br><br>";
  echo "<i>";
- $confirm_url = gen_server_url() . substr( $REQUEST_URI,0,strrpos( substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")),"/")) . "/confirm.php";
+ $confirm_url = gen_server_url() . LIVE_LOCATION . "/confirm.php";
  echo "Pending users are *NOT* yet active on the system, they wait the user confirmation by clicking on the email they received,<br>\n";
  echo "or by going on <a href=\"" . $confirm_url . "\">" . $confirm_url . "</a> and by entering the given cookie.<br>\n";
  echo "Pending users expire <b>24 hours</b> after the request was posted.";

@@ -10,7 +10,7 @@ std_connect();
 $cTheme = get_theme_info();
 $user_id = std_security_chk($_COOKIE["auth"]);
 $admin = 0;
-$confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/confirm.php";
+$confirm_url = gen_server_url() . LIVE_LOCATION . "/confirm.php";
 
 // check for global lock (admin)
 if (newusers_off()) {

@@ -10,7 +10,7 @@ $cTheme = get_theme_info();
 	}
 
 
-	$confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/confirm.php";
+$confirm_url = gen_server_url() . LIVE_LOCATION . "/confirm.php";
 
 //
 $lowusername = strtolower( $username ); // lower case pgsql cares

@@ -268,7 +268,7 @@ switch ($_GET["A"]) {
 							$mm .= "You'll receive a confirmation right after this message.\n\n";
 						} else {
 							$mm .= "You can reply to this message by following the next link :\n";
-							$da_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/ticket.php?A=reply&ID=" . $_GET["ID"] . "&C=" . md5( CRC_SALT_0005 . $_GET["ID"] . $da_rt . "reply-user" ) ."&RT=" . $da_rt;
+							$da_url = gen_server_url() . LIVE_LOCATION . "/complaints/ticket.php?A=reply&ID=" . $_GET["ID"] . "&C=" . md5( CRC_SALT_0005 . $_GET["ID"] . $da_rt . "reply-user" ) ."&RT=" . $da_rt;
 							$mm .= $da_url . "\n\n";
 						}
 						custom_mail($daobj->from_email,"[" . NETWORK_NAME . " CService Complaints] " . $_GET["ID"] . " - Admin Reply",$mm,"From: " . NETWORK_NAME . " Channel Service <" . OBJECT_EMAIL . ">\nReply-to: DO.NOT@REPLY.THANKS\nX-Mailer: " . NETWORK_NAME . " CService Complaint Module\n\n");

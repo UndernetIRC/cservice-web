@@ -334,7 +334,7 @@ if (!$res) { die($back_lnk . "<b>SQL ERROR</b><br><br></td></tr></table></body><
 	$mmsg .= "We recently received a complaint to CService using this e-mail address (" . $_POST["from_mail"] . ") for the reply.\n";
 	$mmsg .= "If you haven't sent any complaint and don't know what this is all about, then just delete this message and DO NOT CLICK below.\n\n";
 	$mmsg .= "If you are the person that sent that complaint, please confirm it by clicking the link below within 48 hours :\n\n";
-	$confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/confirm.php";
+	$confirm_url = gen_server_url() . LIVE_LOCATION . "/complaints/confirm.php";
 	$mmsg .= "\t\t" . $confirm_url . "?ID=" . $da_crc . "\n\n";
 	$mmsg .= "\nThe " . NETWORK_NAME . " Channel Service.\n\n";
 	custom_mail($_POST["from_mail"],"[" . NETWORK_NAME . " CService Complaints] Confirmation request",$mmsg,"From: " . NETWORK_NAME . " Channel Service <" . OBJECT_EMAIL . ">\nReply-to: DO.NOT@REPLY.THANKS\nX-Mailer: " . NETWORK_NAME . " CService Complaint Module\n\n");

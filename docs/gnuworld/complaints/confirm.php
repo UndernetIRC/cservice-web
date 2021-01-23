@@ -18,11 +18,11 @@ if (!$r) { echo "<h2>Invalid ID</h2>"; } else {
 		echo "Your complaint has been placed in the work queue and will be processed as soon as possible.<br><br>\n";
 		echo "Please allow 3-5 days for processing, You will be re-contacted by e-mail.<br></h3><br><h4><br>\n";
 		echo "Your ticket number is <b>" . $ticket_number . "</b>, you can see the status of your complaint by going to :<br>\n";
-		$status_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/status.php";
+		$status_url = gen_server_url() . LIVE_LOCATION . "/complaints/status.php";
 		$added_url_s = "?ID=" . $ticket_number;
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"status.php" . $added_url_s . "\">" . $status_url . $added_url_s . "</a><br><br>\n";
 		echo "You can ABANDON / CLOSE your complaint by going to :<br>\n";
-		$close_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/ticket.php";
+		$close_url = gen_server_url() . LIVE_LOCATION . "/complaints/ticket.php";
 		$added_url_c = "?A=close&ID=" . $ticket_number . "&C=" . md5( CRC_SALT_0005 . $ticket_number . "close" );
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"ticket.php" . $added_url_c . "\">" . $close_url . $added_url_c . "</a><br><br>\n";
 		echo "The " . NETWORK_NAME . " Channel Service Complaint Department Team.<br><br></h4>\n";

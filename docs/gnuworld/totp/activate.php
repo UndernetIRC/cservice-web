@@ -69,8 +69,8 @@ if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
 	pg_safe_exec($query);
 	$mailm = "";
 	$mailm .= "\nHello,\n\nThis is a confirmation that you have chosen to enable two-step verification,\nto complete the activation follow the instructions below.\n\n";
-    preg_match('/(.+)\/totp.*/', $REQUEST_URI, $m);
-	$confirm_url = gen_server_url() . preg_replace('/\/totp.*/','', $REQUEST_URI) ."/main.php?entotp=1&ID=$cookieval";
+    preg_match('/(.+)\/totp.*/', $_SERVER['REQUEST_URI'], $m);
+	$confirm_url = gen_server_url() . LIVE_LOCATION ."/main.php?entotp=1&ID=$cookieval";
 	$mailm .= "Make sure that you are logged in to the CService webpage, then click on this link ".$confirm_url." and follow the instructions.\n\n";
 	$mailm .= "\n\nThe " . NETWORK_NAME . " Channel Service.\n\n";
 	custom_mail($dauser->email,"CService enable two-step verification",$mailm,"From: " . NETWORK_NAME . " Channel Service <" . FROM_NEWUSER . ">\nReply-to: " . OBJECT_EMAIL . "\nX-Mailer: " . NETWORK_NAME . " Channel Service\n\n");

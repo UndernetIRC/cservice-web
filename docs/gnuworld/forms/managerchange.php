@@ -377,7 +377,7 @@ if (pg_numrows($huhu)>0) {
 	}
 	$mmsg .= "to user '$newmgr->user_name' who is a level 499 on " . str_replace("\\'","'",$channel) . ",\n\n";
 	$mmsg .= "then click on the following link to confirm (say YES) within SIX HOURS, after that it will be too late :\n\n";
-	$mmsg .= "\t" . gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/confirm_mgrchange.php?ID=$crc_cookie\n\n";
+	$mmsg .= "\t" . gen_server_url() . LIVE_LOCATION . "/forms/confirm_mgrchange.php?ID=$crc_cookie\n\n";
 	$mmsg .= "if you dont want this request to be processed, just IGNORE this mail and DO NOT click on the above URL.\n\n\n";
 	$mmsg .= "The " . NETWORK_NAME . " Channel Service.\n\n";
 

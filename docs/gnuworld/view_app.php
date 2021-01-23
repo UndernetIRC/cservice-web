@@ -110,7 +110,7 @@
 				echo "<br>";
 				echo "<script language=\"JavaScript1.2\">\n<!--\n";
 				echo "function admintracker() {\n";
-			        echo "\tmyurl = 'app_tracker.php?APPID=" . $id . "&RETURL=" . urlencode($REQUEST_URI) . "';\n";
+			        echo "\tmyurl = 'app_tracker.php?APPID=" . $id . "&RETURL=" . urlencode($_SERVER['REQUEST_URI']) . "';\n";
 			        echo "\tpopwin = open(myurl,'AppTracker','toolbar=no,directories=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=250,height=500');\n";
 			        echo "\tpopwin.focus();\n";
 				echo "}\n";
@@ -496,7 +496,7 @@
 	}
 	echo "<tr><td valign=center align=right><u>Current status :</u>&nbsp;</td><td valign=center><font size=+2><b><font color=" . $status_color . ">" . $status_msg . "</font></b></font></td></tr>\n";
 	$backlink2 = $backlink;
-	if ($backlink2=="list_app.php") { $backlink2 =  gen_server_url() . $REQUEST_URI; }
+	if ($backlink2=="list_app.php") { $backlink2 =  gen_server_url() . $_SERVER['REQUEST_URI']; }
 	if (REQUIRED_SUPPORTERS>0 && $nrw_lvl>0) {
 		echo "<tr><td valign=center align=right><font color=#ff0000><b>*</b></font>&nbsp;<u>Review :</u>&nbsp;</td><td valign=center><font size=+1><b>";
 		if ($ptable->reviewed=="Y") {
@@ -606,7 +606,7 @@
 			echo "<tr><td colspan=2 valign=center align=center>\n";
 			echo "<br><br><br>\n";
 			echo "You must be <b>logged in</b> in order to post objections<br><br>\n";
-			echo "<a href=\"login.php?redir=" . urlencode($REQUEST_URI) . "\" target=\"_top\">Click here to log in</a>\n";
+			echo "<a href=\"login.php?redir=" . urlencode($_SERVER['REQUEST_URI']) . "\" target=\"_top\">Click here to log in</a>\n";
 			echo "<br><br><br>\n";
 			echo "</td></tr>\n";
 		}

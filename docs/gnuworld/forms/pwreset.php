@@ -119,12 +119,8 @@ if ($ro1->post_forms!="" && $ro1->post_forms>0) {
 	}
 }
 
-$temp = $REQUEST_URI;
-$tpos = strrpos($temp,"/");
-$tpos2 = strrpos(substr($temp,0,$tpos),"/");
-$turl = substr($temp,0,$tpos2+1);
-$tref = gen_server_url() . $turl . "forgotten_pass.php";
-$tref2 = gen_server_url() . $REQUEST_URI;
+$tref = gen_server_url() . LIVE_LOCATION . "/forgotten_pass.php";
+$tref2 = gen_server_url() . $_SERVER['REQUEST_URI'];
 $_SERVER['HTTP_REFERER']=str_replace("https", "http", $_SERVER['HTTP_REFERER']);
 $tref=str_replace("https", "http", $tref);
 $tref2=str_replace("https", "http", $tref2);
@@ -253,7 +249,7 @@ if ($crc == md5($HTTP_USER_AGENT . $ts . CRC_SALT_0009)) {
 
 	$cookieval = md5(CRC_SALT_0015 . uniqid("",1) . time() . $da_emailaddy . $verifdata);
 	pg_safe_exec("INSERT INTO pending_pwreset (cookie,user_id,question_id,verificationdata,expiration) VALUES ('$cookieval',$uid,'$verifq','$verifdata',now()::abstime::int4+21600)");
-	$confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/confirm_pwreset.php?ID=$cookieval";
+	$confirm_url = gen_server_url() . LIVE_LOCATION . "/forms/confirm_pwreset.php?ID=$cookieval";
 	$the_msg = "If you would like to confirm that the new verification question/answer for '$da_username' should be changed as requested,\n";
 	$the_msg .= "then click on the link below within 6 hours :\n\n";
 	$the_msg .= "\t$confirm_url\n\n\nThank you\n" . NETWORK_NAME . " Channel Service\n\n\nPS- Please do *NOT* reply to this mail.";

@@ -148,7 +148,7 @@ if ($verifdata!=$user->verificationdata) {
 	$cookieval = md5(CRC_SALT_0020 . uniqid("",1) . time() . $da_newmail);
 
 	pg_safe_exec("INSERT INTO pending_emailchanges (cookie,user_id,old_email,new_email,expiration,phase) VALUES ('$cookieval',$user_id,'$da_emailaddy','$da_newmail',now()::abstime::int4+21600,1)");
-	$confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/confirm_emailchange.php?ID=$cookieval";
+	$confirm_url = gen_server_url() . LIVE_LOCATION. "/forms/confirm_emailchange.php?ID=$cookieval";
 
 	$the_msg = "If you would like to confirm that the new email-in-record for '$da_username' should be '$da_newmail',\n";
 	$the_msg .= "then click on the link below within 6 hours :\n\n";

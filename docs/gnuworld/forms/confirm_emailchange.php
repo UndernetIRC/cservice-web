@@ -41,7 +41,7 @@ $user=pg_fetch_object($res,0);
         $cookieval = md5(CRC_SALT_0020 . uniqid("",1) . time() . $nmail);
 	pg_safe_exec("update pending_emailchanges SET expiration=(now()::abstime::int4+21600),phase=2,cookie='$cookieval' WHERE phase=1 AND cookie='$ID'");
 
-        $confirm_url = gen_server_url() . substr($REQUEST_URI,0,strrpos($REQUEST_URI,"/")) . "/confirm_emailchange2.php?ID=$cookieval";
+        $confirm_url = gen_server_url() . LIVE_LOCATION . "/forms/confirm_emailchange2.php?ID=$cookieval";
 
         $the_msg = "If you would like to confirm that the new email-in-record for '".$user->user_name."' should be '$nmail',\n";
         $the_msg .= "then click on the link below within 6 hours :\n\n";
