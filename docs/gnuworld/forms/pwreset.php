@@ -122,7 +122,7 @@ if ($ro1->post_forms!="" && $ro1->post_forms>0) {
 $tref = gen_server_url() . LIVE_LOCATION . "/forgotten_pass.php";
 $tref2 = gen_server_url() . $_SERVER['REQUEST_URI'];
 
-if ($_SERVER['HTTP_REFERER'] != $tref) {
+if ($_SERVER['HTTP_REFERER'] != $tref && $_SERVER['HTTP_REFERER'] != $tref2) {
 	echo "<h2>\n";
 
 	echo "You can only access this form after at least you tried the 'forgotten password' option.<br>\n";
