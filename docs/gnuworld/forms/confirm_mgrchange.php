@@ -9,10 +9,6 @@ if($loadavg5 >= (2*CRIT_LOADAVG))
 
 $cTheme = get_theme_info();
 
-echo "WTF " . gen_server_url();
-
-/* $Id: confirm_mgrchange.php,v 1.6 2003/01/17 05:47:16 nighty Exp $ */
-
 if ($ID!="" && strlen($ID)<=128) {
 	std_connect();
 	pg_safe_exec("delete from pending_mgrchange where expiration<now()::abstime::int4 AND confirmed='0'");
