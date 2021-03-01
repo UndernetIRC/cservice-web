@@ -693,6 +693,11 @@ if (pg_numrows($r) > 0) {
     $lsuser = "";
     $missingrec = 1;
 }
+
+if ($admin > 0 || $user->id == $user_id) {
+    echo("<tr bgcolor=#ffffff><td><b>Created On: </b></td><td>" . cs_time($user->created_ts) . "</td></tr>");
+}
+
 if ($admin > 0) {
 
     if (preg_match("/^forgotten.password./", $user->last_updated_by)) { // forgotten passord...
