@@ -695,7 +695,7 @@ if (pg_numrows($r) > 0) {
 }
 
 if ($admin > 0 || $user->id == $user_id) {
-    echo("<tr bgcolor=#ffffff><td><b>Created On: </b></td><td>" . cs_time($user->created_ts) . "</td></tr>");
+    echo("<tr bgcolor=#ffffff><td><b>Created On: </b></td><td>" . cs_time($user->created_ts) . "(" . drake_duration((time()-($user->created_ts))) . " ago)</td></tr>");
 }
 
 if ($admin > 0) {
