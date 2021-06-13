@@ -95,9 +95,7 @@ $sec_id = md5( $user_id . CRC_SALT_0019 . $authcsc );
 		<a href="users.php" target=right>User Lookup</a><br>
 		<? } ?>
 	<? } ?>
-        <? if ($admin>=600) { ?>
-                <a href="/collector/" target="_blank">Collector</a><br><br>
-        <? } ?>
+
 	<? if ($admin>0) { ?>
 		<a HREF="list_app.php" target="right"><b>List Applications</b></a><br><br>
 		<a href="users.php" target=right>User Lookup</a><br>

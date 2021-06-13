@@ -1,10 +1,10 @@
 <? 
-//include("../../php_includes/cmaster.inc");
+include("../../php_includes/cmaster.inc");
  ?>
 <!-- $Id: index.php,v 1.4 2002/05/26 01:10:27 nighty Exp $ //-->
 <HTML>
 <HEAD>
-        <TITLE>Undernet&nbsp;&nbsp;&nbsp;C h a n n e l&nbsp;&nbsp;&nbsp;S e r v i c e</TITLE>
+        <TITLE><? echo NETWORK_NAME ?>&nbsp;&nbsp;&nbsp;C h a n n e l&nbsp;&nbsp;&nbsp;S e r v i c e</TITLE>
 <script>
 function openPopup() {
  var url = this.href;
