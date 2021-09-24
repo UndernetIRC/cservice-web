@@ -613,22 +613,6 @@
 
 	}
 
-	if (($admin>=$min_lvl || $nrw_lvl>1) && $status==8) {
-		echo "<td><td colspan=2>&nbsp;</td></tr>\n";
-		echo "<tr bgcolor=#" . $cTheme->table_bgcolor . "><td colspan=2 align=center><b>Add an admin comment for that application</b></td></tr>\n";
-		$rrr = pg_safe_exec("SELECT user_name FROM users WHERE id='" . $user_id . "'");
-		$roX = pg_fetch_object($rrr,0);
-		$user_name = $roX->user_name;
-		if ($err==1) {
-			echo "<tr><td valign=center align=left colspan=2><font color=#" . $cTheme->main_warnmsg . "><b>Please check your entry, comment acceptable size is 1-700 chars.</b></font></td></tr>\n";
-		}
-		echo "<tr><td valign=center align=right><u>Your username :</u>&nbsp;</td><td valign=center><font size=+1><b>$user_name</b><input type=hidden name=user_name value=\"$user_name\"></font></td></tr>\n";
-		echo "<tr><td valign=center align=right><font color=#" . $cTheme->main_warnmsg . "><b>*</b></font>&nbsp;<u>Objection type :</u>&nbsp;</td><td valign=center><select name=admin_only><option value=\"Y\">Admin comment</option></select></td></tr>\n";
-		echo "<tr><td valign=top align=right><u>Your comment :</u>&nbsp;</td><td valign=center><font size=+1><textarea name=comment cols=50 rows=7>$comment</textarea></font></td></tr>\n";
-		echo "<tr><td align=center colspan=2>";
-		echo "<input type=hidden name=channel_id value=$channel_id><input type=submit value=\" SUBMIT THIS ADMIN COMMENT \"><br><br>&nbsp;</td></tr>\n";
-	}
-
 	if ($status<3 || $status==8) {
 		if ($status==8) {
 			echo "<tr><td colspan=2>&nbsp;</td></tr>\n";
@@ -678,11 +662,13 @@
 <script language="JavaScript1.2">
 <!--
 function check(f) {
-	if (f.user_name.value=="") {
+	let uname = document.forms["object"]["user_name"].value;
+    if (uname.value=="") {
 		alert('USERNAME is required.');
 		return(false);
 	}
-	if (f.comment.value=="") {
+	let comment = document.forms["object"]["comment"].value;
+    if (comment.value=="") {
 		alert('You cannot add an objection without a comment.');
 		return(false);
 	}
