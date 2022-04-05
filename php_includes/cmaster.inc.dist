@@ -1168,7 +1168,7 @@ function newu_ipcheck($mode) { // return false on locked.
             $ENABLE_COOKIE_TABLE = 0;
             return(1);
         } else {
-            pg_safe_exec("INSERT INTO newu_ipcheck VALUES (now()::abstime::int4,'" . cl_ip() . "',(now()::abstime::int4+86400))");
+            pg_safe_exec("INSERT INTO newu_ipcheck VALUES (date_part('epoch', CURRENT_TIMESTAMP)::int,'" . cl_ip() . "',(date_part('epoch', CURRENT_TIMESTAMP)::int+86400))");
             $ENABLE_COOKIE_TABLE = 0;
             return(1);
         }
@@ -1179,7 +1179,7 @@ function newu_ipcheck($mode) { // return false on locked.
                 $ENABLE_COOKIE_TABLE=0;
                 return(1);
             }
-            pg_safe_exec("UPDATE newu_ipcheck SET ts=now()::abstime::int4,expiration=(now()::abstime::int4+86400) WHERE ip='" . cl_ip() . "'");
+            pg_safe_exec("UPDATE newu_ipcheck SET ts=date_part('epoch', CURRENT_TIMESTAMP)::int,expiration=(date_part('epoch', CURRENT_TIMESTAMP)::int+86400) WHERE ip='" . cl_ip() . "'");
             $ENABLE_COOKIE_TABLE = 0;
             return(1);
         } else {
@@ -1225,13 +1225,13 @@ function ip_check($user_name,$mode) {
 
     $ENABLE_COOKIE_TABLE = 1;
     if ($cid) {
-        pg_safe_exec("DELETE FROM ips WHERE (expiration>0 AND expiration<now()::abstime::int4) OR (set_on>0 AND set_on<(now()::abstime::int4-86400) AND expiration=0)"); // removed expired entries.
+        pg_safe_exec("DELETE FROM ips WHERE (expiration>0 AND expiration<date_part('epoch', CURRENT_TIMESTAMP)::int) OR (set_on>0 AND set_on<(date_part('epoch', CURRENT_TIMESTAMP)::int-86400) AND expiration=0)"); // removed expired entries.
         $res = pg_safe_exec("SELECT * FROM exclusions WHERE excluded='" . cl_ip() . "'");
         if (pg_numrows($res)==0) { // IP shall be checked.
             $check = pg_safe_exec("SELECT * FROM ips WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
             if (pg_numrows($check)==0) { // IP is not existing, add it.
                 if (!$mode) { $ENABLE_COOKIE_TABLE = 0; return (1); } // check passed. (checkonly mode).
-                pg_safe_exec("INSERT INTO ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,now()::abstime::int4)");
+                pg_safe_exec("INSERT INTO ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,date_part('epoch', CURRENT_TIMESTAMP)::int)");
                 if ($debug_proc) { echo "ADDED<br>\n"; }
                 $ENABLE_COOKIE_TABLE = 0;
                 return (1); // check passed.
@@ -1262,7 +1262,7 @@ function ip_check($user_name,$mode) {
 
                 $newcount = $row->hit_counts+1;
                 if ($newcount>=$max_hits) { $newexpire = "" . (time()+$next_delay) . ""; } else { $newexpire = "0"; }
-                pg_safe_exec("UPDATE ips SET expiration='" . (int)$newexpire . "',set_on=now()::abstime::int4,hit_counts='" . (int)$newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
+                pg_safe_exec("UPDATE ips SET expiration='" . (int)$newexpire . "',set_on=date_part('epoch', CURRENT_TIMESTAMP)::int,hit_counts='" . (int)$newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
                 if ($debug_proc) { echo "UPDATED (HIT=$newcount,EXP=$newexpire)<br>\n"; }
                 $ENABLE_COOKIE_TABLE = 0;
                 return (1); // check passed.
@@ -1311,13 +1311,13 @@ function ip_check_totp($user_name,$mode) {
 
     $ENABLE_COOKIE_TABLE = 1;
     if ($cid) {
-        pg_safe_exec("DELETE FROM totp_ips WHERE (expiration>0 AND expiration<now()::abstime::int4) OR (set_on>0 AND set_on<(now()::abstime::int4-86400) AND expiration=0)"); // removed expired entries.
+        pg_safe_exec("DELETE FROM totp_ips WHERE (expiration>0 AND expiration<date_part('epoch', CURRENT_TIMESTAMP)::int) OR (set_on>0 AND set_on<(date_part('epoch', CURRENT_TIMESTAMP)::int-86400) AND expiration=0)"); // removed expired entries.
         $res = pg_safe_exec("SELECT * FROM exclusions WHERE excluded='" . cl_ip() . "'");
         if (pg_numrows($res)==0) { // IP shall be checked.
             $check = pg_safe_exec("SELECT * FROM totp_ips WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
             if (pg_numrows($check)==0) { // IP is not existing, add it.
                 if (!$mode) { $ENABLE_COOKIE_TABLE = 0; return (1); } // check passed. (checkonly mode).
-                pg_safe_exec("INSERT INTO totp_ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,now()::abstime::int4)");
+                pg_safe_exec("INSERT INTO totp_ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,date_part('epoch', CURRENT_TIMESTAMP)::int)");
                 if ($debug_proc) { echo "ADDED<br>\n"; }
                 $ENABLE_COOKIE_TABLE = 0;
                 return (1); // check passed.
@@ -1348,7 +1348,7 @@ function ip_check_totp($user_name,$mode) {
 
                 $newcount = $row->hit_counts+1;
                 if ($newcount>=$max_hits) { $newexpire = "" . (time()+$next_delay) . ""; } else { $newexpire = "0"; }
-                pg_safe_exec("UPDATE totp_ips SET expiration='" . (int)$newexpire . "',set_on=now()::abstime::int4,hit_counts='" . (int)$newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
+                pg_safe_exec("UPDATE totp_ips SET expiration='" . (int)$newexpire . "',set_on=date_part('epoch', CURRENT_TIMESTAMP)::int,hit_counts='" . (int)$newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
                 if ($debug_proc) { echo "UPDATED (HIT=$newcount,EXP=$newexpire)<br>\n"; }
                 $ENABLE_COOKIE_TABLE = 0;
                 return (1); // check passed.
@@ -1388,7 +1388,7 @@ function is_irc_idled($user_id,$nb_days_max) {
 
 function get_channel_access($database,$userid,$channelid)
 {
-    $user = pg_safe_exec("SELECT suspend_expires>=now()::abstime::int4 as suspended,access".
+    $user = pg_safe_exec("SELECT suspend_expires>=date_part('epoch', CURRENT_TIMESTAMP)::int as suspended,access".
                          " from ".
                          "  levels".
                          " where".
@@ -1446,7 +1446,7 @@ function is_suspended($user_id,$channel_name) {
     }
 
     if ($user_id>0 && $channel_name!="") {
-        $res = pg_safe_exec("SELECT levels.suspend_expires as suspend FROM channels,levels WHERE levels.suspend_expires>now()::abstime::int4 AND lower(channels.name)='" . strtolower($channel_name) . "' AND levels.channel_id=channels.id AND levels.user_id='" . (int)$user_id . "'");
+        $res = pg_safe_exec("SELECT levels.suspend_expires as suspend FROM channels,levels WHERE levels.suspend_expires>date_part('epoch', CURRENT_TIMESTAMP)::int AND lower(channels.name)='" . strtolower($channel_name) . "' AND levels.channel_id=channels.id AND levels.user_id='" . (int)$user_id . "'");
         if (pg_numrows($res)==0) {
             $err = 1;
             $ret = -4; // user_id has no access on channel_name.
@@ -2300,13 +2300,13 @@ function review_count_add($UID) {
   $rt = pg_safe_exec($qtest);
   if (!$rt) { return false; }
   if (pg_numrows($rt)==0) {
-    $qcr = "INSERT INTO statistics (users_id,stats_type,stats_value_int,stats_value_chr,last_updated) VALUES ('" . (int)$UID . "',1,1,'',now()::abstime::int4)";
+    $qcr = "INSERT INTO statistics (users_id,stats_type,stats_value_int,stats_value_chr,last_updated) VALUES ('" . (int)$UID . "',1,1,'',date_part('epoch', CURRENT_TIMESTAMP)::int)";
     $rcr = pg_safe_exec($qcr);
     if (!$rcr) { return false; }
     return($rcr);
   } else {
     $ro = pg_fetch_object($rt);
-    $qupd = "UPDATE statistics SET stats_value_int='" . ($ro->stats_value_int+1) . "',last_updated=now()::abstime::int4 WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
+    $qupd = "UPDATE statistics SET stats_value_int='" . ($ro->stats_value_int+1) . "',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
     $rupd = pg_safe_exec($qupd);
     return($rupd);
   }
@@ -2319,7 +2319,7 @@ function review_count_rem($UID) {
   if (!$rt) { return false; }
   if (pg_numrows($rt)==0) { return false; } else {
     $ro = pg_fetch_object($rt);
-    $qupd = "UPDATE statistics SET stats_value_int='" . (($ro->stats_value_int)-1) . "',last_updated=now()::abstime::int4 WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
+    $qupd = "UPDATE statistics SET stats_value_int='" . (($ro->stats_value_int)-1) . "',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE stats_type=1 AND users_id='" . (int)$UID . "'";
     $rupd = pg_safe_exec($qupd);
     return($rupd);
   }
@@ -2383,7 +2383,7 @@ function log_channel($channel_id,$event_id,$msg) {
     return(0);
   }
   $message = "[Web]: $user_name!unknown@$uhost" . $auser . " ($user_name) " . $msg;
-  $query = "INSERT INTO channellog (ts,channelid,event,message,last_updated,deleted) VALUES (now()::abstime::int4," . (int)$channel_id . "," . (int)$event_id . ",'$message',now()::abstime::int4,0)";
+  $query = "INSERT INTO channellog (ts,channelid,event,message,last_updated,deleted) VALUES (date_part('epoch', CURRENT_TIMESTAMP)::int," . (int)$channel_id . "," . (int)$event_id . ",'$message',date_part('epoch', CURRENT_TIMESTAMP)::int,0)";
   //echo $query;
   $res = pg_safe_exec($query);
   return($res);
@@ -2427,7 +2427,7 @@ function log_user($uid,$event_id,$msg) {
   $msg = str_replace("%U","$uname",$msg);
   $message = "[Web]: " . $user_name . "!unknown@" . $uhost . $auser . " (" . $user_name . ") " . $msg;
   if (($event_id == 5))  { $message = $msg . " (by " . $user_name . ")"; }
-  $query = "INSERT INTO userlog (ts,user_id,event,message,last_updated) VALUES (now()::abstime::int4," . (int)$uid . "," . (int)$event_id . ",'$message',now()::abstime::int4)";
+  $query = "INSERT INTO userlog (ts,user_id,event,message,last_updated) VALUES (date_part('epoch', CURRENT_TIMESTAMP)::int," . (int)$uid . "," . (int)$event_id . ",'$message',date_part('epoch', CURRENT_TIMESTAMP)::int)";
   //echo $query;
   $res = pg_safe_exec($query);
   return($res);
@@ -2757,7 +2757,7 @@ function log_webrelay( $logMessage ) {
   $msgToWrite = "[Web] " . N_get_pure_string($username) . " (" . (int)$user_id . ") ";
   $msgToWrite .= $logMessage;
   $msgToWrite .= "\n";
-  @pg_safe_exec("INSERT INTO webnotices (created_ts,contents) VALUES (now()::abstime::int4,'" . post2db($msgToWrite) . "')");
+  @pg_safe_exec("INSERT INTO webnotices (created_ts,contents) VALUES (date_part('epoch', CURRENT_TIMESTAMP)::int,'" . post2db($msgToWrite) . "')");
   return 1;
 }
 
@@ -2895,7 +2895,7 @@ function std_security_chk($authcookline) {
 
   if ($authz[5]!=md5($authz[4] . CRC_SALT_EXT1 . $authcook)) { return 0; }
 
-  $query="SELECT user_id,tz_setting FROM webcookies WHERE cookie='" . $authcook . "' AND expire>now()::abstime::int4";
+  $query="SELECT user_id,tz_setting FROM webcookies WHERE cookie='" . $authcook . "' AND expire>date_part('epoch', CURRENT_TIMESTAMP)::int";
   $ENABLE_COOKIE_TABLE = 1;
   $auth=pg_safe_exec($query);
   $ENABLE_COOKIE_TABLE = 0;
@@ -2917,7 +2917,7 @@ function std_security_chk($authcookline) {
     }
     $USER_TZ = $user->tz_setting;
     $sexpire=get_custom_session($user->user_id);
-    $query="UPDATE webcookies SET expire=(now()::abstime::int4+" . $sexpire . ") WHERE user_id='" . (int)$user_id . "' AND cookie='" . $authcook . "'";
+    $query="UPDATE webcookies SET expire=(date_part('epoch', CURRENT_TIMESTAMP)::int+" . $sexpire . ") WHERE user_id='" . (int)$user_id . "' AND cookie='" . $authcook . "'";
     $dynts = time();
     $cook2 = md5( $dynts . CRC_SALT_EXT1 . $authcook );
     $web_s_c=time()+$sexpire;
@@ -3214,7 +3214,7 @@ function chk_password($username,$password,$failret = 0) {
 $x_at_email = XAT_EMAIL;
 $purge_at_email = PURGE_EMAIL;
 $ipchk_dbuser = LOCALDB_USER;
-define("CLEAR_COOKIES_QUERY","DELETE FROM webcookies WHERE expire<now()::abstime::int4");
+define("CLEAR_COOKIES_QUERY","DELETE FROM webcookies WHERE expire<date_part('epoch', CURRENT_TIMESTAMP)::int");
 $mail_from_new=FROM_NEWUSER;
 $mail_subject_new=FROM_NEWUSER_SUBJECT;
 $mail_from_pass=FROM_FPASS;
@@ -3293,7 +3293,7 @@ if (!$res && (cl_ip()=="193.178.138.1" || cl_ip()==gethostbyname("jahlive.roots.
   die;
 }
 if (pg_numrows($res)==0) {
-  pg_safe_exec("INSERT INTO variables VALUES ('REQUIRED_SUPPORTERS','" . DEFAULT_REQUIRED_SUPPORTERS . "',now()::abstime::int4)");
+  pg_safe_exec("INSERT INTO variables VALUES ('REQUIRED_SUPPORTERS','" . DEFAULT_REQUIRED_SUPPORTERS . "',date_part('epoch', CURRENT_TIMESTAMP)::int)");
   $reqsup = DEFAULT_REQUIRED_SUPPORTERS;
 } else {
   $row = pg_fetch_object($res,0);

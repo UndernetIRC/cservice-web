@@ -184,7 +184,7 @@ function search_check(f) {
 // start applications list...
 	$x = $xstart;
 
-	$oldest_ts = "(now()::abstime::int4-86400*$nb_days)";
+	$oldest_ts = "(date_part('epoch', CURRENT_TIMESTAMP)::int-86400*$nb_days)";
 	if (acl(XWEBAXS_2) || acl(XWEBAXS_3)) {
 		if ($force_all=="OK") {
 			$oldest_ts="0";

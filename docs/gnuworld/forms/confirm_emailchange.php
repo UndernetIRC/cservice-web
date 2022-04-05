@@ -11,7 +11,7 @@ $cTheme = get_theme_info();
 
 if ($ID!="" && strlen($ID)<=128) {
 	std_connect();
- 	$res=pg_safe_exec("select * from pending_emailchanges where phase=1 AND cookie='$ID' AND expiration>=now()::abstime::int4");
+ 	$res=pg_safe_exec("select * from pending_emailchanges where phase=1 AND cookie='$ID' AND expiration>=date_part('epoch', CURRENT_TIMESTAMP)::int");
   	if (pg_numrows($res)==0) {
 		std_theme_styles(1); std_theme_body("../");
 		echo "<h1>Error</h1> The URL entered is not valid.  Please check it ";
@@ -19,7 +19,7 @@ if ($ID!="" && strlen($ID)<=128) {
 		echo "</body></html>";
 		exit;
 	} else {
-		pg_safe_exec("delete from pending_emailchanges where expiration<now()::abstime::int4");
+		pg_safe_exec("delete from pending_emailchanges where expiration<date_part('epoch', CURRENT_TIMESTAMP)::int");
 		$email=pg_fetch_object($res,0);
 		$userid = $email->user_id;
 		$nmail = $email->new_email;
@@ -39,7 +39,7 @@ $user=pg_fetch_object($res,0);
 
 	// change email
         $cookieval = md5(CRC_SALT_0020 . uniqid("",1) . time() . $nmail);
-	pg_safe_exec("update pending_emailchanges SET expiration=(now()::abstime::int4+21600),phase=2,cookie='$cookieval' WHERE phase=1 AND cookie='$ID'");
+	pg_safe_exec("update pending_emailchanges SET expiration=(date_part('epoch', CURRENT_TIMESTAMP)::int+21600),phase=2,cookie='$cookieval' WHERE phase=1 AND cookie='$ID'");
 
         $confirm_url = gen_server_url() . LIVE_LOCATION . "/forms/confirm_emailchange2.php?ID=$cookieval";
 

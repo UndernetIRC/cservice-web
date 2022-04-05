@@ -87,16 +87,16 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 
 
 
-	$quer2 = "UPDATE pending SET status=3,last_updated=now()::abstime::int4,decision_ts=now()::abstime::int4,decision='$decision2' WHERE channel_id='$c'";
+	$quer2 = "UPDATE pending SET status=3,last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,decision_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,decision='$decision2' WHERE channel_id='$c'";
 	pg_safe_exec($quer2);
 
 	$res = pg_safe_exec("SELECT manager_id FROM pending WHERE channel_id='$c'");
 	$row = pg_fetch_object($res,0);
 	$m_id = $row->manager_id;
 
-	pg_safe_exec("UPDATE channels SET registered_ts=now()::abstime::int4,last_updated=now()::abstime::int4,comment='' WHERE id='$c'");
-	pg_safe_exec("INSERT INTO levels (channel_id,user_id,access,added,added_by,last_modif,last_modif_by,last_updated) VALUES ($c,$m_id,500,now()::abstime::int4,'*** REGPROC ***',now()::abstime::int4,'*** REGPROC ***',now()::abstime::int4)");
-	pg_safe_exec("UPDATE users_lastseen SET last_updated=now()::abstime::int4,last_seen=now()::abstime::int4 WHERE user_id='$m_id'");
+	pg_safe_exec("UPDATE channels SET registered_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,comment='' WHERE id='$c'");
+	pg_safe_exec("INSERT INTO levels (channel_id,user_id,access,added,added_by,last_modif,last_modif_by,last_updated) VALUES ($c,$m_id,500,date_part('epoch', CURRENT_TIMESTAMP)::int,'*** REGPROC ***',date_part('epoch', CURRENT_TIMESTAMP)::int,'*** REGPROC ***',date_part('epoch', CURRENT_TIMESTAMP)::int)");
+	pg_safe_exec("UPDATE users_lastseen SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_seen=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE user_id='$m_id'");
 
 	$qqq = "UPDATE pending SET reviewed='Y',reviewed_by_id='$user_id' WHERE channel_id='$c'";
 	pg_safe_exec($qqq);
@@ -107,7 +107,7 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 	log_channel($c,7,"to $mgr_name");
 	review_count_add($user_id);
 /*
-	$quer3 = "INSERT INTO mailq (user_id,channel_id,created_ts,template,var1,var2,var3,var4,var5) VALUES ($m_id,$c,now()::abstime::int4,3,'','','','','')";
+	$quer3 = "INSERT INTO mailq (user_id,channel_id,created_ts,template,var1,var2,var3,var4,var5) VALUES ($m_id,$c,date_part('epoch', CURRENT_TIMESTAMP)::int,3,'','','','','')";
 	pg_safe_exec($quer3);
 */
 

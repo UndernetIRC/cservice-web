@@ -68,10 +68,10 @@ if ($badargs) {
 } else {
 
 	$newflags = (int)$flags|0x0008; // Fraud tag.
-	$queryb = "update users set last_updated=now()::abstime::int4,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . (int)$newflags . "' where id='" . (int)$userid . "'";
+	$queryb = "update users set last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . (int)$newflags . "' where id='" . (int)$userid . "'";
 
 	$query = "insert into noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) ";
-	$query = $query . "values ('$user_name','$email','',4,1,0,0,now()::abstime::int4,'$set_by','$reason')";
+	$query = $query . "values ('$user_name','$email','',4,1,0,0,date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$reason')";
 
 	//echo "<b>DEBUG</b>(query): $query<br><br>\n";
 

@@ -117,9 +117,9 @@ for ($x=0;$x<$gcount;$x++) {
 		if ($days_noreg_with_del < 1) { //forever
 			$nr_q .= "1,0,0,";
 		} else {
-			$nr_q .= "0,0,now()::abstime::int4+(86400*" . $days_noreg_with_del . "),";
+			$nr_q .= "0,0,date_part('epoch', CURRENT_TIMESTAMP)::int+(86400*" . $days_noreg_with_del . "),";
 		}
-		$nr_q .= "now()::abstime::int4,'" . $adm_user . " (Toaster)','" . $dreason_ok . "')";
+		$nr_q .= "date_part('epoch', CURRENT_TIMESTAMP)::int,'" . $adm_user . " (Toaster)','" . $dreason_ok . "')";
 		if (!$debug_me) { // take the action
 			for ($z=0;$z<count($del_q);$z++) {
 				@pg_safe_exec($del_q[$z]);
@@ -148,13 +148,13 @@ for ($x=0;$x<$gcount;$x++) {
 		if (pg_numrows($bla)>0) { $notalready=0; }
 		if ($$fraud==1 && $notalready) {
 			if ($debug_me) { echo $$fraud; }
-			$daq = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('" . $username[$x] . "','" . $email[$x] . "','',4,1,0,0,now()::abstime::int4,'" . $adm_user . "','" . $freason_ok . "')";
+			$daq = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('" . $username[$x] . "','" . $email[$x] . "','',4,1,0,0,date_part('epoch', CURRENT_TIMESTAMP)::int,'" . $adm_user . "','" . $freason_ok . "')";
 			$prereq = "SELECT flags FROM users WHERE id='" . $id[$x] . "'";
 			$preres = pg_safe_exec($prereq);
 			$prerow = pg_fetch_object($preres,0);
 			$uflags = $prerow->flags;
 			$newflags = (int)$uflags|0x0008; // Fraud TAG.
-			$da2q = "UPDATE users SET last_updated=now()::abstime::int4,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . $newflags . "' WHERE id='" . $id[$x] . "'";
+			$da2q = "UPDATE users SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . $newflags . "' WHERE id='" . $id[$x] . "'";
 			if (!$debug_me) { // take the action.
 				pg_safe_exec($daq);
 				pg_safe_exec($da2q);
@@ -181,7 +181,7 @@ for ($x=0;$x<$gcount;$x++) {
 				if ($debug_me) { echo "1"; }
 				if ($send_mail) { $mmsg .= $t_mmsg; }
 				$new_u_flags = (int)$ols->flags|0x0001; // global Suspension tag
-				$query = "UPDATE users SET last_updated=now()::abstime::int4,last_updated_by='Suspended by Toaster',flags='" . $new_u_flags . "' WHERE id='" . $id[$x] . "'";
+				$query = "UPDATE users SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='Suspended by Toaster',flags='" . $new_u_flags . "' WHERE id='" . $id[$x] . "'";
 				if (!$debug_me) { // take action
 					unset($raction);
 					$raction = pg_safe_exec($query);

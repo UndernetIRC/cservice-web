@@ -328,13 +328,13 @@ function ip6_check_glined($ip) {
         $ip_check = pg_exec("SELECT * FROM ips WHERE ipnum='" . $ip . "' AND lower(user_name)='" . strtolower($user_name) . "'");
         if (pg_numrows($ip_check) == 0) {
             $ENABLE_COOKIE_TABLE = 1;
-            pg_exec("INSERT INTO ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,now()::abstime::int4)");
+            pg_exec("INSERT INTO ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,date_part('epoch', CURRENT_TIMESTAMP)::int)");
             $ENABLE_COOKIE_TABLE = 0;
         } else {
             $ENABLE_COOKIE_TABLE = 1;
             $row = pg_fetch_object($ip_check);
             $newcount = $row->hit_counts + 1;
-            pg_exec("UPDATE ips SET expiration='0',set_on=now()::abstime::int4,hit_counts='" . (int) $newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
+            pg_exec("UPDATE ips SET expiration='0',set_on=date_part('epoch', CURRENT_TIMESTAMP)::int,hit_counts='" . (int) $newcount . "' WHERE ipnum='" . cl_ip() . "' AND lower(user_name)='" . strtolower($user_name) . "'");
             $ENABLE_COOKIE_TABLE = 0;
         }
     }
@@ -410,7 +410,7 @@ function ip6_check_glined($ip) {
             $oldflags = $o->flags;
             $flags = $oldflags;
             $flags = $oldflags & ~TOTP_USR_FLAG;
-            pg_safe_exec("UPDATE users SET flags='" . $flags . "',last_updated=now()::abstime::int4 WHERE id='" . (int) $totp_id . "'");
+            pg_safe_exec("UPDATE users SET flags='" . $flags . "',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='" . (int) $totp_id . "'");
             $oldtotp = $o->totp_key;
             // log_user($totp_id,14,"TOTP disabled for %U. Old TOTP key: ".$oldtotp." (by %U)");
             log_user($totp_id, 14, "TOTP disabled for %U");

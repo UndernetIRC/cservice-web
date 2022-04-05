@@ -16,7 +16,7 @@
 <?
  $ENABLE_COOKIE_TABLE = 0;
 
- pg_safe_exec("DELETE FROM pendingusers WHERE expire<now()::abstime::int4");
+ pg_safe_exec("DELETE FROM pendingusers WHERE expire<date_part('epoch', CURRENT_TIMESTAMP)::int");
 
  	$r1 = pg_safe_exec("SELECT COUNT(*) AS count FROM pendingusers");
 

@@ -284,7 +284,7 @@
 		echo "<br><br>\n";
 
 		$nb_days_history = 30;
-		$tmpr = pg_safe_exec("SELECT COUNT(event) AS count FROM channellog WHERE channelid=" . ($channel_id+0) . " AND event=15 AND ts>=(now()::abstime::int4-(86400*" . $nb_days_history . "))");
+		$tmpr = pg_safe_exec("SELECT COUNT(event) AS count FROM channellog WHERE channelid=" . ($channel_id+0) . " AND event=15 AND ts>=(date_part('epoch', CURRENT_TIMESTAMP)::int-(86400*" . $nb_days_history . "))");
 		$tmpo = pg_fetch_object($tmpr,0);
 		$tc = $tmpo->count;
 		if ($tc>=1) { $tc--; } // dont count the "current registration".

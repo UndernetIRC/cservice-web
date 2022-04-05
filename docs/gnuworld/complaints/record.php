@@ -221,7 +221,7 @@ if ((complaints_off() && !isoper($user_id)) || COMPLAINTS_ADMINCOMMENT_ID<=0) {
 
 
 	/* Check if the maximum complaints per user id / email hasnt been reached */
-	$ssq = pg_safe_exec("SELECT COUNT(id) AS count FROM complaints WHERE created_ts>(now()::abstime::int4-" . MAX_CONCURRENT_TIME . ") AND status<=2 AND (lower(from_email)='" . strtolower($_POST["from_mail"]) . "' OR lower(inrec_email)='" . strtolower($_POST["from_mail"]) . "' OR (from_id='" . ($user_id+0) . "' AND from_id>0))");
+	$ssq = pg_safe_exec("SELECT COUNT(id) AS count FROM complaints WHERE created_ts>(date_part('epoch', CURRENT_TIMESTAMP)::int-" . MAX_CONCURRENT_TIME . ") AND status<=2 AND (lower(from_email)='" . strtolower($_POST["from_mail"]) . "' OR lower(inrec_email)='" . strtolower($_POST["from_mail"]) . "' OR (from_id='" . ($user_id+0) . "' AND from_id>0))");
 	$sso = pg_fetch_object($ssq);
 	if ($sso->count >= MAX_CONCURRENT) { // yes !
 		echo $back_lnk;
@@ -231,7 +231,7 @@ if ((complaints_off() && !isoper($user_id)) || COMPLAINTS_ADMINCOMMENT_ID<=0) {
 	unset($ssq); unset($sso);
 
 	/* Check if the maximum complaints per IP hasnt been reached */
-	$ssq = pg_safe_exec("SELECT COUNT(id) AS count FROM complaints WHERE created_ts>(now()::abstime::int4-" . MAX_CONCURRENT_IP_TIME . ") AND status<=2 AND created_ip='" . cl_ip() . "'");
+	$ssq = pg_safe_exec("SELECT COUNT(id) AS count FROM complaints WHERE created_ts>(date_part('epoch', CURRENT_TIMESTAMP)::int-" . MAX_CONCURRENT_IP_TIME . ") AND status<=2 AND created_ip='" . cl_ip() . "'");
 	$sso = pg_fetch_object($ssq);
 	if ($sso->count >= MAX_CONCURRENT_IP) { // yes !
 		echo $back_lnk;
@@ -302,7 +302,7 @@ $query .= "" . (int)$da_channel2_id . ", ";
 $query .= "'" . post2db($da_channel2_name) . "', ";
 
 $query .= "" . (int)$da_users_id . ", ";
-$query .= "0, 0, 0, 0, now()::abstime::int4, '" . cl_ip() . "', '" . $da_crc . "', (now()::abstime::int4+172800), '', 0";
+$query .= "0, 0, 0, 0, date_part('epoch', CURRENT_TIMESTAMP)::int, '" . cl_ip() . "', '" . $da_crc . "', (date_part('epoch', CURRENT_TIMESTAMP)::int+172800), '', 0";
 $query .= " )";
 echo "<br>";
 $res = @pg_safe_exec($query);
@@ -319,7 +319,7 @@ if ($to = pg_fetch_object($tq)) {
 		$da_cmt .= "**** AUTOMATIC ****<br><br>";
 		$da_cmt .= "<b>An anonymous objection has been posted through the Complaints System.</b><br>";
 		$da_cmt .= "<a href=\"complaints/admin.php?view=" . $ticket_number . "\">click here</a> to go to that complaint.<br><br>";
-		$notif_q = "INSERT INTO objections (channel_id,user_id,comment,created_ts,admin_only) VALUES ('" . (int)$da_channel1_id . "','" . (int)$issuer_id . "','" . post2db($da_cmt) . "',now()::abstime::int4,'Y')";
+		$notif_q = "INSERT INTO objections (channel_id,user_id,comment,created_ts,admin_only) VALUES ('" . (int)$da_channel1_id . "','" . (int)$issuer_id . "','" . post2db($da_cmt) . "',date_part('epoch', CURRENT_TIMESTAMP)::int,'Y')";
 		pg_safe_exec($notif_q);
 	}
 
@@ -339,7 +339,7 @@ if (!$res) { die($back_lnk . "<b>SQL ERROR</b><br><br></td></tr></table></body><
 	$mmsg .= "\nThe " . NETWORK_NAME . " Channel Service.\n\n";
 	custom_mail($_POST["from_mail"],"[" . NETWORK_NAME . " CService Complaints] Confirmation request",$mmsg,"From: " . NETWORK_NAME . " Channel Service <" . OBJECT_EMAIL . ">\nReply-to: DO.NOT@REPLY.THANKS\nX-Mailer: " . NETWORK_NAME . " CService Complaint Module\n\n");
 }
-$dq = pg_safe_exec("SELECT id FROM complaints WHERE (status=0 OR status=99) AND crc_expiration<now()::abstime::int4");
+$dq = pg_safe_exec("SELECT id FROM complaints WHERE (status=0 OR status=99) AND crc_expiration<date_part('epoch', CURRENT_TIMESTAMP)::int");
 while ($do = pg_fetch_object($dq)) {
 	pg_safe_exec("DELETE FROM complaints_reference WHERE complaints_ref='" . (int)$do->id . "'");
 	pg_safe_exec("DELETE FROM complaints_threads WHERE complaint_ref='" . (int)$do->id . "'");

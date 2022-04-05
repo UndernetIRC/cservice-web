@@ -191,7 +191,7 @@ if (pg_numrows($iit)>0 || ((int)$row->flags & 0x0008)) {
 		}
 		$set_by=$d_username;
 		$fraudchg = 1;
-		pg_safe_exec("INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('$u_username','$u_email','',4,1,0,0,now()::abstime::int4,'$set_by','$fraudreason')");
+		pg_safe_exec("INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('$u_username','$u_email','',4,1,0,0,date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$fraudreason')");
 		//set_flag(1,$row->flags,0x0008,"on");
 		$new_flags = (int)$new_flags|0x0008;
 		$fchanged=1;
@@ -215,7 +215,7 @@ if (pg_numrows($iiunr)==0 && $unreg == 2) { // switch to 'YES'
 	}
 	$unrchg = 1;
 	$set_by=$d_username;
-	pg_safe_exec("INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('$u_username','','',2,1,0,0,now()::abstime::int4,'$set_by','$unregreason')");
+	pg_safe_exec("INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('$u_username','','',2,1,0,0,date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$unregreason')");
 }
 
 $enrchg = 0;
@@ -235,7 +235,7 @@ if (pg_numrows($iienr)==0 && $enreg == 2) { // switch to 'YES'
 	}
 	$enrchg = 1;
 	$set_by=$d_username;
-	pg_safe_exec("INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('','$u_email','',2,1,0,0,now()::abstime::int4,'$set_by','$enregreason')");
+	pg_safe_exec("INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('','$u_email','',2,1,0,0,date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$enregreason')");
 }
 
 //echo $new_flags." / " . $row->flags . " / $noteacc <br>\n";
@@ -400,7 +400,7 @@ if ($chg_formpost>0 && $chg_formpost<3) {
 	$query .= "post_forms=" . $new_pforms . ", ";
 }
 
-$query .= "last_updated=now()::abstime::int4, ";
+$query .= "last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int, ";
 if ($fraudt==2) {
 	$query .= "last_updated_by='*** TAGGED AS FRAUD ***' WHERE id=$id";
 } else {

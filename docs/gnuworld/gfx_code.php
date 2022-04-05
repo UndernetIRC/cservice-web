@@ -10,7 +10,7 @@ if (SHOW_GFXUSRCHK && NEWUSERS_GFXCHECK) {
 	$fontList = get_font_face_list();
 	unset($dFID); $dFID = rand(0,(count($fontList)-1)); // random available font face
 
-	pg_safe_exec("DELETE FROM gfxcodes WHERE expire<now()::abstime::int4");
+	pg_safe_exec("DELETE FROM gfxcodes WHERE expire<date_part('epoch', CURRENT_TIMESTAMP)::int");
 	$r = pg_safe_exec("SELECT code FROM gfxcodes WHERE crc='" . $_GET["crc"] . "'");
 	if ($o = pg_fetch_object($r)) {
 		$code_gen = $o->code;

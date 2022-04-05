@@ -216,7 +216,7 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 	//$decision2 = "by <b>$user_name</b> (CService Admin)<br>" . $decision;
 	$decision2 = "by CService Admin<br>" . $decision;
 
-	$quer2 = "UPDATE pending SET status='9',last_updated=now()::abstime::int4,decision_ts=now()::abstime::int4,decision='$decision2' WHERE channel_id='$c' AND (status='0' OR status='1' OR status='2' OR status='8') AND created_ts='$id'";
+	$quer2 = "UPDATE pending SET status='9',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,decision_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,decision='$decision2' WHERE channel_id='$c' AND (status='0' OR status='1' OR status='2' OR status='8') AND created_ts='$id'";
 	//echo "$quer2<br><br>\n";
 	//$res = pg_safe_exec($quer2);
 	pg_safe_exec($quer2);
@@ -227,7 +227,7 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 	$uid = $tmp2->manager_id;
 
 /*
-	$quer3 = "INSERT INTO mailq (user_id,channel_id,created_ts,template,var1,var2,var3,var4,var5) VALUES ($uid,$c,now()::abstime::int4,2,'" . str_replace("<br>","\n",$decision) . "','','','','')";
+	$quer3 = "INSERT INTO mailq (user_id,channel_id,created_ts,template,var1,var2,var3,var4,var5) VALUES ($uid,$c,date_part('epoch', CURRENT_TIMESTAMP)::int,2,'" . str_replace("<br>","\n",$decision) . "','','','','')";
 	pg_safe_exec($quer3);
 */
 
@@ -300,7 +300,7 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 		if ($noapplicant==0) {
 			if ($put_channel==1) {
 				if ($NR_type==4) { $NR_type2 = 2;  $def_reason = "Abusive application (Fraud Usernames/Applicant) (" . str_replace("'","\\'",$c_name) . ")"; } else { $NR_type2 = $NR_type; }
-				$quer3 = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('','','$c_name',$NR_type2,$NR_never_reg,$NR_for_review,(now()::abstime::int4+86400*$nb_days),now()::abstime::int4,'$set_by','$def_reason')";
+				$quer3 = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('','','$c_name',$NR_type2,$NR_never_reg,$NR_for_review,(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*$nb_days),date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$def_reason')";
 				//echo $quer3 . "<br><br>\n";
 				pg_safe_exec($quer3);
 			}
@@ -314,8 +314,8 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 				$p_flags = $prow4->flags;
 				if ($NR_type==4) { $p_flags = $p_flags|0x0008; // Fraud TAG
 				}
-				$quer4b = "UPDATE users SET last_updated=now()::abstime::int4,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . $p_flags . "' WHERE id='" . $p_uid . "'";
-				$quer4 = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('$u_name','$def_email','',$NR_type,$NR_never_reg,$NR_for_review,(now()::abstime::int4+86400*$nb_days),now()::abstime::int4,'$set_by','$def_reason')";
+				$quer4b = "UPDATE users SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . $p_flags . "' WHERE id='" . $p_uid . "'";
+				$quer4 = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('$u_name','$def_email','',$NR_type,$NR_never_reg,$NR_for_review,(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*$nb_days),date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$def_reason')";
 				//echo $quer4 . "<br><br>\n";
 				pg_safe_exec($quer4);
 				pg_safe_exec($quer4b);
@@ -345,7 +345,7 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 					}
 					if ($$suptype_t==1) { //Abuse (2)
 						$nbdays = $$supdays_t+0;
-						$expire_at = "(now()::abstime::int4+86400*$nb_days)";
+						$expire_at = "(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*$nb_days)";
 						$NR_type = 2;
 						$NR_neverreg = 0;
 					} else if ($$suptype_t==2) { //Fraud Username (4)
@@ -368,9 +368,9 @@ if ($channel_id=="" || $channel_id<=0 || $decision=="" || $pending_cts<=0) {
 					$p_flags = $prow->flags;
 					if ($NR_type==4) { $p_flags = $p_flags|0x0008; // Fraud TAG
 					}
-					$queryb = "UPDATE users SET last_updated=now()::abstime::int4,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . $p_flags . "' WHERE id='" . $p_uid . "'";
+					$queryb = "UPDATE users SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='*** TAGGED AS FRAUD ***',flags='" . $p_flags . "' WHERE id='" . $p_uid . "'";
 					$query  = "INSERT INTO NOREG (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ";
-					$query .= "('" . $$supname_t . "','$supporter_email','',$NR_type,$NR_neverreg,0,$expire_at,now()::abstime::int4,'$set_by','$reason')";
+					$query .= "('" . $$supname_t . "','$supporter_email','',$NR_type,$NR_neverreg,0,$expire_at,date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$reason')";
 					pg_safe_exec($query);
 					pg_safe_exec($queryb);
 				}

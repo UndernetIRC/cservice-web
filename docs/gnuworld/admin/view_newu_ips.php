@@ -23,7 +23,7 @@ if ($o==2) { $order="ip"; }
 
 
 $ENABLE_COOKIE_TABLE=1;
-pg_safe_exec("DELETE FROM newu_ipcheck WHERE expiration<now()::abstime::int4");
+pg_safe_exec("DELETE FROM newu_ipcheck WHERE expiration<date_part('epoch', CURRENT_TIMESTAMP)::int");
 $res = pg_safe_exec("SELECT * FROM newu_ipcheck ORDER BY " . $order);
 $num = pg_numrows($res);
 

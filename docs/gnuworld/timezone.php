@@ -106,7 +106,7 @@
 			$tz_countrycode = $tz_temp[0];
 			$tz_name = $tz_temp[1];
 			if ($tz_name!="") {
-				$query = "INSERT INTO timezones (tz_name,tz_countrycode,tz_acronym,deleted,last_updated) VALUES ('$tz_name','$tz_countrycode','',0,now()::abstime::int4)";
+				$query = "INSERT INTO timezones (tz_name,tz_countrycode,tz_acronym,deleted,last_updated) VALUES ('$tz_name','$tz_countrycode','',0,date_part('epoch', CURRENT_TIMESTAMP)::int)";
 				pg_safe_exec($query);
 			}
 		}

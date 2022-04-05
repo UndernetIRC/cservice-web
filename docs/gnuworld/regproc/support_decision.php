@@ -81,9 +81,9 @@ if (($crc==md5("$HTTP_USER_AGENT" . $ts . CRC_SALT_0012)) && $mode=="validate" &
 			echo "</form>\n";
 		} else {
 			$tts = time();
-			$query = "UPDATE supporters SET support='N',reason='" . str_replace("\\&quot;","&quot;",str_replace("\n","<br>",htmlspecialchars($comments))) . "',last_updated=now()::abstime::int4 WHERE channel_id='$id' AND user_id='$user_id'";
+			$query = "UPDATE supporters SET support='N',reason='" . str_replace("\\&quot;","&quot;",str_replace("\n","<br>",htmlspecialchars($comments))) . "',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE channel_id='$id' AND user_id='$user_id'";
 			pg_safe_exec($query);
-			$quer2 = "UPDATE pending SET status='9',last_updated=now()::abstime::int4,decision_ts=now()::abstime::int4,decision='--AUTOMATIC (REGPROC)-- NON-SUPPORT' WHERE channel_id='$id' AND status='0'";
+			$quer2 = "UPDATE pending SET status='9',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,decision_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,decision='--AUTOMATIC (REGPROC)-- NON-SUPPORT' WHERE channel_id='$id' AND status='0'";
 			pg_safe_exec($quer2);
 
 			$res = pg_safe_exec("SELECT manager_id FROM pending WHERE channel_id='$id' AND status='9'");
@@ -99,9 +99,9 @@ if (($crc==md5("$HTTP_USER_AGENT" . $ts . CRC_SALT_0012)) && $mode=="validate" &
 			$def_reason = "-NON SUPPORT-";
 			$set_by = "* REGPROC";
 
-			$quer3 = "INSERT INTO noreg (user_name,email,channel_name,type,expire_time,created_ts,set_by,reason) VALUES ('','','$c_name',1,(now()::abstime::int4+86400*3),now()::abstime::int4,'$set_by','$def_reason')";
+			$quer3 = "INSERT INTO noreg (user_name,email,channel_name,type,expire_time,created_ts,set_by,reason) VALUES ('','','$c_name',1,(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*3),date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$def_reason')";
 			pg_safe_exec($quer3);
-			$quer4 = "INSERT INTO noreg (user_name,email,channel_name,type,expire_time,created_ts,set_by,reason) VALUES ('$u_name','$def_email','',1,(now()::abstime::int4+86400*3),now()::abstime::int4,'$set_by','$def_reason')";
+			$quer4 = "INSERT INTO noreg (user_name,email,channel_name,type,expire_time,created_ts,set_by,reason) VALUES ('$u_name','$def_email','',1,(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*3),date_part('epoch', CURRENT_TIMESTAMP)::int,'$set_by','$def_reason')";
 			pg_safe_exec($quer4);
 
 

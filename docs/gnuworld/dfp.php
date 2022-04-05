@@ -10,7 +10,7 @@ $r1 = pg_safe_exec("SELECT * FROM pending_passwordchanges WHERE cookie='" . post
 if ($o1 = @pg_fetch_object($r1,0)) {
 	if ($ccrc == md5($iid . "modFP" . CRC_SALT_0015 . $o1->new_crypt)) {
 		// cancellation of password change
-		$rez = @pg_safe_exec("UPDATE users SET password='" . $o1->old_crypt . "',last_updated=now()::abstime::int4,last_updated_by='forgotten password (" . cl_ip() . ") cancel' WHERE id='" . $iid . "'");
+		$rez = @pg_safe_exec("UPDATE users SET password='" . $o1->old_crypt . "',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='forgotten password (" . cl_ip() . ") cancel' WHERE id='" . $iid . "'");
 		if ($rez) {
 			pg_safe_exec("DELETE FROM pending_passwordchanges WHERE user_id='" . $user->id . "'");
 	       		echo "<h1>Success !<br><br>\n";

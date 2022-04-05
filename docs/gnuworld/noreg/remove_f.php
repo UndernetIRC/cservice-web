@@ -76,7 +76,7 @@ if ($id<=0 || $id=="") {
 		$uflags = (int)$uflags&~0x0008; // Untag the FRAUD.
 
 		$query = "delete from noreg where id='" . (int)$id . "' and type=4";
-		$queryb = "update users set last_updated=now()::abstime::int4,last_updated_by='*** UNTAGGED FRAUD ***',flags='" . (int)$uflags . "' where id='" . (int)$u_id . "'";
+		$queryb = "update users set last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='*** UNTAGGED FRAUD ***',flags='" . (int)$uflags . "' where id='" . (int)$u_id . "'";
 
 
 		pg_safe_exec($query);

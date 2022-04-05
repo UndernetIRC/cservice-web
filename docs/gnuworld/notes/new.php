@@ -142,7 +142,7 @@ if ($crc == md5( $authcsc . $user_id . CRC_SALT_0015 )) {
 
 		// write new note to database.
 		if ($final_msg!="" && ($rcpt_id+0)>0) {
-			pg_safe_exec("INSERT INTO notes (user_id,from_user_id,message,last_updated) VALUES ('" . $rcpt_id . "','" . $user_id . "','" . $final_msg . "',now()::abstime::int4)");
+			pg_safe_exec("INSERT INTO notes (user_id,from_user_id,message,last_updated) VALUES ('" . $rcpt_id . "','" . $user_id . "','" . $final_msg . "',date_part('epoch', CURRENT_TIMESTAMP)::int)");
 			header("Location: " . urldecode($BACK_PAGE) . "\n\n");
 		} else {
 			die("Internal Error !@#");

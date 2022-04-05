@@ -11,7 +11,7 @@ $cTheme = get_theme_info();
 
 if ($ID!="" && strlen($ID)<=128) {
 	std_connect();
- 	$res=pg_safe_exec("select * from pending_emailchanges where phase=2 AND cookie='$ID' AND expiration>=now()::abstime::int4");
+ 	$res=pg_safe_exec("select * from pending_emailchanges where phase=2 AND cookie='$ID' AND expiration>=date_part('epoch', CURRENT_TIMESTAMP)::int");
   	if (pg_numrows($res)==0) {
 		std_theme_styles(1); std_theme_body("../");
 		echo "<h1>Error</h1> The URL entered is not valid.  Please check it ";
@@ -19,7 +19,7 @@ if ($ID!="" && strlen($ID)<=128) {
 		echo "</body></html>";
 		exit;
 	} else {
-		pg_safe_exec("delete from pending_emailchanges where expiration<now()::abstime::int4");
+		pg_safe_exec("delete from pending_emailchanges where expiration<date_part('epoch', CURRENT_TIMESTAMP)::int");
 		$email=pg_fetch_object($res,0);
 		$userid = $email->user_id;
 		$nmail = $email->new_email;
@@ -37,7 +37,7 @@ if ($ID!="" && strlen($ID)<=128) {
 
 	// change email
 
-	$res=pg_safe_exec("UPDATE users SET email='$nmail',last_updated=now()::abstime::int4,last_updated_by='Email-in-record Modification' WHERE id='$userid'");
+	$res=pg_safe_exec("UPDATE users SET email='$nmail',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='Email-in-record Modification' WHERE id='$userid'");
 	$user_id = $userid;
 	log_user($userid,7,"Changed email-in-record from: $omail(old) to: $nmail(new) - cookie was: $ID");
 	$user_id = 0;

@@ -82,7 +82,7 @@ if(!$totp_key)
 		  ip_check($user_name,1);
 		//	totp_ip_add( cl_ip(),  $user_name);
 		
-			//pg_exec("INSERT INTO ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,now()::abstime::int4)");
+			//pg_exec("INSERT INTO ips (ipnum,user_name,expiration,hit_counts,set_on) VALUES ('" . cl_ip() . "','" . $user_name . "',0,1,date_part('epoch', CURRENT_TIMESTAMP)::int)");
 		}	
 	}
 

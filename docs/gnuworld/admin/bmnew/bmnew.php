@@ -175,9 +175,9 @@ if ($_POST['action'])
 							$flags = $oldflags&~MIA_TAG_FLAG;
 						}
 					if ($debug==on)
-					echo $oldflags." -> UPDATE channels SET flags='".$flags."',last_updated=now()::abstime::int4 WHERE id='".(int)$data[1]."'<br>";
+					echo $oldflags." -> UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$data[1]."'<br>";
 					else
-					pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=now()::abstime::int4 WHERE id='".(int)$data[1]."'");										
+					pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$data[1]."'");										
 					} else 
 						{
 						$oldflags = -1;
@@ -204,9 +204,9 @@ if ($_POST['action'])
 						break;
 				}
 				if ($debug==on)
-				echo $oldflags." -> UPDATE channels SET flags='".$flags."',last_updated=now()::abstime::int4 WHERE id='".(int)$_GET['channel_id']."'<br>";
+				echo $oldflags." -> UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$_GET['channel_id']."'<br>";
 				else
-				pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=now()::abstime::int4 WHERE id='".(int)$_GET['channel_id']."'");
+				pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$_GET['channel_id']."'");
 				
 			} else {
 				$oldflags = -1;
@@ -310,9 +310,9 @@ if ($strict==on)
 	{
 	if ($manager==on)
 		{
-		$query .= " AND users_lastseen.last_seen<((now()::abstime::int4-((".$days_seen."*24*60*60)+1))) AND ";
+		$query .= " AND users_lastseen.last_seen<((date_part('epoch', CURRENT_TIMESTAMP)::int-((".$days_seen."*24*60*60)+1))) AND ";
 		$query .= "levels.access=500 ";
-		$query .= "AND channels.id IN ( SELECT channels.id FROM users,users_lastseen,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND users.id=users_lastseen.user_id AND (users_lastseen.last_seen<((now()::abstime::int4-((".$days_seen."*24*60*60)+1)))) AND channels.registered_ts>0 AND levels.access=500 AND lower(users.user_name) !='".$nopurge_username."')";
+		$query .= "AND channels.id IN ( SELECT channels.id FROM users,users_lastseen,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND users.id=users_lastseen.user_id AND (users_lastseen.last_seen<((date_part('epoch', CURRENT_TIMESTAMP)::int-((".$days_seen."*24*60*60)+1)))) AND channels.registered_ts>0 AND levels.access=500 AND lower(users.user_name) !='".$nopurge_username."')";
 
 		if ($nopurgeuser==on)
 		$query.=" AND channels.id IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
@@ -351,7 +351,7 @@ if ($strict==on)
 	if ($manager==on)
 		{
 		$query .= "AND levels.access=500 ";
-		$query .= "AND channels.id IN ( SELECT channels.id FROM users,users_lastseen,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND users.id=users_lastseen.user_id AND (users_lastseen.last_seen<((now()::abstime::int4-((".$days_seen."*24*60*60)+1)))) AND channels.registered_ts>0 AND levels.access=500 AND lower(users.user_name) !='".$nopurge_username."')";
+		$query .= "AND channels.id IN ( SELECT channels.id FROM users,users_lastseen,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND users.id=users_lastseen.user_id AND (users_lastseen.last_seen<((date_part('epoch', CURRENT_TIMESTAMP)::int-((".$days_seen."*24*60*60)+1)))) AND channels.registered_ts>0 AND levels.access=500 AND lower(users.user_name) !='".$nopurge_username."')";
 		if ($nopurgeuser==on)
 		$query.=" AND channels.id IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
 		if ($nousers==on)

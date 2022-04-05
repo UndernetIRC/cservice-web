@@ -780,7 +780,7 @@ if ($admin > 0) {
     }
 
     $ENABLE_COOKIE_TABLE = 1;
-    $res = pg_safe_exec("SELECT * FROM webcookies WHERE user_id='" . $user->id . "' AND expire>=now()::abstime::int4");
+    $res = pg_safe_exec("SELECT * FROM webcookies WHERE user_id='" . $user->id . "' AND expire>=date_part('epoch', CURRENT_TIMESTAMP)::int");
     if (pg_numrows($res) > 0 && $user_id != $user->id) {
         echo "<tr><td colspan=2><font color=#" . $cTheme->main_yes . "><b>User is currently logged in on the website</b></font></td></tr>\n";
     }
@@ -1177,7 +1177,7 @@ if ($admin >= 750 || $nrw_lvl > 0) {
 
     /* start proc */
     $type = array(0 => "Incoming", 1 => "Pending (Traffic Check)", 2 => "Pending (Notification)", 3 => "Accepted", 8 => "Ready for review");
-    $req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts FROM pending,users,channels WHERE pending.channel_id=channels.id AND pending.manager_id=users.id AND pending.manager_id='$id' AND channels.registered_ts=0 AND (pending.status<4 OR pending.status=8) AND (pending.decision_ts=0 OR pending.decision_ts>now()::abstime::int4-86400*5) ORDER BY pending.created_ts DESC";
+    $req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts FROM pending,users,channels WHERE pending.channel_id=channels.id AND pending.manager_id=users.id AND pending.manager_id='$id' AND channels.registered_ts=0 AND (pending.status<4 OR pending.status=8) AND (pending.decision_ts=0 OR pending.decision_ts>date_part('epoch', CURRENT_TIMESTAMP)::int-86400*5) ORDER BY pending.created_ts DESC";
     $levels = pg_safe_exec($req00);
     echo ("<br>
         <TABLE WIDTH=100% border=1 cellspacing=1 cellpadding=2 BGCOLOR=#" . $cTheme->table_bgcolor . ">
@@ -1211,7 +1211,7 @@ if ($admin >= 750 || $nrw_lvl > 0) {
 
     /* start proc */
     $type = array(0 => "Incoming", 1 => "Pending (Traffic Check)", 2 => "Pending (Notification)", 3 => "Accepted", 8 => "Ready for review");
-    $req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts,pending.manager_id,supporters.support FROM pending,users,channels,supporters WHERE pending.channel_id=channels.id AND supporters.user_id=users.id AND channels.id=supporters.channel_id AND pending.channel_id=supporters.channel_id AND supporters.user_id='$id' AND channels.registered_ts=0 AND (pending.status<4 OR pending.status=8) AND (pending.decision_ts=0 OR pending.decision_ts>now()::abstime::int4-86400*5) ORDER BY pending.created_ts DESC";
+    $req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts,pending.manager_id,supporters.support FROM pending,users,channels,supporters WHERE pending.channel_id=channels.id AND supporters.user_id=users.id AND channels.id=supporters.channel_id AND pending.channel_id=supporters.channel_id AND supporters.user_id='$id' AND channels.registered_ts=0 AND (pending.status<4 OR pending.status=8) AND (pending.decision_ts=0 OR pending.decision_ts>date_part('epoch', CURRENT_TIMESTAMP)::int-86400*5) ORDER BY pending.created_ts DESC";
     $levels = pg_safe_exec($req00);
     echo ("<br>
         <TABLE WIDTH=100% border=1 cellspacing=1 cellpadding=2 BGCOLOR=#" . $cTheme->table_bgcolor . ">

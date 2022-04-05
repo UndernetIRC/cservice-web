@@ -147,7 +147,7 @@ if ($verifdata!=$user->verificationdata) {
 
 	$cookieval = md5(CRC_SALT_0020 . uniqid("",1) . time() . $da_newmail);
 
-	pg_safe_exec("INSERT INTO pending_emailchanges (cookie,user_id,old_email,new_email,expiration,phase) VALUES ('$cookieval',$user_id,'$da_emailaddy','$da_newmail',now()::abstime::int4+21600,1)");
+	pg_safe_exec("INSERT INTO pending_emailchanges (cookie,user_id,old_email,new_email,expiration,phase) VALUES ('$cookieval',$user_id,'$da_emailaddy','$da_newmail',date_part('epoch', CURRENT_TIMESTAMP)::int+21600,1)");
 	$confirm_url = gen_server_url() . LIVE_LOCATION. "/forms/confirm_emailchange.php?ID=$cookieval";
 
 	$the_msg = "If you would like to confirm that the new email-in-record for '$da_username' should be '$da_newmail',\n";
@@ -157,7 +157,7 @@ if ($verifdata!=$user->verificationdata) {
 	custom_mail($da_emailaddy,"E-Mail change request 1/2",$the_msg,"From: " . NETWORK_NAME . " E-Mail Change Request <" . OBJECT_EMAIL . ">\nReply-To: no.reply@thank.you\nX-Mailer: " . NETWORK_NAME . " Channel Service");
 
 	/* make the user can re-port in 10 days. */
-	pg_safe_exec("UPDATE users SET post_forms=(now()::abstime::int4+86400*10) WHERE id=" . $user_id);
+	pg_safe_exec("UPDATE users SET post_forms=(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*10) WHERE id=" . $user_id);
 
 	echo "<h2>";
 	echo "Please check your e-mail at '$da_emailaddy',<br>then click on the URL to continue the email change to phase 2/2.<br><br>\n";

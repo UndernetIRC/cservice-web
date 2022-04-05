@@ -16,12 +16,12 @@
 <?
  $ENABLE_COOKIE_TABLE = 1;
 
- 	pg_safe_exec("DELETE FROM webcookies WHERE expire<now()::abstime::int4");
+ 	pg_safe_exec("DELETE FROM webcookies WHERE expire<date_part('epoch', CURRENT_TIMESTAMP)::int");
 
  	$r1 = pg_safe_exec("SELECT COUNT(*) AS count FROM webcookies WHERE is_admin>0");
  	$r2 = pg_safe_exec("SELECT COUNT(*) AS count FROM webcookies WHERE is_admin=0");
 	$active_mins = 2;
-	$r3 = pg_safe_exec("SELECT COUNT(*) AS count FROM webcookies WHERE is_admin=0 AND expire>(now()::abstime::int4+" . $active_mins . "*60)");
+	$r3 = pg_safe_exec("SELECT COUNT(*) AS count FROM webcookies WHERE is_admin=0 AND expire>(date_part('epoch', CURRENT_TIMESTAMP)::int+" . $active_mins . "*60)");
  	$s1 = pg_fetch_object($r1,0);
  	$s2 = pg_fetch_object($r2,0);
 	$s3 = pg_fetch_object($r3,0);
@@ -33,7 +33,7 @@
 
  echo "Login timeout : <b>" . round((COOKIE_EXPIRE/3600),0) . "</b> hour(s).<br>\n";
 
-  $query = "SELECT * FROM webcookies WHERE is_admin>0 AND expire>=now()::abstime::int4 ORDER BY expire DESC";
+  $query = "SELECT * FROM webcookies WHERE is_admin>0 AND expire>=date_part('epoch', CURRENT_TIMESTAMP)::int ORDER BY expire DESC";
 
   //echo "<b>SQL Query:</b><br>" . $query . ";<br><br>";
 

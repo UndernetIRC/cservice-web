@@ -69,7 +69,7 @@ if ($user_id==0 || $auth=="") {
             $flags = $oldflags;
             $flags = $oldflags|TOTP_USR_FLAG;
             //echo $oldflags.'->'.$flags;
-            pg_safe_exec("UPDATE users SET flags='".$flags."',last_updated=now()::abstime::int4 WHERE id='".($user_id+0)."'");
+            pg_safe_exec("UPDATE users SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".($user_id+0)."'");
             log_user($user_id, 13, "TOTP enabled");
             $ENABLE_COOKIE_TABLE = 0;
             $temp_totp_hash=gen_totp_cookie($totp_key);

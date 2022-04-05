@@ -35,7 +35,7 @@ if ($do_it==0) {
 	die;
 
 }
-$q = "UPDATE pending SET reviewed='Y',reviewed_by_id='$user_id',last_updated=now()::abstime::int4 WHERE channel_id='$channel_id' AND created_ts='$created_ts'";
+$q = "UPDATE pending SET reviewed='Y',reviewed_by_id='$user_id',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE channel_id='$channel_id' AND created_ts='$created_ts'";
 pg_safe_exec($q);
 review_count_add($user_id);
 log_channel($channel_id,17,"Reviewed Application");

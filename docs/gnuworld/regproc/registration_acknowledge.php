@@ -26,7 +26,7 @@ $cTheme = get_theme_info();
 	$row = pg_fetch_object($res,0);
 	$c_name = $row->name;
 
-	pg_safe_exec("UPDATE pending SET reg_acknowledged='Y',last_updated=now()::abstime::int4 WHERE status=3 AND channel_id='$c_id'");
+	pg_safe_exec("UPDATE pending SET reg_acknowledged='Y',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE status=3 AND channel_id='$c_id'");
 
 	echo "You <b>ACKNOWLEDGED</b> registration for <b>$c_name</b><br>\n";
 
