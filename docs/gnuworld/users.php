@@ -900,7 +900,7 @@ if (!$edit) {
     }
     echo "</td></tr>\n";
 }
-if (!$edit || $admin < 800) {
+if (!$edit) {
     if ($user->question_id == "" || $user->question_id == 0) {
         echo "<tr><td><b>Verification question</b></td><td>** NOT SET **</td></tr>";
     } else {
@@ -968,7 +968,7 @@ if (!$edit || $admin < 800) {
         }
         echo "</td></tr>\n";
     }
-} else {
+} elseif ($admin >= MOD_VA_LEVEL) {
     echo "<tr><td><b>Verification question</b></td><td>";
     if ($user->question_id == "" || $user->question_id == 0) {
         $autoselect = 0;

@@ -381,7 +381,7 @@ if ($admin>=800) {
 if ($fchanged) {
 	$query .= "flags='" . $new_flags . "', ";
 }
-if ($admin>=800) {
+if ($admin >= MOD_VA_LEVEL) {
 	$query .= "question_id=$question_id, ";
 	$query .= "verificationdata='$verificationdata', ";
 }

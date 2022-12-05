@@ -202,6 +202,8 @@ define("MIN_DAYS_BEFORE_TMGR",1);		// minimum probation period (in days) for a n
 define("MIN_DAYS_BEFORE_PMGR",1);		// minimum probation period (in days) for a new username to be a permanent manager (manager change)
 
 define("DEFAULT_REQUIRED_SUPPORTERS",3); // this option defines number of default required supporters (see below).
+
+define("MOD_VA_LEVEL", 751); // Set level allowed to modify a users Verification Answer
 /*
 Current feature of REQUIRED_SUPPORTERS :
 		0	set it to 0 to allow instant registration (no supporters)	[VERY SMALL NETWORKS]
