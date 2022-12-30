@@ -11,7 +11,7 @@ for db in local_db; do
 done
 
 echo "$0: Setting up cservice db"
-for sql_file in cservice.sql languages.sql language_table.sql cservice.help.sql cservice.web.sql cservice.config.sql greeting.sql; do
+for sql_file in cservice.sql languages.sql language_table.sql cservice.help.sql cservice.web.sql cservice.config.sql cservice.addme.sql greeting.sql; do
   wget -O- https://raw.githubusercontent.com/UndernetIRC/gnuworld/master/doc/${sql_file} | ${psql[@]} --dbname cservice
 done
 
