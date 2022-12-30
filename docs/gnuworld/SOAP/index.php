@@ -183,7 +183,7 @@ function channelAccessList( $channel_name , $match_pattern = "*" ) {
 		$ccRow = pg_fetch_object($ccRes);
 		$rVal[0]->query_status = 1;
 		$rVal[0]->channel_id = $ccRow->id;
-		$cQuery = "SELECT users.user_name,levels.access,levels.flags,levels.suspend_expires>=now()::abstime::int4 AS is_suspended,levels.suspend_expires,levels.suspend_level,levels.suspend_by FROM users,levels WHERE levels.channel_id='" . $ccRow->id . "' AND users.id=levels.user_id";
+		$cQuery = "SELECT users.user_name,levels.access,levels.flags,levels.suspend_expires>=date_part('epoch', CURRENT_TIMESTAMP)::int AS is_suspended,levels.suspend_expires,levels.suspend_level,levels.suspend_by FROM users,levels WHERE levels.channel_id='" . $ccRow->id . "' AND users.id=levels.user_id";
 		if ($match_pattern != "*") {
 			$match_string = str_replace("?","_",str_replace("*","%",str_replace("%","\%",str_replace("_","\_",$match_pattern))));
 			$cQuery .= " AND lower(users.user_name) LIKE '" . strtolower($match_string) . "'";
@@ -318,7 +318,7 @@ function setUserMaxlogins( $dest_username, $new_maxlogins, $admin_user, $admin_p
 	$dRes = pg_safe_exec($dQuery);
 	if (pg_numrows($dRes)==0) { return(-3); }
 	$dUser = pg_fetch_object($dRes);
-	$sQuery = "UPDATE users SET maxlogins='" . $new_maxlogins . "',last_updated=now()::abstime::int4,last_updated_by='SOAP Interface (" . $admin_user . ")' WHERE id='" . $dUser->id . "'";
+	$sQuery = "UPDATE users SET maxlogins='" . $new_maxlogins . "',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='SOAP Interface (" . $admin_user . ")' WHERE id='" . $dUser->id . "'";
 	if ($log_line) {
 		$user_id = $cUser->id;
 		log_user($dUser->id,3,"- Maxlogins (SOAP)");

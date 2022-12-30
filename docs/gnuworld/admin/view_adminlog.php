@@ -37,7 +37,7 @@ if ($_GET["ok"]==1) {
 	$x_days_ago_start = (mktime(0,0,1,date("m",$x_days_ago),date("d",$x_days_ago),date("Y",$x_days_ago)) - 1);
 	$start_ts = $x_days_ago_start;
 	$end_ts = time();
-	$end_ts_db = "now()::abstime::int4";
+	$end_ts_db = "date_part('epoch', CURRENT_TIMESTAMP)::int";
 }
 
 $q = "SELECT users.id,users.user_name,adminlog.timestamp AS ts,adminlog.* FROM users,adminlog ";

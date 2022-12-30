@@ -70,7 +70,7 @@ echo "If you forgot your verification answer then go to the <a href=\"forms/pwre
 						die;
 					} else {
 						$Xcrc = md5($user->id . "modFP" . CRC_SALT_0015 . $crypt);
-						pg_safe_exec("INSERT INTO pending_passwordchanges VALUES ('" . post2db($Xcrc) . "','" . $user->id . "','" . $user->password . "','" . $crypt . "','" . post2db($password) . "',now()::abstime::int4)");
+						pg_safe_exec("INSERT INTO pending_passwordchanges VALUES ('" . post2db($Xcrc) . "','" . $user->id . "','" . $user->password . "','" . $crypt . "','" . post2db($password) . "',date_part('epoch', CURRENT_TIMESTAMP)::int)");
 						if (LOCK_ON_PWCHG) { $crypt = "*"; } else { $crypt = $user->password; }
 						$ss = "[Forgotten Password] Confirmation request for '" . $user->username . "'";
 						$mm = "";
@@ -100,7 +100,7 @@ echo "If you forgot your verification answer then go to the <a href=\"forms/pwre
 		}
 		if (!$doconf || LOCK_ON_PWCHG) {
 			$res=pg_safe_exec("update users set password='" . $crypt . "', " .
-			     	" last_updated = now()::abstime::int4, " .
+			     	" last_updated = date_part('epoch', CURRENT_TIMESTAMP)::int, " .
 			     	" last_updated_by = 'forgotten password (" . cl_ip() . ")' " .
 			     	" where " .
 			     	"  id='". $user->id . "'");
@@ -110,7 +110,7 @@ echo "If you forgot your verification answer then go to the <a href=\"forms/pwre
 			log_user($user->id,9," ");
 		}
 		pg_safe_exec("delete from lastrequests where ip='" . cl_ip() . "'");
-		pg_safe_exec("insert into lastrequests (ip,last_request_ts) values ('" . cl_ip() . "',now()::abstime::int4)");
+		pg_safe_exec("insert into lastrequests (ip,last_request_ts) values ('" . cl_ip() . "',date_part('epoch', CURRENT_TIMESTAMP)::int)");
 
 ?>
 <html>

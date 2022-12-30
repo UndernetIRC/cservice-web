@@ -389,7 +389,7 @@ if (pg_numrows($huhu)>0) {
 
 	if (!$mailres) { local_seclog("custom_mail() failed for " . $user->email . " from: " . $x_at_email); }
 
-	pg_safe_exec("UPDATE users SET post_forms=(now()::abstime::int4+86400*10) WHERE id='" . $user_id . "'");
+	pg_safe_exec("UPDATE users SET post_forms=(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*10) WHERE id='" . $user_id . "'");
 
 	echo "<h2>";
 	echo "Please read your email at '$user->email'<br>and click on the link to CONFIRM your request<br>within <b>6 hours</b>\n";
@@ -470,7 +470,7 @@ echo "<input type=hidden name=verifq value=" . $user->question_id . ">\n";
  <textarea name=mcreason cols=40 rows=5></textarea>
  <li>Username of new manager : <?
 	if ($multiple_ok == 0) { $forcechannel_I=$channel->id; }
-	$res3 = pg_safe_exec("SELECT users.user_name,users.id FROM users,users_lastseen,levels WHERE users.id=levels.user_id AND levels.channel_id='" . $forcechannel_I . "' AND levels.access=499 AND users_lastseen.user_id=users.id AND users_lastseen.last_seen>(now()::abstime::int4-86400*20) ORDER BY users.user_name");
+	$res3 = pg_safe_exec("SELECT users.user_name,users.id FROM users,users_lastseen,levels WHERE users.id=levels.user_id AND levels.channel_id='" . $forcechannel_I . "' AND levels.access=499 AND users_lastseen.user_id=users.id AND users_lastseen.last_seen>(date_part('epoch', CURRENT_TIMESTAMP)::int-86400*20) ORDER BY users.user_name");
 	if (pg_numrows($res3)==0) {
 		echo "<b>No user with level 499 on that channel seen in the last 20 days.</b><br>\n";
 		$nouser=1;

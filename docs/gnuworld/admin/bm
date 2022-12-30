@@ -26,7 +26,7 @@
 						$flags = $oldflags&~MIA_TAG_FLAG;
 						break;
 				}
-				pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=now()::abstime::int4 WHERE id='".(int)$_GET['channel_id']."'");
+				pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$_GET['channel_id']."'");
 
 			} else {
 				$oldflags = -1;
@@ -69,7 +69,7 @@
   $query .= "users.id=levels.user_id AND ";
   $query .= "levels.channel_id=channels.id AND ";
   $query .= "users.id=users_lastseen.user_id AND ";
-  $query .= "users_lastseen.last_seen<=(now()::abstime::int4-25*24*60*60) AND ";
+  $query .= "users_lastseen.last_seen<=(date_part('epoch', CURRENT_TIMESTAMP)::int-25*24*60*60) AND ";
   $query .= "channels.registered_ts>0 AND ";
 // warning: works only on pgsql version 7.2+ (!) If you see SQL errors, this comes from here, just comment the two lines below.
   $query .= "(channels.flags & 1)!=1 AND "; // NOPURGE
@@ -86,7 +86,7 @@
   $query .= "levels.channel_id=channels.id AND ";
   $query .= "users.id=users_lastseen.user_id AND ";
   $query .= "(";
-  $query .= "users_lastseen.last_seen>(now()::abstime::int4-25*24*60*60) ";
+  $query .= "users_lastseen.last_seen>(date_part('epoch', CURRENT_TIMESTAMP)::int-25*24*60*60) ";
   $query .= "OR ";
   $query .= "lower(users.user_name)='nopurge') ";
   $query .= "AND ";

@@ -31,7 +31,7 @@ if ($_GET["ok"]==1) {
 	$x_days_ago_start = (mktime(0,0,1,date("m",$x_days_ago),date("d",$x_days_ago),date("Y",$x_days_ago)) - 1);
 	$start_ts = $x_days_ago_start;
 	$end_ts = time();
-	$end_ts_db = "now()::abstime::int4";
+	$end_ts_db = "date_part('epoch', CURRENT_TIMESTAMP)::int";
 }
 $res=pg_safe_exec("select channellog.ts as ts, channels.name as name, channellog.message as message from channellog,channels where channellog.ts>=" . $start_ts . " AND channellog.ts<=" . $end_ts . " AND channellog.event=11 and channellog.channelid=channels.id and channels.registered_ts>0 order by channellog.ts desc");
 $count = pg_numrows($res);

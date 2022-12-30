@@ -28,7 +28,7 @@ switch ($_GET["A"]) {
 				$r1 = pg_safe_exec("SELECT id,from_id FROM complaints WHERE status!=4 AND id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'");
 				if ($o1 = pg_fetch_object($r1)) {
 					$q = "UPDATE complaints SET current_owner=0,status=4 WHERE id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'";
-					$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "',0,now()::abstime::int4,'** TICKET CLOSED **','',0)";
+					$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "',0,date_part('epoch', CURRENT_TIMESTAMP)::int,'** TICKET CLOSED **','',0)";
 					$q3 = "DELETE FROM complaints_reference WHERE complaints_ref='" . (int)$da_id . "'";
 					$r = pg_safe_exec($q);
 					$updated=0;
@@ -95,7 +95,7 @@ switch ($_GET["A"]) {
 					if (strlen($da_reply)>30720) {
 						echo "<big>your 'reply' section is too big ( above 30KB )</big>.";
 					} else {
-						$q = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "',0,now()::abstime::int4,'" . $da_reply . "',''," . (int)$_GET["RT"] . ")";
+						$q = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "',0,date_part('epoch', CURRENT_TIMESTAMP)::int,'" . $da_reply . "',''," . (int)$_GET["RT"] . ")";
 
 						echo "<h2>Complaint Manager (reply to admin)";
 						echo "</h2>\n";
@@ -188,7 +188,7 @@ if ($passok) {
 switch ($_GET["A"]) {
 	case 'cancel':
 		$q = "UPDATE complaints SET current_owner=0,status=4 WHERE id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'";
-		$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",now()::abstime::int4,'** TICKET CANCELLED **','',0)";
+		$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",date_part('epoch', CURRENT_TIMESTAMP)::int,'** TICKET CANCELLED **','',0)";
 		$q3 = "DELETE FROM complaints_reference WHERE complaints_ref='" . (int)$da_id . "'";
 		$r = pg_safe_exec($q);
 		$updated=0;
@@ -224,15 +224,15 @@ switch ($_GET["A"]) {
 			}
 			if ($do_the_reply == 1) {
 				if ($da_reply == "") { $do_notify_user = 0; }
-				$q = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",now()::abstime::int4,'" . $da_reply . "','" . $da_actions . "'," . (int)$_GET["RT"] . ")";
+				$q = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",date_part('epoch', CURRENT_TIMESTAMP)::int,'" . $da_reply . "','" . $da_actions . "'," . (int)$_GET["RT"] . ")";
 				$qx = ""; $qs = "";
 				if ($_GET["RT"]==0 && $_POST["newstatus"]==0) {
-					$qx = "UPDATE complaints SET current_owner=" . (int)$user_id . ",reviewed_by_id=" . (int)$user_id . ",reviewed_ts=now()::abstime::int4,status=2 WHERE id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'";
+					$qx = "UPDATE complaints SET current_owner=" . (int)$user_id . ",reviewed_by_id=" . (int)$user_id . ",reviewed_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,status=2 WHERE id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'";
 				}
 				if ($_POST["newstatus"]>2) {
 					$somemore = "";
 					if ($_GET["RT"]==0) {
-						$somemore = "current_owner=0,reviewed_by_id=" . (int)$user_id . ",reviewed_ts=now()::abstime::int4,";
+						$somemore = "current_owner=0,reviewed_by_id=" . (int)$user_id . ",reviewed_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,";
 					} else {
 						$somemore = "current_owner=0,";
 					}
@@ -245,7 +245,7 @@ switch ($_GET["A"]) {
 				if ($qs!="") {
 					pg_safe_exec($qs);
 	//				echo $qs . "<br>";
-					$qq = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",now()::abstime::int4,'*** TICKET " . strtoupper($cmp_status[$_POST["newstatus"]]) . " ***','',0)";
+					$qq = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",date_part('epoch', CURRENT_TIMESTAMP)::int,'*** TICKET " . strtoupper($cmp_status[$_POST["newstatus"]]) . " ***','',0)";
 	//				echo $qq . "<br>";
 					pg_safe_exec($qq);
 				}
@@ -356,7 +356,7 @@ switch ($_GET["A"]) {
 		break;
 	case 'resolve':
 		$q = "UPDATE complaints SET status=3 WHERE id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'";
-		$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",now()::abstime::int4,'** TICKET RESOLVED **','',0)";
+		$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",date_part('epoch', CURRENT_TIMESTAMP)::int,'** TICKET RESOLVED **','',0)";
 		$q3 = "DELETE FROM complaints_reference WHERE complaints_ref='" . (int)$da_id . "'";
 		$r = pg_safe_exec($q);
 		$updated=0;
@@ -381,8 +381,8 @@ switch ($_GET["A"]) {
 		}
 		break;
 	case 'delete':
-		$q = "UPDATE complaints SET status=99,created_crc='',crc_expiration=(now()::abstime::int4+(86400*15)) WHERE id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'";
-		$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",now()::abstime::int4,'** TICKET REMOVED/DELETED **','',0)";
+		$q = "UPDATE complaints SET status=99,created_crc='',crc_expiration=(date_part('epoch', CURRENT_TIMESTAMP)::int+(86400*15)) WHERE id='" . (int)$da_id . "' AND ticket_number='" . $_GET["ID"] . "'";
+		$q2 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$da_id . "'," . (int)$user_id . ",date_part('epoch', CURRENT_TIMESTAMP)::int,'** TICKET REMOVED/DELETED **','',0)";
 		$q3 = "DELETE FROM complaints_reference WHERE complaints_ref='" . (int)$da_id . "'";
 		$r = pg_safe_exec($q);
 		$updated=0;

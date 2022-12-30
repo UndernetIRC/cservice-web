@@ -14,7 +14,7 @@ $cTheme = get_theme_info();
 
 if ($ID!="" && strlen($ID)<=128) {
 	std_connect();
- 	$res=pg_safe_exec("select * from pending_pwreset where cookie='" . $ID . "' AND expiration>=now()::abstime::int4");
+ 	$res=pg_safe_exec("select * from pending_pwreset where cookie='" . $ID . "' AND expiration>=date_part('epoch', CURRENT_TIMESTAMP)::int");
   	if (pg_numrows($res)==0) {
 		std_theme_styles(1); std_theme_body("../");
 		echo "<h1>Error</h1> The URL entered is not valid.  Please check it ";
@@ -22,7 +22,7 @@ if ($ID!="" && strlen($ID)<=128) {
 		echo "</body></html>";
 		exit;
 	} else {
-		pg_safe_exec("delete from pending_pwreset where expiration<now()::abstime::int4");
+		pg_safe_exec("delete from pending_pwreset where expiration<date_part('epoch', CURRENT_TIMESTAMP)::int");
 		$pwreset=pg_fetch_object($res,0);
 		$userid = $pwreset->user_id;
 		$qid = $pwreset->question_id;
@@ -32,7 +32,7 @@ if ($ID!="" && strlen($ID)<=128) {
 	// change verifdata
 	$gor=pg_safe_exec("SELECT verificationdata FROM users WHERE id='" . (int)$userid . "'");
 	$goro=pg_fetch_object($gor);
-	$res=pg_safe_exec("UPDATE users SET question_id='" . (int)$qid . "',verificationdata='" . post2db($vdata) . "',post_forms=(now()::abstime::int4+86400*10),last_updated=now()::abstime::int4,last_updated_by='Verif Q/A Reset' WHERE id='" . (int)$userid . "'");
+	$res=pg_safe_exec("UPDATE users SET question_id='" . (int)$qid . "',verificationdata='" . post2db($vdata) . "',post_forms=(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*10),last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='Verif Q/A Reset' WHERE id='" . (int)$userid . "'");
 	$user_id = $userid;
 	log_user($userid,8,"Cookie was: " . $ID . ", Old V/A was: " . $goro->verificationdata);
 	$user_id = 0;

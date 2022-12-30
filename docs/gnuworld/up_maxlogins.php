@@ -43,7 +43,7 @@ function not_valid_va($user_id)
 					echo '<a href ="users.php">Click here</a> to go back to your info page.';
 					die;
 				} else {
-				  $sql = sprintf("UPDATE users SET maxlogins=%d, last_updated=now()::abstime::int4, last_updated_by='Web Interface (%s (%d))' WHERE id=%d", $user_max_login, $o->user_name, $o->id, $o->id);
+				  $sql = sprintf("UPDATE users SET maxlogins=%d, last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int, last_updated_by='Web Interface (%s (%d))' WHERE id=%d", $user_max_login, $o->user_name, $o->id, $o->id);
 				  pg_safe_exec($sql);
 
 					echo "You've succesfully set maxlogins to <strong>" . $user_max_login . "</strong> !<br>";

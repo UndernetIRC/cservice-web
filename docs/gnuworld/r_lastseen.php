@@ -11,7 +11,7 @@ if ($_GET["crc"]==md5( CRC_SALT_0013 . $_GET["id"] . $_GET["ts"] )) {
 		// do nothing, the record IS here ( heh ?! )
 	} else {
 		// insert a new record
-		pg_safe_exec("INSERT INTO users_lastseen (user_id, last_seen, last_updated, last_hostmask) VALUES ( " . (int)$_GET["id"] . ", now()::abstime::int4, now()::abstime::int4, '')");
+		pg_safe_exec("INSERT INTO users_lastseen (user_id, last_seen, last_updated, last_hostmask) VALUES ( " . (int)$_GET["id"] . ", date_part('epoch', CURRENT_TIMESTAMP)::int, date_part('epoch', CURRENT_TIMESTAMP)::int, '')");
 	}
 	header("Location: users.php?id=" . $_GET["id"] . "\n\n");
 	die;

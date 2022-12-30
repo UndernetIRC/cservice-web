@@ -313,7 +313,7 @@ switch ((int)$curr_step) {
 			//	$err .= "<li> You entered an invalid code from the picture.\n";
 			//} else { // CRC logic is fine, now check with the database temporary record...
 				//$ENABLE_COOKIE_TABLE = 1;
-				//pg_safe_exec("DELETE FROM gfxcodes WHERE expire<now()::abstime::int4");
+				//pg_safe_exec("DELETE FROM gfxcodes WHERE expire<date_part('epoch', CURRENT_TIMESTAMP)::int");
 				//$r = pg_safe_exec("SELECT expire FROM gfxcodes WHERE crc='" . $gfxcode_crc . "' AND code='" . strtoupper($gfxcode_val) . "'");
 				//if (pg_numrows($r)==0) {
 				//	$err .= "<li> You entered an invalid/expired code from the picture.\n";

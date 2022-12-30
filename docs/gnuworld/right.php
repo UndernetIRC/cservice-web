@@ -54,7 +54,7 @@ $cTheme = get_theme_info();
 			die;
 		}
 		$default_gopage = "users.php?id=".$user_id;
-		$req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts,pending.manager_id FROM pending,users,channels,supporters WHERE pending.channel_id=channels.id AND supporters.user_id=users.id AND channels.id=supporters.channel_id AND pending.channel_id=supporters.channel_id AND supporters.user_id='$user_id' AND channels.registered_ts=0 AND pending.status<4 AND ( pending.decision_ts=0 OR pending.decision_ts>now()::abstime::int4-(86400*5) ) AND (supporters.support IS NULL OR supporters.support='?') ORDER BY pending.created_ts DESC";
+		$req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts,pending.manager_id FROM pending,users,channels,supporters WHERE pending.channel_id=channels.id AND supporters.user_id=users.id AND channels.id=supporters.channel_id AND pending.channel_id=supporters.channel_id AND supporters.user_id='$user_id' AND channels.registered_ts=0 AND pending.status<4 AND ( pending.decision_ts=0 OR pending.decision_ts>date_part('epoch', CURRENT_TIMESTAMP)::int-(86400*5) ) AND (supporters.support IS NULL OR supporters.support='?') ORDER BY pending.created_ts DESC";
 		$levels = pg_safe_exec($req00);
 		if (pg_numrows($levels)>0) { // user has some channels to support.
 			if (pg_numrows($levels)>1) { $c_addy = "s"; } else { $c_addy = ""; }
@@ -73,7 +73,7 @@ $cTheme = get_theme_info();
 			echo "</body></html>\n\n";
 			die;
 		} else { // user doesnt need to confirm any support on any channel
-			$req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts FROM pending,users,channels WHERE pending.channel_id=channels.id AND pending.manager_id=users.id AND pending.manager_id='$user_id' AND channels.registered_ts=0 AND pending.status<9 AND pending.status!=4 AND pending.reg_acknowledged='N' AND (pending.decision_ts=0 OR pending.decision_ts>now()::abstime::int4-86400*5) ORDER BY pending.created_ts DESC";
+			$req00 = "SELECT channels.id,channels.name,pending.created_ts,pending.status,pending.decision_ts FROM pending,users,channels WHERE pending.channel_id=channels.id AND pending.manager_id=users.id AND pending.manager_id='$user_id' AND channels.registered_ts=0 AND pending.status<9 AND pending.status!=4 AND pending.reg_acknowledged='N' AND (pending.decision_ts=0 OR pending.decision_ts>date_part('epoch', CURRENT_TIMESTAMP)::int-86400*5) ORDER BY pending.created_ts DESC";
 			$levels = pg_safe_exec($req00);
 			if (pg_numrows($levels)>0) { // user has one or more pending applications
 					header("Pragma: no-cache");

@@ -427,7 +427,7 @@ if ($check_invalid) {
 if (REGPROC_IDLECHECK) {
 	$check_invalid=0;$s_index=0;
 	for ($x=0;$x<REQUIRED_SUPPORTERS;$x++) {
-		//$res = pg_safe_exec("SELECT users.id AS id FROM users,users_lastseen WHERE users.id=users_lastseen.user_id AND users_lastseen.last_seen<(now()::abstime::int4-86400*21) AND lower(users.user_name)='" . strtolower($supporters[$x]) . "'");
+		//$res = pg_safe_exec("SELECT users.id AS id FROM users,users_lastseen WHERE users.id=users_lastseen.user_id AND users_lastseen.last_seen<(date_part('epoch', CURRENT_TIMESTAMP)::int-86400*21) AND lower(users.user_name)='" . strtolower($supporters[$x]) . "'");
 		//if (pg_numrows($res)>0) {
 		$res = pg_safe_exec("SELECT id FROM users WHERE lower(user_name)='" . strtolower($supporters[$x]) . "'");
 		$row = pg_fetch_object($res,0);
@@ -624,16 +624,16 @@ if ($manager_id != $user_id) { die("Nice try! he he...."); }
 if ($reusechan) {
 	$channel_id=$cc_id;
 	if (REQUIRED_SUPPORTERS>0) {
-		$channels_q = "UPDATE channels SET name='$channel_nameF',mass_deop_pro=0,flood_pro=0,flags=0,limit_offset=3,limit_period=20,limit_grace=1,limit_max=0,userflags=0,url='',description='',keywords='',registered_ts=0,channel_ts=0,channel_mode='',comment='',last_updated=now()::abstime::int4 WHERE id='$channel_id'";
+		$channels_q = "UPDATE channels SET name='$channel_nameF',mass_deop_pro=0,flood_pro=0,flags=0,limit_offset=3,limit_period=20,limit_grace=1,limit_max=0,userflags=0,url='',description='',keywords='',registered_ts=0,channel_ts=0,channel_mode='',comment='',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='$channel_id'";
 	} else {
-		$channels_q = "UPDATE channels SET name='$channel_nameF',mass_deop_pro=0,flood_pro=0,flags=0,limit_offset=3,limit_period=20,limit_grace=1,limit_max=0,userflags=0,url='',description='',keywords='',registered_ts=now()::abstime::int4,channel_ts=0,channel_mode='',comment='',last_updated=now()::abstime::int4 WHERE id='$channel_id'";
+		$channels_q = "UPDATE channels SET name='$channel_nameF',mass_deop_pro=0,flood_pro=0,flags=0,limit_offset=3,limit_period=20,limit_grace=1,limit_max=0,userflags=0,url='',description='',keywords='',registered_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,channel_ts=0,channel_mode='',comment='',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='$channel_id'";
 	}
 	$lastreq = pg_safe_exec($channels_q);
 } else {
 	if (REQUIRED_SUPPORTERS>0) {
-		$channels_q = "INSERT INTO channels (name,url,description,keywords,registered_ts,channel_ts,channel_mode,comment,last_updated,mass_deop_pro,flood_pro,flags,limit_offset,limit_period,limit_grace,limit_max,userflags) VALUES ('$channel_nameF','','','',0,0,'','',now()::abstime::int4,0,0,0,3,20,1,0,0)";
+		$channels_q = "INSERT INTO channels (name,url,description,keywords,registered_ts,channel_ts,channel_mode,comment,last_updated,mass_deop_pro,flood_pro,flags,limit_offset,limit_period,limit_grace,limit_max,userflags) VALUES ('$channel_nameF','','','',0,0,'','',date_part('epoch', CURRENT_TIMESTAMP)::int,0,0,0,3,20,1,0,0)";
 	} else {
-		$channels_q = "INSERT INTO channels (name,url,description,keywords,registered_ts,channel_ts,channel_mode,comment,last_updated,mass_deop_pro,flood_pro,flags,limit_offset,limit_period,limit_grace,limit_max,userflags) VALUES ('$channel_nameF','','','',now()::abstime::int4,0,'','',now()::abstime::int4,0,0,0,3,20,1,0,0)";
+		$channels_q = "INSERT INTO channels (name,url,description,keywords,registered_ts,channel_ts,channel_mode,comment,last_updated,mass_deop_pro,flood_pro,flags,limit_offset,limit_period,limit_grace,limit_max,userflags) VALUES ('$channel_nameF','','','',date_part('epoch', CURRENT_TIMESTAMP)::int,0,'','',date_part('epoch', CURRENT_TIMESTAMP)::int,0,0,0,3,20,1,0,0)";
 	}
 	$lastreq = pg_safe_exec($channels_q);
 	$res = pg_safe_exec("SELECT id FROM channels WHERE name='$channel_nameF'");
@@ -648,9 +648,9 @@ if (!$lastreq) {
 }
 
 if (REQUIRED_SUPPORTERS>0) {
-	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,last_updated,reg_acknowledged,check_start_ts) VALUES ($channel_id,$manager_id,now()::abstime::int4,0,'','','$description',now()::abstime::int4,'N',0)";
+	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,last_updated,reg_acknowledged,check_start_ts) VALUES ($channel_id,$manager_id,date_part('epoch', CURRENT_TIMESTAMP)::int,0,'','','$description',date_part('epoch', CURRENT_TIMESTAMP)::int,'N',0)";
 } else {
-	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,last_updated,reg_acknowledged,check_start_ts,status) VALUES ($channel_id,$manager_id,now()::abstime::int4,now()::abstime::int4,'** INSTANT REGISTRATION **','','$description',now()::abstime::int4,'Y',0,3)";
+	$pending_q = "INSERT INTO pending (channel_id,manager_id,created_ts,decision_ts,decision,comments,description,last_updated,reg_acknowledged,check_start_ts,status) VALUES ($channel_id,$manager_id,date_part('epoch', CURRENT_TIMESTAMP)::int,date_part('epoch', CURRENT_TIMESTAMP)::int,'** INSTANT REGISTRATION **','','$description',date_part('epoch', CURRENT_TIMESTAMP)::int,'Y',0,3)";
 }
 $lastreq = pg_safe_exec($pending_q);
 
@@ -669,16 +669,16 @@ if (REQUIRED_SUPPORTERS>0) {
 		$res = pg_safe_exec("SELECT id FROM users WHERE lower(user_name)='" . strtolower($supporters[$x]) . "'");
 		$row = pg_fetch_object($res,0);
 		$sup_id = $row->id;
-		$supporters_q[$x] = "INSERT INTO supporters (channel_id,user_id,reason,last_updated) VALUES ($channel_id,$sup_id,'',now()::abstime::int4)";
+		$supporters_q[$x] = "INSERT INTO supporters (channel_id,user_id,reason,last_updated) VALUES ($channel_id,$sup_id,'',date_part('epoch', CURRENT_TIMESTAMP)::int)";
 		pg_safe_exec($supporters_q[$x]);
 	}
 } else {
 	// INSTANT REGISTRATION :: Finish registering the channel properly (ie. add the manager)
-	pg_safe_exec("UPDATE channels SET registered_ts=now()::abstime::int4,last_updated=now()::abstime::int4,comment='' WHERE id='$channel_id'");
-	pg_safe_exec("INSERT INTO levels (channel_id,user_id,access,added,added_by,last_modif,last_modif_by,last_updated) VALUES ($channel_id,$manager_id,500,now()::abstime::int4,'*** REGPROC ***',now()::abstime::int4,'*** REGPROC ***',now()::abstime::int4)");
-	pg_safe_exec("UPDATE users_lastseen SET last_updated=now()::abstime::int4,last_seen=now()::abstime::int4 WHERE user_id='$manager_id'");
+	pg_safe_exec("UPDATE channels SET registered_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,comment='' WHERE id='$channel_id'");
+	pg_safe_exec("INSERT INTO levels (channel_id,user_id,access,added,added_by,last_modif,last_modif_by,last_updated) VALUES ($channel_id,$manager_id,500,date_part('epoch', CURRENT_TIMESTAMP)::int,'*** REGPROC ***',date_part('epoch', CURRENT_TIMESTAMP)::int,'*** REGPROC ***',date_part('epoch', CURRENT_TIMESTAMP)::int)");
+	pg_safe_exec("UPDATE users_lastseen SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_seen=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE user_id='$manager_id'");
 
-//	pg_safe_exec("UPDATE pending SET status=3,last_updated=now()::abstime::int4,decision_ts=now()::abstime::int4,decision='** INSTANT REGISTRATION **' WHERE channel_id='$channel_id' AND created_ts=''");
+//	pg_safe_exec("UPDATE pending SET status=3,last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,decision_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,decision='** INSTANT REGISTRATION **' WHERE channel_id='$channel_id' AND created_ts=''");
 }
 
 pg_safe_exec("COMMIT WORK");

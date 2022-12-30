@@ -412,7 +412,7 @@ if (($_GET["view"]+0)<=0) {
 			$q = "DELETE FROM complaints WHERE id='" . (int)$_POST["compid"] . "'";
 			// To be checked for bugs (referenced keys) !@#
 		} else {
-			$q = "UPDATE complaints SET current_owner='" . (int)$user_id . "',reviewed_by_id='" . (int)$user_id . "',reviewed_ts=now()::abstime::int4,status='" . $_POST["switchto"] . "' WHERE id='" . (int)$_POST["compid"] . "'";
+			$q = "UPDATE complaints SET current_owner='" . (int)$user_id . "',reviewed_by_id='" . (int)$user_id . "',reviewed_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,status='" . $_POST["switchto"] . "' WHERE id='" . (int)$_POST["compid"] . "'";
 		}
 		pg_safe_exec($q);
 		echo "<a href=\"admin.php\"><b>&lt;&nbsp;back</b></a><br><br>\n";
@@ -425,13 +425,13 @@ if (($_GET["view"]+0)<=0) {
 			$lo = @pg_fetch_object($lr);
 			$q1_more = "";
 			if ((int)$lo->id == 0) { // so if you transfer it when never replied, it doesnt "bug"
-				$q1_more = "status=2,reviewed_by_id='" . (int)$user_id . "',reviewed_ts=now()::abstime::int4,";
+				$q1_more = "status=2,reviewed_by_id='" . (int)$user_id . "',reviewed_ts=date_part('epoch', CURRENT_TIMESTAMP)::int,";
 			}
 			$q1 = "UPDATE complaints SET " . $q1_more . "current_owner='" . (int)$_POST["newowner"] . "' WHERE id='" . (int)$_POST["compid"]. "'";
-			$q2 = "INSERT INTO complaints_reference (complaints_ref,referenced_by,referenced_to,reference_ts,is_new) VALUES ('" . (int)$_POST["compid"] . "','" . (int)$user_id . "','" . (int)$_POST["newowner"] . "',now()::abstime::int4,1)";
+			$q2 = "INSERT INTO complaints_reference (complaints_ref,referenced_by,referenced_to,reference_ts,is_new) VALUES ('" . (int)$_POST["compid"] . "','" . (int)$user_id . "','" . (int)$_POST["newowner"] . "',date_part('epoch', CURRENT_TIMESTAMP)::int,1)";
 			$nr = pg_safe_exec("SELECT user_name FROM users WHERE id='" . (int)$_POST["newowner"] . "'");
 			$no = pg_fetch_object($nr);
-			$q3 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$_POST["compid"] . "'," . (int)$user_id . ",now()::abstime::int4,'','*** CHANGED TICKET OWNERSHIP TO : " . $no->user_name . " ***'," . (int)$lo->id . ")";
+			$q3 = "INSERT INTO complaints_threads (complaint_ref,reply_by,reply_ts,reply_text,actions_text,in_reply_to) VALUES ('" . (int)$_POST["compid"] . "'," . (int)$user_id . ",date_part('epoch', CURRENT_TIMESTAMP)::int,'','*** CHANGED TICKET OWNERSHIP TO : " . $no->user_name . " ***'," . (int)$lo->id . ")";
 
 			//echo $q0 . "<br>\n";
 			//echo $q1 . "<br>\n";

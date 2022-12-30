@@ -196,7 +196,7 @@ if (!file_exists("../testnet")) {
 }
 
 	/* make the user can re-port in 10 days. */
-	pg_safe_exec("UPDATE users SET post_forms=(now()::abstime::int4+86400*10) WHERE id=" . $user_id);
+	pg_safe_exec("UPDATE users SET post_forms=(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*10) WHERE id=" . $user_id);
 
 	echo "<h2>";
 	echo "Please allow 3-5 days for your request to be processed.\n";

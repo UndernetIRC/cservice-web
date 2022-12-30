@@ -34,7 +34,7 @@
 
              	if ($mode=="reset") { $nbsup = DEFAULT_REQUIRED_SUPPORTERS; }
 
-		pg_safe_exec("UPDATE variables SET contents='" . $nbsup . "',last_updated=now()::abstime::int4 WHERE var_name='REQUIRED_SUPPORTERS'");
+		pg_safe_exec("UPDATE variables SET contents='" . $nbsup . "',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE var_name='REQUIRED_SUPPORTERS'");
 
 		header("Location: index.php\n\n");
 		die;

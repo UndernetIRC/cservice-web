@@ -64,7 +64,7 @@ if (pg_numrows($blah)>0) {
 	}
 	$crypt=$salt . md5($salt . $password);
 	$res=pg_safe_exec("update users set password='" . $crypt . "', " .
-		     " last_updated=now()::abstime::int4, " .
+		     " last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int, " .
 		     " last_updated_by='<b>Password Changed by SYSTEM</b> (" . date("YmdHis") . $user_id . ")' " .
 		     " where " .
 		     "  id='" . $user->id . "'");

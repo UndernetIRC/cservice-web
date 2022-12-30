@@ -302,7 +302,7 @@ if ($button == "Save Changes") {
 		 "  url = '" . $c_url . "'," .
 		 "  description = '" . $c_desc . "'," .
 		 "  keywords = '" . $c_keywords . "'," .
-		 "  last_updated = now()::abstime::int4, " .
+		 "  last_updated = date_part('epoch', CURRENT_TIMESTAMP)::int, " .
 		 "  channel_mode = '" . $c_mode . "' " .
 		 " WHERE id = " . $channel->id;
 
@@ -354,10 +354,10 @@ if ($button == "Save Changes") {
 				"  last_modif,last_modif_by,last_updated,deleted) " .
 				" values " .
 				"  (" . $channel->id . "," . $user2->id . "," .
-				"$add_access ,0,now()::abstime::int4," .
+				"$add_access ,0,date_part('epoch', CURRENT_TIMESTAMP)::int," .
 				"  '" . $user->user_name . " (via web)'," .
-				"  now()::abstime::int4,'" .$user->user_name . " (via web)'," .
-				"  now()::abstime::int4,0)");
+				"  date_part('epoch', CURRENT_TIMESTAMP)::int,'" .$user->user_name . " (via web)'," .
+				"  date_part('epoch', CURRENT_TIMESTAMP)::int,0)");
 			//pg_safe_exec($query);
 		}
 	}
@@ -578,7 +578,7 @@ if (pg_numrows($levels)==0) {
 
 echo("</table>");
 
-$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE (expires=0 OR expires>now()::abstime::int4) AND channel_id=$channel->id order by set_ts desc");
+$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE (expires=0 OR expires>date_part('epoch', CURRENT_TIMESTAMP)::int) AND channel_id=$channel->id order by set_ts desc");
 
 if (pg_numrows($bans)!=0) {
 echo(" <br><br>

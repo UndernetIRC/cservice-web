@@ -128,7 +128,7 @@ if ($cookie!="") {
 	$verificationdata = prepare_dbtext_db( $user->verificationdata );
 
 	$q = "INSERT INTO users (user_name, password, flags, email, last_updated, last_updated_by, language_id, question_id, verificationdata, post_forms, signup_ts, signup_ip, maxlogins)";
-	$q .= sprintf(" VALUES ('%s', '%s', %d, '%s', %s, '%s', %d, %d, '%s', %s, %s, '%s', %d)", $user->user_name, $crypt, 4, $user->email, "now()::abstime::int4", "Web Page New User", $user->language, $user->question_id, $verificationdata, "(now()::abstime::int4+432000)", "now()::abstime::int4", cl_ip(), DEFAULT_MAX_LOGINS);
+	$q .= sprintf(" VALUES ('%s', '%s', %d, '%s', %s, '%s', %d, %d, '%s', %s, %s, '%s', %d)", $user->user_name, $crypt, 4, $user->email, "date_part('epoch', CURRENT_TIMESTAMP)::int", "Web Page New User", $user->language, $user->question_id, $verificationdata, "(date_part('epoch', CURRENT_TIMESTAMP)::int+432000)", "date_part('epoch', CURRENT_TIMESTAMP)::int", cl_ip(), DEFAULT_MAX_LOGINS);
 
 	$res=pg_safe_exec($q);
 	local_seclog("New user confirmation for `" . $user->user_name . "`");
@@ -140,7 +140,7 @@ if ($cookie!="") {
 		$uobj=pg_fetch_object($ucount,0);
 		$newcount = $uobj->count_count+1;
 		if ($newcount==$MAX_ALLOWED_USERS) {
-			pg_safe_exec("INSERT INTO locks VALUES (3,now()::abstime::int4,0)");
+			pg_safe_exec("INSERT INTO locks VALUES (3,date_part('epoch', CURRENT_TIMESTAMP)::int,0)");
 		}
 		pg_safe_exec("UPDATE counts SET count_count='" . ($newcount+0) . "' WHERE count_type='1'");
 	}

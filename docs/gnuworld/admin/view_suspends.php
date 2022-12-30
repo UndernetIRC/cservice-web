@@ -36,7 +36,7 @@ if ($_GET["ok"]==1) {
 	$x_days_ago_start = (mktime(0,0,1,date("m",$x_days_ago),date("d",$x_days_ago),date("Y",$x_days_ago)) - 1);
 	$start_ts = $x_days_ago_start;
 	$end_ts = time();
-	$end_ts_db = "now()::abstime::int4";
+	$end_ts_db = "date_part('epoch', CURRENT_TIMESTAMP)::int";
 }
 
 $suspends = pg_safe_exec("SELECT * FROM users,userlog WHERE userlog.ts>=" . $start_ts . " AND userlog.ts<=" . $end_ts_db . " AND users.id=userlog.user_id AND (userlog.event=1 OR userlog.event=2) ORDER BY userlog.ts DESC");

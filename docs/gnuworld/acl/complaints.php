@@ -17,7 +17,7 @@
   		die;
   	}
 
-        if ($switch=="ON") { pg_safe_exec("INSERT INTO locks VALUES (4,now()::abstime::int4," . $user_id . ")"); }
+        if ($switch=="ON") { pg_safe_exec("INSERT INTO locks VALUES (4,date_part('epoch', CURRENT_TIMESTAMP)::int," . $user_id . ")"); }
         if ($switch=="OFF") { pg_safe_exec("DELETE FROM locks WHERE section='4'"); }
 
         header("Location: redir.php?RET=index.php");

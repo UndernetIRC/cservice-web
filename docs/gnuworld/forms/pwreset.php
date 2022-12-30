@@ -81,7 +81,7 @@ if ((int)$ro1->question_id==0 || $ro1->verificationdata=="") {
                 die;
         }
 
-pg_safe_exec("DELETE FROM pending_pwreset WHERE expiration<now()::abstime::int4");
+pg_safe_exec("DELETE FROM pending_pwreset WHERE expiration<date_part('epoch', CURRENT_TIMESTAMP)::int");
 $blo2 = pg_safe_exec("SELECT * FROM pending_pwreset WHERE user_id='$da_id'");
 if (pg_numrows($blo2)>0) {
 	echo "<h2>\n";
@@ -245,7 +245,7 @@ if ($crc == md5($HTTP_USER_AGENT . $ts . CRC_SALT_0009)) {
 
 
 	$cookieval = md5(CRC_SALT_0015 . uniqid("",1) . time() . $da_emailaddy . $verifdata);
-	pg_safe_exec("INSERT INTO pending_pwreset (cookie,user_id,question_id,verificationdata,expiration) VALUES ('$cookieval',$uid,'$verifq','$verifdata',now()::abstime::int4+21600)");
+	pg_safe_exec("INSERT INTO pending_pwreset (cookie,user_id,question_id,verificationdata,expiration) VALUES ('$cookieval',$uid,'$verifq','$verifdata',date_part('epoch', CURRENT_TIMESTAMP)::int+21600)");
 	$confirm_url = gen_server_url() . LIVE_LOCATION . "/forms/confirm_pwreset.php?ID=$cookieval";
 	$the_msg = "If you would like to confirm that the new verification question/answer for '$da_username' should be changed as requested,\n";
 	$the_msg .= "then click on the link below within 6 hours :\n\n";

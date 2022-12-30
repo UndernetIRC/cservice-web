@@ -142,7 +142,7 @@
        		$query .= "'" . $isstaff . "',";
        		$query .= "'" . $flags . "',";
        		$query .= "'" . $xtra . "',";
-       		$query .= "now()::abstime::int4,";
+       		$query .= "date_part('epoch', CURRENT_TIMESTAMP)::int,";
        		$query .= "'" . $user_id . "',";
        		$query .= "'0','0','0')";
 
@@ -254,7 +254,7 @@ if ($mode=="applyacl" && $crc == md5( $HTTP_USER_AGENT . $CRC_SALT_0008 . $user_
        		$query .= "isstaff='" . $isstaff . "',";
        		$query .= "flags='" . $flags . "',";
        		$query .= "xtra='" . $xtra . "',";
-       		$query .= "last_updated=now()::abstime::int4,";
+       		$query .= "last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,";
        		$query .= "last_updated_by='" . $user_id . "' ";
        		$query .= " WHERE user_id='" . $userid . "'";
 

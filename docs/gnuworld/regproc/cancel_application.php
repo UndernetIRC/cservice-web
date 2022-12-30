@@ -39,7 +39,7 @@ echo "<b>CHANNEL SERVICE REGISTRATION PROCESS</b> - CANCELLATION OF YOUR APPLICA
 if (($crc==md5("$HTTP_USER_AGENT" . $ts . CRC_SALT_0013)) && $mode=="remove" && $c>0 && isset($c) && $id>0 && isset($id)) {
 	// write decision.
 	$datime=time();
-	$query = "UPDATE pending SET status=4,last_updated=now()::abstime::int4,decision='Cancelled by applicant',decision_ts=now()::abstime::int4 WHERE channel_id='$c' AND created_ts='$id'";
+	$query = "UPDATE pending SET status=4,last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,decision='Cancelled by applicant',decision_ts=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE channel_id='$c' AND created_ts='$id'";
 	pg_safe_exec($query);
 	//echo htmlspecialchars($query); die;
 	$applicant = $user_name . " (" . $user_id . ")";

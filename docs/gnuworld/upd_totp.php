@@ -21,7 +21,7 @@ if ($user_id > 0) {
 					{
 					$oldflags = $o->flags; $flags = $oldflags;
 					$flags = $oldflags&~TOTP_USR_FLAG;
-					pg_safe_exec("UPDATE users SET flags='".$flags."',last_updated=now()::abstime::int4 WHERE id='".(int)$totp_id."'");
+					pg_safe_exec("UPDATE users SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$totp_id."'");
 					$oldtotp=$o->totp_key;
 					// log_user($totp_id,14,"TOTP disabled for %U. Old TOTP key: ".$oldtotp." (%I)");
 					log_user($totp_id,14,"TOTP disabled for %U. (%I)");

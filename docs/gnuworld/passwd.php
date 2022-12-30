@@ -59,7 +59,7 @@ if ($mode=="write" && $crc == md5( $SECURE_ID . CRC_SALT_0011 )) {
 							$salt=$salt . $valid[rand(0,strlen($valid)-1)];
 						}
 						$crypt=$salt . md5($salt . $pass1);
-						$query = "UPDATE users SET last_updated=now()::abstime::int4,last_updated_by='** Password Change **',password='" . $crypt . "' WHERE id=" . ($user_id+0);
+						$query = "UPDATE users SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated_by='** Password Change **',password='" . $crypt . "' WHERE id=" . ($user_id+0);
 						pg_safe_exec($query);
 
 						// send email

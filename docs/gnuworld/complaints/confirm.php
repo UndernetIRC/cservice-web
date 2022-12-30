@@ -8,8 +8,8 @@ if ($user_id > 0) { $admin = std_admin(); } else { $admin = 0; }
 $cTheme = get_theme_info();
 std_theme_styles(1);
 std_theme_body();
-pg_safe_exec("DELETE FROM complaints WHERE status=0 AND crc_expiration<now()::abstime::int4");
-$r = @pg_safe_exec("SELECT id,from_email FROM complaints WHERE created_crc='" . $_GET["ID"] . "' AND status=0 AND crc_expiration>=now()::abstime::int4");
+pg_safe_exec("DELETE FROM complaints WHERE status=0 AND crc_expiration<date_part('epoch', CURRENT_TIMESTAMP)::int");
+$r = @pg_safe_exec("SELECT id,from_email FROM complaints WHERE created_crc='" . $_GET["ID"] . "' AND status=0 AND crc_expiration>=date_part('epoch', CURRENT_TIMESTAMP)::int");
 if (!$r) { echo "<h2>Invalid ID</h2>"; } else {
 	if ($o = pg_fetch_object($r)) {
 		$ticket_number = strtoupper($o->id . "-" . substr(md5( $o->id . CRC_SALT_0007 . "ticket" ),0,10));

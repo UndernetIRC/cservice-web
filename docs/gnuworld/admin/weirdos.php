@@ -39,7 +39,7 @@
 	"or " .
 	" channellog.event = 10 " .
 	") and " .
-	" channellog.ts > now()::abstime::int4-(14*24*60*60) " .
+	" channellog.ts > date_part('epoch', CURRENT_TIMESTAMP)::int-(14*24*60*60) " .
 	"order by channellog.ts desc");
 
   if (pg_numrows($res)<1) {

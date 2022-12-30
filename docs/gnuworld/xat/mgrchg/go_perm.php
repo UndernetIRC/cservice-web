@@ -148,9 +148,9 @@ $q_idx = 0;
 
 	//echo $the_email; die;
 
-	pg_safe_exec("UPDATE levels SET access=499,last_modif=now()::abstime::int4,last_updated=now()::abstime::int4,suspend_expires=0,suspend_level=NULL,suspend_by='',last_modif_by='*** MANAGER CHANGE ***' WHERE access=500 AND user_id='$pending->manager_id' AND channel_id='$pending->channel_id'");
-	pg_safe_exec("UPDATE levels SET last_modif=now()::abstime::int4,last_updated=now()::abstime::int4,last_modif_by='*** MANAGER CHANGE ***' WHERE access=500 AND user_id='$pending->new_manager_id' AND channel_id='$pending->channel_id'");
-	$chan_update = "UPDATE channels SET last_updated=now()::abstime::int4,comment='" . str_replace("\n","\\n",$new_comment) . "' WHERE id='$pending->channel_id'";
+	pg_safe_exec("UPDATE levels SET access=499,last_modif=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,suspend_expires=0,suspend_level=NULL,suspend_by='',last_modif_by='*** MANAGER CHANGE ***' WHERE access=500 AND user_id='$pending->manager_id' AND channel_id='$pending->channel_id'");
+	pg_safe_exec("UPDATE levels SET last_modif=date_part('epoch', CURRENT_TIMESTAMP)::int,last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,last_modif_by='*** MANAGER CHANGE ***' WHERE access=500 AND user_id='$pending->new_manager_id' AND channel_id='$pending->channel_id'");
+	$chan_update = "UPDATE channels SET last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int,comment='" . str_replace("\n","\\n",$new_comment) . "' WHERE id='$pending->channel_id'";
 	pg_safe_exec($chan_update);
 
 	custom_mail($usr1->email,"[" . $channel->name . "] Manager Change (Turned Permanent)",$the_email,"From: " . $x_at_email . "\nCc: " . $usr2->email . "\nReply-to: Dont.Reply@Thank.You\nX-Mailer: " . NETWORK_NAME . " Channel Service\n\n");

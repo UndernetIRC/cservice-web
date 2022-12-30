@@ -30,7 +30,7 @@ if ($_GET["ok"]==1) {
 	$x_days_ago_start = (mktime(0,0,1,date("m",$x_days_ago),date("d",$x_days_ago),date("Y",$x_days_ago)) - 1);
 	$start_ts = $x_days_ago_start;
 	$end_ts = time();
-	$end_ts_db = "now()::abstime::int4";
+	$end_ts_db = "date_part('epoch', CURRENT_TIMESTAMP)::int";
 }
 $res = pg_safe_exec("SELECT channels.id AS chanid,channels.registered_ts AS ts,channels.name AS name,users.id AS uid,users.user_name AS uname,users_lastseen.last_hostmask AS hostmask,users_lastseen.last_seen AS lastseen_ts FROM levels,channels,users,users_lastseen WHERE levels.access=500 AND levels.added_by='The Judge' AND channels.id=levels.channel_id AND channels.registered_ts>=" . $start_ts . " AND channels.registered_ts<=" . $end_ts . " AND users.id=levels.user_id AND users_lastseen.user_id=levels.user_id");
 $count = pg_numrows($res);

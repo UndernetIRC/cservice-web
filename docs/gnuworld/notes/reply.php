@@ -141,7 +141,7 @@ if ($crc == md5( $authcsc . $user_id . CRC_SALT_0012 )) {
 				pg_safe_exec("DELETE FROM notes WHERE message_id='" . $id . "'");
 			}
 
-			pg_safe_exec("INSERT INTO notes (user_id,from_user_id,message,last_updated) VALUES ('" . $rcpt_id . "','" . $user_id . "','" . $final_msg . "',now()::abstime::int4)");
+			pg_safe_exec("INSERT INTO notes (user_id,from_user_id,message,last_updated) VALUES ('" . $rcpt_id . "','" . $user_id . "','" . $final_msg . "',date_part('epoch', CURRENT_TIMESTAMP)::int)");
 			$notesl = pg_safe_exec("SELECT * FROM notes WHERE user_id='" . $user_id . "'");
 			$notes_left = pg_numrows($notesl);
 			if ($notes_left>0) { // any notes left ? go back to notes list

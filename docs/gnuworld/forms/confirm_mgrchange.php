@@ -11,8 +11,8 @@ $cTheme = get_theme_info();
 
 if ($ID!="" && strlen($ID)<=128) {
 	std_connect();
-	pg_safe_exec("delete from pending_mgrchange where expiration<now()::abstime::int4 AND confirmed='0'");
- 	$res=pg_safe_exec("select * from pending_mgrchange where crc='$ID' AND expiration>=now()::abstime::int4 AND confirmed='0'");
+	pg_safe_exec("delete from pending_mgrchange where expiration<date_part('epoch', CURRENT_TIMESTAMP)::int AND confirmed='0'");
+ 	$res=pg_safe_exec("select * from pending_mgrchange where crc='$ID' AND expiration>=date_part('epoch', CURRENT_TIMESTAMP)::int AND confirmed='0'");
   	if (pg_numrows($res)==0) {
 		std_theme_styles(1); std_theme_body("../");
 		echo "<h1>Error</h1> The URL entered is not valid.  Please check it ";
