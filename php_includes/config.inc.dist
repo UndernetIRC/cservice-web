@@ -225,7 +225,8 @@ This requires to login with a user with an admin access of 901 or above (coder l
 
 
 
-define("RBL_CHECKS", 0);		// enable RBL and glines check for new user registration.
+define("GLINE_CHECK", 0);  // Enable gline check for new user registration
+define("RBL_CHECKS", 0);		// enable RBL check for new user registration.
 define("TOTP_USR_FLAG",1024);
 define("TOTP_ADMIN_IPR_FLAG", 2048);
 define("NON_BOGUS_TOTP",'/^[0-9\=]+$/');

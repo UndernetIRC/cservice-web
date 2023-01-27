@@ -166,86 +166,20 @@ function has_ipr($user_id) {
     return false;
 }
 
-function ip_check_glined($ip){
-    $ip="2001:470:f51a:76e:f5f5:1a62::1";
-    if (filter_var($ip, FILTER_VALIDATE_IP,FILTER_FLAG_IPV4))
+function ip_check_glined($ip): bool
+{
+    if (filter_var($ip, FILTER_VALIDATE_IP) )
     {
-        return ip4_check_glined($ip);
-
-    }
-    if (filter_var($ip, FILTER_VALIDATE_IP,FILTER_FLAG_IPV6))
-    {
-        return ip6_check_glined($ip);
-
-    }
-}
-
-function ip4_check_glined($ip) {
-    if (!ip_check_white($ip)) {
-        $ip_t = explode('.', $ip);
-        $a = $ip_t[0] . '.' . $ip_t[1] . '.';
-        $glines = 0;
-        $sql = "SELECT host from glines where host like '*@" . $a . "%' or host like '~*@" . $a . "%' order by ID ASC"; // getting all glines that match first two bytes in IP and no ident
+        $sql = sprintf("SELECT * FROM glines WHERE host ~ '.*@[abcdef0-9]+[\.:]+' AND split_part(host, '@', 2)::INET >>= '%s' limit 1", pg_escape_string($ip));
         if ($res = pg_safe_exec($sql)) {
-            $rows = pg_num_rows($res);
-            if ($rows > 0) {
-                $hosts = pg_fetch_all($res);
-
-                for ($i = 0; $i < count($hosts); $i++) {
-                    $t_mask = str_replace('*@', '', $hosts[$i]['host']);  //cleaning up gline host
-                    $t_mask = str_replace('~', '', $t_mask);
-                    $masks[] = $t_mask;
-
-                    $filter = new IP4Filter(
-                            array($t_mask));
-
-                    if ($filter->check($ip))
-                        $glines++;
-                }
+            if ($res && pg_numrows($res) > 0) {
+                return true;
             }
+            return false;
         }
-        if ($glines == 0)
-            return false; // not glined
-        else
-            return true; // glined
-    } else
-        return false;
+    }
+    return false;
 }
-
-function ip6_check_glined($ip) {
-    $ip="2001:470:f51a:76e:f5f5:1a62::1";
-    $glines = 0;
-    if (!ip_check_white($ip)) {
-        for ($i = 7; $i > 0; $i--) {
-            $ip6 = explode(":", $ip);
-            $like="";
-            for ($j = 0; $j <= $i; $j++)
-                $like.=$ip6[$j] . ":";
-            $like = substr($like, 0, -1);
-            $sel = "select * from glines where host like '*@" . $like . "%' or host like '~*@" . $like . "%' order by ID ASC";
-            //echo $sel;
-            if ($res = pg_safe_exec($sel)) {
-                $rows = pg_num_rows($res);
-                if ($rows > 0) {
-                    $hosts = pg_fetch_all($res);
-
-                    for ($k = 0; $k < count($hosts); $k++) {
-                        $net=str_replace('*@', '', $hosts[$k]['host']);
-                        $net=str_replace('~', '', $net);
-                        $net = new IPV6Net( $net );
-                        if ($net->contains( $test ) == 1)
-                                $glines++;
-                    }
-                }
-            }
-        }
-    if ($glines == 0)
-            return false; // not glined
-        else
-            return true; // glined
-    }
-        return false;
-    }
 
     function ip_check_rbl($ip) {
         global $rbl;

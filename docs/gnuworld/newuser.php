@@ -50,22 +50,23 @@ if ($test_rbl==1)
 else
 $user_ip=cl_ip();
 
-if (RBL_CHECKS==1)
+if (GLINE_CHECK)
 {
-if (ip_check_glined($user_ip)) {
-	echo "<html><head><title>SECURITY WARNING</title>";
-	std_theme_styles();
-	echo "</head>\n";
-	std_theme_body();
-	echo "<center>\n";
-	echo "<h2>";
-	echo "Sorry, you can't register new users whilst G-Lined from the network.";
-	echo "</h2>";
-	echo "</center>\n";
-	echo "</body></html>\n\n";
-	die;
+    if (ip_check_glined($user_ip)) {
+        echo "<html><head><title>SECURITY WARNING</title>";
+        std_theme_styles();
+        echo "</head>\n";
+        std_theme_body();
+        echo "<center>\n";
+        echo "<h2>";
+        echo "Sorry, you can't register new users whilst G-Lined from the network.";
+        echo "</h2>";
+        echo "</center>\n";
+        echo "</body></html>\n\n";
+        die;
+    }
 }
-}
+
 if (RBL_CHECKS==1)
 {
 $msg=ip_check_rbl($user_ip);
