@@ -1018,19 +1018,19 @@ if (( ($admin >= $edit_lvl || acl(XAT_CAN_EDIT) || acl(XTOTP_DISABLE_OTHERS)) &&
         echo "<input type=\"hidden\" name=\"id\" value=\"" . (int) $id . "\">";
         echo "<input type=\"hidden\" name=\"edit\" value=\"true\">";
         echo "<input type=\"submit\" value=\"Edit User\">";
-        if ($update == 2) {
+        if (isset($update) && $update == 2) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>FAILED User update !!!</b></font>";
         }
-        if ($fc == md5($id . 1 . CRC_SALT_0013)) {
+        if (isset($fc) && $fc == md5($id . 1 . CRC_SALT_0013)) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>You are not allowed to edit that user.</b></font>";
         }
-        if ($fc == md5($id . 2 . CRC_SALT_0013)) {
+        if (isset($fc) && $fc == md5($id . 2 . CRC_SALT_0013)) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>You can only edit admins with an access strictly lower than yours.</b></font>";
         }
-        if ($fc == md5($id . 3 . CRC_SALT_0013)) {
+        if (isset($fc) && $fc == md5($id . 3 . CRC_SALT_0013)) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>Non admins can't edit people other than themselves.</b></font>";
         }
-        if ($update == 1) {
+        if (isset($update) && $update == 1) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>User successfully updated</b></font>";
         }
         echo "</form>";
