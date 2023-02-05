@@ -2,7 +2,6 @@
 require("../../php_includes/cmaster.inc");
 std_init();
 $cTheme = get_theme_info();
-$theuser = trim($theuser);
 
 $min_lvl = 800;
 $edit_lvl = 600;
@@ -37,7 +36,8 @@ if ($canedit == 0) {
 //echo "THEUSER = $theuser, THEHOSTMASK = $thehostmask, MODE = $mode, ADMIN = $admin.<br><br>\n";
 
 std_sanitise_username($user);
-if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
+if (!empty($theuser) && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
+    $theuser = trim($theuser);
     $lowuser = strtolower($theuser);
     $raw_q = "FROM users WHERE lower(user_name) LIKE '" . str_replace("*", "%", $lowuser) . "'";
 //		echo "$raw_q<br><br>";
