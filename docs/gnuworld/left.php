@@ -17,8 +17,11 @@ if (isset($authtok)) {
 if (isset($authcsc)) {
     unset($authcsc);
 }
-$authtok = explode(":", $auth);
-$authcsc = $authtok[3];
+
+if (isset($auth)) {
+    $authtok = explode(":", $auth);
+    $authcsc = $authtok[3];
+}
 
 echo "<html><head><title>LEFT MENU</title>";
 ?>
