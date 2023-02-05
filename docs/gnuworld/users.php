@@ -85,7 +85,7 @@ if (!empty($theuser) && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XA
         die;
     }
 } else {
-    if ($thehostmask != "" && $mode == 2 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
+    if (!empty($thehostmask) && $mode == 2 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
         $lowhost = strtolower($thehostmask);
         $raw_q = "FROM users,users_lastseen WHERE lower(users_lastseen.last_hostmask) LIKE '" . str_replace("*", "%", $lowhost) . "' AND users_lastseen.user_id=users.id";
         $tcount = pg_safe_exec("SELECT COUNT(*) AS count " . $raw_q . " LIMIT " . ($maxuserlisted + 1));
