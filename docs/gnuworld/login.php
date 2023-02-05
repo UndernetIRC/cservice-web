@@ -238,7 +238,7 @@ if ($username != "" && $password != "") {
 				}
 			}
 		}
-		if ($redir) {
+		if (isset($redir)) {
 			$redir = urldecode($redir);
 			# Allow relative URLs and absolute URLs starting with the server host
 			if (!preg_match("/:\/\//", $redir) || preg_match("/^https?:\/\/" . $_SERVER["HTTP_HOST"] . "/", $redir)) {

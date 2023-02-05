@@ -5,11 +5,14 @@ if($loadavg5 >= CRIT_LOADAVG) {
   	header("Location: highload.php");
   	exit;
 }
-$totp_pin=$_POST['pin'];
-   	if ($totp_pin!="" && !preg_match(NON_BOGUS_TOTP,trim($totp_pin))) {
-	echo "<h2>Bogus token PIN</h2><br><a href=\"v_totp.php\">Try again</a>";
-	die;
-	}
+
+if (isset($_POST["pin"])) {
+  $totp_pin=$_POST["pin"];
+  if ($totp_pin!="" && !preg_match(NON_BOGUS_TOTP,trim($totp_pin))) {
+    echo "<h2>Bogus token PIN</h2><br><a href=\"v_totp.php\">Try again</a>";
+    die;
+  }
+}
 $dummy='n/a';
 SetCookie("totp",$dummy,time()+7200,"/",COOKIE_DOMAIN);
 header("Pragma: no-cache");

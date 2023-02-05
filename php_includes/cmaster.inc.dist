@@ -710,7 +710,7 @@ function cl_ip($rettype = 1) {
     if (!isset($dns_cache) || !is_array($dns_cache)) { unset($dns_cache); $dns_cache = Array(); }
     if (!cl_ipdmaskchk($_SERVER["REMOTE_ADDR"]) && !cl_ipwmaskchk($_SERVER['REMOTE_ADDR'])) { // direct connection (IP not in disallow list $dmask or allow list $wmask)
         $ips[] = $_SERVER["REMOTE_ADDR"];
-        $hst[] = $_SERVER["REMOTE_HOST"];
+        $hst[] = $_SERVER["REMOTE_HOST"] ?? $_SERVER["REMOTE_ADDR"];
     } else if ($_SERVER["HTTP_X_FORWARDED_FOR"]!="") { // from a proxy
         if (strpos(",", $_SERVER["HTTP_X_FORWARDED_FOR"]) !== false) {
             $ipp = explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]);
@@ -3013,7 +3013,7 @@ function get_theme_info() {
 
   }
 */
-if ($_COOKIE['cstheme']=='')
+if (isset($_COOKIE['cstheme']))
   {
   $res = pg_safe_exec("SELECT * FROM themes WHERE name='" . STD_THEME . "'"); // Select STD theme from config.inc
   if (pg_numrows($res)==0) { // if it doesnt exist...
