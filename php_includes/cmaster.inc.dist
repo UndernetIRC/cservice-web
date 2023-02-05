@@ -3013,7 +3013,7 @@ function get_theme_info() {
 
   }
 */
-if (isset($_COOKIE['cstheme']))
+if (empty($_COOKIE['cstheme']))
   {
   $res = pg_safe_exec("SELECT * FROM themes WHERE name='" . STD_THEME . "'"); // Select STD theme from config.inc
   if (pg_numrows($res)==0) { // if it doesnt exist...
