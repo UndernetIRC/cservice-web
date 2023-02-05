@@ -1,11 +1,6 @@
-<?
-/* $Id: regproc.php,v 1.25 2004/05/11 03:09:50 nighty Exp $ */
-
-
-	$cache_page=1;
-
+<?php
 	require("../../../php_includes/blackhole.inc");
-        require("../../../php_includes/cmaster.inc");
+    require("../../../php_includes/cmaster.inc");
 
 	if($loadavg5 >= CRIT_LOADAVG)
 	{

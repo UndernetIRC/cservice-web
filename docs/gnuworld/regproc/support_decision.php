@@ -1,6 +1,4 @@
-<?
-/* $Id: support_decision.php,v 1.4 2002/05/20 23:58:04 nighty Exp $ */
-	$cache_page=1;
+<?php
         require("../../../php_includes/cmaster.inc");
         std_connect();
         $user_id = std_security_chk($auth);

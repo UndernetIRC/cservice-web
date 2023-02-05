@@ -1,6 +1,4 @@
-<?
-/* $Id: admin_complete.php,v 1.6 2003/03/15 05:59:00 nighty Exp $ */
-	$cache_page=1;
+<?php
 	$min_lvl=800;
         require("../../../php_includes/cmaster.inc");
         std_connect();

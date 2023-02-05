@@ -368,12 +368,6 @@ $max_question_id=3;
 // deprecated
 $standard_body="<BODY BGCOLOR=#A0A0A0 TEXT=#000000 alink=#004400 link=#004400 vlink=#004400> <FONT FACE=\"Arial,Helvetica,sans-serif\" size=\"-1\">";
 
-if ($cache_page!=1) { $cache_page=0; }
-if (!$cache_page) {
-//  header("Expires: 0");
-//  header("Pragma: no-cache");
-}
-
 $main_rr = ROUNDROBIN;
 $local_mirror = LOCALMIRROR;
 

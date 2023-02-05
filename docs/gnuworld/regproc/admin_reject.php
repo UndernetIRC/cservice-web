@@ -1,6 +1,4 @@
-<?
-/* $Id: admin_reject.php,v 1.14 2003/03/15 05:59:00 nighty Exp $ */
-	$cache_page=1;
+<?php
 	$def_day_duration=90;
 	$min_lvl=800;
         require("../../../php_includes/cmaster.inc");
