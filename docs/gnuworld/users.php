@@ -128,7 +128,7 @@ if (!empty($theuser) && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XA
             die;
         }
     } elseif ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW)) {
-        if ($id == "") {
+        if (empty($id)) {
             std_theme_styles(1);
             std_theme_body();
             ?>
