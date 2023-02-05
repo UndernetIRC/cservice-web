@@ -1,24 +1,26 @@
-<?
-	$noregwrite_lvl=1;
+<?php
+$noregwrite_lvl = 1;
 
-        require("../../php_includes/cmaster.inc");
-        header("Pragma: no-cache");
-        std_connect();
-		$min_lvl=800; // for WEBACCESS TEAM admin.
-        $current_page="left.php";
-        $user_id = std_security_chk($auth);
-        $admin = std_admin();
+require("../../php_includes/cmaster.inc");
+header("Pragma: no-cache");
+std_connect();
+$min_lvl = 800; // for WEBACCESS TEAM admin.
+$current_page = "left.php";
+$user_id = isset($auth) ? std_security_chk($auth) : 0;
+$admin = std_admin();
 
-	$cTheme = get_theme_info();
+$cTheme = get_theme_info();
 
-	if (isset($authtok)) { unset($authtok); }
-	if (isset($authcsc)) { unset($authcsc); }
-	$authtok = explode(":",$auth);
-	$authcsc = $authtok[3];
-?>
-<!-- $Id: left.php,v 1.23 2004/08/10 11:57:52 nighty Exp $ //-->
-<?
-        echo "<html><head><title>LEFT MENU</title>";
+if (isset($authtok)) {
+    unset($authtok);
+}
+if (isset($authcsc)) {
+    unset($authcsc);
+}
+$authtok = explode(":", $auth);
+$authcsc = $authtok[3];
+
+echo "<html><head><title>LEFT MENU</title>";
 ?>
 <style type=text/css>
 <!--

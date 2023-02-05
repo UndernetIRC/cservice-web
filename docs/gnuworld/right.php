@@ -1,8 +1,7 @@
-<?
+<?php
 $default_gopage="login.php";
 require("../../php_includes/cmaster.inc");
 std_connect();
-/* $Id: right.php,v 1.15 2005/03/07 04:48:03 nighty Exp $ */
 $user_id = std_security_chk($auth);
 $admin = std_admin();
 $cTheme = get_theme_info();
@@ -154,7 +153,7 @@ $cTheme = get_theme_info();
 	} else {
 	header("Pragma: no-cache");
         std_theme_styles(1);
-        if ($_COOKIE['rlogin']!="") {
+        if (isset($_COOKIE['rlogin'])) {
         	std_theme_body("","document.forms[0].password.focus();");
         } else {
         	std_theme_body("","document.forms[0].username.focus();");
@@ -177,12 +176,12 @@ echo "<font color=#" . $cTheme->main_textcolor . ">\n";
 echo "<font size=+2><b>CService Login</b></font>\n";
 echo "<form method=post action=login.php" . $tgt . " target=body>\n";
 echo "<table border=0><tr><td><font color=\"#" . $cTheme->main_textcolor . "\">Username</td><td><input type=text name=username value=\"";
-if (REMEMBER_LOGIN || PREFILL_NOTICE) { echo $_COOKIE['rlogin']; }
+if (isset($_COOKIE["rlogin"]) && (REMEMBER_LOGIN || PREFILL_NOTICE)) { echo $_COOKIE['rlogin']; }
 echo "\"></td></tr>\n";
 echo "<tr><td><font color=\"#" . $cTheme->main_textcolor . "\">Password</td><td><input type=password name=password></td></tr></table>\n";
 echo "<br><input type=submit value=Login>\n";
 echo "</center>";
-if (PREFILL_NOTICE && trim($_COOKIE['rlogin']) != "") {
+if (PREFILL_NOTICE && isset($_COOKIE['rlogin'])) {
 	echo "<br><table border=0 cellspacing=0 cellpadding=2 bgcolor=#ffff99>";
 	echo "<tr><td valign=top bgcolor=#ff9999>";
 	echo "<font style=\"font-size: 13px; color: #000000; font-weight: bold;\">";
