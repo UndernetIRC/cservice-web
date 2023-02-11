@@ -101,7 +101,22 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
 
 define("LOG_STREAM_HANDLER", getenv("LOG_STREAM_HANDLER") ?: "../../logs/cservice.log");
-define("LOG_LEVEL", getenv("LOG_LEVEL") ?: Logger::INFO);
+
+if (getenv("LOG_LEVEL")) {
+    switch(getenv("LOG_LEVEL")) {
+        case "debug":
+            define("LOG_LEVEL", Logger::DEBUG);
+            break;
+        case "warning":
+            define("LOG_LEVEL", Logger::WARNING);
+            break;
+        default:
+            define("LOG_LEVEL", Logger::INFO);
+            break;
+    }
+} else {
+    define("LOG_LEVEL", Logger::INFO);
+}
 
 $stream = new StreamHandler(LOG_STREAM_HANDLER, LOG_LEVEL);
 $logger = new Logger('cservice');
