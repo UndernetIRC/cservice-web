@@ -2115,7 +2115,7 @@ function show_ticket_events($complaint_ID,$hilight_last = 0) {
 
 /* Forms and strings manipulation functions */
 
-define("RPL_CR","¤@¤");
+define("RPL_CR","ï¿½@ï¿½");
 
 function N_get_pure_string($POST_OR_GET_VAR) {
   return(trim(str_replace(RPL_CR,"\n",str_replace("\r","",stripslashes(urldecode($POST_OR_GET_VAR))))));
@@ -2471,14 +2471,13 @@ function make_duration($duration)
 
 function drake_duration($duration)
 {
-  $days .= (int)($duration/(24*60*60));
+  $days = (int)($duration/(24*60*60));
   $duration %= (24*60*60);
-  $hours .= (int)($duration/(60*60));
+  $hours = (int)($duration/(60*60));
   $duration %= (60*60);
-  $mins .= (int)($duration/60);
+  $mins = (int)($duration/60);
   $duration %= 60;
-  $ret=sprintf("%01d days, %02d:%02d:%02d",$days,$hours,$mins,$duration);
-  return $ret;
+  return sprintf("%01d days, %02d:%02d:%02d",$days,$hours,$mins,$duration);
 }
 
 function gen_server_url() {
@@ -2509,7 +2508,7 @@ function gen_server_url() {
 }
 
 function C_strtolower($txt){
-  return(strtolower(strtr($txt,"ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜİ","àáâãäåçèéêëìíîïñòóôõöøùúûüı")));
+  return(strtolower(strtr($txt,"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")));
 }
 
 function js_redir($url, $toTop = 0) {
