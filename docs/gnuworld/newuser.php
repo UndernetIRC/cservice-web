@@ -7,7 +7,7 @@ if($loadavg5 >= CRIT_LOADAVG) { header("Location: highload.php"); die; }
 
 std_connect();
 $cTheme = get_theme_info();
-$user_id = std_security_chk($_COOKIE["auth"]);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $admin = 0;
 $confirm_url = gen_server_url() . LIVE_LOCATION . "/confirm.php";
 
@@ -101,17 +101,6 @@ if (SHOW_GFXUSRCHK && NEWUSERS_GFXCHECK) { $max_step++; }
 if ((int)$_POST["showStep"]>0 && check_secure_form("step".(int)$_POST["showStep"])) { $curr_step = (int)$_POST["showStep"]; } else { $curr_step = 1; }
 if (!(SHOW_GFXUSRCHK && NEWUSERS_GFXCHECK) && $curr_step==6) { $curr_step = 7; }
 
-if ($curr_step==8) {
-	if ($_POST["rCRC"]==md5( $_POST["username"] . CRC_SALT_0011 . $_SERVER["REMOTE_ADDR"] . $_POST["email"] . $_POST["gfxcode_val"] . CRC_SALT_0007 )) {
-		// sets cookie so user cannot create another username within 4 hours.
-		if (UNETUB_TIME>0) {
-			$expire = time()+UNETUB_TIME;
-			$cookie = md5( $expire . "Undernet User Block");
-			setcookie("UNETUB",$cookie,$expire,"/");
-		}
-	}
-}
-
 std_theme_styles(1);
 std_theme_body();
 
@@ -182,9 +171,9 @@ switch ((int)$curr_step) {
 			$jsf .= "\tif (f.email.value == '') { all_ok = false; }\n";
 			$jsf .= "\tvar msg = 'Please type in your e-mail address !';\n";
 		}
-
 		break;
 	case 4:
+      global $LOCK_USERNAME;
 	  if (md5( CRC_SALT_0008 . $_POST["username"] . "UCHECK" )!=$_POST["username_crc"]) { $err .= "<li> <b>Attempt to hack page content !</b> (username)\n"; $hackpc = 1; }
 		if (!is_email_valid($_POST["email"])) { $err .= "<li> Your e-mail address is invalid.\n"; }
 		if (is_email_locked($LOCK_USERNAME,$_POST["email"])) { $err .= "<li> You are not allowed to create an account using this email address (" . $_POST["email"] . ")\n"; }
@@ -355,25 +344,20 @@ switch ((int)$curr_step) {
 		if (md5( CRC_SALT_0010 . $_POST["verificationdata"] . "VCHECK" )!=$_POST["verificationdata_crc"]) { $err .= "<li> <b>Attempt to hack page content !</b> (v/a)\n"; $hackpc = 3; }
 		if ($_POST["rCRC"]!=md5( $_POST["username"] . CRC_SALT_0011 . $_SERVER["REMOTE_ADDR"] . $_POST["email"] . $_POST["gfxcode_val"] . CRC_SALT_0007 )) { $err .= "<li> <b>Something went wrong ! Sorry.</b>\n"; }
 
-
-                if (strlen($_POST["username"])<2 || strlen($_POST["username"])>12) { $err .= "<li> Your username must be 2 to 12 chars long.\n"; }
-                if (!preg_match("/^[A-Za-z0-9]+$/",$_POST["username"])) { $err .= "<li> Your username must be made of letters (A-Z, a-z) and numbers (0-9).\n"; }
-                $ru = pg_safe_exec("SELECT id FROM users WHERE lower(user_name)='" . strtolower($_POST["username"]) . "'");
-                if ($ou=@pg_fetch_object($ru)) { $err .= "<li> The username you picked is already in use by someone else.\n"; }
-                if (is_locked_username($_POST["username"])) { $err .= "<li> Username is LOCKED : Usernames matching <b>" . $ulockinfo->user_name . "</b> are disallowed for the following reason : <b>" . $ulockinfo->reason . "</b>.\n"; }
-                $res = pg_safe_exec("SELECT * FROM noreg WHERE lower(user_name)='" . post2db(strtolower($_POST["username"])) . "'");
-                if (pg_numrows($res)>0) { $err .= "<li> That username (" . $_POST["username"] . ") is in NOREG mode, please choose another.\n"; }
-
-
+        if (strlen($_POST["username"])<2 || strlen($_POST["username"])>12) { $err .= "<li> Your username must be 2 to 12 chars long.\n"; }
+        if (!preg_match("/^[A-Za-z0-9]+$/",$_POST["username"])) { $err .= "<li> Your username must be made of letters (A-Z, a-z) and numbers (0-9).\n"; }
+        $ru = pg_safe_exec("SELECT id FROM users WHERE lower(user_name)='" . strtolower($_POST["username"]) . "'");
+        if ($ou=@pg_fetch_object($ru)) { $err .= "<li> The username you picked is already in use by someone else.\n"; }
+        if (is_locked_username($_POST["username"])) { $err .= "<li> Username is LOCKED : Usernames matching <b>" . $ulockinfo->user_name . "</b> are disallowed for the following reason : <b>" . $ulockinfo->reason . "</b>.\n"; }
+        $res = pg_safe_exec("SELECT * FROM noreg WHERE lower(user_name)='" . post2db(strtolower($_POST["username"])) . "'");
+        if (pg_numrows($res)>0) { $err .= "<li> That username (" . $_POST["username"] . ") is in NOREG mode, please choose another.\n"; }
 
 		if ($err == "") {
 			$ENABLE_COOKIE_TABLE = 1;
 			pg_safe_exec("DELETE FROM gfxcodes WHERE crc='" . post2db($_POST["gfxcode_crc"]) . "' AND code='" . post2db(strtoupper($_POST["gfxcode_val"])) . "'");
 			$ENABLE_COOKIE_TABLE = 0;
-			// checks if cookie disallowing new username is present.
-			if ($_COOKIE["UNETUB"]!="" && UNETUB_TIME>0) {
-				err_newuser("Your IP has already registered a username, you can only signup for ONE username."); $err = 1;
-			} elseif (NEWUSERS_IPCHECK && !newu_ipcheck(1)) {
+
+			if (NEWUSERS_IPCHECK && !newu_ipcheck(1)) {
 				err_newuser("Your IP has already registered a username, you can only signup for ONE username."); $err = 1;
 			} else {
 				$cookie=md5(microtime() . time() . CRC_SALT_0003 . $_POST["username"] . $_POST["email"]);

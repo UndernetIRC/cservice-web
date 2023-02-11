@@ -274,39 +274,42 @@ function ip_check_glined($ip): bool
     }
 
     function check_username_similarity($username) {
+        $users_list = [];
+        $final_list = [];
+        $error = "";
 
         if (USRNREG_WARN_ENABLE == 1) {
-            $mtime = microtime();
-            $mtime = explode(" ", $mtime);
-            $mtime = $mtime[1] + $mtime[0];
-            $starttime = $mtime;
-
-
-            $channels = explode(',', USRNREG_CHANS);
-            $extrausers = explode(',', USRNREG_EUSERS);
-            for ($i = 0; $i < count($channels); $i++) {
-                $query = "select id from channels where id=" . $channels[$i] . "";
-                $res = pg_safe_exec($query);
-                if (pg_numrows($res) != 0) {
-                    $chan_id = pg_fetch_object($res, 0);
-                    $query2 = "select user_id from levels where channel_id=" . $chan_id->id . "";
-                    $res2 = pg_safe_exec($query2);
-                    if (pg_numrows($res2) != 0) {
-                        for ($j = 0; $j < pg_numrows($res2); $j++) {
-                            $user_id = pg_fetch_object($res2, $j);
-                            $query3 = "select user_name from users where id=" . $user_id->user_id . "";
-                            $res3 = pg_safe_exec($query3);
-                            if (pg_numrows($res3) != 0) {
-                                $user_name = pg_fetch_object($res3, 0);
-                                $users_list[] = $user_name->user_name;
+            if (!empty(USRNREG_CHANS)) {
+                $channels = explode(',', USRNREG_CHANS);
+                for ($i = 0; $i < count($channels); $i++) {
+                    $query = "select id from channels where id=" . $channels[$i] . "";
+                    $res = pg_safe_exec($query);
+                    if (pg_numrows($res) != 0) {
+                        $chan_id = pg_fetch_object($res, 0);
+                        $query2 = "select user_id from levels where channel_id=" . $chan_id->id . "";
+                        $res2 = pg_safe_exec($query2);
+                        if (pg_numrows($res2) != 0) {
+                            for ($j = 0; $j < pg_numrows($res2); $j++) {
+                                $user_id = pg_fetch_object($res2, $j);
+                                $query3 = "select user_name from users where id=" . $user_id->user_id . "";
+                                $res3 = pg_safe_exec($query3);
+                                if (pg_numrows($res3) != 0) {
+                                    $user_name = pg_fetch_object($res3, 0);
+                                    $users_list[] = $user_name->user_name;
+                                }
                             }
                         }
                     }
                 }
             }
-            for ($i = 0; $i < count($extrausers); $i++) {
-                $users_list[] = $extrausers[$i];
+
+            if (!empty(USRNREG_EUSERS)) {
+                $extrausers = explode(',', USRNREG_EUSERS);
+                for ($i = 0; $i < count($extrausers); $i++) {
+                    $users_list[] = $extrausers[$i];
+                }
             }
+
             $query = "select * from users where flags & 256 = 256 order by ID asc";
             $res = pg_safe_exec($query);
             if (pg_numrows($res) != 0) {
@@ -318,22 +321,22 @@ function ip_check_glined($ip): bool
             //$users_list=array_unique($users_list);
 
             for ($i = 0; $i < count($users_list); $i++) {
-                if ($users_list[$i])
+                if ($users_list[$i]) {
                     $final_list[] = strtolower($users_list[$i]);
+                }
             }
-            echo "<br><br>";
+
             for ($i = 0; $i < count($final_list); $i++) {
                 if ($final_list[$i]) {
                     $dist = levenshtein($final_list[$i], strtolower($username));
-//		echo "Distance is ".$dist." input user: ".strtolower($username)." matched against <font color=\"#FF0000\">".$final_list[$i]."</font><br>";
                     similar_text($final_list[$i], strtolower($username), $percent);
-//		echo "similarity is ".$percent." <br>";
                     if (($dist < USRNREG_DIST) && ($percent > USRNREG_SIMILAR)) {
-			local_seclog("Likeness match for username " . $username . " against: " . $final_list[$i] ."");
+                        local_seclog("Likeness match for username " . $username . " against: " . $final_list[$i] ."");
                         $error = USRNREG_ERR_MSG;
                     }
                 }
             }
+
             return $error;
         }
     }

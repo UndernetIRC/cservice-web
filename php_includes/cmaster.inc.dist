@@ -1153,7 +1153,7 @@ function complaints_off() {
 
 function newu_ipcheck($mode) { // return false on locked.
     global $ENABLE_COOKIE_TABLE;
-    if (cl_ip()=="" || cl_ip=="0.0.0.0") { return 0; }
+    if (cl_ip()=="" || cl_ip()=="0.0.0.0") { return 0; }
     if (NEWUSERS_IPCHECK == 0) { return(1); }
     $ENABLE_COOKIE_TABLE = 1;
     $res = pg_safe_exec("SELECT * FROM newu_ipcheck WHERE ip='" . cl_ip() . "'");
