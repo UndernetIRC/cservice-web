@@ -2,10 +2,11 @@
 /* $Id: newuser.php,v 1.32 2006/03/11 18:40:34 nighty Exp $ */
 require("../../php_includes/blackhole.inc");
 require("../../php_includes/cmaster.inc");
-$test_rbl=1;
+
 if($loadavg5 >= CRIT_LOADAVG) { header("Location: highload.php"); die; }
 
 std_connect();
+global $max_question_id, $question_text;
 $cTheme = get_theme_info();
 $user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $admin = 0;
@@ -25,29 +26,7 @@ if (newusers_off()) {
 	echo "</body></html>\n\n";
 	die;
 }
-/*
-if (NEWUSERS_IPCHECK && !newu_ipcheck(0)) {
-	echo "<html><head><title>SECURITY WARNING</title>";
-	std_theme_styles();
-	echo "</head>\n";
-	std_theme_body();
-	echo "<center>\n";
-	echo "<h2>";
-	echo "Sorry, your IP address already registered a username, you can only register ONE username.";
-	echo "</h2>";
-	echo "</center>\n";
-	echo "</body></html>\n\n";
-	die;
-}
-*/
-if ($test_rbl==1)
-	{
-	if ($_GET['ip'])
-		$user_ip=$_GET['ip'];
-		else
-		$user_ip=cl_ip();
-	}
-else
+
 $user_ip=cl_ip();
 
 if (GLINE_CHECK)
@@ -98,7 +77,7 @@ if ($user_id > 0) {
 unset($max_step); unset($curr_step);
 $max_step = 6;
 if (SHOW_GFXUSRCHK && NEWUSERS_GFXCHECK) { $max_step++; }
-if ((int)$_POST["showStep"]>0 && check_secure_form("step".(int)$_POST["showStep"])) { $curr_step = (int)$_POST["showStep"]; } else { $curr_step = 1; }
+if (isset($_POST["showStep"]) && (int)$_POST["showStep"]>0 && check_secure_form("step".(int)$_POST["showStep"])) { $curr_step = (int)$_POST["showStep"]; } else { $curr_step = 1; }
 if (!(SHOW_GFXUSRCHK && NEWUSERS_GFXCHECK) && $curr_step==6) { $curr_step = 7; }
 
 std_theme_styles(1);
@@ -219,7 +198,7 @@ switch ((int)$curr_step) {
 			echo "<option selected value=0>--- click here ---</option>\n";
 			for ($x=1;$x<=$max_question_id;$x++) {
 				echo "<option value=" . $x;
-				if( $x == $question_id ) {
+				if(isset($_POST["question_id"]) && $x == $_POST["question_id"] ) {
 					echo( " selected" );
 				}
 				echo ">" . $question_text[$x] . "</option>\n";
