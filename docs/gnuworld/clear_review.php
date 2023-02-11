@@ -2,7 +2,7 @@
 include("../../php_includes/cmaster.inc");
 /* $Id: clear_review.php,v 1.8 2004/04/24 23:52:05 nighty Exp $ */
 std_connect();
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $admin = std_admin();
 
 if ($admin<$min_lvl) {

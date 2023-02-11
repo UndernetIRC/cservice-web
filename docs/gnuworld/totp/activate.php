@@ -3,7 +3,7 @@
 include("../../../php_includes/cmaster.inc");
 /* $Id: passwd.php,v 1.5 2003/07/19 01:26:20 nighty Exp $ */
 std_connect();
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 if ($user_id==0 || $auth=="") {
 	die("You must be logged in to view that page!");
 }

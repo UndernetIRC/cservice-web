@@ -23,7 +23,7 @@ function html_header($show_flash=false) {
 }
 
 std_connect();
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $cTheme = get_theme_info();
 
 if ($user_id==0 || $auth=="") {

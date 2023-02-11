@@ -17,7 +17,7 @@ $dummy = 'n/a';
 SetCookie("totp", $dummy, time() + 7200, "/", COOKIE_DOMAIN);
 header("Pragma: no-cache");
 $current_page = 'v_totp.php';
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $cTheme = get_theme_info();
 if ($user_id > 0)
 {

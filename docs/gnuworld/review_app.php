@@ -2,7 +2,7 @@
 include("../../php_includes/cmaster.inc");
 /* $Id: review_app.php,v 1.6 2003/03/14 04:46:09 nighty Exp $ */
 std_connect();
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $admin = std_admin();
 
 if (!acl(XWEBAXS_2) && !acl(XWEBAXS_3)) {

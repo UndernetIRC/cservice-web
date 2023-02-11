@@ -3,7 +3,7 @@
 require("../../../php_includes/cmaster.inc");
 if (ENABLE_COMPLAINTS_MODULE != 1) { die("This option is disabled. Please contact the server administrator."); }
 std_connect();
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $admin = std_admin();
 if ($_GET["A"]!="replyadm" && $_GET["A"]!="cancel" && $_GET["A"]!="resolve" && $_GET["A"]!="delete" && complaints_off() && !isoper($user_id)) {
 	$cTheme = get_theme_info();

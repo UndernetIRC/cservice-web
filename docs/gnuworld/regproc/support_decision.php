@@ -1,7 +1,7 @@
 <?php
         require("../../../php_includes/cmaster.inc");
         std_connect();
-        $user_id = std_security_chk($auth);
+        $user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 	if ($user_id<=0) {
 		echo "You must be logged in to view that page. <a href=\"../index.php\" target=\"_top\">click here</a>.<br>\n";
 		echo "</body></html>\n\n";

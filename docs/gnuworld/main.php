@@ -7,7 +7,7 @@ $securize_mode = 0;
 
 if (isset($SECURE_ID)) {
 	std_connect();
-	$user_id = std_security_chk($auth);
+	$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 	if (isset($authtok)) { unset($authtok); }
 	if (isset($authcsc)) { unset($authcsc); }
 	$authtok = explode(":",$auth);

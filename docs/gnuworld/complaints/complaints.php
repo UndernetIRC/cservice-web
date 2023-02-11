@@ -3,7 +3,7 @@
 require("../../../php_includes/cmaster.inc");
 if (ENABLE_COMPLAINTS_MODULE != 1) { die("This option is disabled. Please contact the server administrator."); }
 std_connect();
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 if ($user_id > 0) { $admin = std_admin(); } else { $admin = 0; }
 $cTheme = get_theme_info();
 std_theme_styles(1);

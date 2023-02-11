@@ -5,7 +5,7 @@
 	$min_lvl=800;
 	require("../../php_includes/cmaster.inc");
 	std_connect();
-	$user_id = std_security_chk($auth);
+	$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 	$admin = std_admin();
 	$cTheme = get_theme_info();
 	if ($admin==0) { check_file("regproc.3"); check_file("regproc.1"); }

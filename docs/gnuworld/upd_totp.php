@@ -2,7 +2,7 @@
 require("../../php_includes/cmaster.inc");
 std_connect();
 /* $Id: right.php,v 1.15 2005/03/07 04:48:03 nighty Exp $ */
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $admin = std_admin();
 $cTheme = get_theme_info();
 if ($user_id > 0) {
