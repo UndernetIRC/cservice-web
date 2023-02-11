@@ -6,7 +6,7 @@ services:
       - "8080:80"
     environment:
       - PHP_SHORT_OPEN_TAG=On
-      - APACHE_ERRORLOG=/dev/stderr
+      - APACHE_ERRORLOG=/dev/stdout
       - LOCALDB_USER=cservice
       - LOCALDB_PASS=cservice
       - LOCALDB_HOST=db
@@ -15,7 +15,7 @@ services:
       - REMOTEDB_PASS=cservice
       - REMOTEDB_HOST=db
       - ENABLE_REGISTER_GLOBALS=1
-      - LOG_LEVEL=Logger::DEBUG
+      - LOG_LEVEL=debug
       - LOG_STREAM_HANDLER=php://stdout
       - SMTPHOST=mailhog:1025
     volumes:

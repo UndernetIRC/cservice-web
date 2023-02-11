@@ -1,62 +1,58 @@
-FROM alpine:3.10
+FROM alpine:3.17
 MAINTAINER ratler@undernet.org
 
 ENV PYTHONUNBUFFERED 1
 
 RUN apk --no-cache update && apk --no-cache upgrade && \
-    apk --no-cache add \
+    apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add \
     bash \
     busybox-extras \
     apache2 \
-    php7-apache2 \
+    php82-apache2 \
     curl \
     ca-certificates \
     openssl \
     openssh \
     git \
-    php7 \
+    php82 \
     python3 \
     tzdata
 
-RUN apk --no-cache add \
-    php7-phar \
-    php7-json \
-    php7-iconv \
-    php7-openssl \
-    php7-xdebug \
-    php7-mcrypt \
-    php7-mbstring \
-    php7-soap \
-    php7-gmp \
-    php7-pdo_odbc \
-    php7-dom \
-    php7-pdo \
-    php7-zip \
-    php7-sqlite3 \
-    php7-pgsql \
-    php7-pdo_pgsql \
-    php7-bcmath \
-    php7-gd \
-    php7-odbc \
-    php7-gettext \
-    php7-xml \
-    php7-xmlreader \
-    php7-xmlwriter \
-    php7-tokenizer \
-    php7-xmlrpc \
-    php7-bz2 \
-    php7-pdo_dblib \
-    php7-curl \
-    php7-ctype \
-    php7-session \
-    php7-exif \
-    php7-intl \
-    php7-fileinfo \
-    php7-apcu \
-    php7-simplexml
-
-# Composer
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+RUN apk --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community add \
+    php82-phar \
+    php82-json \
+    php82-iconv \
+    php82-openssl \
+    php82-xdebug \
+    php82-mbstring \
+    php82-soap \
+    php82-gmp \
+    php82-pdo_odbc \
+    php82-dom \
+    php82-pdo \
+    php82-zip \
+    php82-sqlite3 \
+    php82-pgsql \
+    php82-pdo_pgsql \
+    php82-bcmath \
+    php82-gd \
+    php82-odbc \
+    php82-gettext \
+    php82-xml \
+    php82-xmlreader \
+    php82-xmlwriter \
+    php82-tokenizer \
+    php82-bz2 \
+    php82-pdo_dblib \
+    php82-curl \
+    php82-ctype \
+    php82-session \
+    php82-exif \
+    php82-intl \
+    php82-fileinfo \
+    php82-apcu \
+    php82-simplexml \
+    composer
 
 # Setup apache
 RUN for m in rewrite_module session_module session_cookie_module ession_crypto_module deflate_module; do \
