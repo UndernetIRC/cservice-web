@@ -1,6 +1,7 @@
-<?
+<?php
 require('../../../php_includes/cmaster.inc');
 std_init();
+global $user_id, $question_text, $LOCK_EMAILCHG;
 $cTheme = get_theme_info();
 $res=pg_safe_exec("SELECT * FROM users WHERE id=" . $user_id);
 $user=pg_fetch_object($res,0);
@@ -17,7 +18,7 @@ $user=pg_fetch_object($res,0);
 <a href="index.php">Back to forms</a><br>
 <hr>
 <?
-if ($user->verificationdata=="") {
+if (empty($user->verificationdata)) {
 	echo "<h2>\n";
 
 	echo "You need to have verification information set.<br>\n";
@@ -29,16 +30,16 @@ if ($user->verificationdata=="") {
 	die;
 }
 
-        $now = time();
-        $days_elapsed = (int)((int)($now - (int)$user->signup_ts)/86400);
-        if ($days_elapsed < MIN_DAYS_BEFORE_SUPPORT) {
-                echo "<h1>Error<br>\n";
-                echo "The USERNAME entered is too newly created !</h1><br><h2>You can only process this request after your account is at least ".MIN_DAYS_BEFORE_SUPPORT." day(s) old !</h2><br><br>\n";
-                echo "<a href=\"javascript:history.go(-1);\">Go back.</a>\n";
-                echo "</body>\n";
-                echo "</html>\n\n";
-                die;
-        }
+$now = time();
+$days_elapsed = (int)((int)($now - (int)$user->signup_ts)/86400);
+if ($days_elapsed < MIN_DAYS_BEFORE_SUPPORT) {
+    echo "<h1>Error<br>\n";
+    echo "The USERNAME entered is too newly created !</h1><br><h2>You can only process this request after your account is at least ".MIN_DAYS_BEFORE_SUPPORT." day(s) old !</h2><br><br>\n";
+    echo "<a href=\"javascript:history.go(-1);\">Go back.</a>\n";
+    echo "</body>\n";
+    echo "</html>\n\n";
+    die;
+}
 
 if ($user->post_forms!="" && $user->post_forms>0) {
 	$curr = time();
@@ -65,14 +66,14 @@ if ($user->post_forms!="" && $user->post_forms>0) {
 
 
 
-if ($crc == md5($HTTP_USER_AGENT . $ts . CRC_SALT_0007)) {
-	$da_username = $username;
+if ($_POST["crc"] == md5($_SERVER["HTTP_USER_AGENT"] . $_POST["ts"] . CRC_SALT_0007)) {
+	$da_username = $_POST["username"];
 	if ($da_username != $user->user_name) {
 		echo "Hmm? hijacking pages ?";
 		die;
 	}
 
-	$da_newmail = $newemail;
+	$da_newmail = $_POST["newemail"];
 
 if (is_email_locked($LOCK_EMAILCHG,$da_newmail)) {
 	echo "<h2>\n";
@@ -97,7 +98,7 @@ if (pg_numrows($email_nreg) >0) {
 	die;
 }
 
-if ($verifdata=="") {
+if (empty($_POST["verifdata"])) {
 	echo "<h2>\n";
 
 	echo "You need to supply an answer to the verification question.<br>\n";
@@ -108,7 +109,7 @@ if ($verifdata=="") {
 	die;
 }
 
-if ($verifdata!=$user->verificationdata) {
+if ($_POST["verifdata"] != $user->verificationdata) {
 	echo "<h2>\n";
 
 	echo "Invalid verification answer :(<br>\n";
@@ -193,9 +194,9 @@ echo "<input type=hidden name=verifq value=" . $user->question_id . ">\n";
  <li> Your new email address : <input type=text name=newemail size=40 maxlength=128>
 </ol>
 <input type=submit value=" Submit Query ">
-<?
+<?php
 	$ts = time();
-	$crc = md5($HTTP_USER_AGENT . $ts . CRC_SALT_0007);
+	$crc = md5($_SERVER["HTTP_USER_AGENT"] . $ts . CRC_SALT_0007);
 ?>
 <input type=hidden name=ts value=<? echo $ts ?>>
 <input type=hidden name=crc value=<? echo $crc ?>>
