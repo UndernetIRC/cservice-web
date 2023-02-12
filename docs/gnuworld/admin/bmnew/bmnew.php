@@ -21,16 +21,16 @@ function checkint ($x)
 {
 return (is_numeric($x)? intval($x)==$x : false);
 }
-$debug=on;
+$debug="off";
 $root_dir="../";
 // set to on the filters to be enabled by default
-$nopurge = off;			// channel flag nopurge
-$special = off;		  	// channel flag special
-$mia = off;			// channel reviewed /tagged as mia
-$nopurgeuser = off;		// has user NoPurge added
-$manager = on;			// has no assigned manager / 500
-$strict = on;			// enforced filters
-$nousers = off;			// userless channels, will over-ride Manager and NoPurge user added filters. 
+$nopurge = "off";			// channel flag nopurge
+$special = "off";		  	// channel flag special
+$mia = "off";			// channel reviewed /tagged as mia
+$nopurgeuser = "off";		// has user NoPurge added
+$manager = "on";			// has no assigned manager / 500
+$strict = "on";			// enforced filters
+$nousers = "off";			// userless channels, will over-ride Manager and NoPurge user added filters.
 $def_days_seen=25;		// Default minimum days to search for inactive managers
 $nopurge_username='nopurge';	// the NoPurge to check for username, in lower caps
 $limit=" LIMIT 1000";		// maximum entries to show. Comment the line to disable limit completly
@@ -40,37 +40,37 @@ if ($_GET['saved_f'])
 {
 $saved_filters=explode("|", base64_decode($_GET['saved_f']));
 if ($saved_filters[0]=='off')
-	$nopurge = off;	
+	$nopurge = "off";
 	else
-	$nopurge = on;	
+	$nopurge = "on";
 if ($saved_filters[1]=='off')
-	$special = off;	
+	$special = "off";
 	else
-	$special = on;	
+	$special = "on";
 if ($saved_filters[2]=='off')
-	$mia = off;	
+	$mia = "off";
 	else
-	$mia = on;	
+	$mia = "on";
 if ($saved_filters[3]=='off')
-	$nopurgeuser = off;	
+	$nopurgeuser = "off";
 	else
-	$nopurgeuser = on;	
+	$nopurgeuser = "on";
 if ($saved_filters[4]=='off')
-	$manager = off;	
+	$manager = "off";
 	else
-	$manager = on;	
+	$manager = "on";
 if ($saved_filters[5]=='off')
-	$strict = off;	
+	$strict = "off";
 	else
-	$strict = on;	
+	$strict = "on";
 if (!is_numeric($saved_filters[6]))
 	$days_seen = $def_days_seen;	
 	else
 	$days_seen =$saved_filters[6];	
 if ($saved_filters[7]=='off')
-	$nousers = off;	
+	$nousers = "off";
 	else
-	$nousers = on;	
+	$nousers = "on";
 }
 else
 if ($_POST['filter'])   // posting new filters overrides any previous selected filter
@@ -88,7 +88,7 @@ if ($_POST['filter'])   // posting new filters overrides any previous selected f
 			$days_seen = $def_days_seen;
 
 		if (!$_POST['strict'])
-			$strict=off;
+			$strict="off";
 		}
 if ($nopurge)
 	$saved_filters="".$nopurge."|";
@@ -127,11 +127,12 @@ $saved_filters=base64_encode($saved_filters);
 /* end filters */
 	require("../../../".$root_dir."php_includes/cmaster.inc");
 	std_init();
+    global $user_id, $admin;
 	$cTheme = get_theme_info();
 	std_theme_styles(1);
 	std_theme_body("../".$root_dir);
 
-	if ($debug==on) {
+	if ($debug=="on") {
 		echo "<br>Nopurge: ".$nopurge."<br>";
 		echo "Special: ".$special."<br>";
 		echo "Mia: ".$mia."<br>";
@@ -147,15 +148,15 @@ $saved_filters=base64_encode($saved_filters);
 		exit;
 	}
 	
-	define(	MIA_TAG_FLAG,1024);	// as defined per 'gnuworld/doc/cservice.sql' : DO NOT CHANGE
-	define( NO_PURGE_TAG,1);	// as defined per 'gnuworld/doc/cservice.sql' : DO NOT CHANGE
-	define( SPECIAL_TAG,2);	// as defined per 'gnuworld/doc/cservice.sql' : DO NOT CHANGE
+	define("MIA_TAG_FLAG",1024);	// as defined per 'gnuworld/doc/cservice.sql' : DO NOT CHANGE
+	define("NO_PURGE_TAG",1);	// as defined per 'gnuworld/doc/cservice.sql' : DO NOT CHANGE
+	define("SPECIAL_TAG",2);	// as defined per 'gnuworld/doc/cservice.sql' : DO NOT CHANGE
 /* batch tag/untag selected channels */
 if ($_POST['action'])
 	{
 	foreach ($_POST as $value => $test) 
 	{
-	if ($test==on)
+	if ($test=="on")
 		{
 		$data=explode("_", $value);
 //		print_r($data);
@@ -174,7 +175,7 @@ if ($_POST['action'])
 					if ($data[3]=='UNTAG')
 							$flags = $oldflags&~MIA_TAG_FLAG;
 						}
-					if ($debug==on)
+					if ($debug=="on")
 					echo $oldflags." -> UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$data[1]."'<br>";
 					else
 					pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$data[1]."'");										
@@ -203,7 +204,7 @@ if ($_POST['action'])
 						$flags = $oldflags&~MIA_TAG_FLAG;
 						break;
 				}
-				if ($debug==on)
+				if ($debug=="on")
 				echo $oldflags." -> UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$_GET['channel_id']."'<br>";
 				else
 				pg_safe_exec("UPDATE channels SET flags='".$flags."',last_updated=date_part('epoch', CURRENT_TIMESTAMP)::int WHERE id='".(int)$_GET['channel_id']."'");
@@ -224,15 +225,15 @@ if ($_POST['action'])
 	<td><strong>Minimum days missing :</strong> <input type="text" name="days" value="<?php echo $days_seen;?>" size="3" /></td></tr>
 	<tr>
 	<td><strong>Show channels with:</strong>
-	<input type="checkbox" name="nopurge" <?php if ($nopurge==on) echo 'checked="checked"'; ?> /> No Purge flag
-	<input type="checkbox" name="special" <?php if ($special==on) echo 'checked="checked"'; ?> /> Special flag
-	<input type="checkbox" name="mia" <?php if ($mia==on) echo 'checked="checked"'; ?> /> MIA tag
-	<input type="checkbox" name="nopurgeuser" <?php if ($nopurgeuser==on) echo 'checked="checked"'; ?> /> NoPurge added
-	<input type="checkbox" name="manager" <?php if ($manager==on) echo 'checked="checked"'; ?> /> Manager
-	<input type="checkbox" name="nousers" <?php if ($nousers==on) echo 'checked="checked"'; ?> /> No Users
+	<input type="checkbox" name="nopurge" <?php if ($nopurge=="on") echo 'checked="checked"'; ?> /> No Purge flag
+	<input type="checkbox" name="special" <?php if ($special=="on") echo 'checked="checked"'; ?> /> Special flag
+	<input type="checkbox" name="mia" <?php if ($mia=="on") echo 'checked="checked"'; ?> /> MIA tag
+	<input type="checkbox" name="nopurgeuser" <?php if ($nopurgeuser=="on") echo 'checked="checked"'; ?> /> NoPurge added
+	<input type="checkbox" name="manager" <?php if ($manager=="on") echo 'checked="checked"'; ?> /> Manager
+	<input type="checkbox" name="nousers" <?php if ($nousers=="on") echo 'checked="checked"'; ?> /> No Users
 	</td>
 	</tr>
-	<tr><td><strong>Enforce filters?</strong><input type="checkbox" name="strict" <?php if ($strict==on) echo 'checked="checked"'; ?> /> </td></tr>
+	<tr><td><strong>Enforce filters?</strong><input type="checkbox" name="strict" <?php if ($strict=="on") echo 'checked="checked"'; ?> /> </td></tr>
 	<tr><td><input type="submit" value="Go!" name="filter" />
 	</table>
 	</form>
@@ -249,7 +250,7 @@ if ($_POST['action'])
   $query .= "levels.access AS access, ";
   $query .= "users_lastseen.last_seen AS last_seen ";
   $query .= "FROM users,users_lastseen,levels,channels ";
-if (($nousers==on) && ((!$manager) || ($manager==off)) )
+if (($nousers=="on") && ((!$manager) || ($manager=="off")) )
 	$query="SELECT channels.id AS channel_id, channels.name AS channel_name, channels.flags FROM channels WHERE ";
 else
 {
@@ -260,65 +261,65 @@ else
 }
   $query .= "channels.registered_ts>0 ";
 // NOPURGE flag check
-if ($strict==off)
+if ($strict=="off")
 	{
-	if ($nopurge==on) {
+	if ($nopurge=="on") {
  	$query .= "AND (channels.flags & ".NO_PURGE_TAG.")=".NO_PURGE_TAG." "; 
  	}
 }  
-elseif ($strict==on)
+elseif ($strict=="on")
 	{
-	if ($nopurge==on) {
+	if ($nopurge=="on") {
 	 $query .= "AND (channels.flags & ".NO_PURGE_TAG.")=".NO_PURGE_TAG." "; 
 	}
- 	elseif (($nopurge==off) || (!$nopurge)) {	
+ 	elseif (($nopurge=="off") || (!$nopurge)) {
  	$query .= "AND (channels.flags & ".NO_PURGE_TAG.")!=".NO_PURGE_TAG." "; 
 	}
 	}
 //SPECIAL flag check
-if ($strict==off)
+if ($strict=="off")
 	{
-	if ($special==on) {
+	if ($special=="on") {
  	$query .= "AND (channels.flags & ".SPECIAL_TAG.")=".SPECIAL_TAG." "; 
  	}
 	}  
-elseif ($strict==on)
+elseif ($strict=="on")
 	{
-	if ($special==on) {
+	if ($special=="on") {
 	 $query .= "AND (channels.flags & ".SPECIAL_TAG.")=".SPECIAL_TAG." "; 
 	}
- 	elseif (($special==off) || (!$special)) {	
+ 	elseif (($special=="off") || (!$special)) {
  	$query .= "AND (channels.flags & ".SPECIAL_TAG.")!=".SPECIAL_TAG." "; 
 	}
 	}
-if ($strict==off)
+if ($strict=="off")
   {
-  if ($mia==on) {
+  if ($mia=="on") {
   	$query .= "AND (channels.flags & ".MIA_TAG_FLAG.")=".MIA_TAG_FLAG." ";
   } 
   }
-  elseif ($strict==on)
+  elseif ($strict=="on")
   {
-    if ($mia==on) {
+    if ($mia=="on") {
   	$query .= "AND (channels.flags & ".MIA_TAG_FLAG.")=".MIA_TAG_FLAG." ";
-  } elseif (($mia==off) || (!$mia)) {
+  } elseif (($mia=="off") || (!$mia)) {
   	$query .= "AND (channels.flags & ".MIA_TAG_FLAG.")!=".MIA_TAG_FLAG." ";
   }
   }
 // Listing channels with no manager and/or NoPurge user added
-if ($strict==on)
+if ($strict=="on")
 	{
-	if ($manager==on)
+	if ($manager=="on")
 		{
 		$query .= " AND users_lastseen.last_seen<((date_part('epoch', CURRENT_TIMESTAMP)::int-((".$days_seen."*24*60*60)+1))) AND ";
 		$query .= "levels.access=500 ";
 		$query .= "AND channels.id IN ( SELECT channels.id FROM users,users_lastseen,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND users.id=users_lastseen.user_id AND (users_lastseen.last_seen<((date_part('epoch', CURRENT_TIMESTAMP)::int-((".$days_seen."*24*60*60)+1)))) AND channels.registered_ts>0 AND levels.access=500 AND lower(users.user_name) !='".$nopurge_username."')";
 
-		if ($nopurgeuser==on)
+		if ($nopurgeuser=="on")
 		$query.=" AND channels.id IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
 		else
 		$query.=" AND channels.id NOT IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
-		if ($nousers==on)
+		if ($nousers=="on")
 		$query.=" AND channels.id NOT IN ( SELECT distinct channels.id FROM users, levels, channels where users.id=levels.user_id AND levels.channel_id=channels.id AND channels.registered_ts>0 AND ( levels.access < 500 OR levels.access > 500))";
 		else
 		$query.=" AND channels.id IN ( SELECT distinct channels.id FROM users, levels, channels where users.id=levels.user_id AND levels.channel_id=channels.id AND channels.registered_ts>0 AND ( levels.access < 500 OR levels.access > 500))";
@@ -335,11 +336,11 @@ if ($strict==on)
 		  $query .= "channels.registered_ts>0 AND ";
 		  $query .= "levels.access=500";
 		  $query .= " ) ";
-		if ($nopurgeuser==on)
+		if ($nopurgeuser=="on")
 		$query.=" AND channels.id IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
 		else
 		$query.=" AND channels.id NOT IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
-		if ($nousers==on)
+		if ($nousers=="on")
 		$query.=" AND channels.id NOT IN ( SELECT distinct channels.id FROM users, levels, channels where users.id=levels.user_id AND levels.channel_id=channels.id AND channels.registered_ts>0 AND ( levels.access < 500 OR levels.access > 500) )";
 		else
 		$query.=" AND channels.id IN ( SELECT distinct channels.id FROM users, levels, channels where users.id=levels.user_id AND levels.channel_id=channels.id AND channels.registered_ts>0 AND ( levels.access < 500 OR levels.access > 500))";	
@@ -348,37 +349,37 @@ if ($strict==on)
 	}
 	else
 	{
-	if ($manager==on)
+	if ($manager=="on")
 		{
 		$query .= "AND levels.access=500 ";
 		$query .= "AND channels.id IN ( SELECT channels.id FROM users,users_lastseen,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND users.id=users_lastseen.user_id AND (users_lastseen.last_seen<((date_part('epoch', CURRENT_TIMESTAMP)::int-((".$days_seen."*24*60*60)+1)))) AND channels.registered_ts>0 AND levels.access=500 AND lower(users.user_name) !='".$nopurge_username."')";
-		if ($nopurgeuser==on)
+		if ($nopurgeuser=="on")
 		$query.=" AND channels.id IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
 		if ($nousers==on)
 		$query.=" AND channels.id NOT IN ( SELECT channels.id FROM users, levels, channels where users.id=levels.user_id AND levels.channel_id=channels.id AND channels.registered_ts>0 AND ( levels.access < 500 OR levels.access > 500))";
 		}
 		else
 		{
-		if (((!$nopurgeuser) || ($nopurgeuser==off)) && ((!$nousers) || ($nousers==off)) && ((!$nopurge) || ($nopurge==off)) && ((!$special) || ($special==off)) && ((!$mia) || ($mia==off)))
+		if (((!$nopurgeuser) || ($nopurgeuser=="off")) && ((!$nousers) || ($nousers=="off")) && ((!$nopurge) || ($nopurge=="off")) && ((!$special) || ($special=="off")) && ((!$mia) || ($mia=="off")))
 			{
 			echo '<h3>Please select at least one filter, or enfore them.</h3>';
 			die;
 			}
-		if ($nopurgeuser==on)
+		if ($nopurgeuser=="on")
 		$query.=" AND channels.id IN ( SELECT channels.id FROM users,levels,channels WHERE users.id=levels.user_id AND levels.channel_id=channels.id AND lower(users.user_name)='".$nopurge_username."' AND channels.registered_ts>0 AND levels.access=500)";
-		if ($nousers==on)
+		if ($nousers=="on")
 		$query.=" AND channels.id NOT IN ( SELECT channels.id FROM users, levels, channels where users.id=levels.user_id AND levels.channel_id=channels.id AND channels.registered_ts>0 AND ( levels.access < 500 OR levels.access > 500))";
 		}	
 	}
 
-if (($nousers==on) && ((!$manager) || ($manager==off)) )
+if (($nousers=="on") && ((!$manager) || ($manager=="off")) )
 	$query.=" ORDER BY channel_name asc";
 else
 $query.=" ORDER BY access desc, users_lastseen.last_seen asc";
 $no_limit_query=$query;
 $query.=$limit;
 
-if ($debug==on)
+if ($debug=="on")
  echo "<b>SQL Query:</b><br>" . $query . ";<br><br>";
  echo '<script type="text/javascript" src="js/jquery-latest.js"></script> 
 <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
@@ -461,7 +462,7 @@ echo "
   echo '</tbody> <tr ><td>All: <input type=\'checkbox\' name=\'checkall\' onclick=\'checkedAll();\'>
 </td><td colspan="6" align="center" ><input type="submit" name="action" value="Set MIA ON/OFF for selected" /></td></tr></table>'; ?>
   <?
-if($debug==on)
+if($debug=="on")
 print_r($showed_ids);
   echo "</form><h3>\n";
    if ($bm_count==0) {
