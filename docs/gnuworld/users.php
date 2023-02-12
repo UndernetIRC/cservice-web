@@ -2,7 +2,6 @@
 require("../../php_includes/cmaster.inc");
 std_init();
 $cTheme = get_theme_info();
-$theuser = trim($theuser);
 
 $min_lvl = 800;
 $edit_lvl = 600;
@@ -37,7 +36,8 @@ if ($canedit == 0) {
 //echo "THEUSER = $theuser, THEHOSTMASK = $thehostmask, MODE = $mode, ADMIN = $admin.<br><br>\n";
 
 std_sanitise_username($user);
-if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
+if (!empty($theuser) && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
+    $theuser = trim($theuser);
     $lowuser = strtolower($theuser);
     $raw_q = "FROM users WHERE lower(user_name) LIKE '" . str_replace("*", "%", $lowuser) . "'";
 //		echo "$raw_q<br><br>";
@@ -85,7 +85,7 @@ if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_
         die;
     }
 } else {
-    if ($thehostmask != "" && $mode == 2 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
+    if (!empty($thehostmask) && $mode == 2 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW))) {
         $lowhost = strtolower($thehostmask);
         $raw_q = "FROM users,users_lastseen WHERE lower(users_lastseen.last_hostmask) LIKE '" . str_replace("*", "%", $lowhost) . "' AND users_lastseen.user_id=users.id";
         $tcount = pg_safe_exec("SELECT COUNT(*) AS count " . $raw_q . " LIMIT " . ($maxuserlisted + 1));
@@ -128,7 +128,7 @@ if ($theuser != "" && $mode == 1 && ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_
             die;
         }
     } elseif ($admin > 0 || acl(XAT_CAN_EDIT) || acl(XAT_CAN_VIEW)) {
-        if ($id == "") {
+        if (empty($id)) {
             std_theme_styles(1);
             std_theme_body();
             ?>
@@ -187,7 +187,7 @@ if (pg_numrows($user) == 0) {
 $user = pg_fetch_object($user, 0);
 $id = $user->id;
 
-if ($admin == 0 && $edit && $id != $user_id && !acl(XAT_CAN_EDIT)) {
+if ($admin == 0 && isset($edit) && $id != $user_id && !acl(XAT_CAN_EDIT)) {
     std_theme_styles(1);
     std_theme_body();
     echo "<h1>Not allowed !!!</h1><br>\n";
@@ -270,10 +270,10 @@ if (pg_numrows($rrr) == 0) {
         }
     }
 }
-if ($edit && $isAdmin && $isAdminLvl >= $admin && $user->id != $user_id && $admin < 1000) {
+if (isset($edit) && $isAdmin && $isAdminLvl >= $admin && $user->id != $user_id && $admin < 1000) {
     unset($edit);
 }
-if ($edit && $admin >= $min_lvl && $user->id != $user_id && $delBtn) {
+if (isset($edit) && $admin >= $min_lvl && $user->id != $user_id && $delBtn) {
     echo "<input type=button onClick=\"del_this_user();\" value=\"Delete this username\"> (no undo)";
     /*
       echo "<br><b><i>user is ";
@@ -311,7 +311,7 @@ if ($admin > 0 || acl(XAT_CAN_EDIT) || $nrw_lvl > 0) {
 
 
 echo("<tr><td colspan=2 bgcolor=#" . $cTheme->table_sepcolor . "><font size=-1 color=#" . $cTheme->table_septextcolor . "><em><b>User Information</b></em></td></tr>");
-if (!$edit) {
+if (!isset($edit)) {
     if ($admin > 0) {
         local_seclog("View '" . $user->user_name . "' (" . $user->id . ")");
     }
@@ -647,7 +647,7 @@ if (!$edit) {
     else
         echo($user->public_key . "<br></td></tr>");
 }
-if (!$edit && ($admin > 0 || has_acl($user_id)) && (
+if (!isset($edit) && ($admin > 0 || has_acl($user_id)) && (
         $admin >= 800 ||
         (acl(XIPR_MOD_OWN) && $user_id == $user->id) ||
         (acl(XIPR_VIEW_OWN) && $user_id == $user->id) ||
@@ -742,7 +742,7 @@ if ($admin > 0) {
     } else {
         echo "<tr><td><b>User's Timezone</b></td><td><b>** NOT SET **</b></td></tr>\n";
     }
-    if ($edit) {
+    if (isset($edit)) {
         if ($admin >= MOD_MAXLOGINS_LEVEL) {
             echo "<tr><td><b>User's Max Logins</b></td><td>";
             echo "<select name=maxlogins>";
@@ -788,7 +788,7 @@ if ($admin > 0) {
 
     if ($isAdmin) {
         echo "<tr><td><b>User's DISABLEAUTH setting</b></td><td>";
-        if ($edit) {
+        if (isset($edit)) {
             if ((int) $user->flags & 64) {
                 echo "<font color=#" . $cTheme->main_yes . "><b>ON";
             } else {
@@ -813,7 +813,7 @@ if ($admin > 0) {
         }
         if ($admin >= 800) { // new
             echo "<tr><td><b>User's ALUMNI setting</b></td><td>";
-            if ($edit && $user_id != $user->id) {
+            if (isset($edit) && $user_id != $user->id) {
                 if ((int) $user->flags & 128) {
                     $ps1 = "selected ";
                     $ps2 = "";
@@ -841,7 +841,7 @@ if ($admin > 0) {
     }
     if ($admin >= 800) { // new
         echo "<tr><td><b>User's OPER setting</b></td><td>";
-        if ($edit) {
+        if (isset($edit)) {
             if ((int) $user->flags & 256) {
                 $ps1 = "selected ";
                 $ps2 = "";
@@ -864,7 +864,7 @@ if ($admin > 0) {
         echo "</b></font></td></tr>\n";
     }
 }
-if (!$edit) {
+if (!isset($edit)) {
     if ($admin > 0 || acl(XAT_CAN_EDIT)) {
         echo "<tr><td><b>Can post next form on</b></td><td>";
         if ($user->post_forms > 0 && $user->post_forms > time()) {
@@ -900,7 +900,7 @@ if (!$edit) {
     }
     echo "</td></tr>\n";
 }
-if (!$edit) {
+if (!isset($edit)) {
     if ($user->question_id == "" || $user->question_id == 0) {
         echo "<tr><td><b>Verification question</b></td><td>** NOT SET **</td></tr>";
     } else {
@@ -1005,7 +1005,7 @@ if (( ($admin >= $edit_lvl || acl(XAT_CAN_EDIT) || acl(XTOTP_DISABLE_OTHERS)) &&
     // 2) or you have XAT_CAN_EDIT flags set in an ACL for you UNLESS
     // 3) user has higher admin access than you.
     // TODO: Allow editing and saving changes.. fair bit of stuff to do
-    if (!$edit) {
+    if (!isset($edit)) {
 
     } else {
         echo "<input type=submit value=\" SAVE CHANGES \">\n";
@@ -1013,24 +1013,24 @@ if (( ($admin >= $edit_lvl || acl(XAT_CAN_EDIT) || acl(XTOTP_DISABLE_OTHERS)) &&
     echo "<input type=hidden name=id value=\"" . (int) $id . "\">\n";
     if ($admin > 0)
         echo "</form>\n";
-    if (!$edit) {
+    if (!isset($edit)) {
         echo "<form method=GET>";
         echo "<input type=\"hidden\" name=\"id\" value=\"" . (int) $id . "\">";
         echo "<input type=\"hidden\" name=\"edit\" value=\"true\">";
         echo "<input type=\"submit\" value=\"Edit User\">";
-        if ($update == 2) {
+        if (isset($update) && $update == 2) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>FAILED User update !!!</b></font>";
         }
-        if ($fc == md5($id . 1 . CRC_SALT_0013)) {
+        if (isset($fc) && $fc == md5($id . 1 . CRC_SALT_0013)) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>You are not allowed to edit that user.</b></font>";
         }
-        if ($fc == md5($id . 2 . CRC_SALT_0013)) {
+        if (isset($fc) && $fc == md5($id . 2 . CRC_SALT_0013)) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>You can only edit admins with an access strictly lower than yours.</b></font>";
         }
-        if ($fc == md5($id . 3 . CRC_SALT_0013)) {
+        if (isset($fc) && $fc == md5($id . 3 . CRC_SALT_0013)) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>Non admins can't edit people other than themselves.</b></font>";
         }
-        if ($update == 1) {
+        if (isset($update) && $update == 1) {
             echo "&nbsp;&nbsp;<font color=#" . $cTheme->main_warnmsg . "><b>User successfully updated</b></font>";
         }
         echo "</form>";
@@ -1043,7 +1043,7 @@ if (( ($admin >= $edit_lvl || acl(XAT_CAN_EDIT) || acl(XTOTP_DISABLE_OTHERS)) &&
 }
 
 
-if (!$edit && $user_id == $id && ENABLE_NOTES && ((NOTES_ADMIN_ONLY && $admin > 0) || (NOTES_ADMIN_ONLY == 0))) {
+if (!isset($edit) && $user_id == $id && ENABLE_NOTES && ((NOTES_ADMIN_ONLY && $admin > 0) || (NOTES_ADMIN_ONLY == 0))) {
     echo "<form>";
     $codenotes = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
@@ -1083,12 +1083,12 @@ if ($id == $user_id && $USER_TZ != "") {
 }
 
 
-if (!$edit && $user_id == $id && ENABLE_NOTES && ((NOTES_ADMIN_ONLY && $admin > 0) || (NOTES_ADMIN_ONLY == 0))) {
+if (!isset($edit) && $user_id == $id && ENABLE_NOTES && ((NOTES_ADMIN_ONLY && $admin > 0) || (NOTES_ADMIN_ONLY == 0))) {
     echo "</form>\n";
 }
 
 if ($admin > 0 || acl(XLOGGING_VIEW)) {
-    if ($admin >= 600 && !$edit) {
+    if ($admin >= 600 && !isset($edit)) {
         echo "<form name=admcmt method=post action=admin_user_comment.php>\n";
         echo "<input type=hidden name=uid value=$id>";
         echo "Add an admin comment to that user : <b>requires level 600+</b><br><input type=text name=admcmt size=50 maxlength=255>&nbsp;<input type=submit value=\" Add \"></form>\n";
@@ -1121,7 +1121,7 @@ if ($admin > 0 || acl(XLOGGING_VIEW)) {
         echo "There are no admin comments for this user\n<br><br>";
     }
 }
-if ($edit && $delBtn) { // deletion secured form
+if (isset($edit) && $delBtn) { // deletion secured form
     echo "<form name=deleteusername action=wipeuser.php method=post>\n";
     make_secure_form("deleteuser!!!" . CRC_SALT_0008 . $user->user_name);
     echo "<input type=hidden name=username value=\"" . $user->user_name . "\">\n";

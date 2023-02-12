@@ -1,10 +1,8 @@
-<?
-/* $Id: admin_complete.php,v 1.6 2003/03/15 05:59:00 nighty Exp $ */
-	$cache_page=1;
+<?php
 	$min_lvl=800;
         require("../../../php_includes/cmaster.inc");
         std_connect();
-        $user_id = std_security_chk($auth);
+        $user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $cTheme = get_theme_info();
 	if ($user_id<=0) {
 		echo "You must be logged in to view that page. <a href=\"../index.php\" target=\"_top\">click here</a>.<br>\n";

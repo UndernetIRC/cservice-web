@@ -5,7 +5,6 @@ if (!check_admin_crc()) {
 	require("../../php_includes/blackhole.inc");
 }
 
-$test_rbl=1;
 if($loadavg5 >= CRIT_LOADAVG)
 {
    header("Location: highload.php");
@@ -27,32 +26,25 @@ function check_admin_crc() {
 	// should be locked out of confirm.php.
 }
 
-if ($test_rbl==1)
-	{
-	if ($_GET['ip'])
-		$user_ip=$_GET['ip'];
-		else
-		$user_ip=cl_ip();
-	}
-else
 $user_ip=cl_ip();
 
-if (RBL_CHECKS==1)
+if (GLINE_CHECK)
 {
-if (ip_check_glined($user_ip)) {
-	echo "<html><head><title>SECURITY WARNING</title>";
-	std_theme_styles();
-	echo "</head>\n";
-	std_theme_body();
-	echo "<center>\n";
-	echo "<h2>";
-        echo "Sorry, you can't confirm new user registrations whilst G-Lined from the network.";
-	echo "</h2>";
-	echo "</center>\n";
-	echo "</body></html>\n\n";
-	die;
+	if (ip_check_glined($user_ip)) {
+		echo "<html><head><title>SECURITY WARNING</title>";
+		std_theme_styles();
+		echo "</head>\n";
+		std_theme_body();
+		echo "<center>\n";
+		echo "<h2>";
+			echo "Sorry, you can't confirm new user registrations whilst G-Lined from the network.";
+		echo "</h2>";
+		echo "</center>\n";
+		echo "</body></html>\n\n";
+		die;
+	}
 }
-}
+
 if (RBL_CHECKS==1)
 {
 $msg=ip_check_rbl($user_ip);
@@ -74,7 +66,7 @@ if ($msg !='clean')
 
 
 
-if ($cookie!="") {
+if (!empty($cookie)) {
 	//std_sanitise_username($cookie);
 	std_connect();
  	$res=pg_safe_exec("select * from pendingusers where cookie='$cookie'");

@@ -101,7 +101,22 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
 
 define("LOG_STREAM_HANDLER", getenv("LOG_STREAM_HANDLER") ?: "../../logs/cservice.log");
-define("LOG_LEVEL", getenv("LOG_LEVEL") ?: Logger::INFO);
+
+if (getenv("LOG_LEVEL")) {
+    switch(getenv("LOG_LEVEL")) {
+        case "debug":
+            define("LOG_LEVEL", Logger::DEBUG);
+            break;
+        case "warning":
+            define("LOG_LEVEL", Logger::WARNING);
+            break;
+        default:
+            define("LOG_LEVEL", Logger::INFO);
+            break;
+    }
+} else {
+    define("LOG_LEVEL", Logger::INFO);
+}
 
 $stream = new StreamHandler(LOG_STREAM_HANDLER, LOG_LEVEL);
 $logger = new Logger('cservice');
@@ -367,12 +382,6 @@ $max_question_id=3;
 
 // deprecated
 $standard_body="<BODY BGCOLOR=#A0A0A0 TEXT=#000000 alink=#004400 link=#004400 vlink=#004400> <FONT FACE=\"Arial,Helvetica,sans-serif\" size=\"-1\">";
-
-if ($cache_page!=1) { $cache_page=0; }
-if (!$cache_page) {
-//  header("Expires: 0");
-//  header("Pragma: no-cache");
-}
 
 $main_rr = ROUNDROBIN;
 $local_mirror = LOCALMIRROR;
@@ -716,7 +725,7 @@ function cl_ip($rettype = 1) {
     if (!isset($dns_cache) || !is_array($dns_cache)) { unset($dns_cache); $dns_cache = Array(); }
     if (!cl_ipdmaskchk($_SERVER["REMOTE_ADDR"]) && !cl_ipwmaskchk($_SERVER['REMOTE_ADDR'])) { // direct connection (IP not in disallow list $dmask or allow list $wmask)
         $ips[] = $_SERVER["REMOTE_ADDR"];
-        $hst[] = $_SERVER["REMOTE_HOST"];
+        $hst[] = $_SERVER["REMOTE_HOST"] ?? $_SERVER["REMOTE_ADDR"];
     } else if ($_SERVER["HTTP_X_FORWARDED_FOR"]!="") { // from a proxy
         if (strpos(",", $_SERVER["HTTP_X_FORWARDED_FOR"]) !== false) {
             $ipp = explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]);
@@ -1159,7 +1168,7 @@ function complaints_off() {
 
 function newu_ipcheck($mode) { // return false on locked.
     global $ENABLE_COOKIE_TABLE;
-    if (cl_ip()=="" || cl_ip=="0.0.0.0") { return 0; }
+    if (cl_ip()=="" || cl_ip()=="0.0.0.0") { return 0; }
     if (NEWUSERS_IPCHECK == 0) { return(1); }
     $ENABLE_COOKIE_TABLE = 1;
     $res = pg_safe_exec("SELECT * FROM newu_ipcheck WHERE ip='" . cl_ip() . "'");
@@ -2106,7 +2115,7 @@ function show_ticket_events($complaint_ID,$hilight_last = 0) {
 
 /* Forms and strings manipulation functions */
 
-define("RPL_CR","¤@¤");
+define("RPL_CR","ï¿½@ï¿½");
 
 function N_get_pure_string($POST_OR_GET_VAR) {
   return(trim(str_replace(RPL_CR,"\n",str_replace("\r","",stripslashes(urldecode($POST_OR_GET_VAR))))));
@@ -2462,14 +2471,13 @@ function make_duration($duration)
 
 function drake_duration($duration)
 {
-  $days .= (int)($duration/(24*60*60));
+  $days = (int)($duration/(24*60*60));
   $duration %= (24*60*60);
-  $hours .= (int)($duration/(60*60));
+  $hours = (int)($duration/(60*60));
   $duration %= (60*60);
-  $mins .= (int)($duration/60);
+  $mins = (int)($duration/60);
   $duration %= 60;
-  $ret=sprintf("%01d days, %02d:%02d:%02d",$days,$hours,$mins,$duration);
-  return $ret;
+  return sprintf("%01d days, %02d:%02d:%02d",$days,$hours,$mins,$duration);
 }
 
 function gen_server_url() {
@@ -2500,7 +2508,7 @@ function gen_server_url() {
 }
 
 function C_strtolower($txt){
-  return(strtolower(strtr($txt,"ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝ","àáâãäåçèéêëìíîïñòóôõöøùúûüý")));
+  return(strtolower(strtr($txt,"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")));
 }
 
 function js_redir($url, $toTop = 0) {
@@ -3019,7 +3027,7 @@ function get_theme_info() {
 
   }
 */
-if ($_COOKIE['cstheme']=='')
+if (empty($_COOKIE['cstheme']))
   {
   $res = pg_safe_exec("SELECT * FROM themes WHERE name='" . STD_THEME . "'"); // Select STD theme from config.inc
   if (pg_numrows($res)==0) { // if it doesnt exist...

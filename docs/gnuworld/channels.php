@@ -1,4 +1,4 @@
-<?
+<?php
 require('../../php_includes/cmaster.inc');
 
 /* $Id: channels.php,v 1.19 2005/11/25 11:14:14 nighty Exp $ */
@@ -9,6 +9,7 @@ $validletters="-abcdefghijklmnopqrstuvwxyz_.#" . $validnumbers;
 */
 
 std_init();
+global $admin, $user_id;
 $cTheme = get_theme_info();
 $nrw_lvl = 0;
 if (acl(XWEBAXS_2)) { $nrw_lvl = 1; }
@@ -28,7 +29,7 @@ std_theme_body();
 
 $name = trim($name);
 
-if ($id!="") {
+if (!empty($id)) {
 
 /*
 	if (strspn($id,$validnumbers)!=strlen($id)) {
@@ -38,7 +39,7 @@ if ($id!="") {
 */
   	$channels = pg_safe_exec("SELECT * from channels WHERE id='$id' AND registered_ts>0");
 
-} else if ($name!="") {
+} else if (!empty($name)) {
 
 	if (ord($name)!=0x23)
 		$name="#" . $name;
@@ -101,25 +102,18 @@ unset($force);
 $edit=0;
 $force=0;
 
-switch($action) {
-	case "edit":
-		//$edit=1;
-		$edit=0; // disabled for now
-		break;
-	case "force":
-		if ($admin>=600) {
-			$edit=1;
-			$force=1;
-			$access=$admin;
-			log_channel($id,6,"");
-		}
-		break;
-	default:
-		if ($admin>0) { local_seclog("View '" . $channel->name . "' (" . $channel->id . ")"); } else {
-			if ($admin==0 && $access>0) { local_seclog("View '" . $channel->name . "' (" . $channel->id . ") as chanop level " . (int)$access); }
-		}
-		break;
-};
+if (isset($action) && $action == "edit") {
+    $edit=0;
+} elseif (isset($action) && $action == "force" && $admin >= 600) {
+    $edit=1;
+    $force=1;
+    $access=$admin;
+    log_channel($id,6,"");
+} elseif ($admin>0) {
+    local_seclog("View '" . $channel->name . "' (" . $channel->id . ")");
+} elseif ($admin==0 && $access>0) {
+    local_seclog("View '" . $channel->name . "' (" . $channel->id . ") as chanop level " . (int)$access);
+}
 
 function set_flag($allowed,&$num,$bit,$bool)
 {
@@ -162,7 +156,7 @@ function set_text($allowed,&$text,$value)
 
 
 
-if ($button == "Save Changes") {
+if (isset($button) && $button == "Save Changes") {
 	// I really should have thought of a for loop sooner..
 	if (((is_suspended($user_id,$channel->name)==1) || ((is_suspended("",$channel->name)==1)) && ($admin==0)) || (($admin==0) && (int)$channel->flags & 0x00000100)) {
 		echo "Not allowed.";
@@ -310,7 +304,7 @@ if ($button == "Save Changes") {
 	pg_safe_exec($updateq);
 
 
-} else if ($button=="Add this user") {
+} else if (isset($button) && $button=="Add this user") {
 	if ((is_suspended($user_id,$channel->name)==1) || (is_suspended("",$channel->name)==1)) {
 		echo "Not allowed.";
 		echo "</body></html>\n\n";
@@ -468,7 +462,7 @@ if (pg_numrows($ruu)==0) { $noaxs=1; }
 if ((($access > $level_modinfo) || ($admin > $level_modinfo)) && !$noedit && $cpurged==0) {
 		echo("<tr><td colspan=2 bgcolor=#" . $cTheme->table_sepcolor . "><font size=-1  color=#" . $cTheme->table_septextcolor . "><em><b>Change Settings</b></em></font></b></td></tr><tr>");
 
-if ((($access > $level_modinfo) || ($admin > $level_modinfo)) && !$noedit && !$edit && $cpurged==0 && (is_suspended($user_id,$channel_name)!=1) && (is_suspended("",$channel_name)!=1) && (is_suspended($user_id,"")!=1)) {
+if ((($access > $level_modinfo) || ($admin > $level_modinfo)) && !$noedit && !$edit && $cpurged==0 && (is_suspended($user_id,$channel->name)!=1) && (is_suspended("",$channel->name)!=1) && (is_suspended($user_id,"")!=1)) {
 if ($access>=$level_status) {
 	echo("<td><form action=\"channels.php\" method=get>
 	<input type=hidden name=id value=\"$channel->id\">\n");

@@ -166,86 +166,20 @@ function has_ipr($user_id) {
     return false;
 }
 
-function ip_check_glined($ip){
-    $ip="2001:470:f51a:76e:f5f5:1a62::1";
-    if (filter_var($ip, FILTER_VALIDATE_IP,FILTER_FLAG_IPV4))
+function ip_check_glined($ip): bool
+{
+    if (filter_var($ip, FILTER_VALIDATE_IP) )
     {
-        return ip4_check_glined($ip);
-
-    }
-    if (filter_var($ip, FILTER_VALIDATE_IP,FILTER_FLAG_IPV6))
-    {
-        return ip6_check_glined($ip);
-
-    }
-}
-
-function ip4_check_glined($ip) {
-    if (!ip_check_white($ip)) {
-        $ip_t = explode('.', $ip);
-        $a = $ip_t[0] . '.' . $ip_t[1] . '.';
-        $glines = 0;
-        $sql = "SELECT host from glines where host like '*@" . $a . "%' or host like '~*@" . $a . "%' order by ID ASC"; // getting all glines that match first two bytes in IP and no ident
+        $sql = sprintf("SELECT * FROM glines WHERE host ~ '.*@[abcdef0-9]+[\.:]+' AND split_part(host, '@', 2)::INET >>= '%s' limit 1", pg_escape_string($ip));
         if ($res = pg_safe_exec($sql)) {
-            $rows = pg_num_rows($res);
-            if ($rows > 0) {
-                $hosts = pg_fetch_all($res);
-
-                for ($i = 0; $i < count($hosts); $i++) {
-                    $t_mask = str_replace('*@', '', $hosts[$i]['host']);  //cleaning up gline host
-                    $t_mask = str_replace('~', '', $t_mask);
-                    $masks[] = $t_mask;
-
-                    $filter = new IP4Filter(
-                            array($t_mask));
-
-                    if ($filter->check($ip))
-                        $glines++;
-                }
+            if ($res && pg_numrows($res) > 0) {
+                return true;
             }
+            return false;
         }
-        if ($glines == 0)
-            return false; // not glined
-        else
-            return true; // glined
-    } else
-        return false;
+    }
+    return false;
 }
-
-function ip6_check_glined($ip) {
-    $ip="2001:470:f51a:76e:f5f5:1a62::1";
-    $glines = 0;
-    if (!ip_check_white($ip)) {
-        for ($i = 7; $i > 0; $i--) {
-            $ip6 = explode(":", $ip);
-            $like="";
-            for ($j = 0; $j <= $i; $j++)
-                $like.=$ip6[$j] . ":";
-            $like = substr($like, 0, -1);
-            $sel = "select * from glines where host like '*@" . $like . "%' or host like '~*@" . $like . "%' order by ID ASC";
-            //echo $sel;
-            if ($res = pg_safe_exec($sel)) {
-                $rows = pg_num_rows($res);
-                if ($rows > 0) {
-                    $hosts = pg_fetch_all($res);
-
-                    for ($k = 0; $k < count($hosts); $k++) {
-                        $net=str_replace('*@', '', $hosts[$k]['host']);
-                        $net=str_replace('~', '', $net);
-                        $net = new IPV6Net( $net );
-                        if ($net->contains( $test ) == 1)
-                                $glines++;
-                    }
-                }
-            }
-        }
-    if ($glines == 0)
-            return false; // not glined
-        else
-            return true; // glined
-    }
-        return false;
-    }
 
     function ip_check_rbl($ip) {
         global $rbl;
@@ -340,39 +274,42 @@ function ip6_check_glined($ip) {
     }
 
     function check_username_similarity($username) {
+        $users_list = [];
+        $final_list = [];
+        $error = "";
 
         if (USRNREG_WARN_ENABLE == 1) {
-            $mtime = microtime();
-            $mtime = explode(" ", $mtime);
-            $mtime = $mtime[1] + $mtime[0];
-            $starttime = $mtime;
-
-
-            $channels = explode(',', USRNREG_CHANS);
-            $extrausers = explode(',', USRNREG_EUSERS);
-            for ($i = 0; $i < count($channels); $i++) {
-                $query = "select id from channels where id=" . $channels[$i] . "";
-                $res = pg_safe_exec($query);
-                if (pg_numrows($res) != 0) {
-                    $chan_id = pg_fetch_object($res, 0);
-                    $query2 = "select user_id from levels where channel_id=" . $chan_id->id . "";
-                    $res2 = pg_safe_exec($query2);
-                    if (pg_numrows($res2) != 0) {
-                        for ($j = 0; $j < pg_numrows($res2); $j++) {
-                            $user_id = pg_fetch_object($res2, $j);
-                            $query3 = "select user_name from users where id=" . $user_id->user_id . "";
-                            $res3 = pg_safe_exec($query3);
-                            if (pg_numrows($res3) != 0) {
-                                $user_name = pg_fetch_object($res3, 0);
-                                $users_list[] = $user_name->user_name;
+            if (!empty(USRNREG_CHANS)) {
+                $channels = explode(',', USRNREG_CHANS);
+                for ($i = 0; $i < count($channels); $i++) {
+                    $query = "select id from channels where id=" . $channels[$i] . "";
+                    $res = pg_safe_exec($query);
+                    if (pg_numrows($res) != 0) {
+                        $chan_id = pg_fetch_object($res, 0);
+                        $query2 = "select user_id from levels where channel_id=" . $chan_id->id . "";
+                        $res2 = pg_safe_exec($query2);
+                        if (pg_numrows($res2) != 0) {
+                            for ($j = 0; $j < pg_numrows($res2); $j++) {
+                                $user_id = pg_fetch_object($res2, $j);
+                                $query3 = "select user_name from users where id=" . $user_id->user_id . "";
+                                $res3 = pg_safe_exec($query3);
+                                if (pg_numrows($res3) != 0) {
+                                    $user_name = pg_fetch_object($res3, 0);
+                                    $users_list[] = $user_name->user_name;
+                                }
                             }
                         }
                     }
                 }
             }
-            for ($i = 0; $i < count($extrausers); $i++) {
-                $users_list[] = $extrausers[$i];
+
+            if (!empty(USRNREG_EUSERS)) {
+                $extrausers = explode(',', USRNREG_EUSERS);
+                for ($i = 0; $i < count($extrausers); $i++) {
+                    $users_list[] = $extrausers[$i];
+                }
             }
+
             $query = "select * from users where flags & 256 = 256 order by ID asc";
             $res = pg_safe_exec($query);
             if (pg_numrows($res) != 0) {
@@ -384,22 +321,22 @@ function ip6_check_glined($ip) {
             //$users_list=array_unique($users_list);
 
             for ($i = 0; $i < count($users_list); $i++) {
-                if ($users_list[$i])
+                if ($users_list[$i]) {
                     $final_list[] = strtolower($users_list[$i]);
+                }
             }
-            echo "<br><br>";
+
             for ($i = 0; $i < count($final_list); $i++) {
                 if ($final_list[$i]) {
                     $dist = levenshtein($final_list[$i], strtolower($username));
-//		echo "Distance is ".$dist." input user: ".strtolower($username)." matched against <font color=\"#FF0000\">".$final_list[$i]."</font><br>";
                     similar_text($final_list[$i], strtolower($username), $percent);
-//		echo "similarity is ".$percent." <br>";
                     if (($dist < USRNREG_DIST) && ($percent > USRNREG_SIMILAR)) {
-			local_seclog("Likeness match for username " . $username . " against: " . $final_list[$i] ."");
+                        local_seclog("Likeness match for username " . $username . " against: " . $final_list[$i] ."");
                         $error = USRNREG_ERR_MSG;
                     }
                 }
             }
+
             return $error;
         }
     }

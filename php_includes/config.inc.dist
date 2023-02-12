@@ -184,14 +184,8 @@ define("DISALLOW_RESERVED_BLOCKS",1); // define this to 1 if you want to disable
 
 define("LREQ_TIME",600); // min time between forgotten password requests to avoid flooding, set this to 0 to disable.
 
-
-define("UNETUB_TIME",14400); // 4 hours before being able to create another user from the same IP. set to 0 to disable.
-            			   // NOTE: this variable is not used if UNETUB_IPCHECK is set to 0.
-
-
 define("REGPROC_IDLECHECK",1); // If this is set to 1, users that are idle more than 21 days will not be allowed to
 			     // register a channel or be a channel supporter until they login to the bot on IRC.
-
 
 define("REGPROC_ALLOWMULTIPLE",0); // If this is set to 1, users will be allowed to register an unlimited amount
 				                 // of channels, but will still be allowed to have only ONE channel being applied at a time.
@@ -225,7 +219,8 @@ This requires to login with a user with an admin access of 901 or above (coder l
 
 
 
-define("RBL_CHECKS", 0);		// enable RBL and glines check for new user registration.
+define("GLINE_CHECK", 0);  // Enable gline check for new user registration
+define("RBL_CHECKS", 0);		// enable RBL check for new user registration.
 define("TOTP_USR_FLAG",1024);
 define("TOTP_ADMIN_IPR_FLAG", 2048);
 define("NON_BOGUS_TOTP",'/^[0-9\=]+$/');

@@ -1,7 +1,7 @@
 <?
 include("../../../php_includes/cmaster.inc");
 std_connect();
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $cTheme = get_theme_info();
 ?>
 <html><head><title>Registration Process</title>

@@ -5,9 +5,9 @@ include("../../php_includes/cmaster.inc");
 if (isset($securize_mode)) { unset($securize_mode); }
 $securize_mode = 0;
 
-if ($SECURE_ID!="") {
+if (isset($SECURE_ID)) {
 	std_connect();
-	$user_id = std_security_chk($auth);
+	$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 	if (isset($authtok)) { unset($authtok); }
 	if (isset($authcsc)) { unset($authcsc); }
 	$authtok = explode(":",$auth);
@@ -40,7 +40,7 @@ if ($securize_mode) {
 	echo "&SECURE_ID=" . $SECURE_ID . "\" NAME=right SCROLLING=AUTO>\n";
 } else {
 	echo "<FRAME SRC=\"left.php\" NAME=left SCROLLING=AUTO>\n";
-	if ($sba) {
+	if (isset($sba)) {
 	        echo "<FRAME SRC=\"right.php?sba=1\" NAME=right SCROLLING=AUTO>\n";
     } elseif (isset($entotp) && isset($ID)) {
             echo "<FRAME SRC=\"totp/confirm.php?ID=$ID\" NAME=\"right\" SCROLLING=\"AUTO\"\n";

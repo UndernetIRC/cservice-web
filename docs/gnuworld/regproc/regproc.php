@@ -1,11 +1,6 @@
-<?
-/* $Id: regproc.php,v 1.25 2004/05/11 03:09:50 nighty Exp $ */
-
-
-	$cache_page=1;
-
+<?php
 	require("../../../php_includes/blackhole.inc");
-        require("../../../php_includes/cmaster.inc");
+    require("../../../php_includes/cmaster.inc");
 
 	if($loadavg5 >= CRIT_LOADAVG)
 	{
@@ -14,7 +9,7 @@
 	}
 
         std_connect();
-        $user_id = std_security_chk($auth);
+        $user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 	$cTheme = get_theme_info();
 	if ($user_id<=0) {
 		std_theme_styles(1); std_theme_body("../");

@@ -2,7 +2,7 @@
 require('../../../php_includes/cmaster.inc');
 std_connect();
 	$ENABLE_COOKIE_TABLE=0;
-$user_id = std_security_chk($auth);
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $cTheme = get_theme_info();
 if ($user_id>0) {
 	std_theme_styles(1); std_theme_body("../");

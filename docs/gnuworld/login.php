@@ -14,6 +14,8 @@ $failed = 0;
 $is_admin = 0;
 $user_id = 0;
 
+global $logger, $LOCK_LOGIN;
+
 // For efficiency, don't load the db unless we have to.
 if (RBL_CHECKS == 1) {
 	$msg = ip_check_rbl(cl_ip());
@@ -31,7 +33,7 @@ if (RBL_CHECKS == 1) {
 		die;
 	}
 }
-if ($username != "" && $password != "") {
+if (!empty($username) && !empty($password)) {
 	if (!ip_check($username, 0)) {
 		echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
 		std_theme_styles(1);
@@ -238,7 +240,7 @@ if ($username != "" && $password != "") {
 				}
 			}
 		}
-		if ($redir) {
+		if (isset($redir)) {
 			$redir = urldecode($redir);
 			# Allow relative URLs and absolute URLs starting with the server host
 			if (!preg_match("/:\/\//", $redir) || preg_match("/^https?:\/\/" . $_SERVER["HTTP_HOST"] . "/", $redir)) {
@@ -283,8 +285,8 @@ echo "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">\n";
 	<title>CService Login</title>
 	<? std_theme_styles(); ?>
 </head>
-<?
-if (($username!="" || $_COOKIE['rlogin']!="") && !preg_match(NON_BOGUS,$username)) {
+<?php
+if ((!empty($username) || !empty($_COOKIE['rlogin'])) && !preg_match(NON_BOGUS,$username)) {
 	std_theme_body("","document.forms[0].password.focus();");
 } else {
 	std_theme_body("","document.forms[0].username.focus();");
@@ -302,13 +304,13 @@ echo "<table cellpadding=5 bgcolor=#" . $cTheme->table_bgcolor . " width=\"100%\
 echo "<tr><td><center>\n";
 echo "<font color=#" . $cTheme->main_textcolor . ">\n";
 echo "<font size=+2><b>CService Login</b></font>\n";
-if (preg_match("/^http/",$redir)) { $tgt = ""; } else { $tgt = " target=body"; }
-   	if ($username!="" && !preg_match(NON_BOGUS,$username)) {
-	echo "<h2>Bogus username</h2><br><a href=\"login.php\">Try again</a></td></tr></table></td></tr></table></center></body></html>\n\n";
-	die;
+if (isset($redir) && preg_match("/^http/",$redir)) { $tgt = ""; } else { $tgt = " target=body"; }
+if (!empty($username) && !preg_match(NON_BOGUS,$username)) {
+    echo "<h2>Bogus username</h2><br><a href=\"login.php\">Try again</a></td></tr></table></td></tr></table></center></body></html>\n\n";
+    die;
 }
 echo "<form method=post action=login.php" . $tgt . ">\n";
-if ($redir) { echo "<input type=hidden name=redir value=\"" . urlencode(urldecode($redir)) . "\">"; }
+if (isset($redir)) { echo "<input type=hidden name=redir value=\"" . urlencode(urldecode($redir)) . "\">"; }
 if (REMEMBER_LOGIN || PREFILL_NOTICE) { if (trim($username) == "") { $username = $_COOKIE['rlogin']; } }
 echo "<table border=0><tr><td><font color=\"#" . $cTheme->main_textcolor . "\">Username</td><td><input type=text name=username value=\"" . $username . "\"></td></tr>\n";
 echo "<tr><td><font color=\"#" . $cTheme->main_textcolor . "\">Password</td><td><input type=password name=password></td></tr></table>\n";
