@@ -1,7 +1,8 @@
-<?
+<?php
 require('../../../php_includes/cmaster.inc');
 std_init();
-	$ENABLE_COOKIE_TABLE=0;
+$ENABLE_COOKIE_TABLE=0;
+global $user_id, $x_at_email, $question_text;
 $res=pg_safe_exec("SELECT * FROM users WHERE id=" . $user_id);
 $user=pg_fetch_object($res,0);
 
@@ -41,16 +42,16 @@ if ($user->email=="") {
 	die;
 }
 
-        $now = time();
-        $days_elapsed = (int)((int)($now - (int)$user->signup_ts)/86400);
-        if ($days_elapsed < MIN_DAYS_BEFORE_SUPPORT) {
-                echo "<h1>Error<br>\n";
-                echo "Your USERNAME is too newly created !</h1><br><h2>You can only process this request after your account is at least ".MIN_DAYS_BEFORE_SUPPORT." day(s) old !</h2><br><br>\n";
-                echo "<a href=\"javascript:history.go(-1);\">Go back.</a>\n";
-                echo "</body>\n";
-                echo "</html>\n\n";
-                die;
-        }
+$now = time();
+$days_elapsed = (int)((int)($now - (int)$user->signup_ts)/86400);
+if ($days_elapsed < MIN_DAYS_BEFORE_SUPPORT) {
+    echo "<h1>Error<br>\n";
+    echo "Your USERNAME is too newly created !</h1><br><h2>You can only process this request after your account is at least ".MIN_DAYS_BEFORE_SUPPORT." day(s) old !</h2><br><br>\n";
+    echo "<a href=\"javascript:history.go(-1);\">Go back.</a>\n";
+    echo "</body>\n";
+    echo "</html>\n\n";
+    die;
+}
 
 if ($user->post_forms!="" && $user->post_forms>0) {
 	$curr = time();
@@ -78,9 +79,9 @@ if ($user->post_forms!="" && $user->post_forms>0) {
 
 
 
-if ($crc == md5($_SERVER["HTTP_USER_AGENT"] . $ts . CRC_SALT_0003) && ($ts+1800)>=time()) {
+if ($_POST["crc"] == md5($_SERVER["HTTP_USER_AGENT"] . $_POST["ts"] . CRC_SALT_0003) && ($_POST["ts"]+1800)>=time()) {
 
-if ($verifdata=="") {
+if (empty($_POST["verifdata"])) {
 	echo "<h2>\n";
 
 	echo "You need to supply an answer to the verification question.<br>\n";
@@ -91,7 +92,7 @@ if ($verifdata=="") {
 	die;
 }
 
-if ($verifdata!=$user->verificationdata) {
+if ($_POST["verifdata"] != $user->verificationdata) {
 	echo "<h2>\n";
 
 	echo "Invalid verification answer :(<br>\n";
@@ -102,7 +103,7 @@ if ($verifdata!=$user->verificationdata) {
 	die;
 }
 
-if ($mctype!=1 && $mctype!=2) {
+if (!in_array($_POST["mctype"], [1, 2])) {
 	echo "<h2>\n";
 
 	echo "You need to supply a type of new manager.<br>\n";
@@ -113,26 +114,14 @@ if ($mctype!=1 && $mctype!=2) {
 	die;
 }
 
-if (isset($nbtype)) { unset($nbtype); }
+if (isset($_POST["nbtype"])) { unset($nbtype); }
 $nbtype = 2; // can only use 'weeks'.
 $nbretOK = $_POST["nbret"];
-if ($mctype==1) {
+if ($_POST["mctype"] == 1) {
 switch ($nbtype) {
-/*
-	case 1:
-		if ($nbret<22 || $nbret>49) {
-			echo "<h2>\n";
-			echo "Number of days ranges from 22 to 49.<br>\n";
-			echo "<a href=\"javascript:history.go(-1);\">Go Back</a><br>\n";
-			echo "</h2>\n";
-			echo "</body>\n</html>\n\n";
-			die;
-		}
-	break;
-*/
 	default:
 	case 2:
-		if ($nbret<3 || $nbret>7) {
+		if ($_POST["nbret"] < 3 || $_POST["nbret"] > 7) {
 			echo "<h2>\n";
 			echo "Number of weeks ranges from 3 to 7.<br>\n";
 			echo "<a href=\"javascript:history.go(-1);\">Go Back</a><br>\n";
@@ -141,22 +130,10 @@ switch ($nbtype) {
 			die;
 		}
 	break;
-/*
-	case 3:
-		if ($nbret<1 || $nbret>3) {
-			echo "<h2>\n";
-			echo "Number of months ranges from 1 to 3.<br>\n";
-			echo "<a href=\"javascript:history.go(-1);\">Go Back</a><br>\n";
-			echo "</h2>\n";
-			echo "</body>\n</html>\n\n";
-			die;
-		}
-	break;
-*/
 }
 }
 
-if ($mcreason=="") {
+if (empty($_POST["mcreason"])) {
 	echo "<h2>\n";
 
 	echo "You need to supply a reason.<br>\n";
@@ -167,7 +144,7 @@ if ($mcreason=="") {
 	die;
 }
 
-if ($new_manager=="") {
+if (empty($_POST["new_manager"])) {
 	echo "<h2>\n";
 
 	echo "You need to supply a new manager's username.<br>\n";
@@ -178,7 +155,7 @@ if ($new_manager=="") {
 	die;
 }
 
-if ($new_manager==$user->user_name) {
+if ($_POST["new_manager"] == $user->user_name) {
 	echo "<h2>\n";
 
 	echo "You are already a manager on this channel.<br>\n";
@@ -189,7 +166,7 @@ if ($new_manager==$user->user_name) {
 	die;
 }
 
-$res2 = pg_safe_exec("SELECT id,email,user_name FROM users WHERE lower(user_name)='" . strtolower($new_manager) . "'");
+$res2 = pg_safe_exec("SELECT id,email,user_name FROM users WHERE lower(user_name)='" . strtolower($_POST["new_manager"]) . "'");
 if (pg_numrows($res2)==0) {
 	echo "<h2>\n";
 
@@ -216,7 +193,7 @@ if (is_email_locked(2,$new_manager_email)) {
 }
 
 
-	$channel = str_replace("\\\'","'",$channel);
+	$channel = str_replace("\\\'","'",$_POST["channel"]);
 	$blah=pg_safe_exec("SELECT id FROM channels WHERE lower(name)='" . strtolower($channel) . "' AND registered_ts>0");
 	if (pg_numrows($blah)==0) {
 		echo "<h2>Unexistant channel !@#</h2></body></html>\n\n";
@@ -251,7 +228,7 @@ if (pg_numrows($huhu)>0) {
 
 
 
-	if ($mctype==2) { // permanent change only check
+	if ($_POST["mctype"] == 2) { // permanent change only check
 		// disallow new perm manager to be already 500 somewhere
 		if (has_a_channel($new_manager_id)) {
 			echo "<h2>\n";
@@ -275,7 +252,7 @@ if (pg_numrows($huhu)>0) {
 	$ooo = pg_fetch_object($rrr);
 	if ((int)$ooo->signup_ts>0) {
 		$el_days = (int)((int)($now - (int)$ooo->signup_ts)/86400);
-		if ($mctype==2) { // permanent changes
+		if ($_POST["mctype"] == 2) { // permanent changes
 			if ($el_days < MIN_DAYS_BEFORE_PMGR) { $is_invalid = 1; }
 		} else { // temp changes
 			if ($el_days < MIN_DAYS_BEFORE_TMGR) { $is_invalid = 1; }
@@ -284,9 +261,9 @@ if (pg_numrows($huhu)>0) {
 	if ($is_invalid) {
 			echo "<h2>\n";
 			echo "The chosen new manager is too newly created (less than ";
-			if ($mctype==2) { echo MIN_DAYS_BEFORE_PMGR; } else { echo MIN_DAYS_BEFORE_TMGR; }
+			if ($_POST["mctype"] == 2) { echo MIN_DAYS_BEFORE_PMGR; } else { echo MIN_DAYS_BEFORE_TMGR; }
 			echo " days).<br>";
-			if ($mctype==2 && $el_days>=MIN_DAYS_BEFORE_TMGR) {
+			if ($_POST["mctype"] == 2 && $el_days>=MIN_DAYS_BEFORE_TMGR) {
 				echo "This user can only apply to 'Temporary' changes.<br><br>\n";
 			} else {
 				echo "This user cannot apply to be a new manager yet.<br><br>\n";
@@ -327,23 +304,14 @@ if (pg_numrows($huhu)>0) {
 		die;
 	}
 
-
-
-
-
 	$change_type = 0;
 	$opt_duration = 0;
 
-	if ($mctype==1) { // temporary
+	if ($_POST["mctype"] == 1) { // temporary
 		$change_type = 0;
-/*
-		if ($nbtype==1) { $opt_duration = $nbret*86400; }
-		if ($nbtype==2) { $opt_duration = $nbret*86400*7; }
-		if ($nbtype==3) { $opt_duration = $nbret*86400*30; }
-*/
 		(int)$opt_duration = ((int)$nbretOK*86400*7);
 	}
-	if ($mctype==2) { // perm
+	if ($_POST["mctype"] == 2) { // perm
 		$change_type = 1;
 		$opt_duration = 0;
 	}
@@ -354,24 +322,19 @@ if (pg_numrows($huhu)>0) {
 	}
 
 	$expiration = time()+21600; // 6 hours
-	$crc_cookie = md5( $expiration . CRC_SALT_015 . $user->email . $new_manager_id . $channel_id );
+	$crc_cookie = md5( $expiration . CRC_SALT_0015 . $user->email . $new_manager_id . $channel_id );
 
 	$query  = "INSERT INTO pending_mgrchange (channel_id,manager_id,new_manager_id,change_type,opt_duration,reason,expiration,crc,confirmed,from_host) VALUES ";
-	$query .= "('$channel_id','$user_id','$new_manager_id','$change_type'," . (int)$opt_duration . ",'$mcreason','$expiration','$crc_cookie',0,'" . cl_ip() . "')";
+	$query .= "('$channel_id','$user_id','$new_manager_id','$change_type'," . (int)$opt_duration . ",'" . $_POST["mcreason"] . "','$expiration','$crc_cookie',0,'" . cl_ip() . "')";
 
 	pg_safe_exec($query);
-
-//	echo $query;
 
 	$mmsg = "";
 	$mmsg .= "Hello,\n\nIf you would like to confirm the \"Manager Change\" request for channel '" . str_replace("\\'","'",$channel) . "',\n";
 	$mmsg .= "thus giving it ";
-	if ($mctype==1) {
+	if ($_POST["mctype"] == 1) {
 		$mmsg .= "TEMPORARILY for $nbretOK ";
-//		if ($nbtype==1) { $mmsg .= "day(s) "; }
-//		if ($nbtype==2) { $mmsg .= "week(s) "; }
 		$mmsg .= "week(s) ";
-//		if ($nbtype==3) { $mmsg .= "month(s) "; }
 	} else {
 		$mmsg .= "PERMANENTLY ";
 	}
@@ -383,10 +346,7 @@ if (pg_numrows($huhu)>0) {
 
 	$mailres = custom_mail($user->email,"Manager Change Request via WEB",$mmsg,"From: $x_at_email\nReply-To: Dont.Reply@Thank.You\nX-Mailer: " . NETWORK_NAME . " Channel Service");
 
-//	echo "<pre>$mmsg</pre>\n";
-
 	/* make the user can re-post in 10 days. */
-
 	if (!$mailres) { local_seclog("custom_mail() failed for " . $user->email . " from: " . $x_at_email); }
 
 	pg_safe_exec("UPDATE users SET post_forms=(date_part('epoch', CURRENT_TIMESTAMP)::int+86400*10) WHERE id='" . $user_id . "'");
@@ -405,13 +365,13 @@ if (pg_numrows($res2)==0) {
         exit;
 }
 $multiple_ok=0;
-if ($multiple==1) {
-	$fc = explode(" ",$forcechannel);
+if (isset($multiple) && $multiple==1) {
+	$fc = explode(" ",$_POST["forcechannel"]);
 	$forcechannel_C = $fc[1];
 	$forcechannel_I = $fc[0];
 }
 if (pg_numrows($res2)>1 && $multiple==1 && isset($forcechannel) && $forcechannel!="" && preg_match("/^#/",$forcechannel_C) && $forcechannel_I>1) {
-	if ($crc == md5($ts . $HTTP_USER_AGENT . $user_id . CRC_SALT_0004)) {
+	if ($_POST["crc"] == md5($_POST["ts"] . $_SERVER["HTTP_USER_AGENT"] . $user_id . CRC_SALT_0004)) {
 		$multiple_ok=1;
 	}
 }
@@ -423,7 +383,7 @@ if (pg_numrows($res2)>1 && $multiple_ok==0) {
 	echo "<form method=POST>\n";
 	echo "<input type=hidden name=multiple value=1>\n";
 	$zets = time();
-	$zecrc = md5($zets . $HTTP_USER_AGENT . $user_id . CRC_SALT_0004);
+	$zecrc = md5($zets . $_SERVER["HTTP_USER_AGENT"] . $user_id . CRC_SALT_0004);
 	echo "<input type=hidden name=ts value=$zets>\n";
 	echo "<input type=hidden name=crc value=$zecrc>\n";
 	echo "<select name=forcechannel>\n";
@@ -452,7 +412,7 @@ $channel=pg_fetch_object($res2,0);
 <? } ?>
  <li>Verification Question/Answer:<br>
 Question :
-<?
+<?php
 
 echo "<b>" . $question_text[$user->question_id] . "</b>";
 echo "<input type=hidden name=verifq value=" . $user->question_id . ">\n";
@@ -504,7 +464,7 @@ echo "<input type=hidden name=verifq value=" . $user->question_id . ">\n";
 
 	echo "<b>note</b>: 499 that are already 500 somewhere else (allowed only for temporary changes) are marked with a (*)<br>\n";
 
-	if ($nouser==0) {
+	if ($nouser==0 && isset($forcechannel_C)) {
 		echo "<b>note</b>:&nbsp;If the new manager's username is not listed above, then you need to add him/her as a level 499,<br>\n";
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/msg " . BOT_NAME . " adduser ";
 		if ($multiple_ok==1) { echo str_replace("\\'","'",$forcechannel_C); } else { echo str_replace("\\'","'",$channel->name); }
@@ -513,14 +473,14 @@ echo "<input type=hidden name=verifq value=" . $user->question_id . ">\n";
 	} else {
 		echo "<b>note</b>:&nbsp;You need to add a username as a level 499,<br>\n";
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/msg " . BOT_NAME . " adduser ";
-		if ($multiple_ok==1) { echo str_replace("\\'","'",$forcechannel_C); } else { echo str_replace("\\'","'",$channel->name); }
+		if ($multiple_ok==1 && isset($forcechannel_C)) { echo str_replace("\\'","'",$forcechannel_C); } else { echo str_replace("\\'","'",$channel->name); }
 		echo " <i>username</i> 499<br>\n";
 		echo "Then <a href=\"managerchange.php\">restart this form from the begining</a>.<br>\n";
 	}
 
 ?>
 </ol>
-<?
+<?php
 	if ($nouser==0) {
 		echo "<input type=submit value=\" Submit Query \">\n";
 	}
