@@ -1,8 +1,7 @@
-<?
-/* $Id: index.php,v 1.29 2006/05/06 01:44:50 nighty Exp $ */
-
+<?php
 $min_lvl=800;
 require("../../../php_includes/cmaster.inc");
+global $MAX_ALLOWED_USERS;
 std_connect();
 $user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
 $admin = std_admin();
@@ -47,17 +46,12 @@ $ras = pg_safe_exec("SELECT COUNT(id) AS count FROM users");
 $raw = pg_fetch_object($ras,0);
 $tot_users = $raw->count;
 
-/*
+
 ?>
-<form name=display3 method=get action=list.php onsubmit="return check3(this);">
-<input type=hidden name=mode value=4>
-Search by FLAGLIST&nbsp;<select name=fl><?
-$flr = pg_safe_exec("SELECT * FROM fraud_lists ORDER BY name");
-while ($flo = pg_fetch_object($flr)) {
-	echo "<option value=\"" . $flo->id . "\">" . $flo->name . "</option>\n";
-}
-?></select><br>
-Order by <select name=or>
+<form name="display3" method="post" action="list.php" onsubmit="return check4(this);">
+<input type="hidden" name="mode" value=6>
+Search by CHANNEL&nbsp;<input type="text" name="cname" size="30" maxlength="255" value="#"><select name=""listtype"><option value=1>users</option><option value=2>objections</option></select><br>
+Order by <select name="or">
 <option value=1 selected>Username</option>
 <option value=3>Creation Date</option>
 <option value=2>Email Addy</option>
@@ -65,38 +59,16 @@ Order by <select name=or>
 <option value=4>Verification Answer</option>
 <option value=5>User ID</option>
 <option value=6>Signup IP</option>
-</select>&nbsp;&nbsp;<input type=submit value="Go!"><br>
-<input type=checkbox name=onlyfresh value=1>&nbsp;Hide already suspended users from output list<br>
-<input type=checkbox name=showlasthost value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
-<?
-//<input type=checkbox name=lookup_apps value=1>&nbsp;Lookup channel applications for non-500 listed users (longer)<br><br>
-echo "<input type=hidden name=lookup_apps value=0>\n";
-?>
-</form>
-<br><br>
-*/
-?>
-<form name=display3 method=get action=list.php onsubmit="return check4(this);">
-<input type=hidden name=mode value=6>
-Search by CHANNEL&nbsp;<input type=text name=cname size=30 maxlength=255 value="#"><select name=listtype><option value=1>users</option><option value=2>objections</option></select><br>
-Order by <select name=or>
-<option value=1 selected>Username</option>
-<option value=3>Creation Date</option>
-<option value=2>Email Addy</option>
-<option value=7>Email @domain only</option>
-<option value=4>Verification Answer</option>
-<option value=5>User ID</option>
-<option value=6>Signup IP</option>
-</select>&nbsp;&nbsp;<input type=submit value="Go!"><br>
-<input type=checkbox name=onlyfresh value=1>&nbsp;Hide already suspended users from output list<br>
-<input type=checkbox name=showlasthost value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
-<?
-echo "<input type=hidden name=lookup_apps value=0>\n";
+</select>&nbsp;&nbsp;<input type="submit" value="Go!"><br>
+<input type="checkbox" name="onlyfresh" value=1>&nbsp;Hide already suspended users from output list<br>
+<input type="checkbox" name="showlasthost" value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
+<?php
+echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 ?>
 </form>
 <br><br>
 
-<form name=display0 method=get action=list.php onsubmit="return check0(this);">
+<form name="display0" method="post" action="list.php" onsubmit="return check0(this);">
 <script language="JavaScript1.2">
 <!--
 function checkEmailadd() {
@@ -110,14 +82,14 @@ function checkEmailadd() {
 }
 //-->
 </script>
-<input type=hidden name=mode value=1>
-Search by&nbsp;<select onchange="checkEmailadd();" name=st>
+<input type="hidden" name="mode" value=1>
+Search by&nbsp;<select onchange="checkEmailadd();" name="st">
 <option value=1>Username</option>
 <option value=2>Email Addy</option>
 <option value=3>Signup IP</option>
 <option value=4>Verification Answer</option>
 <option value=5>Last hostmask</option>
-</select>&nbsp;<input type=text name=sp size=20 value=""> (wildcard : * ?)<br>
+</select>&nbsp;<input type="text" name="sp" size="20" value=""> (wildcard : * ?)<br>
 Order by <select name=or>
 <option value=1 selected>Username</option>
 <option value=3>Creation Date</option>
@@ -126,22 +98,22 @@ Order by <select name=or>
 <option value=4>Verification Answer</option>
 <option value=5>User ID</option>
 <option value=6>Signup IP</option>
-</select>&nbsp;&nbsp;<input type=submit value="Go!"><br>
-<input type=checkbox name=onlyfresh value=1>&nbsp;Hide already suspended users from output list<br>
-<input type=checkbox name=showlasthost value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
+</select>&nbsp;&nbsp;<input type="submit" value="Go!"><br>
+<input type="checkbox" name="onlyfresh" value=1>&nbsp;Hide already suspended users from output list<br>
+<input type="checkbox" name="showlasthost" value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
 <?
 //<input type=checkbox name=lookup_apps value=1>&nbsp;Lookup channel applications for non-500 listed users (longer)<br><br>
-echo "<input type=hidden name=lookup_apps value=0>\n";
+echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 ?>
 </form>
 <br><br>
-<form name=display1 method=get action=list.php onsubmit="return check1(this);">
-<input type=hidden name=mode value=2>
-Display last&nbsp;<input type=text name=nb size=4 maxlength=4 value=<?
+<form name="display1" method="post" action="list.php" onsubmit="return check1(this);">
+<input type="hidden" name="mode" value=2>
+Display last&nbsp;<input type="text" name="nb" size=4 maxlength=4 value=<?
 if ($MAX_UCOUNT<100) { echo $MAX_UCOUNT; } else { echo "100"; }
 ?>> new users
 <br>
-Order by <select name=or>
+Order by <select name="or">
 <option value=1>Username</option>
 <option value=2>Email Addy</option>
 <option value=7>Email @domain only</option>
@@ -149,23 +121,23 @@ Order by <select name=or>
 <option value=4>Verification Answer</option>
 <option value=5 selected>User ID (reverse)</option>
 <option value=6>Signup IP</option>
-</select>&nbsp;&nbsp;<input type=submit value="Go!"><br>
-<input type=checkbox name=onlyfresh value=1>&nbsp;Hide already suspended users from output list<br>
-<input type=checkbox name=showlasthost value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
+</select>&nbsp;&nbsp;<input type="submit" value="Go!"><br>
+<input type="checkbox" name="onlyfresh" value=1>&nbsp;Hide already suspended users from output list<br>
+<input type="checkbox" name="showlasthost" value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
 <?
 //<input type=checkbox name=lookup_apps value=1>&nbsp;Lookup channel applications for non-500 listed users (longer)<br><br>
-echo "<input type=hidden name=lookup_apps value=0>\n";
+echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 ?>
 </form>
 <br><br>
-<form name=display2 method=post action=list.php onsubmit="return check2(this);">
-<input type=hidden name=mode value=3>
-Paste type : <select name=paste_type>
+<form name="display2" method="post" action="list.php" onsubmit="return check2(this);">
+<input type="hidden" name="mode" value=3>
+Paste type : <select name="paste_type">
 <option value=1>Any line containing a +x'd user@host</option>
 <option value=2>One username per line (trailing/heading spaces will be removed)</option>
 <option value=3>A copy/paste of a '/msg <?=BOT_NAME?> status #channel'</option>
 </select><br>
-Order by <select name=or>
+Order by <select name="or">
 <option value=1>Username</option>
 <option value=2>Email Addy</option>
 <option value=7>Email @domain only</option>
@@ -175,21 +147,21 @@ Order by <select name=or>
 <option value=6>Signup IP</option>
 </select><br>
 Your paste below :<br>
-<textarea name=the_paste cols=40 rows=7 wrap></textarea><br>
-<input type=checkbox name=onlyfresh value=1>&nbsp;Hide already suspended users from output list<br>
-<input type=checkbox name=showlasthost value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
+<textarea name="the_paste" cols="40" rows="7" wrap></textarea><br>
+<input type="checkbox" name="onlyfresh" value=1>&nbsp;Hide already suspended users from output list<br>
+<input type="checkbox" name="showlasthost" value=1>&nbsp;Show 'last_hostmask' under username in output list<br>
 <?
 //<input type=checkbox name=lookup_apps value=1>&nbsp;Lookup channel applications for non-500 listed users (longer)<br><br>
-echo "<input type=hidden name=lookup_apps value=0>\n";
+echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 ?>
-<input type=submit value="Display usernames in TOASTER">
+<input type="submit" value="Display usernames in TOASTER">
 </form>
 <? if (MIN_CHAN_TOASTER_QRY>0) { ?>
 <br><br>
-<form name=display5 method=post action=list.php onsubmit="return check5(this);">
-<input type=hidden name=mode value=5>
-Show users with at least <input type=text name=minchan size=7 maxlength=5 value=<?=MIN_CHAN_TOASTER_QRY?>> channel accesses ...<br>
-... in the toaster.&nbsp;&nbsp;<input type=submit value=Go!>
+<form name="display5" method="post" action="list.php" onsubmit="return check5(this);">
+<input type="hidden" name="mode" value=5>
+Show users with at least <input type="text" name="minchan" size="7" maxlength="5" value=<?=MIN_CHAN_TOASTER_QRY?>> channel accesses ...<br>
+... in the toaster.&nbsp;&nbsp;<input type="submit" value="Go!">
 </form>
 <? } ?>
 <script language="JavaScript1.2">
@@ -270,5 +242,3 @@ if (!$ssr) { // PgSQL version doesnt support bitwise comparison (not showing cou
 <font color=#<?=$cTheme->main_textlight?>>Current NewUsers Count : <b><? echo $MAX_UCOUNT ?></b>/<? echo $MAX_ALLOWED_USERS ?>.<br><br>
 </body>
 </html>
-
-

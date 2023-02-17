@@ -1498,7 +1498,7 @@ function not_in_tab($elt,$tab) {
 function show_fraud_list($username_or_id_array,$array_type) {
   // array_type = 1 : IDs
   // array_type = 2 : USERNAMEs
-  global $st,$sp,$nb,$mode,$or,$onlyfresh,$minchan,$showlasthost,$lookup_apps,$cTheme,$first_elt_ever,$fl,$listtype,$user_id,$admin;
+  global $st,$sp,$nb,$mode,$or,$onlyfresh,$minchan,$showlasthost,$lookup_apps,$cTheme,$first_elt_ever,$fl,$listtype,$admin,$MAX_LOW_DAYS,$MAX_HIGH_DAYS;
   if (isset($temp_id)) { unset($temp_id); }
   if (isset($temp_username)) { unset($temp_username); }
   if (isset($temp_username_s)) { unset($temp_username_s); }
@@ -1528,7 +1528,6 @@ function show_fraud_list($username_or_id_array,$array_type) {
       $t_user = pg_safe_exec("SELECT users.id,users.flags,users.user_name,users.email,users.verificationdata,users.signup_ts,users.signup_ip,users_lastseen.last_hostmask FROM users,users_lastseen WHERE lower(users.user_name)='" . strtolower($username_or_id_array[$x]) . "' AND users_lastseen.user_id=users.id");
     }
     if ($tmp_res = pg_fetch_object($t_user)) {
-      if (not_in_tab($tmp_res->user_name,$temp_username)) {
         if (($onlyfresh+0)==0 || (($onlyfresh+0)==1 && !((int)$tmp_res->flags & 0x0001))) {
           $temp_username[]=$tmp_res->user_name;
           $temp_username_s[]=strtolower($tmp_res->user_name);
@@ -1548,7 +1547,6 @@ function show_fraud_list($username_or_id_array,$array_type) {
           $temp_lasthost[]=$tmp_res->last_hostmask;
           $temp_lasthost_s[]=strtolower($tmp_res->last_hostmask);
         }
-      }
     }
   }
 

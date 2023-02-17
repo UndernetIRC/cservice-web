@@ -1,81 +1,91 @@
-<?
+<?php
 /* $Id: list.php,v 1.46 2006/05/06 01:47:08 nighty Exp $ */
 
-	ignore_user_abort(true);
-	unset($min_lvl);
-	require("../../../php_includes/cmaster.inc");
-	std_connect();
+ignore_user_abort(true);
+require("../../../php_includes/cmaster.inc");
+std_connect();
 
-        $user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
-        $admin = std_admin();
-        if ($admin<=0 && !acl()) {
-                echo "Sorry your admin access is too low.";
-                die;
-        }
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
+$admin = std_admin();
+if ($admin <= 0 && !acl()) {
+    echo "Sorry your admin access is too low.";
+    die;
+}
 
-	unset($MAX_HIGH_DAYS);unset($MAX_LOW_DAYS);
+global $MAX_ALLOWED_USERS;
 
-	/* You can possibly change the 8 values below */
-	$min_lvl=800;
-	define(ENABLE_FRAUD_TAG,0);
-	define(ENABLE_DELNOREG_TAG,0);
-	define(ENABLE_SUSP_TAG,1);
-	define(ALLOW_SUSP_500,0);
-	define(HOSTMASK_HIDING,".users.undernet.org");
-	define(SEND_TOAST_LIST,"toaster@undernet.org");
-	$MAX_HIGH_DAYS = 21;
-	$MAX_LOW_DAYS = 60;
+/* You can possibly change the 8 values below */
+$min_lvl = 800;
+define("ENABLE_FRAUD_TAG", 0);
+define("ENABLE_DELNOREG_TAG", 0);
+define("ENABLE_SUSP_TAG", 1);
+define("ALLOW_SUSP_500", 0);
+define("HOSTMASK_HIDING", ".users.undernet.org");
+define("SEND_TOAST_LIST", "toaster@undernet.org");
+$MAX_HIGH_DAYS = 21;
+$MAX_LOW_DAYS = 60;
 
-	/**********************************************/
+if ($_POST["mode"] == 2 || $admin >= $min_lvl) {
+    define("ENABLE_DEL_TAG", ENABLE_DELNOREG_TAG);
+} else {
+    define("ENABLE_DEL_TAG", 0);
+}
 
-	if ($mode==2 || $admin>=$min_lvl) { define(ENABLE_DEL_TAG,ENABLE_DELNOREG_TAG); } else { define(ENABLE_DEL_TAG,0); }
-	unset($nb_enabled);unset($enabled);unset($enabl_tab);unset($first_elt_ever);
-	$nb_enabled = 0; $enabled = "";
-	if (ENABLE_FRAUD_TAG) { $nb_enabled++; $enabled .= "F_FRAUD "; }
-	if (ENABLE_DEL_TAG) { $nb_enabled++; $enabled .= "F_DELNOREG "; }
-	if (ENABLE_SUSP_TAG) { $nb_enabled++; $enabled .= "F_SUSPEND "; }
-	$enabled = trim($enabled);
-	define(DELTA_ELTS,$nb_enabled+5);
-	$first_elt_ever = (($nb_enabled*3)+2);
+$nb_enabled = 0;
+$enabled = "";
+if (ENABLE_FRAUD_TAG) {
+    $nb_enabled++;
+    $enabled .= "F_FRAUD ";
+}
+if (ENABLE_DEL_TAG) {
+    $nb_enabled++;
+    $enabled .= "F_DELNOREG ";
+}
+if (ENABLE_SUSP_TAG) {
+    $nb_enabled++;
+    $enabled .= "F_SUSPEND ";
+}
+$enabled = trim($enabled);
+define("DELTA_ELTS", $nb_enabled + 5);
+$first_elt_ever = (($nb_enabled * 3) + 2);
 
-	unset($F_FRAUD);
-	unset($F_DELNOREG);
-	unset($F_SUSPEND);
+unset($F_FRAUD);
+unset($F_DELNOREG);
+unset($F_SUSPEND);
 
-	$enabl_tab = explode(" ",$enabled);
-	for ($et=0;$et<count($enabl_tab);$et++) {
-		$var = $enabl_tab[$et];
-		$$var = $first_elt_ever;
-		$first_elt_ever++;
-	}
+$enabl_tab = explode(" ", $enabled);
+for ($et = 0; $et < count($enabl_tab); $et++) {
+    $var = $enabl_tab[$et];
+    $$var = $first_elt_ever;
+    $first_elt_ever++;
+}
 
-	define(F_FRAUD,$F_FRAUD+0);
-	define(F_DELNOREG,$F_DELNOREG+0);
-	define(F_SUSPEND,$F_SUSPEND+0);
+define("F_FRAUD", $F_FRAUD + 0);
+define("F_DELNOREG", $F_DELNOREG + 0);
+define("F_SUSPEND", $F_SUSPEND + 0);
 
-	$cTheme = get_theme_info();
-        $res = pg_safe_exec("SELECT user_name FROM users WHERE id='" . ($user_id+0) . "'");
-        if (pg_numrows($res)==0) {
-        	echo "Suddenly logged out ?!";
-        	die;
-        }
-        $adm_usr = pg_fetch_object($res,0);
-        $adm_user = $adm_usr->user_name;
+$cTheme = get_theme_info();
+$res = pg_safe_exec("SELECT user_name FROM users WHERE id='" . ($user_id + 0) . "'");
+if (pg_numrows($res) == 0) {
+    echo "Suddenly logged out ?!";
+    die;
+}
+$adm_usr = pg_fetch_object($res, 0);
+$adm_user = $adm_usr->user_name;
 
 
+if ($admin < $min_lvl && !acl(XWEBAXS_3) && !acl(XWEBUSR_TOASTER) && !acl(XWEBUSR_TOASTER_RDONLY)) {
+    echo "Sorry, your admin access is too low.";
+    die;
+}
 
-        if ($admin<$min_lvl && !acl(XWEBAXS_3) && !acl(XWEBUSR_TOASTER) && !acl(XWEBUSR_TOASTER_RDONLY)) {
-        	echo "Sorry, your admin access is too low.";
-        	die;
-        }
-
-	$unf = pg_safe_exec("SELECT count_count FROM counts WHERE count_type=1");
-	if (pg_numrows($unf)==0) {
-		$MAX_UCOUNT = 0;
-	} else {
-		$bla = pg_fetch_object($unf,0);
-		$MAX_UCOUNT = $bla->count_count;
-	}
+$unf = pg_safe_exec("SELECT count_count FROM counts WHERE count_type=1");
+if (pg_numrows($unf) == 0) {
+    $MAX_UCOUNT = 0;
+} else {
+    $bla = pg_fetch_object($unf, 0);
+    $MAX_UCOUNT = $bla->count_count;
+}
 
 echo "<html><head><title>User Toaster</title>";
 std_theme_styles();
@@ -89,6 +99,14 @@ echo "<br><br><a href=\"./index.php\">New search</a>\n";
 $bad_args = 0;
 $less_count=-1;
 if ($MAX_UCOUNT<1000) { $less_count=$MAX_UCOUNT; $MAX_UCOUNT=1000; }
+
+$st = $_POST["st"];
+$or = $_POST["or"];
+$nb = $_POST["nb"];
+$mode = $_POST["mode"];
+$minchan = $_POST["minchan"];
+$listtype = $_POST["listtype"];
+
 
 if ($mode==1) {
 	if ($st<1 || $st>5) { $bad_args=1; }
@@ -109,7 +127,7 @@ if ($mode==1) {
 					if (($minchan+0)<MIN_CHAN_TOASTER_QRY) { $bad_args=1; }
 				} else {
 					if ($mode==6) {
-						if (trim($_GET["cname"])=="") { $bad_args=1; }
+						if (trim($_POST["cname"])=="") { $bad_args=1; }
 						if ($listtype<1 || $listtype>2) { $bad_args=1; }
 
 					} else {
@@ -134,7 +152,7 @@ local_seclog("Show TOASTER LIST mode=[" . $mode . "], st=[" . $st . "], sp=[" . 
 if (isset($da_id_list)) { unset($da_id_list); }
 if (isset($da_username_list)) { unset($da_username_list); }
 
-if ($lookup_apps != 1) { $lookup_apps = 0; }
+$lookup_apps =  $_POST["lookup_apps"] != 1 ? 0 : $_POST["lookup_apps"];
 
 if ($mode==1) {
 	if ($sp=="" && $st!=5) {
@@ -178,7 +196,7 @@ if ($mode==1) {
 	}
 
 	$query = "SELECT users.id FROM users,users_lastseen WHERE users_lastseen.user_id=users.id AND ";
-	if ($_GET["onlyfresh"]==1) { $query .= "(users.flags::int4 & 1)!=1 AND "; } // show only users that are NOT suspended.
+	if ($_POST["onlyfresh"]==1) { $query .= "(users.flags::int4 & 1)!=1 AND "; } // show only users that are NOT suspended.
 	switch($st) {
 		case 1:
 			$query .= "lower(users.user_name) ";
