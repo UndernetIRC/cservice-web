@@ -2007,7 +2007,7 @@ function show_fraud_list($username_or_id_array,$array_type) {
     echo "<input type=hidden name=dnb value=\"" . ($nb+0) . "\">\n";
     echo "<input type=hidden name=dmode value=\"" . ($mode+0) . "\">\n";
     echo "<input type=hidden name=dsp value=\"" . $sp . "\">\n";
-    echo "<input type=hidden name=ccname value=\"" . post2input($_GET["cname"]) . "\">\n";
+    echo "<input type=hidden name=ccname value=\"" . post2input($_REQUEST["cname"]) . "\">\n";
     echo "</form>\n";
     echo "<script language=\"JavaScript1.2\">\n";
     echo "<!--\n";

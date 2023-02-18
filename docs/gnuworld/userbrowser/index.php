@@ -48,9 +48,9 @@ $tot_users = $raw->count;
 
 
 ?>
-<form name="display3" method="post" action="list.php" onsubmit="return check4(this);">
+<form name="display3" method="GET" action="list.php" onsubmit="return check4(this);">
 <input type="hidden" name="mode" value=6>
-Search by CHANNEL&nbsp;<input type="text" name="cname" size="30" maxlength="255" value="#"><select name=""listtype"><option value=1>users</option><option value=2>objections</option></select><br>
+Search by CHANNEL&nbsp;<input type="text" name="cname" size="30" maxlength="255" value="#"><select name="listtype"><option value=1>users</option><option value=2>objections</option></select><br>
 Order by <select name="or">
 <option value=1 selected>Username</option>
 <option value=3>Creation Date</option>
@@ -68,7 +68,7 @@ echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 </form>
 <br><br>
 
-<form name="display0" method="post" action="list.php" onsubmit="return check0(this);">
+<form name="display0" method="GET" action="list.php" onsubmit="return check0(this);">
 <script language="JavaScript1.2">
 <!--
 function checkEmailadd() {
@@ -107,7 +107,7 @@ echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 ?>
 </form>
 <br><br>
-<form name="display1" method="post" action="list.php" onsubmit="return check1(this);">
+<form name="display1" method="GET" action="list.php" onsubmit="return check1(this);">
 <input type="hidden" name="mode" value=2>
 Display last&nbsp;<input type="text" name="nb" size=4 maxlength=4 value=<?
 if ($MAX_UCOUNT<100) { echo $MAX_UCOUNT; } else { echo "100"; }
@@ -130,7 +130,7 @@ echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 ?>
 </form>
 <br><br>
-<form name="display2" method="post" action="list.php" onsubmit="return check2(this);">
+<form name="display2" method="POST" action="list.php" onsubmit="return check2(this);">
 <input type="hidden" name="mode" value=3>
 Paste type : <select name="paste_type">
 <option value=1>Any line containing a +x'd user@host</option>
@@ -158,7 +158,7 @@ echo "<input type=\"hidden\" name=\"lookup_apps\" value=0>\n";
 </form>
 <? if (MIN_CHAN_TOASTER_QRY>0) { ?>
 <br><br>
-<form name="display5" method="post" action="list.php" onsubmit="return check5(this);">
+<form name="display5" method="GET" action="list.php" onsubmit="return check5(this);">
 <input type="hidden" name="mode" value=5>
 Show users with at least <input type="text" name="minchan" size="7" maxlength="5" value=<?=MIN_CHAN_TOASTER_QRY?>> channel accesses ...<br>
 ... in the toaster.&nbsp;&nbsp;<input type="submit" value="Go!">

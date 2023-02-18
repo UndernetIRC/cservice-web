@@ -25,7 +25,7 @@ define("SEND_TOAST_LIST", "toaster@undernet.org");
 $MAX_HIGH_DAYS = 21;
 $MAX_LOW_DAYS = 60;
 
-if ($_POST["mode"] == 2 || $admin >= $min_lvl) {
+if ($_REQUEST["mode"] == 2 || $admin >= $min_lvl) {
     define("ENABLE_DEL_TAG", ENABLE_DELNOREG_TAG);
 } else {
     define("ENABLE_DEL_TAG", 0);
@@ -60,9 +60,9 @@ for ($et = 0; $et < count($enabl_tab); $et++) {
     $first_elt_ever++;
 }
 
-define("F_FRAUD", $F_FRAUD + 0);
-define("F_DELNOREG", $F_DELNOREG + 0);
-define("F_SUSPEND", $F_SUSPEND + 0);
+define("F_FRAUD", $F_FRAUD ?? 0);
+define("F_DELNOREG", $F_DELNOREG ?? 0);
+define("F_SUSPEND", $F_SUSPEND ?? 0);
 
 $cTheme = get_theme_info();
 $res = pg_safe_exec("SELECT user_name FROM users WHERE id='" . ($user_id + 0) . "'");
@@ -100,12 +100,13 @@ $bad_args = 0;
 $less_count=-1;
 if ($MAX_UCOUNT<1000) { $less_count=$MAX_UCOUNT; $MAX_UCOUNT=1000; }
 
-$st = $_POST["st"];
-$or = $_POST["or"];
-$nb = $_POST["nb"];
-$mode = $_POST["mode"];
-$minchan = $_POST["minchan"];
-$listtype = $_POST["listtype"];
+$st = $_REQUEST["st"];
+$sp = $_REQUEST["sp"] ?? "";
+$or = $_REQUEST["or"];
+$nb = $_REQUEST["nb"] ?? 100;
+$mode = $_REQUEST["mode"];
+$minchan = $_REQUEST["minchan"] ?? 0;
+$listtype = $_REQUEST["listtype"] ?? 0;
 
 
 if ($mode==1) {
@@ -120,14 +121,13 @@ if ($mode==1) {
 		if ($mode!=5) { if ($or<1 || $or>7) { $bad_args=1; } }
 		if ($mode!=3) {
 			if ($mode==4) {
-				if (($fl+0)<=0) { $bad_args=1; }
 				if ($or<1 || $or>7) { $bad_args=1; }
 			} else {
 				if ($mode==5) {
 					if (($minchan+0)<MIN_CHAN_TOASTER_QRY) { $bad_args=1; }
 				} else {
 					if ($mode==6) {
-						if (trim($_POST["cname"])=="") { $bad_args=1; }
+						if (trim($_REQUEST["cname"])=="") { $bad_args=1; }
 						if ($listtype<1 || $listtype>2) { $bad_args=1; }
 
 					} else {
@@ -146,13 +146,13 @@ if ($bad_args) {
 	echo "</body></html>\n\n";
 	die;
 }
-
-local_seclog("Show TOASTER LIST mode=[" . $mode . "], st=[" . $st . "], sp=[" . $sp . "], or=[" . $or . "], nb=[" . $nb . "], minchan=[" . $minchan . "], fl=[" . $fl . "], cname=[" . $cname . "].");
+$tmp_cname = array_key_exists("cname", $_REQUEST) ? $_REQUEST["cname"] : "";
+local_seclog("Show TOASTER LIST mode=[" . $mode . "], st=[" . $st . "], sp=[" . $sp . "], or=[" . $or . "], nb=[" . $nb . "], minchan=[" . $minchan . "], cname=[" . $tmp_cname . "].");
 
 if (isset($da_id_list)) { unset($da_id_list); }
 if (isset($da_username_list)) { unset($da_username_list); }
 
-$lookup_apps =  $_POST["lookup_apps"] != 1 ? 0 : $_POST["lookup_apps"];
+$lookup_apps =  $_REQUEST["lookup_apps"] != 1 ? 0 : $_REQUEST["lookup_apps"];
 
 if ($mode==1) {
 	if ($sp=="" && $st!=5) {
@@ -196,7 +196,7 @@ if ($mode==1) {
 	}
 
 	$query = "SELECT users.id FROM users,users_lastseen WHERE users_lastseen.user_id=users.id AND ";
-	if ($_POST["onlyfresh"]==1) { $query .= "(users.flags::int4 & 1)!=1 AND "; } // show only users that are NOT suspended.
+	if (isset($_REQUEST["onlyfresh"])) { $query .= "(users.flags::int4 & 1)!=1 AND "; } // show only users that are NOT suspended.
 	switch($st) {
 		case 1:
 			$query .= "lower(users.user_name) ";
@@ -248,7 +248,7 @@ if ($mode==2) {
        	 	die;
         }
 	$query = "SELECT id FROM users ";
-	if ($_GET["onlyfresh"]==1) { $query .= "WHERE (flags::int4 & 1)!=1 "; } // show only users that are NOT suspended.
+	if ($_REQUEST["onlyfresh"]==1) { $query .= "WHERE (flags::int4 & 1)!=1 "; } // show only users that are NOT suspended.
 	$query .= "ORDER BY id DESC LIMIT " . $nb;
 }
 if ($mode<3) {
@@ -361,6 +361,7 @@ if ($mode==3) {
 	show_fraud_list($da_username_list,2);
 }
 
+/*
 if ($mode==4) {
 	$q = "SELECT users.id FROM users,fraud_list_data WHERE fraud_list_data.list_id='" . $fl . "' AND users.id=fraud_list_data.user_id";
 	$r = pg_safe_exec($q);
@@ -369,6 +370,7 @@ if ($mode==4) {
 	}
 	show_fraud_list($da_id_list,1);
 }
+*/
 
 if ($mode==5) {
 	if (($minchan+0)<MIN_CHAN_TOASTER_QRY) { $minchan = MIN_CHAN_TOASTER_QRY; }
@@ -382,17 +384,17 @@ if ($mode==5) {
 
 if ($mode==6) {
 	if ($listtype == 1) {
-		$qchk = "SELECT COUNT(id) AS count FROM channels WHERE registered_ts>0 AND lower(channels.name)='" . strtolower(trim(post2db($_GET["cname"]))) . "'";
+		$qchk = "SELECT COUNT(id) AS count FROM channels WHERE registered_ts>0 AND lower(channels.name)='" . strtolower(trim(post2db($_REQUEST["cname"]))) . "'";
 		$rchk = pg_safe_exec($qchk);
 		$ochk = pg_fetch_object($rchk);
 	        if ($ochk->count==0) {
-	             	echo "<br><br><b>ERROR</b> - The channel '" . db2disp(post2db($_GET["cname"])) . "' is NOT registered.<br>\n";
+	             	echo "<br><br><b>ERROR</b> - The channel '" . db2disp(post2db($_REQUEST["cname"])) . "' is NOT registered.<br>\n";
 		        echo "<a href=\"javascript:history.go(-1);\">Back</a>\n";
 	        	echo "<br><br>For CService Admins use <b>ONLY</b>.";
 	       	 	echo "</body></html>\n\n";
 	       	 	die;
 	        }
-		$q = "SELECT * FROM channels,levels WHERE channels.registered_ts>0 AND lower(channels.name)='" . strtolower(trim(post2db($_GET["cname"]))) . "' AND levels.channel_id=channels.id AND levels.access>0 ORDER BY access DESC";
+		$q = "SELECT * FROM channels,levels WHERE channels.registered_ts>0 AND lower(channels.name)='" . strtolower(trim(post2db($_REQUEST["cname"]))) . "' AND levels.channel_id=channels.id AND levels.access>0 ORDER BY access DESC";
 		$r = pg_safe_exec($q);
 		while ($o = pg_fetch_object($r)) {
 			$da_id_list[] = $o->user_id;
@@ -402,12 +404,12 @@ if ($mode==6) {
 	if ($listtype == 2) {
 		//$slock = "";
 		$slock = " AND pending.status!=3";
-		$qchk = "SELECT channels.id FROM channels,pending WHERE lower(channels.name)='" . strtolower(trim(post2db($_GET["cname"]))) . "' AND pending.channel_id=channels.id" . $slock;
+		$qchk = "SELECT channels.id FROM channels,pending WHERE lower(channels.name)='" . strtolower(trim(post2db($_REQUEST["cname"]))) . "' AND pending.channel_id=channels.id" . $slock;
 		$rchk = pg_safe_exec($qchk);
 	        if ($ochk = pg_fetch_object($rchk)) {
 	        	$chan_id = $ochk->id;
 	        } else {
-	             	echo "<br><br><b>ERROR</b> - The channel '" . db2disp(post2db($_GET["cname"])) . "' is NOT a valid incoming/pending application.<br>\n";
+	             	echo "<br><br><b>ERROR</b> - The channel '" . db2disp(post2db($_REQUEST["cname"])) . "' is NOT a valid incoming/pending application.<br>\n";
 		        echo "<a href=\"javascript:history.go(-1);\">Back</a>\n";
 	        	echo "<br><br>For CService Admins use <b>ONLY</b>.";
 	       	 	echo "</body></html>\n\n";
