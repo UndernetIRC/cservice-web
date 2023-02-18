@@ -1,20 +1,21 @@
-<?
+<?php
 /* $Id: forgotten_pass.php,v 1.8 2005/11/18 04:19:33 nighty Exp $ */
 require("../../php_includes/cmaster.inc");
+global $min_time_between_requests, $mail_from_pass, $mail_subject_pass;
 $cTheme = get_theme_info();
 std_theme_styles(1);
 std_theme_body();
-if ($_POST["username"]!="" && (int)$_POST["qid"]>0 && $_POST["passphrase"]=="") {
+if (!empty($_POST["username"]) && (int)$_POST["qid"]>0 && empty($_POST["passphrase"])) {
  	echo "<h1>Error<br>\n";
  	echo "you forgot to answer, heh ;)</h1><br><br>\n";
  	echo "<a href=forgotten_pass.php>Back to the begining...</a><br>\n";
  	echo "</body></html>\n\n";
  	die;
 }
-if ($_POST["username"]!="" && $_POST["passphrase"]!="" && (int)$_POST["qid"]>0) {
+if (!empty($_POST["username"]) && !empty($_POST["passphrase"]) && (int)$_POST["qid"]>0) {
         //TODO: Sanitise username
         //TODO: Sanitise passphrase
-        if ($crc != md5( $_POST["username"] . $_SERVER["HTTP_USER_AGENT"] . $_POST["ts"] . CRC_SALT_0002 )) {
+        if ($_POST["crc"] != md5( $_POST["username"] . $_SERVER["HTTP_USER_AGENT"] . $_POST["ts"] . CRC_SALT_0002 )) {
         	echo "<h1>Error<br><br>Please use the regular page.</h1>\n";
         	echo "<a href=forgotten_pass.php>click here</a>.";
         	echo "</body></html>\n\n";
@@ -28,18 +29,18 @@ if ($_POST["username"]!="" && $_POST["passphrase"]!="" && (int)$_POST["qid"]>0) 
 <h1>Error</h1>
 The PASSPHRASE entered is not valid.  Please check it and make sure it is correct</h1>
 <a href="forgotten_pass.php">Try again.</a><br><br>
-<?
+<?php
 ip_check($username,1);
 echo "If you forgot your verification answer then go to the <a href=\"forms/pwreset.php?p_username=$username\">Verification Question/Answer Reset Form</a>\n";
 ?>
 </body>
 </html>
-<?
-                die;
+<?php
+            die;
         } else {
 		$user=pg_fetch_object($res,0);
 		$tst=pg_safe_exec("select last_request_ts from lastrequests where ip='" . cl_ip() . "'");
-		if ($tst && time()-$tst<$min_time_between_requests) {
+		if ($tst && (time()-(int)$tst) < $min_time_between_requests) {
 			echo "<h1>Error</h1><h3><br>\nYour IP (" . cl_ip() . ") is trying to reconnect too fast -- Throttled.</h3>\n";
 			echo "</body></html>\n\n";
 			die;
@@ -48,10 +49,11 @@ echo "If you forgot your verification answer then go to the <a href=\"forms/pwre
 		$password="";
 		srand((double) microtime() * 1000000);
 		for ($i=0;$i<8;$i++) {
-			$password=$password . $valid[rand(0,strlen($valid)-1)];
-		}
+			$password .= $valid[rand(0,strlen($valid)-1)];
+        }
+        $salt = "";
 		for ($i=0;$i<8;$i++) {
-			$salt=$salt . $valid[rand(0,strlen($valid)-1)];
+			$salt .= $valid[rand(0,strlen($valid)-1)];
 		}
 		$crypt=$salt . md5($salt . $password);
 		$doconf = 0;
@@ -140,14 +142,14 @@ echo "If you forgot your verification answer then go to the <a href=\"forms/pwre
 <html>
 <head><title>Forgotten Password recovery</title></head>
 <?std_theme_body()?>
-<form method=POST action=get_newpass.php>
-<input type=hidden name=ts value=<? echo $zets ?>>
-<input type=hidden name=crc value=<? echo $zecrc ?>>
+<form method="POST" action="get_newpass.php">
+<input type="hidden" name="ts" value=<? echo $zets ?>>
+<input type="hidden" name="crc" value=<? echo $zecrc ?>>
 <h1>Forgotten Password Recovery</h1>
 Please enter the user name to recover :
-<input type=text name=username><br><br>
+<input type="text" name="username"><br><br>
 
-<input type=submit value="Process to next step >>">
+<input type="submit" value="Process to next step >>">
 </form>
 </body>
 </html>

@@ -1,48 +1,55 @@
-<?
+<?php
 /* $Id: toast_this.php,v 1.14 2005/03/07 14:10:51 nighty Exp $ */
 
-	$debug_me = 0; // set to 1 to enable debug messages (no actions).
-	$use_redir = 0; // Use a HTTP/302 redirection (0: use a JavaScript redirection : fixes some issues with HTTP timeouts on 'no data')
-	ignore_user_abort(true);
-	unset($min_lvl);
-	$min_lvl=800;
+$debug_me = 0; // set to 1 to enable debug messages (no actions).
+$use_redir = 0; // Use a HTTP/302 redirection (0: use a JavaScript redirection : fixes some issues with HTTP timeouts on 'no data')
+ignore_user_abort(true);
+unset($min_lvl);
+$min_lvl = 800;
 
-	$noreg_username = 0; // 1 = noreg user as with email, 0 = noreg only email, both for period below.
-	$days_noreg_with_del = 7; // <1 = forever
+$noreg_username = 0; // 1 = noreg user as with email, 0 = noreg only email, both for period below.
+$days_noreg_with_del = 7; // <1 = forever
 
-	require("../../../php_includes/cmaster.inc");
-	std_connect();
-        $user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
-        $admin = std_admin();
-	$cTheme = get_theme_info();
-	unset($can_toast);
+require("../../../php_includes/cmaster.inc");
+std_connect();
+$user_id = isset($_COOKIE["auth"]) ? std_security_chk($_COOKIE["auth"]) : 0;
+$admin = std_admin();
+$cTheme = get_theme_info();
+unset($can_toast);
+$can_toast = 0;
+if (acl(XWEBUSR_TOASTER)) {
+	$can_toast = 1;
+}
+if (acl(XWEBUSR_TOASTER_RDONLY)) {
 	$can_toast = 0;
-	if (acl(XWEBUSR_TOASTER)) { $can_toast = 1; }
-	if (acl(XWEBUSR_TOASTER_RDONLY)) { $can_toast = 0; }
-	if ($admin>=$min_lvl) { $can_toast = 1; }
+}
+if ($admin >= $min_lvl) {
+	$can_toast = 1;
+}
 
-	if ($can_toast==0) {
-		echo "<html><head><title>User Toaster - Access Error</title>";
-		std_theme_styles();
-		echo "</head>";
-		std_theme_body("../");
-		echo "<b>User Toaster</b> (Hunting Fraud Usernames) ";
-		echo "<h1>Sorry, only " . $min_lvl . "+/ACL can toast usernames !</h1>\n";
-		echo "<br><br><a href=\"javascript:history.go(-1);\">Back</a>\n";
-		echo "</body></html>\n\n";
-		die;
-	}
-        $res = pg_safe_exec("SELECT user_name FROM users WHERE id='$user_id'");
-        if (pg_numrows($res)==0) {
-        	echo "Suddenly logged out ?!";
-        	die;
-        }
-        $adm_usr = pg_fetch_object($res,0);
-        $adm_user = $adm_usr->user_name;
-        if ($admin<$min_lvl && !acl(XWEBAXS_3) && !acl(XWEBUSR_TOASTER)) {
-        	echo "Sorry, your admin access is too low.";
-        	die;
-        }
+if ($can_toast == 0) {
+	echo "<html><head><title>User Toaster - Access Error</title>";
+	std_theme_styles();
+	echo "</head>";
+	std_theme_body("../");
+	echo "<b>User Toaster</b> (Hunting Fraud Usernames) ";
+	echo "<h1>Sorry, only " . $min_lvl . "+/ACL can toast usernames !</h1>\n";
+	echo "<br><br><a href=\"javascript:history.go(-1);\">Back</a>\n";
+	echo "</body></html>\n\n";
+	die;
+}
+$res = pg_safe_exec("SELECT user_name FROM users WHERE id='$user_id'");
+if (pg_numrows($res) == 0) {
+	echo "Suddenly logged out ?!";
+	die;
+}
+$adm_usr = pg_fetch_object($res, 0);
+$adm_user = $adm_usr->user_name;
+if ($admin < $min_lvl && !acl(XWEBAXS_3) && !acl(XWEBUSR_TOASTER)) {
+	echo "Sorry, your admin access is too low.";
+	die;
+}
+$id = $_POST["id"] ?? [];
 $gcount = count($id);
 $mmsg = ""; $mail_lines=0;
 if (preg_match("/^[A-Za-z0-9\._-]+\@[A-Za-z0-9\._-]+\.[A-Za-z][A-Za-z]+$/",$_POST["sendlist"])) { $send_mail = 1; } else { $send_mail = 0; }
@@ -73,10 +80,11 @@ if ($send_mail) {
 	$mmsg .= "\n\n";
 }
 if ($debug_me) { echo "\n<a href=\"javascript:history.go(-1);\">&lt;&lt;&nbsp;Back</a>\n\n"; }
-$freason_ok = str_replace("'","\'",$freason);
-$dreason_ok = str_replace("'","\'",$dreason);
+$freason_ok = str_replace("'","\'",$_POST["freason"] ?? "");
+$dreason_ok = str_replace("'","\'",$_POST["dreason"] ?? "");
 
-local_seclog("Toast! mode=[" . $_POST["dmode"] . "], st=[" . $_POST["dstatus"] . "], sp=[" . $_POST["dsp"] . "], or=[" . $_POST["dorder"] . "], nb=[" . $_POST["dnb"] . "], cname=[" . $_POST["ccname"] . "].");
+$tmp_cname = $_POST["cname"] ?? "";
+local_seclog("Toast! mode=[" . $_POST["dmode"] . "], st=[" . $_POST["dstatus"] . "], sp=[" . $_POST["dsp"] . "], or=[" . $_POST["dorder"] . "], nb=[" . $_POST["dnb"] . "], cname=[" . $tmp_cname . "].");
 
 if ($use_redir==0 && $debug_me==0) {
 	echo "<html><head><title>User Toaster</title></head>\n";
@@ -96,9 +104,9 @@ for ($x=0;$x<$gcount;$x++) {
 	if ($debug_me) { echo "User ID : <b>" . $id[$x] . "</b>"; }
 	if ($send_mail) { $t_mmsg .= "User ID : " . $id[$x]; }
 	if ($debug_me) { echo "\tDel/Noreg : <b>"; }
-	if ($$delnoreg==1) {
+	if (isset($_POST[$delnoreg])) {
 		if ($admin<$min_lvl) { die("Sorry you can't do that ;)"); }
-		if ($debug_me) { echo $$delnoreg; }
+		if ($debug_me) { echo $_POST[$delnoreg]; }
 		unset($del_q);
 		$del_q[] = "DELETE FROM acl WHERE user_id='" . $id[$x] . "'";
 		$del_q[] = "DELETE FROM levels WHERE user_id='" . $id[$x] . "'";
@@ -112,8 +120,8 @@ for ($x=0;$x<$gcount;$x++) {
 		$del_q[] = "DELETE FROM users_lastseen WHERE user_id='" . $id[$x]. "'";
 		$del_q[] = "DELETE FROM users WHERE id='" . $id[$x] . "'";
 		$nr_q = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES (";
-		if ($noreg_username == 1) { $nr_q .= "'" . $username[$x] . "',"; } else { $nr_q .= "'',"; }
-		$nr_q .= "'" . $email[$x] . "','',2,";
+		if ($noreg_username == 1) { $nr_q .= "'" . $_POST["username"][$x] . "',"; } else { $nr_q .= "'',"; }
+		$nr_q .= "'" . $_POST["email"][$x] . "','',2,";
 		if ($days_noreg_with_del < 1) { //forever
 			$nr_q .= "1,0,0,";
 		} else {
@@ -136,19 +144,19 @@ for ($x=0;$x<$gcount;$x++) {
 		}
 		if ($debug_me) { echo "</b>\tFraud Tag : <b>-</b>\tSuspend Tag : <b>-"; }
 		if ($debug_me) {
-			echo "</b>\tFlagList+ : <b>-</b>\tUser Name : <b>" . $username[$x] . "</b>";
-			if (strlen($username[$x]<4)) { echo "\t"; }
-			if (strlen($username[$x]<=10)) { echo "\t"; }
-			echo "\tEMail : <b>" . $email[$x] . "</b>\n" . $query;
+			echo "</b>\tFlagList+ : <b>-</b>\tUser Name : <b>" . $_POST["username"][$x] . "</b>";
+			if (strlen($_POST["username"][$x]<4)) { echo "\t"; }
+			if (strlen($_POST["username"][$x]<=10)) { echo "\t"; }
+			echo "\tEMail : <b>" . $_POST["email"][$x] . "</b>\n" . $query;
 		}
 	} else {
 		if ($debug_me) { echo "0</b>"; }
 		if ($debug_me) { echo "\tFraud Tag : <b>"; }
-		$bla = pg_safe_exec("SELECT * FROM noreg WHERE user_name='" . $username[$x] . "' AND type=4");
+		$bla = pg_safe_exec("SELECT * FROM noreg WHERE user_name='" . $_POST["username"][$x] . "' AND type=4");
 		if (pg_numrows($bla)>0) { $notalready=0; }
-		if ($$fraud==1 && $notalready) {
-			if ($debug_me) { echo $$fraud; }
-			$daq = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('" . $username[$x] . "','" . $email[$x] . "','',4,1,0,0,date_part('epoch', CURRENT_TIMESTAMP)::int,'" . $adm_user . "','" . $freason_ok . "')";
+		if (isset($_POST[$fraud]) && $notalready) {
+			if ($debug_me) { echo $_POST[$fraud]; }
+			$daq = "INSERT INTO noreg (user_name,email,channel_name,type,never_reg,for_review,expire_time,created_ts,set_by,reason) VALUES ('" . $_POST["username"][$x] . "','" . $_POST["email"][$x] . "','',4,1,0,0,date_part('epoch', CURRENT_TIMESTAMP)::int,'" . $adm_user . "','" . $freason_ok . "')";
 			$prereq = "SELECT flags FROM users WHERE id='" . $id[$x] . "'";
 			$preres = pg_safe_exec($prereq);
 			$prerow = pg_fetch_object($preres,0);
@@ -177,7 +185,7 @@ for ($x=0;$x<$gcount;$x++) {
 		if ((int)$ols->flags & 0x0001) { // suspended already
 			if ($debug_me) { echo "*"; }
 		} else {
-			if ($$suspend==1) {
+			if (isset($_POST[$suspend])) {
 				if ($debug_me) { echo "1"; }
 				if ($send_mail) { $mmsg .= $t_mmsg; }
 				$new_u_flags = (int)$ols->flags|0x0001; // global Suspension tag
@@ -185,7 +193,7 @@ for ($x=0;$x<$gcount;$x++) {
 				if (!$debug_me) { // take action
 					unset($raction);
 					$raction = pg_safe_exec($query);
-					log_user($id[$x],1,"global suspend for %U (%I) [toaster: " . str_replace("'","'",$_POST[sreason]) . "]");
+					log_user($id[$x],1,"global suspend for %U (%I) [toaster: " . str_replace("'","'",$_POST["sreason"]) . "]");
 				} else {
 					$query2 = "\n\t<i>" . $query;
 					$query2 .= "</i>";
@@ -195,8 +203,8 @@ for ($x=0;$x<$gcount;$x++) {
 			}
 		}
 
-		if ($$flagList!="") {
-			$checkFL = pg_safe_exec("SELECT id FROM fraud_lists WHERE lower(name)='" . strtolower($$flagList) . "'");
+		if (!empty($_POST[$flagList])) {
+			$checkFL = pg_safe_exec("SELECT id FROM fraud_lists WHERE lower(name)='" . strtolower($_POST[$flagList]) . "'");
 			if (pg_numrows($checkFL)>0) { // already an existing list ... check the user
 				$FLobj = pg_fetch_object($checkFL);
 				$checkU = pg_safe_exec("SELECT * FROM fraud_list_data WHERE user_id='" . $id[$x] . "' AND list_id='" . $FLobj->id . "'");
@@ -209,11 +217,11 @@ for ($x=0;$x<$gcount;$x++) {
 					}
 				}
 			} else { // create the list and add the user in it...
-				$queryA = "INSERT INTO fraud_lists (name) VALUES ('" . strtoupper($$flagList) . "')";
+				$queryA = "INSERT INTO fraud_lists (name) VALUES ('" . strtoupper($_POST[$flagList]) . "')";
 				$last_ID = "??";
 				if ($debug_me) { $query3 = "\t<i>" . $queryA . "\n"; } else {
 					$resA = pg_safe_exec($queryA);
-					$checkA = pg_safe_exec("SELECT id FROM fraud_lists WHERE name='" . strtoupper($$flagList) . "'");
+					$checkA = pg_safe_exec("SELECT id FROM fraud_lists WHERE name='" . strtoupper($_POST[$flagList]) . "'");
 					$objA = pg_fetch_object($checkA);
 					$last_ID = $objA->id;
 				}
@@ -224,8 +232,8 @@ for ($x=0;$x<$gcount;$x++) {
 			}
 		}
 
-		if ($$flagListR!="") {
-			$ttt = str_replace(" ","",$$flagListR);
+		if (!empty($_POST[$flagListR])) {
+			$ttt = str_replace(" ","",$_POST[$flagListR]);
 			$ttt2 = explode(",",$ttt);
 			for ($zz=0;$zz<count($ttt2);$zz++) {
 				$unf0 = pg_safe_exec("SELECT id FROM fraud_lists WHERE lower(name)='" . strtolower($ttt2[$zz]) . "'");
@@ -246,20 +254,20 @@ for ($x=0;$x<$gcount;$x++) {
 
 		if ($debug_me) {
 			echo "</b>\tFlagList+ : <b>";
-			if ($$flagList=="") { echo "-"; } else { echo $$flagList; }
-			echo "</b>\tUser Name : <b>" . $username[$x] . "</b>";
-			if (strlen($username[$x])<4) { echo "\t"; }
-			if (strlen($username[$x])<=10) { echo "\t"; }
-			echo "\tEMail : <b>" . $email[$x] . "</b>\n" . $query1 . $query2 . $query3;
+			if (empty($_POST[$flagList])) { echo "-"; } else { echo $_POST[$flagList]; }
+			echo "</b>\tUser Name : <b>" . $_POST["username"][$x] . "</b>";
+			if (strlen($_POST["username"][$x])<4) { echo "\t"; }
+			if (strlen($_POST["username"][$x])<=10) { echo "\t"; }
+			echo "\tEMail : <b>" . $_POST["email"][$x] . "</b>\n" . $query1 . $query2 . $query3;
 			if ($query1 != "" || $query2 != "" || $query3 != "") { $had_q_out = 1; }
 			$query1 = ""; $query2 = ""; $query3 = "";
 		}
-		if ($send_mail && $$suspend==1) {
+		if ($send_mail && $_POST[$suspend]==1) {
 			$mmsg .="\tFlagList+ : ";
-			if ($$flagList=="") { $mmsg .= "-"; }else { $mmsg .= $$flagList; }
-			$mmsg .="\tUser Name : " . $username[$x];
-			if (strlen($username[$x])<4) { $mmsg .= "\t"; }
-			if (strlen($username[$x])<=10) { $mmsg .= "\t"; }
+			if (empty($_POST[$flagList])) { $mmsg .= "-"; }else { $mmsg .= $_POST[$flagList]; }
+			$mmsg .="\tUser Name : " . $_POST["username"][$x];
+			if (strlen($_POST["username"][$x])<4) { $mmsg .= "\t"; }
+			if (strlen($_POST["username"][$x])<=10) { $mmsg .= "\t"; }
 			$mmsg .= "\tSignup IP : " . $ols->signup_ip;
 			if (strlen($ols->signup_ip)<12) { $mmsg .= "\t"; }
 			if ($ols->signup_ip=="") { $mmsg .= "\t"; }
@@ -270,16 +278,16 @@ for ($x=0;$x<$gcount;$x++) {
 			$mmsg .= "\tVerif.Answer : " . $ols->verificationdata;
 			if (strlen($ols->verificationdata)<9) { $mmsg .= "\t"; }
 			if ($ols->verificationdata=="") { $mmsg .= "\t"; }
-			$mmsg .= "\tEMail : " . $email[$x] . "\n";
+			$mmsg .= "\tEMail : " . $_POST["email"][$x] . "\n";
 			$mail_lines++;
 		}
 	}
 }
 
-if ($debug_me) { echo "\n\nFRAUD Reason : <b>" . $freason . "</b>\n"; }
-if ($debug_me) { echo "\n\nDEL/NOREG Reason : <b>" . $dreason . "</b>\n"; }
-if ($debug_me) { echo "\n\nSUSPEND Reason : <b>" . $sreason . "</b>\n"; }
-if ($send_mail) { $mmsg .="\n\nSUSPEND Reason : " . $sreason . "\n"; }
+if ($debug_me) { echo "\n\nFRAUD Reason : <b>" . $_POST["freason"] . "</b>\n"; }
+if ($debug_me) { echo "\n\nDEL/NOREG Reason : <b>" . $_POST["dreason"] . "</b>\n"; }
+if ($debug_me) { echo "\n\nSUSPEND Reason : <b>" . $_POST["sreason"] . "</b>\n"; }
+if ($send_mail) { $mmsg .="\n\nSUSPEND Reason : " . $_POST["sreason"] . "\n"; }
 if ($debug_me) { echo "\n\n<a href=\"javascript:history.go(-1);\">&lt;&lt;&nbsp;Back</a>\n"; }
 if ($debug_me && $send_mail) {
 	if ($mail_lines==0) { echo "No mail will be sent (no actions !)\n\n"; } else { echo "Mail to be sent to " . $_POST["sendlist"] . "\n\n"; }
@@ -305,5 +313,3 @@ if ($use_redir) {
 	echo "</body>\n";
 	echo "</html>\n\n";
 }
-die;
-?>
