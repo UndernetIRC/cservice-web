@@ -1,58 +1,58 @@
 <?
 
-	$CAN_EDIT = 1;
-	$CAN_ADD = 2;
+        $CAN_EDIT = 1;
+        $CAN_ADD = 2;
 $ENABLE_COOKIE_TABLE=0;
-	$lang_id = $langid;
 
-	include("../../../php_includes/cmaster.inc");
-	std_init();
-	$cTheme = get_theme_info();
+        include("../../../php_includes/cmaster.inc");
+        std_init();
+        $cTheme = get_theme_info();
 
-	$FORCE_GET = 1;
-	if (!acl(XHELP)) {
-		echo "You are not allowed to use that page.";
-		die;
-	}
+        $FORCE_GET = 1;
+        if (!acl(XHELP)) {
+                echo "You are not allowed to use that page.";
+                die;
+        }
 
-	$lang_test = $ACL_XTRA;
-	if ($lang_test!=0 && $lang_test!=$lang_id && $admin<800) {
-		echo "You are not allowed to use that page.";
-		die;
-	}
+        $lang_test = $ACL_XTRA;
+        if ($lang_test!=0 && $lang_test!=$lang_id && $admin<800) {
+                echo "You are not allowed to use that page.";
+                die;
+        }
 
-	$res2 = pg_safe_exec("SELECT * FROM languages WHERE id='$lang_id'");
-	if (pg_numrows($res2)==0) {
-		echo "Invalid Language ID, sorry.";
-		die;
-	}
-	$row2 = pg_fetch_object($res2,0);
-	$lang_name = $row2->name;
-	if (!acl(XHELP_CAN_EDIT)) {
-		echo "You are not allowed to use that page. (Permission denied)";
-		die;
-	}
+        $res2 = pg_safe_exec("SELECT * FROM languages WHERE id='$langid'");
+        if (pg_numrows($res2)==0) {
+                echo "Invalid Language ID, sorry.";
+                die;
+        }
 
-	$tst = pg_safe_exec("SELECT * FROM help WHERE topic='" . strtoupper($cmdname) . "' AND language_id='$lang_id'");
-	if (pg_numrows($tst)==0) {
-		echo "Nonexistent COMMAND NAME for specified language ID.";
-		die;
-	} else {
-		$thecmd = pg_fetch_object($tst,0);
-	}
+        $row2 = pg_fetch_object($res2,0);
+        $lang_name = $row2->name;
+        if (!acl(XHELP_CAN_EDIT)) {
+                echo "You are not allowed to use that page. (Permission denied)";
+                die;
+        }
 
-	if ($crc == md5($HTTP_USER_AGENT . $ts . $user_id)) {
+        $tst = pg_safe_exec("SELECT * FROM help WHERE topic='" . strtoupper($cmdname) . "' AND language_id='$langid'");
+        if (pg_numrows($tst)==0) {
+                echo "Nonexistent COMMAND NAME for specified language ID.";
+                die;
+        } else {
+                $thecmd = pg_fetch_object($tst,0);
+        }
 
-		$contents_ok = str_replace("\\\"","\"",str_replace("\n","\\n",str_replace("\r","",$contents)));
+        if ($crc == md5($HTTP_USER_AGENT . $ts . $user_id)) {
 
-		$query = "UPDATE help SET contents=E'$contents_ok' WHERE topic='" . strtoupper($cmdname) . "' AND language_id='$lang_id'";
+                $contents_ok = str_replace("\\\"","\"",str_replace("\n","\\n",str_replace("\r","",$contents)));
 
-		//echo $query;
-		pg_safe_exec($query);
+                $query = "UPDATE help SET contents=E'$contents_ok' WHERE topic='" . strtoupper($cmdname) . "' AND language_id='$langid'";
 
-		header("Location: edit.php?lang_id=$lang_id");
-		die;
-	}
+                //echo $query;
+                pg_safe_exec($query);
+
+                header("Location: edit.php?lang_id=$langid");
+                die;
+        }
 
 ?>
 <html>
@@ -61,16 +61,16 @@ $ENABLE_COOKIE_TABLE=0;
 </head>
 <? std_theme_body("../"); ?>
 <h2><b>Edit HELP TEXT for '<? echo $cmdname ?>' (<? echo $lang_name ?>)</b><br></h2>
-<a href="edit.php?lang_id=<? echo $lang_id ?>">&lt;&lt;&nbsp;Back</a>
+<a href="edit.php?lang_id=<? echo $langid ?>">&lt;&lt;&nbsp;Back</a>
 
 <form name=editcmd action=edit_cmd.php method=post>
 <?
-	$zets = time();
-	$zecrc = md5($HTTP_USER_AGENT . $zets . $user_id);
-	echo "<input type=hidden name=ts value=$zets>\n";
-	echo "<input type=hidden name=crc value=$zecrc>\n";
-	echo "<input type=hidden name=langid value=$langid>\n";
-	echo "<input type=hidden name=cmdname value=\"$cmdname\">\n";
+        $zets = time();
+        $zecrc = md5($HTTP_USER_AGENT . $zets . $user_id);
+        echo "<input type=hidden name=ts value=$zets>\n";
+        echo "<input type=hidden name=crc value=$zecrc>\n";
+        echo "<input type=hidden name=langid value=$langid>\n";
+        echo "<input type=hidden name=cmdname value=\"$cmdname\">\n";
 
 ?>
 <table border=0 cellspacing=1 cellpadding=3>
