@@ -158,7 +158,7 @@ function set_text($allowed,&$text,$value)
 
 if (isset($button) && $button == "Save Changes") {
 	// I really should have thought of a for loop sooner..
-	if (((is_suspended($user_id,$channel->name)==1) || ((is_suspended("",$channel->name)==1)) && ($admin==0)) || (($admin==0) && (int)$channel->flags & 0x00000010)) {
+	if (((is_suspended($user_id,$channel->name)==1) || ((is_suspended("",$channel->name)==1)) && ($admin==0)) || (($admin==0) && (int)$channel->flags & 0x00000100)) {
 		echo "Not allowed.";
 		die;
 	}
@@ -177,7 +177,6 @@ if (isset($button) && $button == "Save Changes") {
 	set_flag($access>=$level_set_strictop ,$channel->flags,0x00020000,$strictop);
 	set_flag($access>=$level_set_noop     ,$channel->flags,0x00040000,$noop);
 	set_flag($access>=$level_set_autotopic,$channel->flags,0x00080000,$autotopic);
-	set_flag($access>=$level_set_autojoin,$channel->flags,0x00200000,$autojoin);
 
 	set_number($access>=$level_set_massdeoppro,$channel->mass_deop_pro,$massdeop,0,10);
 	set_number($access>=$level_set_floodpro   ,$channel->flood_pro,$floodpro,0,20);
@@ -374,11 +373,11 @@ if (($access >= $level_status) || ($admin > 0)) {
 		echo("<tr><td colspan=2 bgcolor=#" . $cTheme->table_sepcolor . "><font size=-1 color=#" . $cTheme->table_septextcolor . "><em><b>Channel Settings</font></b></em></td></tr><tr><td colspan=2><font size=-1>");
 
 
-	if (!$force && $edit && (int)$channel->flags & 0x000000100) {
+	if (!$force && $edit && (int)$channel->flags & 0x00000100) {
 		echo "<font color=#ff1111><b>Cannot EDIT channel, it is LOCKED !</b></font><br><br>\n";
 	}
 
-	if (((is_suspended($user_id,$channel->name)==1) || ((is_suspended("",$channel->name)==1)) && ($admin==0)) || ((int)$channel->flags & 0x00000010)) {
+	if (((is_suspended($user_id,$channel->name)==1) || ((is_suspended("",$channel->name)==1)) && ($admin==0)) || ((int)$channel->flags & 0x00000100)) {
 		$edit = 0;
 	}
 
@@ -392,7 +391,7 @@ if (($access >= $level_status) || ($admin > 0)) {
 		flag($edit && $access>=$level_set_tempman,(int)$channel->flags & 0x00000020,"* Temp Manager","tempman","Y");
 		flag($edit && $access>=$level_set_caution,(int)$channel->flags & 0x00000040,"* Cautioned","cautioned","Y");
 		flag($edit && $access>=$level_set_caution,(int)$channel->flags & 0x00000080,"* Manager on vacation","vacation","Y");
-		flag($edit && $access>=$level_set_locked,(int)$channel->flags & 0x000000100, "* Channel Locked","secret","Y");
+		flag($edit && $access>=$level_set_secret,(int)$channel->flags & 0x000000100, "* Channel Locked","secret","Y");
 
 		//flag($edit && $access>=$level_set_alwaysop,(int)$channel->flags & 0x00010000," Always Op","alwaysop","Y");
 		flag($edit && $access>=$level_set_strictop,(int)$channel->flags & 0x00020000," Strict Op","strictop","Y");
@@ -469,7 +468,7 @@ if ($access>=$level_status) {
 	<input type=hidden name=id value=\"$channel->id\">\n");
 	echo "<input type=hidden name=action value=\"edit\">";
 	echo("<input type=hidden name=\"target\" value=\"channel\">
-    <input type=\"hidden\" value=\"Edit Settings\"> 
+	<input type=\"submit\" value=\"Edit Settings\">
 	</form></td> ");
 	if ($admin < 1) { echo "</tr>"; }
 }
@@ -502,7 +501,7 @@ if (!$noedit && $edit) {
 
 echo "</table><br><br>";
 if ($edit && $access>=400) {
-/* php?>
+php?>
 
 <h3>Add a user to this channel</h3>
 <form method="post">
@@ -512,7 +511,7 @@ if ($edit && $access>=400) {
 </table>
 <input type="submit" name="button" value="Add this user">
 </form>
-<?php */
+<?php
 
 }
 
@@ -573,7 +572,7 @@ if (pg_numrows($levels)==0) {
 
 echo("</table>");
 
-$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE (expires=0 OR expires>date_part('epoch', CURRENT_TIMESTAMP)::int) AND channel_id=$channel->id order by set_ts desc");
+$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE (expires=0 OR expires>extract(epoch FROM now())::int) AND channel_id=$channel->id order by set_ts desc");
 
 if (pg_numrows($bans)!=0) {
 echo(" <br><br>
