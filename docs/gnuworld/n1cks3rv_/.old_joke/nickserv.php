@@ -35,7 +35,7 @@ if (trim($_POST["nickname"])!="" && check_secure_form("nickserv")) {
 	$rc = pg_safe_exec("SELECT COUNT(id) AS count FROM nickserv WHERE lower(nickname)='" . strtolower(trim($_POST["nickname"])) . "'");
 	$ro = pg_fetch_object($rc);
 	if ($ro->count==0) {
-		$q = "INSERT INTO nickserv (nickname, user_id, ts) VALUES ('" . post2db(trim($_POST["nickname"])) . "', " . (int)$user_id . ", now()::abstime::int4)";
+		$q = "INSERT INTO nickserv (nickname, user_id, ts) VALUES ('" . post2db(trim($_POST["nickname"])) . "', " . (int)$user_id . ", date_part('epoch', CURRENT_TIMESTAMP)::int)";
 		pg_safe_exec($q);
 
 		echo "<h3>You successfully reserved '" . trim($_POST["nickname"]) . "' for pre-registration to Nickserv !</h3><br>\n";

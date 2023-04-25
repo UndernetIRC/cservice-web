@@ -572,7 +572,7 @@ if (pg_numrows($levels)==0) {
 
 echo("</table>");
 
-$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE (expires=0 OR expires>date_part('epoch', CURRENT_TIMESTAMP)::int) AND channel_id=$channel->id order by set_ts desc");
+$bans = pg_safe_exec("SELECT channel_id,id,banmask,set_by,set_ts,level,expires,reason FROM bans WHERE (expires=0 OR expires>extract(epoch FROM now())::int) AND channel_id=$channel->id order by set_ts desc");
 
 if (pg_numrows($bans)!=0) {
 echo(" <br><br>
