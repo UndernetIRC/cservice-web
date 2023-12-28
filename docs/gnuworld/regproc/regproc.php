@@ -654,7 +654,7 @@ if (!$lastreq) {
 	die("Fatal Error while processing application (ins_pend): <a href=\"javascript:history.go(-1);\">click here</a>.\n");
 }
 
-if (count($supporters)!=REQUIRED_SUPPORTERS) {
+if (is_countable($supporters) && (count($supporters)!=REQUIRED_SUPPORTERS)) {
 	pg_safe_exec("ROLLBACK WORK");
 	die("Fatal Error while processing application (nb_supp) : <a href=\"javascript:history.go(-1);\">click here</a>.\n");
 }
