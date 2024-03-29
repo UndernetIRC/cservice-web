@@ -21,6 +21,7 @@ if (!empty($_GET["ID"]) && strlen($_GET["ID"]) <= 128) {
 		echo "</body></html>";
 		exit;
 	}
+        pg_safe_exec("UPDATE pending_mgrchange SET confirmed='1' WHERE crc='" . $_GET["ID"] . "'");
 	$query = sprintf("SELECT pm.channel_id, c.name FROM pending_mgrchange pm INNER JOIN channels c on c.id = pm.channel_id WHERE pm.crc = '%s'", $_GET["ID"]);
 	$res = pg_safe_exec($query);
 	$channel = pg_fetch_object($res,0);
