@@ -3,7 +3,7 @@
 	$CAN_EDIT = 1;
 	$CAN_ADD = 2;
 $ENABLE_COOKIE_TABLE=0;
-	$lang_id = $langid;
+	$lang_id = $lang_id;
 
 	include("../../../php_includes/cmaster.inc");
 	std_init();
@@ -69,7 +69,7 @@ $ENABLE_COOKIE_TABLE=0;
 	$zecrc = md5($HTTP_USER_AGENT . $zets . $user_id);
 	echo "<input type=hidden name=ts value=$zets>\n";
 	echo "<input type=hidden name=crc value=$zecrc>\n";
-	echo "<input type=hidden name=langid value=$langid>\n";
+	echo "<input type=hidden name=lang_id value=$lang_id>\n";
 	echo "<input type=hidden name=cmdname value=\"$cmdname\">\n";
 
 ?>
