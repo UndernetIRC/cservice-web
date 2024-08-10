@@ -44,7 +44,7 @@ $ENABLE_COOKIE_TABLE=0;
 <?
 if (acl(XHELP_CAN_ADD)) {
 	echo "<form name=addcmd action=add_cmd.php method=get>\n";
-	echo "<input type=hidden name=langid value=$lang_id>\n";
+	echo "<input type=hidden name=lang_id value=$lang_id>\n";
 	echo "<li>&nbsp;Add COMMAND named <input type=text name=cmdname size=20 maxlength=20>&nbsp;&nbsp;<input type=submit value=Go!>\n";
 	echo "</form>\n";
 }
@@ -64,7 +64,7 @@ if (pg_numrows($ras)==0) {
 	for ($x=0;$x<pg_numrows($ras);$x++) {
 		$roo = pg_fetch_object($ras,$x);
 		echo "<tr bgcolor=#" . $cTheme->table_bgcolor . ">\n";
-		echo "<td valign=top width=20%><a href=\"edit_cmd.php?langid=$lang_id&cmdname=$roo->topic\">" . $roo->topic . "</a></td>\n";
+		echo "<td valign=top width=20%><a href=\"edit_cmd.php?lang_id=$lang_id&cmdname=$roo->topic\">" . $roo->topic . "</a></td>\n";
 		if (trim($roo->contents)=="") {
 			echo "<td valign=top width=80%><font color=#" . $cTheme->main_no . "><i>no help text available</i></font></td>\n";
 		} else {
