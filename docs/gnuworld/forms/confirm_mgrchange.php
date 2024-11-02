@@ -11,7 +11,7 @@ if($loadavg5 >= (2*CRIT_LOADAVG))
 $cTheme = get_theme_info();
 $pattern = '/^[0-9a-f]+$/';
 
-if (!empty($_GET["ID"]) && preg_match($pattern, $_GET["ID"]) {
+if (!empty($_GET["ID"]) && preg_match($pattern, $_GET["ID"])) {
 	std_connect();
 	pg_safe_exec("delete from pending_mgrchange where expiration<date_part('epoch', CURRENT_TIMESTAMP)::int AND confirmed='0'");
  	$res=pg_safe_exec("select * from pending_mgrchange where crc='" . $_GET["ID"] . "' AND expiration>=date_part('epoch', CURRENT_TIMESTAMP)::int AND confirmed='0'");

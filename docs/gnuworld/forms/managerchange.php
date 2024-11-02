@@ -325,7 +325,7 @@ if (pg_numrows($huhu)>0) {
 	$crc_cookie = md5( $expiration . CRC_SALT_0015 . $user->email . $new_manager_id . $channel_id );
 
 	$query  = "INSERT INTO pending_mgrchange (channel_id,manager_id,new_manager_id,change_type,opt_duration,reason,expiration,crc,confirmed,from_host) VALUES ";
-	$query .= "('$channel_id','$user_id','$new_manager_id','$change_type'," . (int)$opt_duration . ",'" . $_POST["mcreason"] . "','$expiration','$crc_cookie',0,'" . cl_ip() . "')";
+	$query .= "('$channel_id','$user_id','$new_manager_id','$change_type'," . (int)$opt_duration . ",'" . pg_escape_string($_POST["mcreason"]) . "','$expiration','$crc_cookie',0,'" . cl_ip() . "')";
 
 	pg_safe_exec($query);
 
