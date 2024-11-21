@@ -3,7 +3,7 @@
 	$CAN_EDIT = 1;
 	$CAN_ADD = 2;
 $ENABLE_COOKIE_TABLE=0;
-	$lang_id = $langid;
+	$lang_id = $lang_id;
 
 	include("../../../php_includes/cmaster.inc");
 	std_init();
