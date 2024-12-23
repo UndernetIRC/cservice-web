@@ -2,11 +2,11 @@
 
 if [ "$1" == "httpd" ]; then
   if [ ! -z "$PHP_SHORT_OPEN_TAG" ]; then
-    sed -i "s/\;\?\\s\?short_open_tag = .*/short_open_tag = $PHP_SHORT_OPEN_TAG/" /etc/php82/php.ini
+    sed -i "s/\;\?\\s\?short_open_tag = .*/short_open_tag = $PHP_SHORT_OPEN_TAG/" /etc/php84/php.ini
     echo "Set PHP short_open_tag = $PHP_SHORT_OPEN_TAG..."
   fi
   if [ ! -z "$PHP_POST_MAX_SIZE" ]; then
-    sed -i "s/\;\?\\s\?post_max_size = .*/post_max_size = $PHP_POST_MAX_SIZE/" /etc/php82/php.ini
+    sed -i "s/\;\?\\s\?post_max_size = .*/post_max_size = $PHP_POST_MAX_SIZE/" /etc/php84/php.ini
     echo "Set PHP post_max_size = $PHP_POST_MAX_SIZE..."
   fi
   if [ ! -z "$APACHE_ERRORLOG" ]; then
@@ -16,7 +16,7 @@ if [ "$1" == "httpd" ]; then
     echo "Set Apache LogLevel to error..."
   fi
 
-  sed -i "s;\;sendmail_path.*;sendmail_path = /usr/sbin/sendmail;" /etc/php82/php.ini
+  sed -i "s;\;sendmail_path.*;sendmail_path = /usr/sbin/sendmail;" /etc/php84/php.ini
 
   # Setup default config for cservice website
   if [ ! -f "/app/php_includes/cmaster.inc" ]; then
